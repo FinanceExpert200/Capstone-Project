@@ -1,6 +1,6 @@
 # Project Proposal
 
-Pod Members: **Add Pod Members Names**
+Pod Members: Matthew Ibrahim, Joselyne Malan, Lake Bradford 
 
 ## Problem Statement
 
