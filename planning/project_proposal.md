@@ -21,6 +21,8 @@ Our project's primary objective is to provide a secure and risk-free platform th
 - Multiple trading strategy options which, when clicked, will display their profitability/effectiveness over the course of the previous year
 
 - An automate button allowing a user to select a strategy that will run daily using current data to see how the strategy will hold
+  
+- A profile with a starting amount to invest with
 
 
 ## Related Work
