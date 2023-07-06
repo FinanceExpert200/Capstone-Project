@@ -4,9 +4,7 @@ Pod Members: Matthew Ibrahim, Joselyne Malan, Lake Bradford
 
 ## Problem Statement
 
-Insert your groups problem statement and target audience.
-user/need/goal
-
+The stock market is known to be a direct way to build up your financial state in life, if one plays the right cards. Multiple strategies have been developed to secure a safe investment during these trading periods. Without a simulated trading account, users are unable to practice risk-free and improve their trading skills. This platform needs to implement a better educational background of these strategies that can invoke old trading partners and new trading partners into the market. To address these limitations, this website offers a simulated trading account for users to gain knowledge, make informed decisions, and personalize their trading experience.
 
 ## User Roles
 
@@ -20,7 +18,7 @@ User Persona #1: Olivia Martinez: a high school student from New York City, USA.
 - Frequency of site access: A few times a week, after school hours.
 - Motivation/Pain points: Olivia can't wait to open her own brokage account. She is invested in becoming familar with the stock market. Growing up she has seen friend and family gain sucuess within this market. She has also heard of the multiple strategies people have taken to ensure a successful trade in the market. As a result, she wants to understand how these different strategies work. However, she is too young to open a real brokeage account and finds it difficult to understand the trading terminology used in this market.
 
-User Persona: David Thompson: a small business owner from Sydney, Australia.
+User Persona #2: David Thompson: a small business owner from Sydney, Australia.
 - Age: 45
 - Access/sophistication with technology: Comfortable using computers and smartphones.
 - Frequency of site access: Once or twice a week, typically on weekends.
