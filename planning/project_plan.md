@@ -1,6 +1,6 @@
 # Project Plan
 
-Pod Members: **Add Pod Members Names**
+Pod Members: Matthew Ibrahim, Lake Bradford, Joselyne Malan
 
 ## Problem Statement and Description
 
@@ -25,5 +25,11 @@ Describe your app's data model using diagrams or tables
 ## Endpoints
 
 List the API endpoints you will need to implement.
+
+Create - POST - Adding a transaction to a table
+Update - PUT - Update user's profile data
+Read - GET - Fetch the stocks from the Yahoo Finance API
+
+
 
 ***Don't forget to set up your Issues, Milestones, and Project Board!***
