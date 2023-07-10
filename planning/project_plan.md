@@ -20,7 +20,12 @@ List all the pages and screens in the app. Include wireframes for at least 3 of 
 
 ## Data Model
 
-Describe your app's data model using diagrams or tables
+<img width="1092" alt="Screenshot 2023-07-10 at 1 58 00 PM" src="https://github.com/FinanceExpert200/Capstone-Project/assets/89942749/9726799a-0c27-4bc3-ae87-f3c2ebede169">
+
+
+
+
+
 
 ## Endpoints
 
