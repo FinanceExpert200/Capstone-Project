@@ -1,5 +1,5 @@
 const express = require("express");
-const User = require("../models/user");
+const User = require("../models/users");
 const router = express.Router();
 // const { createUserJwt } = require("../utils/tokens");
 // const security = require("../middleware/security");
@@ -9,7 +9,7 @@ router.post("/login", async (req, res, next) => {
     // take the users email and password and attempt to authenticate them
     const user = await User.login(req.body);
 
-    const token = createUserJwt(user);
+    // const token = createUserJwt(user);
 
     return res.status(200).json({ user, token });
   } catch (err) {
@@ -38,6 +38,5 @@ router.post("/register", async (req, res, next) => {
     next(err);
   }
 });
-
 
 module.exports = router;

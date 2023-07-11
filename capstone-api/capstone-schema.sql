@@ -9,8 +9,6 @@ CREATE TABLE users (
     created_at TIMESTAMP NOT NULL DEFAULT NOW())
     ;
 
---makflsh
-
 CREATE TABLE portfolio (
     id SERIAL PRIMARY KEY,
     ticker TEXT NOT NULL,
@@ -26,6 +24,6 @@ CREATE TABLE transactions (
     quantity INTEGER NOT NULL,
     curr_price DECIMAL NOT NULL,
     user_id INTEGER NOT NULL REFERENCES users(id),
-    created_at TIMESTAMP NOT NULL DEFAULT NOW())
     trans_type TEXT NOT NULL,
+    created_at TIMESTAMP NOT NULL DEFAULT NOW())
     ;
