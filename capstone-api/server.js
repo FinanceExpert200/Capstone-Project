@@ -4,6 +4,7 @@ const morgan = require("morgan");
 const { PORT } = require("./config");
 const security = require("./middleware/security");
 const authRoutes = require("./Routes/auth");
+const transactionRoutes = require("./routes/transaction")
 
 const { BadRequestError, NotFoundError } = require("./utils/errors"); // Import custom error handlers
 
@@ -20,6 +21,7 @@ app.use(morgan("tiny"));
 app.use(security.extractUserFromJwt);
 
 app.use("/auth", authRoutes);
+app.use("/trans", transactionRoutes)
 
 app.use((req, res, next) => {
   return next(new NotFoundError());

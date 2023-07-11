@@ -17,22 +17,28 @@ class User {
     };
   }
 
+  
+
+  //returns the logged in users information if the conditions are met. If not, an error is thrown.
   static async login(credentials) {
     // user should submit their email and password
     // if any of these fields are missing, throw an error
     //
     const requriedFields = ["email", "password"];
     requriedFields.forEach((field) => {
+        //If both email and password arent present in required in credentials, we throw an error because a component is missing
       if (!credentials.hasOwnProperty(field)) {
         throw new BadRequestError(`Missing ${field} in request body.`);
       }
     });
 
+    // If not, we fetch the user by their email and compare the passwords
     const user = await User.fetchUserByEmail(credentials.email);
 
     if (user) {
       const isValid = await bcrypt.compare(credentials.password, user.password);
       if (isValid) {
+        //If the two passwords match, we now display the user information
         return User.makePublicUser(user);
       }
     }
