@@ -5,6 +5,6 @@ DROP DATABASE fin_expert;
 CREATE DATABASE fin_expert;
 \connect fin_expert;
 
-\i capstone-schema.sql
+\i finexpert-regis-schema.sql
 
 
