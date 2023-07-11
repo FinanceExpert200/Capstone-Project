@@ -6,7 +6,7 @@ SITE Course Year: **2023**
 
 Cohort: **Salesforce**
 
-Team Member Names: **Joselyne,Lake Bradford**
+Team Member Names: **Matthew, Joselyne, Lake Bradford**
 
 Mentors Names: **Devarsh**
 
