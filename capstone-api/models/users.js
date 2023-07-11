@@ -7,15 +7,16 @@ class User {
   static makePublicUser(user) {
     return {
       id: user.id,
+      acc_value: user.acc_value,
+      buying_power: user.buying_power,
       email: user.email,
       firstName: user.first_name,
       lastName: user.last_name,
-      username: user.username,
-      createdAt: user.created_at,
+    //   username: user.username,
+      createdAt: user.created_at
     };
   }
 
-  
   static async login(credentials) {
     // user should submit their email and password
     // if any of these fields are missing, throw an error
@@ -45,8 +46,14 @@ class User {
     throw new UnauthorizedError("Invalid email/password combo");
   }
 
-
-  static async register(email, firstName, lastName, username, password) {
+  static async register(
+    acc_value,
+    buying_power,
+    email,
+    firstName,
+    lastName,
+    password
+  ) {
     // user should submit their email, pw, rsvp status, and number of guests
     // if any of these fields are missing, throw an error
     // const requriedFields = ["email", "firstName", "lastName", "username", "password" ];
@@ -83,22 +90,30 @@ class User {
     const result = await db.query(
       `
         INSERT INTO users (
+            acc_value,
+            buying_power,
             email,
             first_name,
             last_name,
-            username,
             password
             )
-            VALUES ($1, $2, $3, $4, $5)
+            VALUES ($1, $2, $3, $4, $5, $6)
             RETURNING *
             `,
-      [lowercasedEmail, firstName, lastName, username, hashedPassword]
+      [
+        acc_value,
+        buying_power,
+        lowercasedEmail,
+        firstName,
+        lastName,
+        // username,
+        hashedPassword,
+      ]
     );
     // return the user
     const user = result.rows[0];
     return user;
   }
-
 
   static async fetchUserByEmail(email) {
     if (!email) {
