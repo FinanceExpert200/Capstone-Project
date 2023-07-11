@@ -1,7 +1,7 @@
 const express = require("express");
 const User = require("../models/users");
 const router = express.Router();
-// const { createUserJwt } = require("../utils/tokens");
+const { createUserJwt } = require("../utils/tokens");
 // const security = require("../middleware/security");
 
 router.post("/login", async (req, res, next) => {
@@ -21,12 +21,20 @@ router.post("/register", async (req, res, next) => {
   try {
     console.log("In register route");
     // take the user email, password
-    const { email, firstName, lastName, username, password } = req.body;
-    const user = await User.register(
+    const {
+      acc_value,
+      buying_power,
       email,
       firstName,
       lastName,
-      username,
+      password
+    } = req.body;
+    const user = await User.register(
+      acc_value,
+      buying_power,
+      email,
+      firstName,
+      lastName,
       password
     );
 
