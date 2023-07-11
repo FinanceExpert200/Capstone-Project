@@ -9,6 +9,8 @@ CREATE TABLE users (
     created_at TIMESTAMP NOT NULL DEFAULT NOW())
     ;
 
+--makflsh
+
 CREATE TABLE portfolio (
     id SERIAL PRIMARY KEY,
     ticker TEXT NOT NULL,
