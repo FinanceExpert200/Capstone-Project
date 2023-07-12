@@ -16,8 +16,8 @@ const handleAddData = async (event, buying_power, acc_value, email, first_name, 
       password: password,
     });
     console.log(res.data);
-    // navigate('/activity');
-    // window.location.href = "/activity";
+    
+    window.location.href = "/login";
   } catch (err) {
     console.log(err);
   }

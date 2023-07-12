@@ -4,7 +4,7 @@ const morgan = require("morgan");
 const { PORT } = require("./config");
 const security = require("./middleware/security");
 const authRoutes = require("./Routes/auth");
-const transactionRoutes = require("./routes/transaction")
+const transactionRoutes = require("./Routes/transaction")
 
 const { BadRequestError, NotFoundError } = require("./utils/errors"); // Import custom error handlers
 
