@@ -13,9 +13,7 @@ function getDatabaseUru() {
     const dbHost = process.env.DATABASE_HOST || "localhost";
     const dbPort = process.env.DATABASE_PORT || 5432
     const dbName = process.env.DATABASE_NAME || "fin_expert";
-
-
-     return process.env.DATABASE_URL || `postgresql://${dbUser}:${dbPass}@${dbHost}:${dbPort}/${dbName}`
+    return process.env.DATABASE_URL || `postgresql://${dbUser}:${dbPass}@${dbHost}:${dbPort}/${dbName}`
 
 }
 

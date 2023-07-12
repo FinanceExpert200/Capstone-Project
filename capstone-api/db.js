@@ -4,6 +4,7 @@ require("colors");
 
 const db = new Client({ connectionString: getDatabaseUru() });
 
+
 db.connect((err) => {
     if (err) {
         console.error("connection error".red, err.stack);
