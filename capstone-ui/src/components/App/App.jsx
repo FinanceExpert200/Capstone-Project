@@ -7,6 +7,7 @@ import {
   Switch,
   BrowserRouter,
 } from "react-router-dom";
+import { useState } from "react";
 
 import RegisterPage from "../RegisterPage/RegisterPage";
 
