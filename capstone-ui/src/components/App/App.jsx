@@ -69,7 +69,6 @@ function App() {
         </main>
       </BrowserRouter>
       
-      <button onClick = {getTransactions}>click</button>
       
       <br/>
       
