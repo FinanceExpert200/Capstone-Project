@@ -4,13 +4,14 @@
 import { useState } from "react";
 import {
   BrowserRouter as Router,
+  Routes,
   Route,
   Switch,
   BrowserRouter,
 } from "react-router-dom";
-import { useState } from "react";
 import axios from "axios";
 
+import LandingPage from "../LandingPage/LandingPage";
 import RegisterPage from "../RegisterPage/RegisterPage";
 import TransactionTable from "../TransactionTable/TransactionTable";
 
@@ -57,11 +58,21 @@ function App() {
 
   return (
     <div className="App">
-      <button onClick = {getTransactions}>click</button>
+      <BrowserRouter>
+        <main>
+          <Routes>
+           <Route path = '/' element = {<LandingPage/>}/>
+           <Route path = '/transaction' element = {<TransactionTable transactionHistory = {transactionHistory}  />} />
+           <Route path = '/register' element = {<RegisterPage buying_power={buying_power} acc_value={acc_value}/>}/>
+          </Routes>
 
-      <RegisterPage buying_power={buying_power} acc_value={acc_value}/>
+        </main>
+      </BrowserRouter>
+      
+      <button onClick = {getTransactions}>click</button>
+      
       <br/>
-      <TransactionTable transactionHistory = {transactionHistory}  />
+      
 
 
     </div>
