@@ -1,7 +1,7 @@
 // import logo from './assets/logo.svg';
 // import logo from "../../assets/logo.svg";
 // import "./App.css";
-import { useState } from "react";
+import React, { useState } from "react";
 import {
   BrowserRouter as Router,
   Routes,
@@ -19,6 +19,7 @@ function App() {
 
   const [buying_power, setBuyingPower] = useState(10000);
   const [acc_value, setAccValue] = useState(10000);
+  // set
 
   const [currentUserId, setCurrentUserId] = useState(null)
   const [transactionHistory, setTransactionHistory] = useState()
@@ -51,8 +52,6 @@ function App() {
       });
     
   }
-
-
 
 
 
