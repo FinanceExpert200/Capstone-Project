@@ -40,7 +40,12 @@ const LandingPage = () => {
             fontWeight={700}
             lineHeight={1.2}
             fontSize={useBreakpointValue({ base: '3xl', md: '4xl' })}>
-            StockSim
+            StockSim: 
+            Expert Finance
+            Helping you take control of your finances
+            This is a personal finance app that allows you to simulate buying and selling stocks.
+            Create your account now
+
           </Text>
           <Stack direction={'row'}>
             <Button

@@ -14,6 +14,7 @@ import axios from "axios";
 import LandingPage from "../LandingPage/LandingPage";
 import RegisterPage from "../RegisterPage/RegisterPage";
 import TransactionTable from "../TransactionTable/TransactionTable";
+import Trade from "../Trade/Trade";
 import NavBar from "../NavBar/NavBar";
 import SignInPage from "../SignInPage/SignInPage";
 import Home from "../Home/Home";
@@ -83,7 +84,8 @@ function App() {
         <NavBar isLogged={isLogged} setIsLogged={setIsLogged} />
           <Routes>
            <Route path = '/' element = {<LandingPage/>}/>
-            <Route path = '/home' element = {<Home/>}/>
+           <Route path = '/home' element = {<Home/>}/>
+           <Route path = '/trade' element = {<Trade/>}/>
            <Route path = '/transaction' element = {<TransactionTable transactionHistory = {transactionHistory}  />} />
            <Route path = '/register' element = {<RegisterPage buying_power={buying_power} acc_value={acc_value}/>}/>
            <Route path = '/login' element = {<SignInPage setIsLogged={setIsLogged}/>}/>
