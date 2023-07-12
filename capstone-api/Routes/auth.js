@@ -9,7 +9,7 @@ router.post("/login", async (req, res, next) => {
     // take the users email and password and attempt to authenticate them
     const user = await User.login(req.body);
 
-    // const token = createUserJwt(user);
+    const token = createUserJwt(user);
 
     return res.status(200).json({ user, token });
   } catch (err) {
