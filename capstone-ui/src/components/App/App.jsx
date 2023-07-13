@@ -8,6 +8,7 @@ import {
   Route,
   Switch,
   BrowserRouter,
+  json,
 } from "react-router-dom";
 import axios from "axios";
 
@@ -26,82 +27,51 @@ function App() {
 
   const [metaPrice, setMetaPrice] = useState(0);
   const [amznPrice, setAmznPrice] = useState(0);
-  const [aaplPrice, setAaplPrice] = useState(0);
   const [nflxPrice, setNflxPrice] = useState(0);
   const [googlPrice, setGooglPrice] = useState(0);
   const [crmPrice, setCrmPrice] = useState(0);
 
+  const getStockPrice = async (ticker) => {
+    try {
+      fetch(
+        `https://finnhub.io/api/v1/quote?symbol=${ticker}&token=cio7if1r01qhd71bpk70cio7if1r01qhd71bpk7g`
+      )
+        .then((response) => response.json())
+        .then((data) => {
+          // Process the received data
+          console.log("Current price:", data);
 
+          if ((ticker).toLowerCase() == "meta") {
+            setMetaPrice(data.c);
+          } else if ((ticker).toLowerCase() == "amzn") {
+            setAmznPrice(data.c);
+          }
+          else if ((ticker).toLowerCase() == "nflx") {
+            setNflxPrice(data.c);
+          }
+          else if ((ticker).toLowerCase() == "googl") {
+            setGooglPrice(data.c);
+          }
+          else if ((ticker).toLowerCase() == "crm") {
+            setCrmPrice(data.c);
+          }
+        })
+        .catch((error) => {
+          // Handle any errors that occur during the request
+          console.error(error);
+        });
+    } catch (err) {
+      console.log(err.message);
+    }
+  };
 
-  // const socket = new WebSocket(
-  //   "wss://ws.finnhub.io?token=cio3l89r01qhd71bn54gcio3l89r01qhd71bn550"
-  // );
-
-  // // Function to handle subscriptions
-  // const subscribeToSymbols = () => {
-  //   socket.send(JSON.stringify({ type: "subscribe", symbol: "META" }));
-  //   socket.send(JSON.stringify({ type: "subscribe", symbol: "AMZN" }));
-  //   socket.send(JSON.stringify({ type: "subscribe", symbol: "AAPL" }));
-  //   socket.send(JSON.stringify({ type: "subscribe", symbol: "NFLX" }));
-  //   socket.send(JSON.stringify({ type: "subscribe", symbol: "GOOGL" }));
-  //   socket.send(JSON.stringify({ type: "subscribe", symbol: "CRM" }));
-  // };
-
-  // // Function to handle unsubscriptions
-  // const unsubscribeFromSymbols = () => {
-  //   socket.send(JSON.stringify({ type: "unsubscribe", symbol: "META" }));
-  //   socket.send(JSON.stringify({ type: "unsubscribe", symbol: "AMZN" }));
-  //   socket.send(JSON.stringify({ type: "unsubscribe", symbol: "AAPL" }));
-  //   socket.send(JSON.stringify({ type: "unsubscribe", symbol: "NFLX" }));
-  //   socket.send(JSON.stringify({ type: "unsubscribe", symbol: "GOOGL" }));
-  //   socket.send(JSON.stringify({ type: "unsubscribe", symbol: "CRM" }));
-  // };
-
-  // // Subscribe to symbols when the socket connection is opened
-  // socket.addEventListener("open", function (event) {
-  //   subscribeToSymbols();
-
-  //   // Start the timer to update data every minute
-  //   setInterval(() => {
-  //     unsubscribeFromSymbols();
-  //     subscribeToSymbols();
-  //   }, 60000); // 60000 milliseconds = 1 minute
-  // });
-
-  // // Listen for messages
-  // socket.addEventListener("message", function (event) {
-  //   const message = JSON.parse(event.data);
-  //   const trades = message.data;
-  //   // console.log("Message from server", trades);
-
-  //   if (trades && trades.length > 0) {
-  //     const firstTrade = trades[0];
-
-  //     if (firstTrade.s === "META") {
-  //       setMetaPrice(firstTrade.p);
-  //     } else if (firstTrade.s === "AMZN") {
-  //       setAmznPrice(firstTrade.p);
-  //     } else if (firstTrade.s === "AAPL") {
-  //       setAaplPrice(firstTrade.p);
-  //     } else if (firstTrade.s === "NFLX") {
-  //       setNflxPrice(firstTrade.p);
-  //     } else if (firstTrade.s === "GOOGL") {
-  //       setGooglPrice(firstTrade.p);
-  //     } else if (firstTrade.s === "CRM") {
-  //       setCrmPrice(firstTrade.p);
-  //     }
-
-  //     console.log("Message from server", firstTrade);
-  //     // console.log("Meta Price", metaPrice);
-  //     // console.log("AMZN Price", amznPrice);
-  //     // console.log("AAPL Price", aaplPrice);
-  //   }
-  // });
+  getStockPrice("AMZN");
+  console.log("AMZN Price: ", amznPrice);
 
   // login functiionaility
   const [isLogged, setIsLogged] = useState(false);
   // this contains the id of the currently logged in user
-  const [currentUserId, setCurrentUserId] = useState(null)
+  const [currentUserId, setCurrentUserId] = useState(null);
   const [usertoken, setUserToken] = useState(null);
 
   // const [id, setId] = useState(null);
@@ -114,7 +84,7 @@ function App() {
 
   useEffect(() => {
     const currentUserId = localStorage.getItem("currentUserId");
-    const token = localStorage.getItem('token');
+    const token = localStorage.getItem("token");
     //console.log("Here is my token from local Storge: " , token);
     if (currentUserId) {
       setCurrentUserId(currentUserId);
