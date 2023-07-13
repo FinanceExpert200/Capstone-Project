@@ -2,6 +2,7 @@ const { use } = require("../Routes/auth");
 const db = require("../db");
 const { BadRequestError, UnauthorizedError } = require("../utils/errors");
 
+<<<<<<< HEAD
 class Transaction {
   // CREATE TABLE transactions (
   //     id SERIAL PRIMARY KEY,
@@ -15,6 +16,12 @@ class Transaction {
 
   static async getTransactionHistory(userId) {
     const query = `
+=======
+class Transaction{
+    //Function that gets the transaction history for a particular user
+    static async getTransactionHistory(userId) {
+        const query = `
+>>>>>>> 86206bbdf2e8a03e5028197f3f9496323542d0a4
           SELECT *
           FROM transactions
           WHERE user_id = $1 
@@ -24,6 +31,7 @@ class Transaction {
     return exercise;
   }
 
+<<<<<<< HEAD
   static async addTransactionHistory(
     ticker,
     quantity,
@@ -37,6 +45,15 @@ class Transaction {
       );
 
       const query = `
+=======
+    // Adds a transaction to the transaction table. Every transaction should be added here
+    static async addTransactionHistory(ticker, quantity, curr_price, user_id, trans_type) {
+        try {
+
+          console.log(`Adding transaction; ticker: ${ticker}, quantity: ${quantity}, curr_price: ${curr_price}, user_id: ${user_id}, trans_type: ${trans_type}`);
+          
+          const query = `
+>>>>>>> 86206bbdf2e8a03e5028197f3f9496323542d0a4
             INSERT INTO transactions (
               ticker,
               quantity,
@@ -47,6 +64,7 @@ class Transaction {
             VALUES ($1, $2, $3, $4, $5)
             RETURNING *;
           `;
+<<<<<<< HEAD
 
       const values = [ticker, quantity, curr_price, user_id, trans_type];
 
@@ -205,6 +223,17 @@ class Transaction {
     // check if the ticker is already in the users portfolio, If it is not we throw an error,
     // we then decrement the quantity and update profit (PUT)
   }
+=======
+          
+          const values = [ticker, quantity, curr_price, user_id, trans_type];
+          const result = await db.query(query, values);
+          return result.rows[0];
+        } catch (err) {
+          console.error(err);
+        }
+  }
+
+>>>>>>> 86206bbdf2e8a03e5028197f3f9496323542d0a4
 }
 
 module.exports = Transaction;

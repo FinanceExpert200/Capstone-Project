@@ -101,7 +101,8 @@ function App() {
   // login functiionaility
   const [isLogged, setIsLogged] = useState(false);
   // this contains the id of the currently logged in user
-  const [currentUserId, setCurrentUserId] = useState(null);
+  const [currentUserId, setCurrentUserId] = useState(null)
+  const [usertoken, setUserToken] = useState(null);
 
   // const [id, setId] = useState(null);
 
@@ -113,6 +114,8 @@ function App() {
 
   useEffect(() => {
     const currentUserId = localStorage.getItem("currentUserId");
+    const token = localStorage.getItem('token');
+    //console.log("Here is my token from local Storge: " , token);
     if (currentUserId) {
       setCurrentUserId(currentUserId);
       setIsLogged(true);
