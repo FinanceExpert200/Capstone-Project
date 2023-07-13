@@ -22,16 +22,13 @@ router.post("/register", async (req, res, next) => {
     console.log("In register route");
     // take the user email, password
     const {
-      acc_value,
-      buying_power,
       email,
       firstName,
       lastName,
       password
     } = req.body;
+    console.log(firstName, email, lastName, password)
     const user = await User.register(
-      acc_value,
-      buying_power,
       email,
       firstName,
       lastName,

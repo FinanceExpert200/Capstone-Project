@@ -7,8 +7,6 @@ class User {
   static makePublicUser(user) {
     return {
       id: user.id,
-      acc_value: user.acc_value,
-      buying_power: user.buying_power,
       email: user.email,
       firstName: user.first_name,
       lastName: user.last_name,
@@ -52,8 +50,6 @@ class User {
   }
 
   static async register(
-    acc_value,
-    buying_power,
     email,
     firstName,
     lastName,
@@ -95,19 +91,16 @@ class User {
     const result = await db.query(
       `
         INSERT INTO users (
-            acc_value,
-            buying_power,
             email,
             first_name,
             last_name,
             password
             )
-            VALUES ($1, $2, $3, $4, $5, $6)
+            VALUES ($1, $2, $3, $4)
             RETURNING *
             `,
       [
-        acc_value,
-        buying_power,
+
         lowercasedEmail,
         firstName,
         lastName,
@@ -115,9 +108,29 @@ class User {
         hashedPassword,
       ]
     );
-    // return the user
     const user = result.rows[0];
+
+    await db.query(
+      `
+        INSERT INTO account (
+            acc_value,
+            buying_power,
+            user_id
+            )
+            VALUES ($1, $2, $3)
+            RETURNING *
+            `,
+      [
+        10000,
+        10000,
+        user.id
+      ]
+
+    );
+    // return the user
+    
     return user;
+
   }
 
   static async fetchUserByEmail(email) {
@@ -129,6 +142,19 @@ class User {
     const user = result.rows[0];
     return user;
   }
+
+  static async fetchUserDataById(userId) {
+    const query = `
+      SELECT *
+      FROM users
+      WHERE id = $1 
+    `;
+    const result = await db.query(query, [userId]);
+    return result.rows;
+  }
+
+
+
 }
 
 module.exports = User;

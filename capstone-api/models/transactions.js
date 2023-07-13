@@ -4,12 +4,6 @@ const { BadRequestError, UnauthorizedError } = require("../utils/errors");
 
 class Transaction{
 
-    static async buyShare(ticker, quantity, curr_price, user_id, created_at, trans_type){
-        // we first locate the user by their id
-        // next we check if the price * quantity is greater than their buying power, If it is then we throw an error (insufficient funds)
-        // if the price*quantity is less than buying power, we decrement the buying power, run updateUserPortfolio, and run addTransactionHistory
-
-    }
     // CREATE TABLE transactions (
     //     id SERIAL PRIMARY KEY,
     //     ticker TEXT NOT NULL,
@@ -30,6 +24,9 @@ class Transaction{
         const exercise = result.rows;
         return exercise;
     }
+
+
+    
     
 
 
@@ -46,28 +43,148 @@ class Transaction{
               trans_type
             )
             VALUES ($1, $2, $3, $4, $5)
-            RETURNING *
+            RETURNING *;
           `;
           
           const values = [ticker, quantity, curr_price, user_id, trans_type];
           
           const result = await db.query(query, values);
-                
-          return result.rows[0]
-    
-        
-        
-
-
+          
+          return result.rows[0];
         } catch (err) {
           console.error(err);
         }
-      }
-
-    static async buyUserPortfolio(ticker, quantity, curr_price, user_id){
-        // check if the ticker is already in the users portfolio, If it is then we increment the quantity (PUT)
-        // - if it is not, we add the share to the table (POST)
     }
+
+    static async sellUserPortfolio(ticker, quantity, curr_price, user_id) {
+        console.log("sell branch");
+
+        const userQuery = `
+          SELECT *
+          FROM users
+          WHERE id = $1;
+        `;
+      
+        const currentUser = await db.query(userQuery, [user_id]);
+        const existingBuyingPower = currentUser.rows[0].buying_power;
+        const newBuyingPower = existingBuyingPower + quantity * curr_price;
+      
+        if (newBuyingPower < 0) {
+          throw new Error("Insufficient funds to make transaction");
+        } else {
+          const updateUserBuyingPowerQuery = `
+            UPDATE users
+            SET buying_power = $1
+            WHERE id = $2;
+          `;
+      
+          const userValues = [newBuyingPower, user_id];
+          await db.query(updateUserBuyingPowerQuery, userValues);
+      
+          const checkPortfolioQuery = `
+            SELECT *
+            FROM portfolio
+            WHERE user_id = $1 AND ticker = $2;
+          `;
+      
+          const values = [user_id, ticker];
+      
+          const result = await db.query(checkPortfolioQuery, values);
+      
+          if (result.rows.length === 0) {
+            throw new Error(`User ${user_id} does not have that stock to sell`);
+          } else {
+            const existingQuantity = result.rows[0].quantity;
+            const newQuantity = existingQuantity - quantity;
+      
+            if (newQuantity < 0) {
+              throw new Error("Insufficient quantity to make transaction");
+            } else {
+              const updateItemQuery = `
+                UPDATE portfolio
+                SET quantity = $1
+                WHERE user_id = $2 AND ticker = $3;
+              `;
+      
+              const updateValues = [newQuantity, user_id, ticker];
+              await db.query(updateItemQuery, updateValues);
+            }
+          }
+        }
+    }
+
+      
+    // static async buyUserPortfolio(ticker, quantity, curr_price, user_id) {
+    //     console.log("buy branch")
+    //     const userQuery = `
+    //       SELECT * 
+    //       FROM users
+    //       WHERE id = $1;
+    //     `;
+        
+    //     const currentUser = await db.query(userQuery, [user_id]);
+    //     const existingBuyingPower = currentUser.rows[0].buying_power;
+    //     const newBuyingPower = existingBuyingPower - quantity * curr_price;
+        
+    //     if (newBuyingPower < 0) {
+    //       throw new Error("Insufficient funds to make transaction");
+    //     } else {
+    //       const updateUserBuyingPowerQuery = `
+    //         UPDATE users
+    //         SET buying_power = $1
+    //         WHERE id = $2;
+    //       `;
+          
+    //       const userValues = [newBuyingPower, user_id];
+    //       await db.query(updateUserBuyingPowerQuery, userValues);
+      
+    //       const checkPortfolioQuery = `
+    //         SELECT *
+    //         FROM portfolio
+    //         WHERE user_id = $1 AND ticker = $2;
+    //       `;
+          
+    //       const values = [user_id, ticker];
+          
+    //       const result = await db.query(checkPortfolioQuery, values);
+          
+    //       if (result.rows.length === 0) {
+    //         console.log(`Item is new, adding to the portfolio for user: ${user_id}`);
+            
+    //         const addItemQuery = `
+    //           INSERT INTO portfolio (
+    //             ticker,
+    //             quantity,
+    //             user_id
+    //           )
+    //           VALUES ($1, $2, $3)
+    //           RETURNING *;
+    //         `;
+            
+    //         const addValues = [ticker, quantity, user_id];
+    //         await db.query(addItemQuery, addValues);
+    //       } else {
+    //         const existingQuantity = result.rows[0].quantity;
+    //         const newQuantity = existingQuantity + quantity;
+            
+    //         const updateItemQuery = `
+    //           UPDATE portfolio
+    //           SET quantity = $1
+    //           WHERE user_id = $2 AND ticker = $3;
+    //         `;
+            
+    //         const updateValues = [newQuantity, user_id, ticker];
+    //         await db.query(updateItemQuery, updateValues);
+    //       }
+    //     }
+    // }
+
+
+
+      
+      
+      
+      
 
     static async sellShare(ticker, quantity, curr_price, user_id, created_at, trans_type){
         //Locate user by ID
@@ -82,19 +199,7 @@ class Transaction{
         // we then decrement the quantity and update profit (PUT) 
         
     }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 }
+
+
 module.exports = Transaction
