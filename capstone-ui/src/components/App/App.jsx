@@ -25,48 +25,37 @@ import { useEffect } from "react";
 function App() {
   // State Variables that have the current price of the stock
 
-  const [metaPrice, setMetaPrice] = useState(0);
-  const [amznPrice, setAmznPrice] = useState(0);
-  const [nflxPrice, setNflxPrice] = useState(0);
-  const [googlPrice, setGooglPrice] = useState(0);
-  const [crmPrice, setCrmPrice] = useState(0);
+  // const [metaPrice, setMetaPrice] = useState(0);
+  // const [amznPrice, setAmznPrice] = useState(0);
+  // const [nflxPrice, setNflxPrice] = useState(0);
+  // const [googlPrice, setGooglPrice] = useState(0);
+  // const [crmPrice, setCrmPrice] = useState(0);
+
+  // const[currentAccountValue, setCurrentAccountValue] = useState(0)
+
+  
+
 
   const getStockPrice = async (ticker) => {
-    try {
-      fetch(
-        `https://finnhub.io/api/v1/quote?symbol=${ticker}&token=cio7if1r01qhd71bpk70cio7if1r01qhd71bpk7g`
-      )
-        .then((response) => response.json())
-        .then((data) => {
-          // Process the received data
-          console.log("Current price:", data);
-
-          if ((ticker).toLowerCase() == "meta") {
-            setMetaPrice(data.c);
-          } else if ((ticker).toLowerCase() == "amzn") {
-            setAmznPrice(data.c);
-          }
-          else if ((ticker).toLowerCase() == "nflx") {
-            setNflxPrice(data.c);
-          }
-          else if ((ticker).toLowerCase() == "googl") {
-            setGooglPrice(data.c);
-          }
-          else if ((ticker).toLowerCase() == "crm") {
-            setCrmPrice(data.c);
-          }
-        })
-        .catch((error) => {
-          // Handle any errors that occur during the request
-          console.error(error);
-        });
-    } catch (err) {
-      console.log(err.message);
-    }
+    axios
+      .get(`http://localhost:3001/trans/stock/${ticker}`)
+      .then((response) => {
+        
+      })
+      .catch((error) => {
+        console.error(error);
+      });
   };
+  getStockPrice("META")
 
-  getStockPrice("AMZN");
-  console.log("AMZN Price: ", amznPrice);
+
+  
+
+
+
+
+
+
 
   // login functiionaility
   const [isLogged, setIsLogged] = useState(false);

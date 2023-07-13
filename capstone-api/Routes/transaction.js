@@ -25,6 +25,33 @@ router.get("/account/:id", async (req, res, next) => {
   }
 });
 
+
+router.get("/stock/:ticker", async (req,res,next)=>{
+  ticker = req.params.ticker; 
+  console.log(ticker)
+  try {
+    fetch(
+      `https://finnhub.io/api/v1/quote?symbol=${ticker}&token=cio7if1r01qhd71bpk70cio7if1r01qhd71bpk7g`
+    )
+      .then((response) => response.json())
+      .then((data) => {
+        // Process the received data
+        console.log("Current price:", data);
+        return res.status(200).json({ data });
+      })
+      .catch((error) => {
+        // Handle any errors that occur during the request
+        console.error(error);
+      });
+  } catch (err) {
+    console.log(err.message);
+  }
+
+
+
+
+})
+
 // Access the Portfolio information for a specified user (Each stock they own and quantity)
 router.get("/portfolio/:id", async (req, res, next) => {
   try {
