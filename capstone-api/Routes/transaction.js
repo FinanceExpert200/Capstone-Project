@@ -60,6 +60,7 @@ router.get("/portfolio/:id", async (req, res, next) => {
     }
 });
 
+
 router.get("/history/:id", async (req, res, next) => {
   try {
     const userId = req.params.id; 
@@ -95,6 +96,9 @@ router.post("/buy", async (req, res, next) => {
         next(err);
     }
 });
+
+
+
 
 router.post("/sell", async (req, res, next) => {
   try {
