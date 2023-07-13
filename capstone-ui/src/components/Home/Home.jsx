@@ -1,7 +1,7 @@
 import React from "react";
 import TickerGraphs from "./TickerGraphs";
 import { useEffect, useRef } from "react";
-import { Chart } from "chart.js";
+//import { Chart } from "chart.js";
 
 const Home = () => {
   return (

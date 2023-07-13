@@ -1,6 +1,8 @@
 import React from "react";
 import axios from "axios";
 import { useState } from "react";
+import './RegistrationPage.css';
+import {Box,Button,Center,Flex,Form,Stack,Container,SimpleGrid,Input, Text, Heading} from '@chakra-ui/react'
 
 const handleAddData = async (event, buying_power, acc_value, email, first_name, last_name, password) => {
   try {
@@ -33,81 +35,114 @@ const RegisterPage = ({buying_power, acc_value}) => {
   const [password, setPassword] = useState("");
 
   return (
-    <div className="login-container">
-      <h2 className="login-heading">Create an Account</h2>
 
-      <div className="login-section">
-        <form
-          className="login-form"
-          onSubmit={(event) =>
-            handleAddData(
-              event,
-              buying_power,
-              acc_value,
-              email,
-              first_name,
-              last_name,
-              password
-            )
+    <Box  position={'relative'}
+          backgroundImage={
+          'url(https://business.fiu.edu/graduate/insights/img/artificial-intelligence-in-the-stock-market.jpg)'
           }
-        >
-          <div className="login-contents">
-            <input
-              type="text"
-              className="login-input"
-              placeholder="Email"
-              required
-              onChange={(event) => {
-                event.preventDefault();
-                setEmail(event.target.value);
-              }}
-            />
-            <input
-              type="text"
-              className="login-input"
-              placeholder="First Name"
-              required
-              onChange={(event) => {
-                event.preventDefault();
-                setFirstName(event.target.value);
-              }}
-            />
-            <input
-              type="text"
-              className="login-input"
-              placeholder="Last Name"
-              required
-              onChange={(event) => {
-                event.preventDefault();
-                setLastName(event.target.value);
-              }}
-            />
-            <input
-              type="password"
-              className="login-input"
-              placeholder="Password"
-              required
-              onChange={(event) => {
-                event.preventDefault();
-                setPassword(event.target.value);
-              }}
-            />
-            <input
-              type="password"
-              className="login-input"
-              placeholder="Confirm Password"
-              name="confirmpassword"
-              required
-            />
+          backgroundSize={'cover'}
+          backgroundPosition={'center center'}
+          justifyContent={'center'}
+          
+          >
+      <Container as = {SimpleGrid}
+                 maxW={'7xl'}
+                 py={{ base: 10, sm: 20, lg: 32 }} 
+                 w={'full'}
+                 h={'100vh'}
+                 >
+        
+        <Center>
+        <Stack bg={'gray.50'}
+               p={{ base: 4, sm: 6, md: 8 }}
+               rounded = {'xl'}>
+            <Stack spacing={4}
+                  >
+            <Center>
+              <Heading color={'gray.800'}
+                    lineHeight={1.1}
+                    fontSize={{ base: '2xl', sm: '3xl', md: '4xl' }}>
+              Welcome!
+            </Heading>
+            </Center>
+            <Text textAlign='center' color={'gray.500'} 
+                  fontSize={{ base: 'sm', sm: 'md' }}
+                  marginBottom={5}>
+              Blah Blah blah BLAH Blah blah blah blah Will increase
+            </Text>
+          </Stack >
+          <Box as = {'form'}
+               onSubmit={(event) =>
+                handleAddData(
+                  event,
+                  buying_power,
+                  acc_value,
+                  email,
+                  first_name,
+                  last_name,
+                  password
+                )
+              }>
+            <Stack spacing = {4}
+                   marginBottom={4}>
+              <Input type = 'text'
+                     required
+                     placeholder="Email"
+                     bg = {'grey.100'} 
+                     onChange={(event) => {
+                      event.preventDefault();
+                      setEmail(event.target.value);
+                    }}>
+              </Input>
+              <Input type = 'text'
+                     required
+                     placeholder="First Name"
+                     bg = {'grey.100'} 
+                     onChange={(event) => {
+                      event.preventDefault();
+                      setFirstName(event.target.value);
+                    }}>
+              </Input>
+              <Input type = 'text'
+                     required
+                     placeholder="Last Name"
+                     bg = {'grey.100'} 
+                     onChange={(event) => {
+                      event.preventDefault();
+                      setLastName(event.target.value);
+                    }}>
+              </Input>
+              <Input type = 'password'
+                     required
+                     placeholder="Password"
+                     bg = {'grey.100'} 
+                     onChange={(event) => {
+                      event.preventDefault();
+                      setPassword(event.target.value);
+                    }}>
+              </Input>
+              <Input type = 'password'
+                     required
+                     placeholder="Confirm Password"
+                     bg = {'grey.100'} 
+                     >
+              </Input>
 
-            <button type="submit" className="login-button">
-              Sign Up
-            </button>
-          </div>
-        </form>
-      </div>
-    </div>
+              <Button type = 'submit'
+                      color = {'grey.800'}>
+                {/* add a hover action for the button */}
+                Sign Up
+              </Button>
+            </Stack>
+
+          </Box>
+
+        </Stack>
+        </Center>
+      </Container>
+    </Box>
   );
 };
 
 export default RegisterPage;
+
