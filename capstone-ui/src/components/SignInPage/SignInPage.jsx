@@ -17,12 +17,12 @@ const handleLogin = async (event, email, password, setIsLogged) => {
         password: password,
       }
     );
-
-   
-    // console.log(res.data.user.id);
+    
 
     setIsLogged(true);
+    //sets the id and token in localstorage
     localStorage.setItem("currentUserId", res.data.user.id);
+    localStorage.setItem("token", res.data.token)
 
 
       // this will take you to the 

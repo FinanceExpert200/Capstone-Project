@@ -11,7 +11,7 @@ router.post("/login", async (req, res, next) => {
 
     const token = createUserJwt(user);
 
-    return res.status(200).json({ user, token });
+    return res.status(200).json({ message: "Login Successful!" , user, token });
   } catch (err) {
     next(err);
   }
