@@ -113,19 +113,18 @@ class User {
     await db.query(
       `
         INSERT INTO account (
-            acc_value,
-            buying_power,
-            user_id
-            )
-            VALUES ($1, $2, $3)
-            RETURNING *
-            `,
+          acc_value,
+          buying_power,
+          user_id
+        )
+        VALUES ($1::decimal, $2::decimal, $3)
+        RETURNING *
+      `,
       [
-        10000,
-        10000,
+        10000.00, // Assuming these are the desired values as decimal numbers
+        10000.00,
         user.id
       ]
-
     );
     // return the user
     
