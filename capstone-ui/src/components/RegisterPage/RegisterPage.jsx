@@ -4,8 +4,9 @@ import { useState } from "react";
 
 const handleAddData = async (event, buying_power, acc_value, email, first_name, last_name, password) => {
   try {
-    // const navigate = useNavigate();
+    
     event.preventDefault();
+    
     const res = await axios.post(`http://localhost:3001/auth/register`, {
       acc_value: buying_power,
       buying_power: acc_value,
@@ -15,16 +16,18 @@ const handleAddData = async (event, buying_power, acc_value, email, first_name, 
       password: password,
     });
     console.log(res.data);
-    // navigate('/activity');
-    // window.location.href = "/activity";
+    
+    window.location.href = "/login";
   } catch (err) {
     console.log(err);
   }
 };
 
-const RegisterPage = (buying_power, acc_value) => {
+const RegisterPage = ({buying_power, acc_value}) => {
+
+
+
   const [email, setEmail] = useState("");
-  const [username, setUserName] = useState("");
   const [first_name, setFirstName] = useState("");
   const [last_name, setLastName] = useState("");
   const [password, setPassword] = useState("");
@@ -42,7 +45,6 @@ const RegisterPage = (buying_power, acc_value) => {
               buying_power,
               acc_value,
               email,
-              username,
               first_name,
               last_name,
               password
@@ -58,16 +60,6 @@ const RegisterPage = (buying_power, acc_value) => {
               onChange={(event) => {
                 event.preventDefault();
                 setEmail(event.target.value);
-              }}
-            />
-            <input
-              type="text"
-              className="login-input"
-              placeholder="Username"
-              required
-              onChange={(event) => {
-                event.preventDefault();
-                setUserName(event.target.value);
               }}
             />
             <input
