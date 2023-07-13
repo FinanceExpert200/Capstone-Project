@@ -18,6 +18,7 @@ export default function Navbar({ isLogged, setIsLogged }) {
     setIsLogged(false);
     console.log(isLogged);
     localStorage.removeItem("currentUserId");
+    localStorage.removeItem("token");
     window.location.href = "/";
 
   };
