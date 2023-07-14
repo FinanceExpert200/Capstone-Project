@@ -4,7 +4,7 @@ Pod Members: Matthew Ibrahim, Lake Bradford, Joselyne Malan
 
 ## Problem Statement and Description
 
-Insert the latest summary of your problem statement and app description.
+Our project addresses the lack of understanding and the perception of trading as gambling by providing a user-friendly platform that educates users about investment strategies. We aim to emphasize the quantitative and profit-oriented aspects of trading to empower individuals to make informed investment decisions. Our target audience consists of individuals seeking to learn about responsible investing, including beginners and those interested in quantitative trading approaches.
 
 ## User Roles and Personas
 
