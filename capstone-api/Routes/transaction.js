@@ -1,7 +1,6 @@
 const express = require("express")
 const router  = express.Router()
 const Transaction = require("../models/transactions")
-const Account = require("../models/accounts")
 const User  = require("../models/users")
 const Portfolio = require("../models/portfolios")
 
@@ -17,7 +16,7 @@ const Portfolio = require("../models/portfolios")
 router.get("/account/:id", async (req, res, next) => {
   try {
     const userId = req.params.id; 
-    const account = await Account.fetchUserAccountById(userId); // Pass the exercise ID and user ID to the method
+    const account = await Portfolio.fetchUserAccountById(userId); // Pass the exercise ID and user ID to the method
     return res.status(200).json({ account }); // Use 200 OK status code for a successful response
   } catch (err) {
     console.error("Error is: ", err);

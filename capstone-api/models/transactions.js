@@ -35,6 +35,7 @@ class Transaction{
         
         const values = [ticker, quantity, curr_price, user_id, trans_type];
         const result = await db.query(query, values);
+        
         return result.rows[0];
       } catch (err) {
         console.error(err);
@@ -42,14 +43,13 @@ class Transaction{
   }
 
   static async fetchCurrentTickerPrice(ticker) {
-    console.log("fetched");
     try {
       const response = await fetch(
         `https://finnhub.io/api/v1/quote?symbol=${ticker}&token=cio7if1r01qhd71bpk70cio7if1r01qhd71bpk7g`
       );
       const data = await response.json();
 
-      console.log("Current price:", data);
+      console.log("Current price: of ", ticker, data.c);
       return data;
     } catch (error) {
       console.error(error);
