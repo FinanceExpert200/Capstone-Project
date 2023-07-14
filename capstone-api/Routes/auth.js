@@ -4,6 +4,23 @@ const router = express.Router();
 const { createUserJwt } = require("../utils/tokens");
 // const security = require("../middleware/security");
 
+
+
+// app.get("/trade/:id", (req, res) => {
+//   const id = parseInt(req.params.id);
+
+//   const product = dataModel.getProdById(id);
+
+
+//   if (product) {
+//     res.json(product);
+//   } else {
+//     res.status(404).send(`Product with id ${id} does not exist`);
+//   }
+// });
+
+
+
 router.post("/login", async (req, res, next) => {
   try {
     // take the users email and password and attempt to authenticate them
