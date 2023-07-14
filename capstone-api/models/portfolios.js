@@ -2,7 +2,7 @@ const { use } = require("../Routes/auth");
 const db = require("../db");
 const { BadRequestError, UnauthorizedError } = require("../utils/errors");
 const User = require("./users");
-const Account = require("./accounts");
+const Transaction = require("./transactions")
 
 class Portfolio {
   // Gets the Users portfolio by their ID
@@ -12,6 +12,7 @@ class Portfolio {
       FROM portfolio
       WHERE user_id = $1 
     `;
+
     const result = await db.query(query, [userId]);
     return result.rows;
   }
@@ -125,7 +126,8 @@ static async removeFromUserPortfolio(ticker, quantity, curr_price, user_id) {
   // Handles the purchasing of a stock by decrementing their buying power and adding the stock to the users portfolio
   static async buyShare(ticker, quantity, curr_price, user_id) {
     // Get the user info
-    const currentUser = await Account.fetchUserAccountById(user_id);
+    
+    const currentUser = await this.fetchUserAccountById(user_id);
     console.log("current user", currentUser);
     const existingBuyingPower = currentUser.buying_power;
     const newBuyingPower = existingBuyingPower - quantity * curr_price;
@@ -135,7 +137,8 @@ static async removeFromUserPortfolio(ticker, quantity, curr_price, user_id) {
       throw new Error("Insufficient funds to make transaction");
     } else {
       // Update Buying power
-      await Account.updateBuyingPower(newBuyingPower.toString(), user_id);
+      await this.updateBuyingPower(newBuyingPower.toString(), user_id);
+      await this.calculateTotalShareValue(user_id)
       // Add stock to the portfolio table
       console.log(
         `Values added to portfolio: ${[ticker, quantity, curr_price, user_id]} `
@@ -147,7 +150,7 @@ static async removeFromUserPortfolio(ticker, quantity, curr_price, user_id) {
   // Handles the selling of a stock by incrementing their buying power and reducing the shares owned in the users portfolio
   static async sellShare(ticker, quantity, curr_price, user_id) {
     //get user info
-    const currentUser = await Account.fetchUserAccountById(user_id);
+    const currentUser = await this.fetchUserAccountById(user_id);
     //check if the quantity of the stock we want to sell is less than or equal to the owned user stock
     const stockQuantityOwned = await this.getShareQuantityOwned(
       user_id,
@@ -161,7 +164,8 @@ static async removeFromUserPortfolio(ticker, quantity, curr_price, user_id) {
       const existingBuyingPower = currentUser.buying_power;
       const newBuyingPower = parseFloat(existingBuyingPower) + parseFloat(quantity) * parseFloat(curr_price);
       console.log("bp", newBuyingPower)
-      await Account.updateBuyingPower(newBuyingPower.toString(), user_id);
+      await this.updateBuyingPower(newBuyingPower.toString(), user_id);
+      await this.calculateTotalShareValue(user_id)
       this.removeFromUserPortfolio(ticker, quantity, curr_price, user_id)
       console.log("item changed in portfolio")
     }
@@ -184,6 +188,79 @@ static async removeFromUserPortfolio(ticker, quantity, curr_price, user_id) {
       return result.rows[0].quantity;
     }
   }
+
+  static async calculateTotalShareValue(user_id) {
+    let currentUser = await this.fetchUserAccountById(user_id);
+    let totalValue = parseFloat(currentUser.buying_power);
+  
+    try {
+      const findTickers = `
+        SELECT *
+        FROM portfolio
+        WHERE user_id = $1
+      `;
+      const val = [user_id];
+      const result = await db.query(findTickers, val);
+  
+      for (const share of result.rows) {
+        const quantity = share.quantity;
+  
+        // Fetch the price of the ticker
+        const price = await Transaction.fetchCurrentTickerPrice(share.ticker);
+  
+        const shareValue = parseInt(quantity, 10) * parseFloat(price.c);
+        console.log(`Total value of ${quantity} shares of ${share.ticker}: ${shareValue}`);
+        totalValue += shareValue;
+      }
+    } catch (error) {
+      console.error('Error calculating total share value:', error);
+      throw error;
+    } finally {
+      console.log('Total Share Value:', totalValue);
+      //update the Account value
+      await this.updateAccountValue(totalValue, user_id)
+    }
+  }
+
+      // Updates the buying power of a specified user, Used for when a user buys or sells a stock
+      static async updateBuyingPower(amount, user_id) {
+        const updateUserBuyingPowerQuery = `
+        UPDATE account
+        SET buying_power = $1::numeric 
+        WHERE id = $2;
+        `;
+        const userValues = [amount.toString(), user_id];
+        console.log(`Updating the Buying power of user ${user_id} to ${userValues}`)
+        await db.query(updateUserBuyingPowerQuery, userValues);
+      
+    }
+    //gets the users account using their user ID
+    static async fetchUserAccountById(user_id){ 
+        const query = `
+        SELECT *
+        FROM account
+        WHERE user_id = $1 
+      `;
+      const result = await db.query(query, [user_id]);
+      return result.rows[0];
+    }
+
+    static async updateAccountValue(amount, user_id){
+        const updateUserAccountValueQuery = `
+        UPDATE account
+        SET  acc_value = $1::numeric 
+        WHERE id = $2;
+        `;
+        // add the amount of stock owned to the users buying power
+
+        
+        const userValues = [amount.toString(), user_id];
+        console.log(`Updating the Account Value of user ${user_id} to ${amount}`)
+        await db.query(updateUserAccountValueQuery, userValues);
+    }
+
+
+
 }
 
 module.exports = Portfolio;
