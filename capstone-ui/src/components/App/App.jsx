@@ -47,7 +47,7 @@ function App() {
         console.error(error);
       });
   };
-
+  getStockPrice("META")
 
 
   
