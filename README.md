@@ -8,7 +8,7 @@ Cohort: **Salesforce**
 
 Team Member Names: **Matthew, Joselyne, Lake Bradford**
 
-Mentors Names: **Devarsh**
+Mentors Names: **Ronesha**
 
 Project Code Repository Links
 
