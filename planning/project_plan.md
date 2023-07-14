@@ -19,6 +19,10 @@ List the current user stories you will implement.
 List all the pages and screens in the app. Include wireframes for at least 3 of them.
 
 ![](pictures/Home.jpg)
+![](pictures/Login:Registration.jpg)
+![](pictures/Reciept.jpg)
+![](pictures/Routes.jpg)
+![](pictures/trade.gif)
 
 ## Data Model
 
