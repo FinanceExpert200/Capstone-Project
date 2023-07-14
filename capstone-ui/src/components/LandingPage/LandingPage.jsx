@@ -21,6 +21,7 @@ const LandingPage = () => {
       backgroundSize={'cover'}
       backgroundPosition={'center center'}
       justifyContent={'center'}
+      position={'absolute'}
     // filter= 'auto'
     // blur='2px'
     >
@@ -28,7 +29,7 @@ const LandingPage = () => {
         w={'full'}
         justify={'center'}
         px={useBreakpointValue({ base: 4, md: 8 })}
-        bgGradient={'linear(to-r, blackAlpha.600, green)'}>
+        bgGradient={'linear(to-r, blackAlpha.100,black)'}>
 
         <Stack maxW={'2xl'} align={'flex-start'} spacing={6}>
           <Text
@@ -45,17 +46,17 @@ const LandingPage = () => {
           </Text>
           <Stack direction={'row'}>
             <Button
-              bg={'blue.400'}
+              bg={'green.400'}
               rounded={'full'}
               color={'white'}
-              _hover={{ bg: 'blue.500' }}>
+              _hover={{ bg: 'green.500' }}>
               <Link href="/login">Sign In</Link>
             </Button>
             <Button
-              bg={'whiteAlpha.300'}
+              bg={'whiteAlpha.600'}
               rounded={'full'}
-              color={'white'}
-              _hover={{ bg: 'whiteAlpha.500' }}>
+              color={'black'}
+              _hover={{ bg: 'green.100' }} >
               <Link href="/register">Register</Link>
 
             </Button>
