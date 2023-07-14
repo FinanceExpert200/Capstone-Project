@@ -14,7 +14,7 @@ import {
 } from '@chakra-ui/react';
 
 export default function Navbar({ isLogged, setIsLogged }) {
-  const bgNav = useColorModeValue('grey.300', 'grey.900')
+  const bgNav = useColorModeValue('green')
 
   const handleLogout = (event) => {
     event.preventDefault(); // Prevents the default form submission behavior
@@ -27,13 +27,16 @@ export default function Navbar({ isLogged, setIsLogged }) {
   };
 
   return (
-    <div className="navbar" style={{ background: bgNav }}>
       <Flex
         align="center"
         justify="space-between"
         minH="60px"
         py={{ base: 2 }}
         px={{ base: 4 }}
+        position = {'absolute'}
+        zIndex={1}
+        width = {'full'}
+        bgGradient={'linear(to-r, blackAlpha.600, transparent)'}
       >
         {isLogged && (
           <>
@@ -58,7 +61,7 @@ export default function Navbar({ isLogged, setIsLogged }) {
             </div>
             <Button
               type = "button"
-              bg={'blue.400'}
+              bg={'green.700'}
               rounded={'full'}
               color={'white'}
               _hover={{ bg: 'blue.500' }}
@@ -81,24 +84,24 @@ export default function Navbar({ isLogged, setIsLogged }) {
               </Link>
             <Stack direction="row" spacing={4} justify="flex-end">
             <Button
-              bg={'blue.400'}
+              bg={'green.400'}
               rounded={'full'}
               color={'white'}
-              _hover={{ bg: 'blue.500' }}>
+              _hover={{ bg: 'green.500' }}>
               <Link href="/login">Sign In</Link>
             </Button>
             <Button
-              bg={'blue.400'}
+              bg={'whiteAlpha.600'}
               rounded={'full'}
-              color={'white'}
-              _hover={{ bg: 'blue.500' }}>
+              color={'black'}
+              _hover={{ bg: 'green.100' }}>
               <Link href="/register"> Register</Link>
             </Button>
             </Stack>
           </Flex>
         )}
       </Flex>
-    </div>
+    
 
   );
 }
