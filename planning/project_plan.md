@@ -5,7 +5,7 @@ Pod Members: Matthew Ibrahim, Lake Bradford, Joselyne Malan
 ## Problem Statement and Description
 
 Our project addresses the lack of understanding and the perception of trading as gambling by providing a user-friendly platform that educates users about investment strategies. We aim to emphasize the quantitative and profit-oriented aspects of trading to empower individuals to make informed investment decisions. Our target audience consists of individuals seeking to learn about responsible investing, including beginners and those interested in quantitative trading approaches.
-
+Our project's primary objective is to provide a secure and risk-free platform that educates users about diverse investment strategies, while dispelling the misconception that trading is synonymous with glorified gambling. Key features include descriptions of multiple trading strategies and their profitibality, and using the current market data to show how effective these strategies are in todays market.
 ## User Roles and Personas
 
 Include the most up-to-date user roles and personas.
