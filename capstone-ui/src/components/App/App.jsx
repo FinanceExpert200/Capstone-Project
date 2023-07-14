@@ -21,39 +21,68 @@ import SignInPage from "../SignInPage/SignInPage";
 import Home from "../Home/Home";
 
 import { useEffect } from "react";
+import { get } from "lodash";
 
 function App() {
   // State Variables that have the current price of the stock
 
-  // const [metaPrice, setMetaPrice] = useState(0);
-  // const [amznPrice, setAmznPrice] = useState(0);
-  // const [nflxPrice, setNflxPrice] = useState(0);
-  // const [googlPrice, setGooglPrice] = useState(0);
-  // const [crmPrice, setCrmPrice] = useState(0);
+  const tickers = ["META", "AMZN", "NFLX", "GOOGL", "CRM"];
+  const [metaPrice, setMetaPrice] = useState(0);
+  const [amznPrice, setAmznPrice] = useState(0);
+  const [nflxPrice, setNflxPrice] = useState(0);
+  const [googlPrice, setGooglPrice] = useState(0);
+  const [crmPrice, setCrmPrice] = useState(0);
 
   // const[currentAccountValue, setCurrentAccountValue] = useState(0)
 
-  
-
-
   const getStockPrice = async (ticker) => {
-    axios
-      .get(`http://localhost:3001/trans/stock/${ticker}`)
-      .then((response) => {
-        
-      })
-      .catch((error) => {
-        console.error(error);
-      });
+    try {
+      const response = await axios.get(
+        `http://localhost:3001/trans/stock/${ticker}`
+      );
+      const price = (response.data).data.c; // THIS IS INCORRECT
+      // const currPrice = price.c
+      switch (ticker) {
+        case "META":
+          setMetaPrice(price);
+          break;
+        case "AMZN":
+          setAmznPrice(price);
+          break;
+        case "NFLX":
+          setNflxPrice(price);
+          break;
+        case "GOOGL":
+          setGooglPrice(price);
+          break;
+        case "CRM":
+          setCrmPrice(price);
+          break;
+        default:
+          break;
+      }
+      // console.log(price);
+    } catch (error) {
+      console.error(error);
+    }
   };
-  getStockPrice("META")
+
+  // console.log("Here is the meta price: ", metaPrice);
+
+  const updateStockPrice = async (tickers) => {
+    tickers.forEach((ticker) => {
+      getStockPrice(ticker);
+    });
+  };
 
 
+  // useEffect(() => {
+  //   // getStockPrice("META");
+  //   updateStockPrice(tickers)
+  // }, []);
+  // updateStockPrice(tickers)
+  // getStockPrice("META");
   
-
-
-
-
 
 
 
@@ -123,7 +152,7 @@ function App() {
           <Routes>
             <Route path="/" element={<LandingPage />} />
             <Route path="/home" element={<Home />} />
-            <Route path="/trade" element={<Trade />} />
+            <Route path="/trade" element={<Trade updateStockPrice={updateStockPrice} tickers={tickers} metaPrice={metaPrice} amznPrice={amznPrice} nflxPrice={nflxPrice} googlPrice={googlPrice} crmPrice={crmPrice} getStockPrice={getStockPrice}  />} />
             <Route
               path="/transaction"
               element={
