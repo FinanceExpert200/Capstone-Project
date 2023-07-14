@@ -16,7 +16,7 @@ import LandingPage from "../LandingPage/LandingPage";
 import RegisterPage from "../RegisterPage/RegisterPage";
 import TransactionTable from "../TransactionTable/TransactionTable";
 import Trade from "../Trade/Trade";
-import NavBar from "../NavBar/NavBar";
+import Navbar from "../NavBar/NavBar";
 import SignInPage from "../SignInPage/SignInPage";
 import Home from "../Home/Home";
 
@@ -75,13 +75,13 @@ function App() {
   useEffect(() => {
     const currentUserId = localStorage.getItem("currentUserId");
     const token = localStorage.getItem("token");
-    //console.log("Here is my token from local Storge: " , token);
     if (currentUserId) {
       setCurrentUserId(currentUserId);
       setIsLogged(true);
     } else {
       setIsLogged(false);
     }
+    console.log(isLogged)
   }, [isLogged]);
 
   const addTransaction = async (
@@ -117,19 +117,19 @@ function App() {
   };
 
   return (
-    <div className="App">
+    <div className="App" >
       <BrowserRouter>
         <main>
-          <NavBar isLogged={isLogged} setIsLogged={setIsLogged} />
+          <Navbar isLogged={isLogged} setIsLogged={setIsLogged} /> 
           <Routes>
-            <Route path="/" element={<LandingPage />} />
-            <Route path="/home" element={<Home />} />
-            <Route path="/trade" element={<Trade />} />
+            <Route path="/" element={isLogged?(<Home />):(<LandingPage />)} />
+            <Route path="/home" element={isLogged?(<Home />):(<LandingPage />)} />
+            <Route path="/trade" element={isLogged?(<Trade />):(<LandingPage />)} />
             <Route
               path="/transaction"
-              element={
-                <TransactionTable transactionHistory={transactionHistory} />
-              }
+              element={isLogged?(<TransactionTable transactionHistory={transactionHistory} />):(<LandingPage />)}
+                
+              
             />
             <Route
               path="/register"
