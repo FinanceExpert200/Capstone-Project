@@ -40,13 +40,14 @@ function App() {
     axios
       .get(`http://localhost:3001/trans/stock/${ticker}`)
       .then((response) => {
-        
+        console.log("PRICES")
+        console.log(response.data)
       })
       .catch((error) => {
         console.error(error);
       });
   };
-  getStockPrice("META")
+
 
 
   
