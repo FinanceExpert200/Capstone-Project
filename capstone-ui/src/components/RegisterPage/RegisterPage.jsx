@@ -129,7 +129,9 @@ const RegisterPage = ({ buying_power, acc_value }) => {
                 </Input>
 
                 <Button type='submit'
-                  color={'grey.800'}>
+                  color={'grey.800'}
+                  rounded={'full'}
+                  _hover={{ bg: 'green.100' }}>
                   {/* add a hover action for the button */}
                   Sign Up
                 </Button>
