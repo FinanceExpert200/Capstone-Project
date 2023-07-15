@@ -24,6 +24,16 @@ Motivation/Pain points: David is well aquainted with the stock markekt and done 
 ## User Stories
 
 List the current user stories you will implement.
+As a new user I want to create my own account so that I can keep track of my own data.
+As a user I seek a platform that offers educational resources and guidance to help me understand the potential risks and benefits associated with each strategy.
+As a user I want to understand the basic approach to these trading strategies so that I can confidently interact with the trading market.
+As a user I want to receive a set amount of fictitious money so that I can interact with the market without risking my financial stability.
+As a user I want to see a transaction of my trading history so that I can track my investment.
+As a user I want to be able to see the data values from a particular company when i click on it so that I can see its % rate and current value
+As a user I want to be able to choose different companies to trade with so that I can personalize my own trading choices.
+As a user I want to interact with a data that reflects the market in real time so that I can visualize a possible trajectory in my investment
+As a user I want to be able to buy and sell a stock from a selected company so that I can visualize my choice of trade.
+As a user I want to be able to select what trading strategy I am intrested in using so that i can pair up the trading results with the selected strategy.
 
 ## Pages/Screens
 
