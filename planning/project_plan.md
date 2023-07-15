@@ -55,7 +55,45 @@ List all the pages and screens in the app. Include wireframes for at least 3 of 
 ## Endpoints
 
 List the API endpoints you will need to implement.
+POST REQUEST:
+Adding a transaction using Postman
+Link: http://localhost:3001/trans/add
+{
+    "ticker": "APPL", 
+    "quantity": 2,
+    "curr_price": 240,
+    "user_id": 1,
+    "trans_type": "sell"
+}
+Buy Transaction
+Link: http://localhost:3001/trans/buy
+{
+    "ticker": "APPL", 
+    "quantity": 2,
+    "curr_price": 240,
+    "user_id": 1,
+    "trans_type": "sell"
+}
 
+
+
+Create a new User
+Link: http://localhost:3001/auth/register
+{
+ "email": "test@gmail.com",
+ "firstName": "test",
+ "lastName": "test2",
+ "password": "1234"
+}
+
+
+
+GET REQUESTS
+
+gets the account information for a user
+http://localhost:3001/trans/account/:id
+
+LIST OF REQUEST:
 Create - POST - Adding a transaction to a table
 Update - PUT - Update user's profile data
 Read - GET - Fetch the stocks from the Yahoo Finance API
