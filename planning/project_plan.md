@@ -8,7 +8,18 @@ Our project addresses the lack of understanding and the perception of trading as
 Our project's primary objective is to provide a secure and risk-free platform that educates users about diverse investment strategies, while dispelling the misconception that trading is synonymous with glorified gambling. Key features include descriptions of multiple trading strategies and their profitibality, and using the current market data to show how effective these strategies are in todays market.
 ## User Roles and Personas
 
-Include the most up-to-date user roles and personas.
+User Persona #1: Olivia Martinez: a high school student from New York City, USA.
+
+Age: 16
+Access/sophistication with technology: Proficient with smartphones and uses them primarily.
+Frequency of site access: A few times a week, after school hours.
+Motivation/Pain points: Olivia can't wait to open her own brokage account. She is invested in becoming familar with the stock market. Growing up she has seen friend and family gain sucuess within this market. She has also heard of the multiple strategies people have taken to ensure a successful trade in the market. As a result, she wants to understand how these different strategies work. However, she is too young to open a real brokeage account and finds it difficult to understand the trading terminology used in this market.
+User Persona #2: David Thompson: a small business owner from Sydney, Australia.
+
+Age: 45
+Access/sophistication with technology: Comfortable using computers and smartphones.
+Frequency of site access: Once or twice a week, typically on weekends.
+Motivation/Pain points: David is well aquainted with the stock markekt and done his own investment in the past. However, there were times where he has made poor investments resutlting in him losing his confidence in his trading skills. Now he seeks to diversify his investment portfolio and build up his financial confidence.
 
 ## User Stories
 
