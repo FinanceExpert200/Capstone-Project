@@ -35,13 +35,28 @@ function App() {
   const [googlPrice, setGooglPrice] = useState(0);
   const [crmPrice, setCrmPrice] = useState(0);
 
-  const [stockInfo, setStockInfo] = useState(
-    { name: "meta", price: metaPrice, id: 1 },
-    { name: "amzn", price: amznPrice, id: 2 },
-    { name: "nflx", price: nflxPrice, id: 3 },
-    { name: "googl", price: googlPrice, id: 4 },
-    { name: "crm", price: crmPrice, id: 5 }
-  );
+  const stockData = {
+    "1": {
+      stockName: "META",
+      stockPrice: metaPrice,
+    },
+    "2": {
+      stockName: "AMZN",
+      stockPrice: amznPrice,
+    },
+     "3" : {
+      stockName: "NFLX",
+      stockPrice: nflxPrice,
+    },
+     "4" : {
+      stockName: "GOOGL",
+      stockPrice: googlPrice,
+    },
+      "5" : {
+      stockName: "CRM",
+      stockPrice: crmPrice,
+    },
+  };
 
   // const[currentAccountValue, setCurrentAccountValue] = useState(0)
 
@@ -50,7 +65,7 @@ function App() {
       const response = await axios.get(
         `http://localhost:3001/trans/stock/${ticker}`
       );
-      const price = response.data.data.c; // THIS IS INCORRECT
+      const price = response.data.data.c; // this is the current price of the stock
       // const currPrice = price.c
       switch (ticker) {
         case "META":
@@ -86,12 +101,6 @@ function App() {
     });
   };
 
-  // useEffect(() => {
-  //   // getStockPrice("META");
-  //   updateStockPrice(tickers)
-  // }, []);
-  // updateStockPrice(tickers)
-  // getStockPrice("META");
 
   // login functiionaility
   const [isLogged, setIsLogged] = useState(false);
@@ -99,11 +108,12 @@ function App() {
   const [currentUserId, setCurrentUserId] = useState(null);
   const [usertoken, setUserToken] = useState(null);
 
-  // const [id, setId] = useState(null);
 
   const [buying_power, setBuyingPower] = useState(10000);
   const [acc_value, setAccValue] = useState(10000);
-  // set
+
+
+
 
   const [transactionHistory, setTransactionHistory] = useState();
 
@@ -165,13 +175,7 @@ function App() {
                 <Trade
                   updateStockPrice={updateStockPrice}
                   tickers={tickers}
-                  metaPrice={metaPrice}
-                  amznPrice={amznPrice}
-                  nflxPrice={nflxPrice}
-                  googlPrice={googlPrice}
-                  crmPrice={crmPrice}
-                  getStockPrice={getStockPrice}
-                  stockInfo={stockInfo}
+                  stockData={stockData}
                 />
               }
             />
@@ -194,7 +198,7 @@ function App() {
               path="/login"
               element={<SignInPage setIsLogged={setIsLogged} />}
             />
-            <Route path="/trade/:stockId" element={<StockCard metaPrice={metaPrice} updateStockPrice={updateStockPrice} tickers={tickers} />} />
+            <Route path="/trade/:stockId" element={<StockCard metaPrice={metaPrice} amznPrice={amznPrice} updateStockPrice={updateStockPrice} tickers={tickers} currentUserId={currentUserId} stockData={stockData} />} />
           </Routes>
         </main>
       </BrowserRouter>
