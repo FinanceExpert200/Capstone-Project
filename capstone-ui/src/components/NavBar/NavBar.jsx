@@ -64,7 +64,7 @@ export default function Navbar({ isLogged, setIsLogged }) {
               bg={'green.700'}
               rounded={'full'}
               color={'white'}
-              _hover={{ bg: 'blue.500' }}
+              _hover={{ bg: 'green.500' }}
               onClick={handleLogout}>
               <Link href="/register"> Logout</Link>
             </Button>
