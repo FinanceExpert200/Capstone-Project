@@ -20,6 +20,9 @@ import Trade from "../Trade/Trade";
 import Navbar from "../NavBar/NavBar";
 import SignInPage from "../SignInPage/SignInPage";
 import Home from "../Home/Home";
+
+import Trading from "../../TradingCalculations/Trade.js"
+
 import StockCard from "../StockCard/StockCard";
 
 import { useEffect } from "react";
@@ -95,6 +98,13 @@ function App() {
     }
   };
 
+  
+  // Trading.calculateMovingAverage('AAPL', "2022-02-01");
+
+  
+
+
+
   // console.log("Here is the meta price: ", metaPrice);
 
   const updateStockPrice = async (tickers) => {
@@ -165,7 +175,7 @@ function App() {
 
   const getTransactions = async (userID) => {
     axios
-      .get(`http://localhost:3001/trans/${1}`)
+      .get(`http://localhost:3001/trans/${userID}`)
       .then((response) => {
         setTransactionHistory(response.data.transactions);
       })
