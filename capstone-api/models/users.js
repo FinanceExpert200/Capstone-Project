@@ -50,11 +50,14 @@ class User {
   }
 
   static async register(
+    acc_value,
+    buying_power,
     email,
     firstName,
     lastName,
     password
   ) {
+    
     // user should submit their email, pw, rsvp status, and number of guests
     // if any of these fields are missing, throw an error
     // const requriedFields = ["email", "firstName", "lastName", "username", "password" ];
@@ -76,6 +79,7 @@ class User {
     //
 
     const existingUser = await User.fetchUserByEmail(email);
+
     if (existingUser) {
       throw new BadRequestError(`A user already exists with email: ${email}`);
     }
@@ -107,7 +111,9 @@ class User {
         // username,
         hashedPassword,
       ]
+      
     );
+    console.log("ADDED USER")
     const user = result.rows[0];
 
     await db.query(
@@ -121,8 +127,8 @@ class User {
         RETURNING *
       `,
       [
-        10000.00, // Assuming these are the desired values as decimal numbers
-        10000.00,
+        acc_value, // Assuming these are the desired values as decimal numbers
+        buying_power,
         user.id
       ]
     );
@@ -151,8 +157,6 @@ class User {
     const result = await db.query(query, [userId]);
     return result.rows;
   }
-
-
 
 }
 
