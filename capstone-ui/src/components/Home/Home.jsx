@@ -2,25 +2,55 @@ import React from "react";
 import TickerGraphs from "./TickerGraphs";
 import { useEffect, useRef } from "react";
 //import { Chart } from "chart.js";
+import {Grid, Flex,Center,Box, GridItem, Stack} from '@chakra-ui/react'
 
 const Home = () => {
   return (
-    <div className="landingPage">
-      {/* <TickerGraphs /> */}
-      <h1 className="landingTitle">Expert Finance</h1>
-      <h2 className="landingSubtitle">
-        Helping you take control of your finances
-      </h2>
-      {/* <img src={tracker} alt="Landing Page" className="landingPhoto" /> */}
-      <p className="landingBlurb">
-        This is a personal finance app that allows you to simulate buying and
-        selling stocks.
-      </p>
+    
+        <Center 
+          w={'full'}
+          h={'100vh'}
+          >
+            <Grid
+              templateAreas={`"profile graph"`}
+              h='100vh'
+              w={'full'}
+              templateRows='repeat(1, 1fr)'
+              templateColumns='repeat(2, 1fr)'
+              p={55}
+            >
+              <GridItem rowSpan={1} area= {'profile'} >
+                
 
-      <a href="/register" className="landingButton">
-        Create your account now
-      </a>
-    </div>
+              </GridItem>
+              <GridItem rowSpan={1} >
+                <Stack direction={'column'} justify={'sapce-between'}>
+                  <Stack bgColor={'red'}
+                        >
+                          <Box>
+                            Timer here it will grow 
+                          </Box>
+                          <Box>
+                            here
+                          </Box>
+                  
+                  </Stack>
+                  <Stack bgColor={'red'}>
+                    <Box>here</Box>
+                  </Stack>
+
+                </Stack>
+              </GridItem>
+            
+            </Grid>
+          
+          
+          
+        </Center>
+        
+     
+
+
   );
 };
 

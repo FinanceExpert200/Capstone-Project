@@ -11,6 +11,7 @@ import {
   json,
 } from "react-router-dom";
 import axios from "axios";
+import { Params } from "react-router-dom";
 
 import LandingPage from "../LandingPage/LandingPage";
 import RegisterPage from "../RegisterPage/RegisterPage";
@@ -24,6 +25,8 @@ import StockCard from "../StockCard/StockCard";
 import { useEffect } from "react";
 
 function App() {
+  //State of the users Profile
+  const [profile,setProfile] = useState(null);
   // State Variables that have the current price of the stock
 
   const tickers = ["META", "AMZN", "NFLX", "GOOGL", "CRM"];
@@ -113,11 +116,21 @@ function App() {
     if (currentUserId) {
       setCurrentUserId(currentUserId);
       setIsLogged(true);
+      // getProfile();
     } else {
       setIsLogged(false);
     }
     console.log(isLogged)
   }, [isLogged]);
+
+  // const getProfile = async() => {
+  //    await axios.get(`http://localhost:3001/auth/profile/${currentUserId}`)
+  //   .then((res) =>{
+  //     setProfile(res.data.user);
+  //     console.log("This is the profile: ", profile)
+  //   })
+    
+  // }
 
   const addTransaction = async (
     ticker,
@@ -150,6 +163,8 @@ function App() {
         console.error(error);
       });
   };
+
+  
 
   return (
     <div className="App" >
