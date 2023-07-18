@@ -71,6 +71,8 @@ function App() {
 
   }, [isLogged]);
 
+  Trading.calculateDisplayedProfit("META")
+
   const getProfile = async() => {
     try {
       const res = await axios.get(`http://localhost:3001/auth/profile/${localStorage.getItem("currentUserId")}`);

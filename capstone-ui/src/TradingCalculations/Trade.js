@@ -38,8 +38,9 @@ export default class Trading {
     let movingAverage = sum / totalItems;
   
     let currentPrice = filteredData[filteredData.length - 1].close;
-  
-    console.log(`Moving Average: ${movingAverage}, Current Price: ${currentPrice}`);
+    let currentDate = filteredData[filteredData.length - 1].date;
+    
+    console.log(`Moving Average: ${movingAverage}, Current Price: ${currentPrice} Date ${currentDate}`);
     this.compareMovingAverage(currentPrice, movingAverage);
     return movingAverage;
   }
@@ -105,9 +106,9 @@ export default class Trading {
     const currentDate = this.getDatePrior(0);
   
     const oneYearHistoricalData = await this.fetchHistoricalData(ticker, startDate);
-  
-    while (startDate <= currentDate) {
-      break
+    
+    let count  = 0
+    while (count < 20) {
       let currMovingAverage = this.calculateMovingAverage(oneYearHistoricalData, startDate, endDate);
       console.log(`startdate: ${startDate}, endDate ${endDate}. Moving avg: ${currMovingAverage}. We stop at ${currentDate}`);
   
@@ -122,6 +123,7 @@ export default class Trading {
         console.log("END OF THE DATA, We are done")
         break
       }
+      count = count + 1
     }
   }
 
@@ -134,6 +136,7 @@ static getDatePrior(days) {
   const day = this.formatNumber(d.getDate());
   return `${year}-${month}-${day}`;
 }
+  static check
 
 
   static formatNumber(num) {
