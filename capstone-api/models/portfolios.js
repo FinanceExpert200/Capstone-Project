@@ -2,7 +2,7 @@ const { use } = require("../Routes/auth");
 const db = require("../db");
 const { BadRequestError, UnauthorizedError } = require("../utils/errors");
 const User = require("./users");
-const Transaction = require("./transactions")
+const Transaction = require("./transactions");
 
 class Portfolio {
   // Gets the Users portfolio by their ID
@@ -17,15 +17,15 @@ class Portfolio {
     return result.rows;
   }
 
-// Adds a stock to the user's portfolio (Used when buying a new stock)
-static async addToUserPortfolio(ticker, quantity, curr_price, user_id) {
-  // First, check if the stock is already in the table
-  let currentPortfolio = await this.getUserPortfolio(user_id);
+  // Adds a stock to the user's portfolio (Used when buying a new stock)
+  static async addToUserPortfolio(ticker, quantity, curr_price, user_id) {
+    // First, check if the stock is already in the table
+    let currentPortfolio = await this.getUserPortfolio(user_id);
 
-  if (currentPortfolio.length === 0) {
-    // If it is not present in the portfolio, we need to add it to the user table
-    console.log(`Item is new, adding to the portfolio for user: ${user_id}`);
-    const addItemQuery = `
+    if (currentPortfolio.length === 0) {
+      // If it is not present in the portfolio, we need to add it to the user table
+      console.log(`Item is new, adding to the portfolio for user: ${user_id}`);
+      const addItemQuery = `
       INSERT INTO portfolio (
         ticker,
         quantity,
@@ -35,29 +35,33 @@ static async addToUserPortfolio(ticker, quantity, curr_price, user_id) {
       RETURNING *;
     `;
 
-    const addValues = [ticker, quantity, user_id];
-    await db.query(addItemQuery, addValues);
-    console.log(`Added stock to user #${user_id}'s portfolio`);
-  } else {
-    // If it is already present, we update the quantity
-    const existingStock = currentPortfolio.find(item => item.ticker === ticker);
-    if (existingStock) {
-      const existingQuantity = existingStock.quantity;
-      const newQuantity = existingQuantity + quantity;
+      const addValues = [ticker, quantity, user_id];
+      await db.query(addItemQuery, addValues);
+      console.log(`Added stock to user #${user_id}'s portfolio`);
+    } else {
+      // If it is already present, we update the quantity
+      const existingStock = currentPortfolio.find(
+        (item) => item.ticker === ticker
+      );
+      if (existingStock) {
+        const existingQuantity = existingStock.quantity;
+        const newQuantity = existingQuantity + quantity;
 
-      const updateItemQuery = `
+        const updateItemQuery = `
         UPDATE portfolio
         SET quantity = $1
         WHERE user_id = $2 AND ticker = $3;
       `;
 
-      const updateValues = [newQuantity, user_id, ticker];
-      await db.query(updateItemQuery, updateValues);
-      console.log(`Updated quantity of stock ${ticker} for user #${user_id}`);
-    } else {
-      // The stock is not present, so we add it to the user table
-      console.log(`Item is new, adding to the portfolio for user: ${user_id}`);
-      const addItemQuery = `
+        const updateValues = [newQuantity, user_id, ticker];
+        await db.query(updateItemQuery, updateValues);
+        console.log(`Updated quantity of stock ${ticker} for user #${user_id}`);
+      } else {
+        // The stock is not present, so we add it to the user table
+        console.log(
+          `Item is new, adding to the portfolio for user: ${user_id}`
+        );
+        const addItemQuery = `
         INSERT INTO portfolio (
           ticker,
           quantity,
@@ -67,66 +71,70 @@ static async addToUserPortfolio(ticker, quantity, curr_price, user_id) {
         RETURNING *;
       `;
 
-      const addValues = [ticker, quantity, user_id];
-      await db.query(addItemQuery, addValues);
-      console.log(`Added stock to user #${user_id}'s portfolio`);
+        const addValues = [ticker, quantity, user_id];
+        await db.query(addItemQuery, addValues);
+        console.log(`Added stock to user #${user_id}'s portfolio`);
+      }
     }
   }
-}
 
+  // Removes a stock from the user's portfolio (Used when selling a stock)
+  static async removeFromUserPortfolio(ticker, quantity, curr_price, user_id) {
+    let currentPortfolio = await this.getUserPortfolio(user_id);
 
-// Removes a stock from the user's portfolio (Used when selling a stock)
-static async removeFromUserPortfolio(ticker, quantity, curr_price, user_id) {
-  let currentPortfolio = await this.getUserPortfolio(user_id);
+    if (currentPortfolio.length === 0) {
+      console.log(
+        `User #${user_id} does not have any stocks in their portfolio.`
+      );
+      return;
+    }
 
-  if (currentPortfolio.length === 0) {
-    console.log(`User #${user_id} does not have any stocks in their portfolio.`);
-    return;
-  }
+    const existingStock = currentPortfolio.find(
+      (item) => item.ticker === ticker
+    );
 
-  const existingStock = currentPortfolio.find(item => item.ticker === ticker);
+    if (!existingStock) {
+      console.log(`Stock ${ticker} is not present in the user's portfolio.`);
+      return;
+    }
 
-  if (!existingStock) {
-    console.log(`Stock ${ticker} is not present in the user's portfolio.`);
-    return;
-  }
+    const existingQuantity = existingStock.quantity;
 
-  const existingQuantity = existingStock.quantity;
+    if (quantity > existingQuantity) {
+      console.log(
+        `Insufficient quantity of stock ${ticker} in the user's portfolio.`
+      );
+      return;
+    }
 
-  if (quantity > existingQuantity) {
-    console.log(`Insufficient quantity of stock ${ticker} in the user's portfolio.`);
-    return;
-  }
+    const newQuantity = existingQuantity - quantity;
 
-  const newQuantity = existingQuantity - quantity;
-
-  if (newQuantity === 0) {
-    // If the new quantity becomes zero, we remove the stock from the portfolio
-    const removeItemQuery = `
+    if (newQuantity === 0) {
+      // If the new quantity becomes zero, we remove the stock from the portfolio
+      const removeItemQuery = `
       DELETE FROM portfolio
       WHERE user_id = $1 AND ticker = $2;
     `;
-    const removeValues = [user_id, ticker];
-    await db.query(removeItemQuery, removeValues);
-  } else {
-    // Otherwise, update the quantity
-    const updateItemQuery = `
+      const removeValues = [user_id, ticker];
+      await db.query(removeItemQuery, removeValues);
+    } else {
+      // Otherwise, update the quantity
+      const updateItemQuery = `
       UPDATE portfolio
       SET quantity = $1
       WHERE user_id = $2 AND ticker = $3;
     `;
-    const updateValues = [newQuantity, user_id, ticker];
-    await db.query(updateItemQuery, updateValues);
+      const updateValues = [newQuantity, user_id, ticker];
+      await db.query(updateItemQuery, updateValues);
+    }
+
+    console.log(`Removed stock ${ticker} from user #${user_id}'s portfolio.`);
   }
-
-  console.log(`Removed stock ${ticker} from user #${user_id}'s portfolio.`);
-}
-
 
   // Handles the purchasing of a stock by decrementing their buying power and adding the stock to the users portfolio
   static async buyShare(ticker, quantity, curr_price, user_id) {
     // Get the user info
-    
+
     const currentUser = await this.fetchUserAccountById(user_id);
     console.log("current user", currentUser);
     const existingBuyingPower = currentUser.buying_power;
@@ -138,12 +146,13 @@ static async removeFromUserPortfolio(ticker, quantity, curr_price, user_id) {
     } else {
       // Update Buying power
       await this.updateBuyingPower(newBuyingPower.toString(), user_id);
-      await this.calculateTotalShareValue(user_id)
+
       // Add stock to the portfolio table
       console.log(
         `Values added to portfolio: ${[ticker, quantity, curr_price, user_id]} `
       );
       await this.addToUserPortfolio(ticker, quantity, curr_price, user_id);
+      await this.calculateTotalShareValue(user_id);
     }
   }
 
@@ -160,14 +169,17 @@ static async removeFromUserPortfolio(ticker, quantity, curr_price, user_id) {
       throw new Error("Trying to sell more stock than owned");
     }
     //else, update quantity and buying power
-    else{
+    else {
       const existingBuyingPower = currentUser.buying_power;
-      const newBuyingPower = parseFloat(existingBuyingPower) + parseFloat(quantity) * parseFloat(curr_price);
-      console.log("bp", newBuyingPower)
+      const newBuyingPower =
+        parseFloat(existingBuyingPower) +
+        parseFloat(quantity) * parseFloat(curr_price);
+      console.log("UPDATES BUYING POWER", newBuyingPower);
       await this.updateBuyingPower(newBuyingPower.toString(), user_id);
-      await this.calculateTotalShareValue(user_id)
-      this.removeFromUserPortfolio(ticker, quantity, curr_price, user_id)
-      console.log("item changed in portfolio")
+
+      this.removeFromUserPortfolio(ticker, quantity, curr_price, user_id);
+      await this.calculateTotalShareValue(user_id);
+      console.log("item changed in portfolio");
     }
   }
 
@@ -191,8 +203,9 @@ static async removeFromUserPortfolio(ticker, quantity, curr_price, user_id) {
 
   static async calculateTotalShareValue(user_id) {
     let currentUser = await this.fetchUserAccountById(user_id);
+
     let totalValue = parseFloat(currentUser.buying_power);
-  
+
     try {
       const findTickers = `
         SELECT *
@@ -201,66 +214,65 @@ static async removeFromUserPortfolio(ticker, quantity, curr_price, user_id) {
       `;
       const val = [user_id];
       const result = await db.query(findTickers, val);
-  
+
       for (const share of result.rows) {
         const quantity = share.quantity;
-  
+
         // Fetch the price of the ticker
         const price = await Transaction.fetchCurrentTickerPrice(share.ticker);
-  
+
         const shareValue = parseInt(quantity, 10) * parseFloat(price.c);
-        console.log(`Total value of ${quantity} shares of ${share.ticker}: ${shareValue}`);
+        console.log(
+          `Total value of ${quantity} shares of ${share.ticker}: ${shareValue}`
+        );
         totalValue += shareValue;
       }
     } catch (error) {
-      console.error('Error calculating total share value:', error);
+      console.error("Error calculating total share value:", error);
       throw error;
     } finally {
-      console.log('Total Share Value:', totalValue);
+      console.log("Total Cash Value of Account:", totalValue);
       //update the Account value
-      await this.updateAccountValue(totalValue, user_id)
+      await this.updateAccountValue(totalValue, user_id);
     }
   }
 
-      // Updates the buying power of a specified user, Used for when a user buys or sells a stock
-      static async updateBuyingPower(amount, user_id) {
-        const updateUserBuyingPowerQuery = `
+  // Updates the buying power of a specified user, Used for when a user buys or sells a stock
+  static async updateBuyingPower(amount, user_id) {
+    const updateUserBuyingPowerQuery = `
         UPDATE account
         SET buying_power = $1::numeric 
         WHERE id = $2;
         `;
-        const userValues = [amount.toString(), user_id];
-        console.log(`Updating the Buying power of user ${user_id} to ${userValues}`)
-        await db.query(updateUserBuyingPowerQuery, userValues);
-      
-    }
-    //gets the users account using their user ID
-    static async fetchUserAccountById(user_id){ 
-        const query = `
+    const userValues = [amount.toString(), user_id];
+    console.log(
+      `Updating the Buying power of user ${user_id} to ${userValues}`
+    );
+    await db.query(updateUserBuyingPowerQuery, userValues);
+  }
+  //gets the users account using their user ID
+  static async fetchUserAccountById(user_id) {
+    const query = `
         SELECT *
         FROM account
         WHERE user_id = $1 
       `;
-      const result = await db.query(query, [user_id]);
-      return result.rows[0];
-    }
+    const result = await db.query(query, [user_id]);
+    return result.rows[0];
+  }
 
-    static async updateAccountValue(amount, user_id){
-        const updateUserAccountValueQuery = `
+  static async updateAccountValue(amount, user_id) {
+    const updateUserAccountValueQuery = `
         UPDATE account
         SET  acc_value = $1::numeric 
         WHERE id = $2;
         `;
-        // add the amount of stock owned to the users buying power
+    // add the amount of stock owned to the users buying power
 
-        
-        const userValues = [amount.toString(), user_id];
-        console.log(`Updating the Account Value of user ${user_id} to ${amount}`)
-        await db.query(updateUserAccountValueQuery, userValues);
-    }
-
-
-
+    const userValues = [amount.toString(), user_id];
+    console.log(`Updating the Account Value of user ${user_id} to ${amount}`);
+    await db.query(updateUserAccountValueQuery, userValues);
+  }
 }
 
 module.exports = Portfolio;
