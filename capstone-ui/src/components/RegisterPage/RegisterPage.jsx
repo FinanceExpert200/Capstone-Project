@@ -9,14 +9,18 @@ const handleAddData = async (event, buying_power, acc_value, email, first_name, 
 
     event.preventDefault();
 
+    console.log(acc_value)
+
     const res = await axios.post(`http://localhost:3001/auth/register`, {
-      acc_value: buying_power,
-      buying_power: acc_value,
+      acc_value: acc_value,
+      buying_power: buying_power,
       email: email,
       firstName: first_name,
       lastName: last_name,
       password: password,
-    });
+    });    
+
+
     console.log(res.data);
 
     window.location.href = "/login";

@@ -122,12 +122,12 @@ router.post("/sell", async (req, res, next) => {
 
 router.post("/historical", async(req, res,next) =>{
   try {
-      const {ticker, startDate} = req.body
-      console.log("TICKER",  ticker)
-      const query = 'TSLA';
-      const queryOptions = { period1: '2023-0-01', /* ... */ };
+      const {ticker, startDate, endDate} = req.body
+      console.log("TICKER",  ticker , startDate, endDate)
+      const query = ticker;
+      const queryOptions = { period1: startDate,period2: endDate };
       const result = await yahooFinance.historical(query, queryOptions);
-      console.log(result)
+
       return res.status(201).json({result});
     } catch (error) {
       console.error(error);
