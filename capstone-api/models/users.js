@@ -133,6 +133,8 @@ class User {
       ]
     );
     // return the user
+
+    console.log(acc_value, buying_power, user.id)
     
     return user;
 

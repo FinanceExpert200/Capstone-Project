@@ -28,7 +28,6 @@ function App() {
 
   const tickers = ["META", "AMZN", "NFLX", "GOOGL", "CRM"];
 
-
   const [metaPrice, setMetaPrice] = useState(0);
   const [amznPrice, setAmznPrice] = useState(0);
   const [nflxPrice, setNflxPrice] = useState(0);
@@ -58,7 +57,8 @@ function App() {
     },
   };
 
-  // const[currentAccountValue, setCurrentAccountValue] = useState(0)
+// --------------------------------------------------------------------------------------------------------------
+  // this function gets the current price of the stocks
 
   const getStockPrice = async (ticker) => {
     try {
@@ -92,30 +92,36 @@ function App() {
     }
   };
 
-  // console.log("Here is the meta price: ", metaPrice);
-
+  // this function updates the stock price of every single ticker that we have
   const updateStockPrice = async (tickers) => {
     console.log(tickers);
     tickers.forEach(async (ticker) => {
       await getStockPrice(ticker);
     });
   };
+  // --------------------------------------------------------------------------------------------------------------
 
 
-  // login functiionaility
+  // THIS SECTION CONTAINS THE LOGIN FUNCTIONALITY
+
+  // logged 
   const [isLogged, setIsLogged] = useState(false);
   // this contains the id of the currently logged in user
   const [currentUserId, setCurrentUserId] = useState(null);
-  const [usertoken, setUserToken] = useState(null);
 
 
+
+  // this is the buying power and account value of the user
   const [buying_power, setBuyingPower] = useState(10000);
   const [acc_value, setAccValue] = useState(10000);
 
 
-
-
   const [transactionHistory, setTransactionHistory] = useState();
+
+
+
+
+
 
   useEffect(() => {
     const currentUserId = localStorage.getItem("currentUserId");
@@ -126,8 +132,12 @@ function App() {
     } else {
       setIsLogged(false);
     }
-    console.log(isLogged)
   }, [isLogged]);
+
+
+
+
+
 
   const addTransaction = async (
     ticker,
@@ -150,16 +160,30 @@ function App() {
     }
   };
 
+
+  useEffect(() => {
+
+  
+
   const getTransactions = async (userID) => {
     axios
-      .get(`http://localhost:3001/trans/${1}`)
+      .get(`http://localhost:3001/trans/history/${userID}`)
       .then((response) => {
-        setTransactionHistory(response.data.transactions);
+        setTransactionHistory(response.data.userTransactionHistory);
       })
       .catch((error) => {
         console.error(error);
       });
   };
+
+  getTransactions(12);
+  }, []);
+  
+  
+
+
+
+
 
   return (
     <div className="App" >
@@ -198,7 +222,7 @@ function App() {
               path="/login"
               element={<SignInPage setIsLogged={setIsLogged} />}
             />
-            <Route path="/trade/:stockId" element={<StockCard metaPrice={metaPrice} amznPrice={amznPrice} updateStockPrice={updateStockPrice} tickers={tickers} currentUserId={currentUserId} stockData={stockData} />} />
+            <Route path="/trade/:stockId" element={<StockCard updateStockPrice={updateStockPrice} tickers={tickers} currentUserId={currentUserId} stockData={stockData} acc_value={acc_value}/>} />
           </Routes>
         </main>
       </BrowserRouter>

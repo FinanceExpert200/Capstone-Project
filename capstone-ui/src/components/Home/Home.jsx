@@ -1,12 +1,11 @@
 import React from "react";
-import TickerGraphs from "./TickerGraphs";
+import "./Home.css";
 import { useEffect, useRef } from "react";
-//import { Chart } from "chart.js";
+import axios from "axios";
 
 const Home = () => {
   return (
     <div className="landingPage">
-      {/* <TickerGraphs /> */}
       <h1 className="landingTitle">Expert Finance</h1>
       <h2 className="landingSubtitle">
         Helping you take control of your finances
