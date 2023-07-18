@@ -157,8 +157,8 @@ class User {
       WHERE id = $1 
     `;
     const result = await db.query(query, [userId]);
-    //const publicUser = User.makePublicUser(result.rows[0])
-    return result.rows[0];
+    const publicUser = User.makePublicUser(result.rows[0])
+    return publicUser;
   }
 
 }

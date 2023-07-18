@@ -4,7 +4,12 @@ import { useEffect, useRef } from "react";
 //import { Chart } from "chart.js";
 import {Grid, Flex,Center,Box, GridItem, Stack} from '@chakra-ui/react'
 
-const Home = () => {
+
+const Home = ({getProfile,profile}) => {
+  useEffect(()=> {
+    console.log("Being used");
+    getProfile();
+  },[]);
   return (
     
         <Center 
