@@ -33,6 +33,7 @@ function App() {
   //State of the users Profile
   const [profile,setProfile] = useState(null);
   const [account,setAccount] = useState(null);
+  const [portfolio, setPortfolio] = useState(null)
   // State Variables that have the current price of the stock
 
   const tickers = ["META", "AMZN", "NFLX", "GOOGL", "CRM"];
@@ -71,23 +72,39 @@ function App() {
 
   }, [isLogged]);
 
- const getUserId = () =>{
-    return currentUserId
-  }
-
-
   const getProfile = async() => {
     try {
-      console.log(getUserId)
-      console.log("USER: " ,currentUserId)
-      const res = await axios.get(`http://localhost:3001/auth/profile/${localStorage.getItem("currentUserId")}`);
+      const res = await axios.get(`http://localhost:3001/auth/profile/${1}`);
       setProfile(res.data.user);
-      
     } catch(error){
       console.log(error)
     } 
   }
-  console.log("This is the profile: ", profile)
+//testing get result
+console.log(profile)
+
+  const getAccount = async() => {
+    try {
+      const res = await axios.get(`http://localhost:3001/trans/account/${localStorage.getItem("currentUserId")}`);
+      setAccount(res.data.account);
+    } catch(error){
+      console.log(error)
+    } 
+  }
+//testing get result
+console.log(account);
+
+//gets the list of all stocks used by the user
+  const getPortfolio = async() => {
+    try {
+      const res = await axios.get(`http://localhost:3001/trans/account/${localStorage.getItem("currentUserId")}`);
+      setPortfolio(res.data.account);
+    } catch(error){
+      console.log(error)
+    } 
+  }
+//testing get result
+console.log(portfolio);
 
   const stockData = {
     "1": {
@@ -211,7 +228,7 @@ function App() {
           <Navbar isLogged={isLogged} setIsLogged={setIsLogged} /> 
           <Routes>
             <Route path="/" element={<LandingPage />} />
-            <Route path="/home" element={<Home getProfile={getProfile} profile= {profile}/>} />
+            <Route path="/home" element={<Home getProfile={getProfile} getAccount={getAccount} getPortfolio={getPortfolio} portfolio={portfolio} profile= {profile} account={account}/>} />
             <Route
               path="/trade"
               element={
