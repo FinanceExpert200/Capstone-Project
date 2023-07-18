@@ -4,6 +4,9 @@ const Transaction = require("../models/transactions")
 const User  = require("../models/users")
 const Portfolio = require("../models/portfolios")
 
+const yahooFinance = require('yahoo-finance2').default;
+
+
 
 // Transaction.js manages all of the post and get requests for transactions
 
@@ -116,6 +119,20 @@ router.post("/sell", async (req, res, next) => {
     next(err);
   }
 });
+
+router.post("/historical", async(req, res,next) =>{
+  try {
+      const {ticker, startDate} = req.body
+      console.log("TICKER",  ticker)
+      const query = 'TSLA';
+      const queryOptions = { period1: '2023-0-01', /* ... */ };
+      const result = await yahooFinance.historical(query, queryOptions);
+      console.log(result)
+      return res.status(201).json({result});
+    } catch (error) {
+      console.error(error);
+    }
+})
 
 router.post("/", async (req, res, next) => {
 

@@ -7,7 +7,9 @@ import { Box, Button, Center, Flex, Form, Stack, Container, SimpleGrid, Input, T
 
 
 // this post request over here verifies if the user email and password combo is valid
-const handleLogin = async (event, email, password, setIsLogged) => {
+const handleLogin = async (event, email, password, setIsLogged, setCurrentUserId) => {
+  console.log("trying to log in...")
+  
   try {
     event.preventDefault();
 
@@ -19,11 +21,14 @@ const handleLogin = async (event, email, password, setIsLogged) => {
       }
     );
 
-
-    setIsLogged(true);
-    //sets the id and token in localstorage
+      console.log(res.data.user)
+    setCurrentUserId(res.data.user.id);
     localStorage.setItem("currentUserId", res.data.user.id);
     localStorage.setItem("token", res.data.token)
+    setIsLogged(true);
+    //sets the id and token in localstorage
+
+    
 
 
     // this will take you to the 
@@ -35,12 +40,13 @@ const handleLogin = async (event, email, password, setIsLogged) => {
 
 
 
-export default function SignInPage({ setIsLogged }) {
+export default function SignInPage({ setIsLogged, setCurrentUserId}) {
   const [email, setEmail] = useState("");
 
   const [password, setPassword] = useState("");
   //https://g.foolcdn.com/image/?url=https%3A%2F%2Fg.foolcdn.com%2Feditorial%2Fimages%2F548475%2Fgettyimages-1035991674.jpg&op=resize&w=1200&h=630
   // https://business.fiu.edu/graduate/insights/img/artificial-intelligence-in-the-stock-market.jpg
+  
   return (
     <Box position={'relative'}
       backgroundImage={
@@ -80,7 +86,7 @@ export default function SignInPage({ setIsLogged }) {
             </Stack >
             <Box as={'form'}
               onSubmit={(event) =>
-                handleLogin(event, email, password, setIsLogged)
+                handleLogin(event, email, password, setIsLogged, setCurrentUserId)
               }>
               <Stack spacing={4}
                 marginBottom={4}>

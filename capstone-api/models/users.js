@@ -36,6 +36,7 @@ class User {
       const isValid = await bcrypt.compare(credentials.password, user.password);
       if (isValid) {
         //If the two passwords match, we now display the user information
+        console.log("This is the public userInformation: ", User.makePublicUser(user))
         return User.makePublicUser(user);
       }
     }
@@ -151,13 +152,15 @@ class User {
   }
 
   static async fetchUserDataById(userId) {
+    //should return the public user information
     const query = `
       SELECT *
       FROM users
       WHERE id = $1 
     `;
     const result = await db.query(query, [userId]);
-    return result.rows;
+    const publicUser = User.makePublicUser(result.rows[0])
+    return publicUser;
   }
 
 }

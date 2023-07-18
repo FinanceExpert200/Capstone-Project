@@ -17,6 +17,15 @@ const { createUserJwt } = require("../utils/tokens");
 //   }
 // });
 
+router.get("/profile/:id", async (req,res)=> {
+  try {
+    const userInfo = await User.fetchUserDataById(req.params.id);
+    res.status(200).json({user: userInfo});
+  }catch(err){
+    next(err);
+  }
+})
+
 router.post("/login", async (req, res, next) => {
   try {
     // take the users email and password and attempt to authenticate them

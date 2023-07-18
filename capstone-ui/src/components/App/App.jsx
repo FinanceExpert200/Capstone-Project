@@ -11,6 +11,7 @@ import {
   json,
 } from "react-router-dom";
 import axios from "axios";
+import { Params } from "react-router-dom";
 
 import LandingPage from "../LandingPage/LandingPage";
 import RegisterPage from "../RegisterPage/RegisterPage";
@@ -19,11 +20,19 @@ import Trade from "../Trade/Trade";
 import Navbar from "../NavBar/NavBar";
 import SignInPage from "../SignInPage/SignInPage";
 import Home from "../Home/Home";
+
+import Trading from "../../TradingCalculations/Trade.js"
+
 import StockCard from "../StockCard/StockCard";
 
 import { useEffect } from "react";
 
+
+
 function App() {
+  //State of the users Profile
+  const [profile,setProfile] = useState(null);
+  const [account,setAccount] = useState(null);
   // State Variables that have the current price of the stock
 
   const tickers = ["META", "AMZN", "NFLX", "GOOGL", "CRM"];
@@ -33,6 +42,49 @@ function App() {
   const [nflxPrice, setNflxPrice] = useState(0);
   const [googlPrice, setGooglPrice] = useState(0);
   const [crmPrice, setCrmPrice] = useState(0);
+
+  // login functiionaility
+  const [isLogged, setIsLogged] = useState(false);
+  // this contains the id of the currently logged in user
+  const [currentUserId, setCurrentUserId] = useState(null);
+  const [usertoken, setUserToken] = useState(null);
+
+  const [buying_power, setBuyingPower] = useState(10000);
+  const [acc_value, setAccValue] = useState(10000);
+  const [transactionHistory, setTransactionHistory] = useState();
+
+
+  useEffect(() => {
+    
+    const userId = localStorage.getItem("currentUserId");
+    const token = localStorage.getItem("token");
+    if (userId ) {
+      setCurrentUserId(userId);
+      setIsLogged(true);
+    } else {
+      setIsLogged(false);
+    }
+    console.log(isLogged);
+
+
+
+  }, [isLogged]);
+
+ const getUserId = () =>{
+    return currentUserId
+  }
+
+
+  const getProfile = async() => {
+    try {
+      const res = await axios.get(`http://localhost:3001/auth/profile/${localStorage.getItem("currentUserId")}`);
+      setProfile(res.data.user);
+      
+    } catch(error){
+      console.log(error)
+    } 
+  }
+  // console.log("This is the profile: ", profile)
 
   const stockData = {
     "1": {
@@ -92,7 +144,15 @@ function App() {
     }
   };
 
-  // this function updates the stock price of every single ticker that we have
+  
+  // Trading.calculateMovingAverage('AAPL', "2022-02-01");
+
+  
+
+
+
+  // console.log("Here is the meta price: ", metaPrice);
+
   const updateStockPrice = async (tickers) => {
     console.log(tickers);
     tickers.forEach(async (ticker) => {
@@ -100,25 +160,6 @@ function App() {
     });
   };
   // --------------------------------------------------------------------------------------------------------------
-
-
-  // THIS SECTION CONTAINS THE LOGIN FUNCTIONALITY
-
-  // logged 
-  const [isLogged, setIsLogged] = useState(false);
-  // this contains the id of the currently logged in user
-  const [currentUserId, setCurrentUserId] = useState(null);
-
-
-
-  // this is the buying power and account value of the user
-  const [buying_power, setBuyingPower] = useState(10000);
-  const [acc_value, setAccValue] = useState(10000);
-
-
-  const [transactionHistory, setTransactionHistory] = useState();
-
-
 
 
 
@@ -192,7 +233,7 @@ function App() {
           <Navbar isLogged={isLogged} setIsLogged={setIsLogged} /> 
           <Routes>
             <Route path="/" element={<LandingPage />} />
-            <Route path="/home" element={<Home />} />
+            <Route path="/home" element={<Home getProfile={getProfile} profile= {profile}/>} />
             <Route
               path="/trade"
               element={
@@ -220,7 +261,8 @@ function App() {
             />
             <Route
               path="/login"
-              element={<SignInPage setIsLogged={setIsLogged} />}
+              element={<SignInPage setIsLogged={setIsLogged} 
+              setCurrentUserId = {setCurrentUserId} />}
             />
             <Route path="/trade/:stockId" element={<StockCard updateStockPrice={updateStockPrice} tickers={tickers} currentUserId={currentUserId} stockData={stockData} acc_value={acc_value}/>} />
           </Routes>
