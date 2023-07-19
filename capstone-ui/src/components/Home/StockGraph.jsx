@@ -4,31 +4,9 @@ import {Box,Text} from '@chakra-ui/react'
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
 
 export default function StockGraph ({priceList}) {
-    console.log(priceList)
-    const [dataPrice, setDataPrice] = useState([])
-    useEffect(() => {
-        if (priceList) {
-            const extractedDates = priceList.map(item => ({
-              date: item.date, // Assuming date property exists in the priceList items
-              openPrice: item.open, // Assuming open property exists in the priceList items
-            }));
-            setDataPrice(extractedDates);
-          }
-        }, [priceList]);
-
-        // priceList.map((id) => {
-        //     setDataPrice([...dataPrice, id.date]);
-
-        // })
-        // }, [dataPrice]);
-
-    console.log("This is the list: " ,dataPrice);
-   //const test = priceList ? priceList[0].open : 90;
-        // priceList.map((id) => {
-        //     setDataPrice([...dataPrice, id] )
-        // })
-
-
+    console.log("when called first : " , priceList)
+    // const [dataPrice, setDataPrice] = useState([])
+    // console.log("This is the list: " ,dataPrice);
     return (
         <Box>
             <Text>
@@ -39,9 +17,9 @@ export default function StockGraph ({priceList}) {
             </Text>
             <ResponsiveContainer width="100%" aspect={2}>
       <LineChart
-        width={500}
+        width={100}
         height={300}
-        data={dataPrice}
+        data={[]}
         margin={{
           top: 5,
           right: 30,
@@ -54,7 +32,16 @@ export default function StockGraph ({priceList}) {
         <YAxis domain={['auto', 'auto']}/>
         <Tooltip />
         <Legend />
-        <Line type="monotone" dataKey="openPrice" stroke="#8884d8" activeDot={{ r: 8 }} />
+        {priceList.map((companySets, index) => (
+          <Line   key = {index}
+                  name={'Company'}
+                  type="monotone"  
+                  data= {companySets}
+                  dataKey="openPrice"
+                  stroke="#8884d8" 
+                  activeDot={{ r: 8 }} />
+
+          ))}
         
       </LineChart>
     </ResponsiveContainer>
