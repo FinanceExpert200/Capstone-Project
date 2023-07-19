@@ -1,12 +1,16 @@
 import React from "react";
 import "./Home.css";
-import { useEffect, useRef } from "react";
-
+import { useEffect, useState } from "react";
 import {Grid, Flex,Center,Box, GridItem, Text, Stack, Container, Button} from '@chakra-ui/react'
-import axios from "axios";
+import axios, { all } from "axios";
 import StockGraph from "./StockGraph";
 
-const Home = ({getProfile,getAccount, getPortfolio, pastStockPrice, portfolio, profile, account, historicalPrice}) => {
+const Home = ({getProfile,getAccount, getPortfolio, pastStockPrice, portfolio, profile, account, historicalPrice, tickers}) => {
+  const [metaData, setMetaData] = useState([]);
+  const [amznData, setAmznData] = useState([]);
+  const [nflxData, setNflxData] = useState([]);
+  //const [allData, setAllData] = useState([]);
+
   const rangeDate = new Date();
   rangeDate.setDate(rangeDate.getDate()- 30);
 
@@ -14,12 +18,30 @@ const Home = ({getProfile,getAccount, getPortfolio, pastStockPrice, portfolio, p
     getProfile();
     getAccount();
     getPortfolio();
-    pastStockPrice(rangeDate);
+    //fetches the data from a promise 
+    const fetchData = async () => {
+      try {
+        const meta = await pastStockPrice(tickers[0], rangeDate);
+        const amzn = await pastStockPrice(tickers[1], rangeDate);
+        const nflx = await pastStockPrice(tickers[2], rangeDate);
+        setMetaData(meta);
+        setAmznData(amzn);
+        setNflxData(nflx);
+      } catch (error) {
+        console.error(error);
+      }
+    };
+
+    fetchData();
 
   },[]);
   
 
-  console.log("NAME: " , historicalPrice)
+  // console.log("Meta: " , metaData);
+  // console.log("Amazon: " , amznData);
+  // console.log("Netflix: " , nflxData);
+  const allData = [metaData, amznData,nflxData];
+  console.log("All Data: ", allData)
   return (
         <Box 
           w={'full'}
@@ -83,8 +105,8 @@ const Home = ({getProfile,getAccount, getPortfolio, pastStockPrice, portfolio, p
                 <Box>
                   The wacther and graph
                 </Box>
-                {historicalPrice ? (
-                  <StockGraph priceList={historicalPrice}/>
+                {allData ? (
+                  <StockGraph priceList={allData}/>
                 ):(
                   <Text>Loading...</Text>
                 )}
@@ -111,70 +133,3 @@ const Home = ({getProfile,getAccount, getPortfolio, pastStockPrice, portfolio, p
       };
       
       export default Home;
-      
-      // <Grid
-      //   templateAreas={`"profile graph"`}
-      //   h='100vh'
-      //   w={'full'}
-      //   templateRows='repeat(1, 1fr)'
-      //   templateColumns='repeat(2, 1fr)'
-      //   p={55}
-      // >
-      //   <GridItem rowSpan={1} 
-      //             area= {'profile'}
-      //             bg= {'transparent'} 
-      //             borderRadius={30}
-      //             p={10}
-                  
-      //             >
-      //     <Stack direction={'column'} 
-      //            bg = {'#D6D5C9'}
-                 
-      //            p= {10}>
-      //     <span></span>
-      //     <Center>           
-      //       Welcome {profile.firstName}
-      //     </Center>
-      //     <Box >
-      //       <h1>Total Amount: </h1>
-      //       <Center>{account.acc_value}</Center>
-      //     </Box>
-      //     <Box >
-      //       <h1>Buying Amount: </h1>
-      //       <Center>{account.buying_power}</Center>
-      //     </Box>
-          
-      //     {!portfolio ? (
-      //         <Text>
-      //           The list is available
-      //         </Text>
-      //     ):(
-      //         <Box>
-      //           No stock available
-      //         </Box>
-      //     )}
-          
-
-      //     </Stack>
-
-      //   </GridItem>
-      //   <GridItem rowSpan={1} >
-      //     <Stack direction={'column'} justify={'sapce-between'}>
-      //       <Stack bgColor={'grey'}
-      //             >
-      //               <Box>
-      //                 Timer here it will grow 
-      //               </Box>
-      //               <Box>
-      //                 here
-      //               </Box>
-            
-      //       </Stack>
-      //       <Stack bgColor={'red'}>
-      //         <Box>here</Box>
-      //       </Stack>
-
-      //     </Stack>
-      //   </GridItem>
-      
-      // </Grid>

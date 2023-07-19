@@ -45,7 +45,7 @@ function App() {
   const [crmPrice, setCrmPrice] = useState(0);
 
   //State Variable that gatehrs the price in teh last 30 days
-  const [historicalPrice, setHistoricalPrice] = useState(null);
+  const [historicalPrice, setHistoricalPrice] = useState([]);
 
   // login functiionaility
   const [isLogged, setIsLogged] = useState(false);
@@ -175,13 +175,19 @@ function App() {
 
   // --------------------------------------------------------------------------------------------------------------
   //The function fetches the price of past Stock
-  const pastStockPrice = async(date) => {
+  const pastStockPrice = async(tick, date) => {
     try{
       console.log("history is being used")
-      const list = await Trading.fetchHistoricalData("META", date);
-      setHistoricalPrice(list);
-
-    } catch(error){
+      const list = await Trading.fetchHistoricalData(tick, date);
+      //The data now extracts the date and open price
+      
+      const extractedData = list.map(item => (
+        {
+        date: item.date,
+        openPrice: item.open,
+      }));
+      return extractedData;
+      } catch(error){
       console.error(error);
     }
   }
@@ -241,7 +247,9 @@ function App() {
           <Navbar isLogged={isLogged} setIsLogged={setIsLogged} /> 
           <Routes>
             <Route path="/" element={<LandingPage />} />
-            <Route path="/home" element={<Home getProfile={getProfile} getAccount={getAccount} getPortfolio={getPortfolio} pastStockPrice={pastStockPrice} portfolio={portfolio} profile= {profile} account={account} historicalPrice={historicalPrice}/>} />
+            <Route path="/home" element={<Home getProfile={getProfile} getAccount={getAccount} getPortfolio={getPortfolio} 
+                                               pastStockPrice={pastStockPrice} portfolio={portfolio} profile= {profile} 
+                                               account={account} historicalPrice={historicalPrice} tickers = {tickers}  />} />
             <Route
               path="/trade"
               element={
