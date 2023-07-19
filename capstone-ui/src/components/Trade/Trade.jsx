@@ -12,8 +12,8 @@ export default function Trade({
   useEffect(() => {
     updateStockPrice(tickers);
   }, []);
-
-  console.log("ticker", tickers);
+//UNDO THIS
+  //console.log("ticker", tickers);
   const handleRefresh = async () => {
     updateStockPrice(tickers);
   };

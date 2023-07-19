@@ -39,8 +39,8 @@ export default class Trading {
   
     let currentPrice = filteredData[filteredData.length - 1].close;
     let currentDate = filteredData[filteredData.length - 1].date;
-    
-    console.log(`Moving Average: ${movingAverage}, Current Price: ${currentPrice} Date ${currentDate}`);
+    //UNDO THIS
+    //console.log(`Moving Average: ${movingAverage}, Current Price: ${currentPrice} Date ${currentDate}`);
     this.compareMovingAverage(currentPrice, movingAverage);
     return movingAverage;
   }
@@ -50,10 +50,13 @@ export default class Trading {
         //if todays stock is 5% below the moving avg, we buy 
         //(2% decrease or higher)
         let percentIncrease = ((currentPrice - movingAverage) / movingAverage) * 100;
-        console.log("Percent Increase", percentIncrease)
+        //UNDO THIS
+        //console.log("Percent Increase", percentIncrease)
+
         //If PercentIncrease is negative 2 or lower, we want to buy a share of the stock (call buy share from transaction route)
         if (percentIncrease < -1){
-            console.log(`We buy the stock`)
+          //UNDO THIS
+          //console.log(`We buy the stock`)
         }
     }
 
@@ -63,7 +66,8 @@ export default class Trading {
           const response = await axios.get(
             `http://localhost:3001/trans/stock/${ticker}`
           );
-          console.log(response.data.data)
+          //UNDO THIS
+          //console.log(response.data.data)
           return response.data.data.c
 
         } catch (error) {
@@ -76,15 +80,16 @@ export default class Trading {
 
   static async fetchHistoricalData(ticker, startDate, endDate){
     //if endDate is left undefined, it defaults to today
-    console.log("FETCHING THE API")
+    //UNDO THIS
+    //console.log("FETCHING THE API")
     try {
         const res = await axios.post(`http://localhost:3001/trans/historical`, {
           ticker: ticker,
           startDate: startDate,
           endDate: endDate
         });
-
-        console.log(res.data);
+//UNDO THIS
+        //console.log(res.data);
         return res.data.result
       } catch (err) {
         console.log(err);
@@ -110,7 +115,8 @@ export default class Trading {
     let count  = 0
     while (count < 20) {
       let currMovingAverage = this.calculateMovingAverage(oneYearHistoricalData, startDate, endDate);
-      console.log(`startdate: ${startDate}, endDate ${endDate}. Moving avg: ${currMovingAverage}. We stop at ${currentDate}`);
+      //UNDO THIS
+      //console.log(`startdate: ${startDate}, endDate ${endDate}. Moving avg: ${currMovingAverage}. We stop at ${currentDate}`);
   
       startDate = this.incrementDateByOneDay(startDate);
       endDate = this.incrementDateByOneDay(endDate);
