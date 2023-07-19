@@ -1,19 +1,25 @@
 import React from "react";
 import "./Home.css";
 import { useEffect, useRef } from "react";
-//import { Chart } from "chart.js";
+
 import {Grid, Flex,Center,Box, GridItem, Text, Stack, Container, Button} from '@chakra-ui/react'
 import axios from "axios";
+import StockGraph from "./StockGraph";
 
-const Home = ({getProfile,getAccount, getPortfolio, portfolio, profile, account}) => {
+const Home = ({getProfile,getAccount, getPortfolio, pastStockPrice, portfolio, profile, account, historicalPrice}) => {
+  const rangeDate = new Date();
+  rangeDate.setDate(rangeDate.getDate()- 30);
+
   useEffect(()=> {
     getProfile();
     getAccount();
     getPortfolio();
+    pastStockPrice(rangeDate);
 
   },[]);
+  
 
-  //console.log("NAME: " , profile.firstName)
+  console.log("NAME: " , historicalPrice)
   return (
         <Box 
           w={'full'}
@@ -77,6 +83,12 @@ const Home = ({getProfile,getAccount, getPortfolio, portfolio, profile, account}
                 <Box>
                   The wacther and graph
                 </Box>
+                {historicalPrice ? (
+                  <StockGraph priceList={historicalPrice}/>
+                ):(
+                  <Text>Loading...</Text>
+                )}
+                
 
               </Stack>
 

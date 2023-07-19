@@ -52,8 +52,9 @@ export default function StockCard({
     }
   };
 
-
-  console.log("transaction history", acc_value);
+//UNDO THIS
+  //console.log("transaction history", acc_value);
+  
   // here will be some sort of function that displays the stock graph, and just overall infromation based on the stock id that is passed
   return (
     <div className="stock-card">

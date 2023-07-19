@@ -11,7 +11,7 @@ import {
   json,
 } from "react-router-dom";
 import axios from "axios";
-import { Params } from "react-router-dom";
+
 
 import LandingPage from "../LandingPage/LandingPage";
 import RegisterPage from "../RegisterPage/RegisterPage";
@@ -44,6 +44,9 @@ function App() {
   const [googlPrice, setGooglPrice] = useState(0);
   const [crmPrice, setCrmPrice] = useState(0);
 
+  //State Variable that gatehrs the price in teh last 30 days
+  const [historicalPrice, setHistoricalPrice] = useState(null);
+
   // login functiionaility
   const [isLogged, setIsLogged] = useState(false);
   // this contains the id of the currently logged in user
@@ -54,25 +57,23 @@ function App() {
   const [acc_value, setAccValue] = useState(10000);
   const [transactionHistory, setTransactionHistory] = useState();
 
-
   useEffect(() => {
-    
-    const userId = localStorage.getItem("currentUserId");
+    const currentUserId = localStorage.getItem("currentUserId");
     const token = localStorage.getItem("token");
-    if (userId ) {
-      setCurrentUserId(userId);
+    if (currentUserId) {
+      setCurrentUserId(currentUserId);
       setIsLogged(true);
     } else {
       setIsLogged(false);
     }
-    console.log(isLogged);
-
-
-
   }, [isLogged]);
+
+
 
   Trading.calculateDisplayedProfit("META")
 
+  //The following 3 getter: gets the list of all stocks and account used by the user
+  
   const getProfile = async() => {
     try {
       const res = await axios.get(`http://localhost:3001/auth/profile/${localStorage.getItem("currentUserId")}`);
@@ -81,8 +82,6 @@ function App() {
       console.log(error)
     } 
   }
-//testing get result
-console.log(profile)
 
   const getAccount = async() => {
     try {
@@ -92,10 +91,7 @@ console.log(profile)
       console.log(error)
     } 
   }
-//testing get result
-console.log(account);
 
-//gets the list of all stocks used by the user
   const getPortfolio = async() => {
     try {
       const res = await axios.get(`http://localhost:3001/trans/account/${localStorage.getItem("currentUserId")}`);
@@ -104,8 +100,6 @@ console.log(account);
       console.log(error)
     } 
   }
-//testing get result
-console.log(portfolio);
 
   const stockData = {
     "1": {
@@ -169,9 +163,6 @@ console.log(portfolio);
   
   // Trading.calculateMovingAverage('AAPL', "2022-02-01");
 
-  
-
-
 
   // console.log("Here is the meta price: ", metaPrice);
 
@@ -181,24 +172,19 @@ console.log(portfolio);
       await getStockPrice(ticker);
     });
   };
+
   // --------------------------------------------------------------------------------------------------------------
+  //The function fetches the price of past Stock
+  const pastStockPrice = async(date) => {
+    try{
+      console.log("history is being used")
+      const list = await Trading.fetchHistoricalData("META", date);
+      setHistoricalPrice(list);
 
-
-
-
-  useEffect(() => {
-    const currentUserId = localStorage.getItem("currentUserId");
-    const token = localStorage.getItem("token");
-    if (currentUserId) {
-      setCurrentUserId(currentUserId);
-      setIsLogged(true);
-    } else {
-      setIsLogged(false);
+    } catch(error){
+      console.error(error);
     }
-  }, [isLogged]);
-
-
-
+  }
 
 
 
@@ -255,7 +241,7 @@ console.log(portfolio);
           <Navbar isLogged={isLogged} setIsLogged={setIsLogged} /> 
           <Routes>
             <Route path="/" element={<LandingPage />} />
-            <Route path="/home" element={<Home getProfile={getProfile} getAccount={getAccount} getPortfolio={getPortfolio} portfolio={portfolio} profile= {profile} account={account}/>} />
+            <Route path="/home" element={<Home getProfile={getProfile} getAccount={getAccount} getPortfolio={getPortfolio} pastStockPrice={pastStockPrice} portfolio={portfolio} profile= {profile} account={account} historicalPrice={historicalPrice}/>} />
             <Route
               path="/trade"
               element={
