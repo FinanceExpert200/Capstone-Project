@@ -8,11 +8,40 @@ import StockGraph from "./StockGraph";
 const Home = ({getProfile,getAccount, getPortfolio, pastStockPrice, portfolio, profile, account, historicalPrice, tickers}) => {
   const [metaData, setMetaData] = useState([]);
   const [amznData, setAmznData] = useState([]);
-  const [nflxData, setNflxData] = useState([]);
-  //const [allData, setAllData] = useState([]);
+  const [googleData, setGoogleData] = useState([]);
+  const [crmData, setCrmData] = useState([]);
+  // const [nflxData, setNflxData] = useState([]);
+  const [allData, setAllData] = useState([]);
+  const [test,setTest] = useState([]);
 
   const rangeDate = new Date();
   rangeDate.setDate(rangeDate.getDate()- 30);
+
+  const mergeArrays = (arr1, arr2, arr3, arr4) => {
+    const mergedArray = [];
+    // Create an object to keep track of merged data
+    const dataMap = {};
+    arr1.forEach(({ date, ...rest }) => {
+      dataMap[date] = { ...dataMap[date], ...rest };
+    });
+    arr2.forEach(({ date, ...rest }) => {
+      dataMap[date] = { ...dataMap[date], ...rest };
+    });
+    arr3.forEach(({ date, ...rest }) => {
+      dataMap[date] = { ...dataMap[date], ...rest };
+    });
+    arr4.forEach(({ date, ...rest }) => {
+      dataMap[date] = { ...dataMap[date], ...rest };
+    });
+  
+  
+    // Convert the data in the dataMap back to an array
+    Object.keys(dataMap).forEach((date) => {
+      mergedArray.push({ date, ...dataMap[date] });
+    });
+  
+    return mergedArray;
+  };
 
   useEffect(()=> {
     getProfile();
@@ -23,10 +52,16 @@ const Home = ({getProfile,getAccount, getPortfolio, pastStockPrice, portfolio, p
       try {
         const meta = await pastStockPrice(tickers[0], rangeDate);
         const amzn = await pastStockPrice(tickers[1], rangeDate);
-        const nflx = await pastStockPrice(tickers[2], rangeDate);
+        const google = await pastStockPrice(tickers[3], rangeDate);
+        const crm = await pastStockPrice(tickers[4], rangeDate);
+        // const nflx = await pastStockPrice(tickers[2], rangeDate);
+
         setMetaData(meta);
         setAmznData(amzn);
-        setNflxData(nflx);
+        setGoogleData(google);
+        setCrmData(crm);
+        // setNflxData(nflx);
+
       } catch (error) {
         console.error(error);
       }
@@ -36,12 +71,15 @@ const Home = ({getProfile,getAccount, getPortfolio, pastStockPrice, portfolio, p
 
   },[]);
   
+//gathers the individual stocks together as sets
+  useEffect(() => {
+    if (metaData.length > 0 && amznData.length > 0 && googleData.length > 0 && crmData.length > 0) {
+      setAllData([metaData, amznData, googleData, crmData]);
 
-  // console.log("Meta: " , metaData);
-  // console.log("Amazon: " , amznData);
-  // console.log("Netflix: " , nflxData);
-  const allData = [metaData, amznData,nflxData];
-  console.log("All Data: ", allData)
+    }
+  }, [metaData, amznData, googleData, crmData]);
+  const data = mergeArrays(metaData,amznData,googleData, crmData);
+
   return (
         <Box 
           w={'full'}
@@ -51,10 +89,10 @@ const Home = ({getProfile,getAccount, getPortfolio, pastStockPrice, portfolio, p
           ]}
           
           >
-          {profile && account ? (
+          {profile && account && data.length ? (
             <Stack direction={'row'} padding={20} w={'full'} >
               <Stack direction={'column'} p={'10'} 
-                     bgColor={'#B2D3C2'}
+                     bgColor={'green.700'}
                      borderRadius={10}>
 
                 <Stack direction={'row'} fontWeight={'medium'} fontSize={50} fontFamily={'Arial'}>
@@ -88,7 +126,7 @@ const Home = ({getProfile,getAccount, getPortfolio, pastStockPrice, portfolio, p
                   </Stack>
                 </Box>
           
-            {!portfolio ? (
+            {portfolio.length ? (
                <Text>
                  The list is available
                </Text>
@@ -105,21 +143,19 @@ const Home = ({getProfile,getAccount, getPortfolio, pastStockPrice, portfolio, p
                 <Box>
                   The wacther and graph
                 </Box>
-                {allData ? (
-                  <StockGraph priceList={allData}/>
-                ):(
-                  <Text>Loading...</Text>
-                )}
-                
+               
+                  <StockGraph priceList={data}/>
 
               </Stack>
 
             </Stack>
             
             ):(
-              <Box>
-              Loading...
-            </Box>
+              <Center  w={'full'}
+              h={'100vh'}
+              color={'white'}>
+                <Text>Loading...</Text>
+              </Center>
           )}
           
           
