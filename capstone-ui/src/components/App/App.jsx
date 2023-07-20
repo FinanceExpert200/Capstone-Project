@@ -1,17 +1,16 @@
-// import logo from './assets/logo.svg';
-// import logo from "../../assets/logo.svg";
-// import "./App.css";
-import React, { useState } from "react";
+import { useState } from 'react'
+// import reactLogo from './assets/react.svg'
+import viteLogo from '/vite.svg'
+import './App.css'
+
 import {
   BrowserRouter as Router,
   Routes,
   Route,
-  Switch,
   BrowserRouter,
   json,
 } from "react-router-dom";
 import axios from "axios";
-
 
 import LandingPage from "../LandingPage/LandingPage";
 import RegisterPage from "../RegisterPage/RegisterPage";
@@ -26,8 +25,6 @@ import Trading from "../../TradingCalculations/Trade.js"
 import StockCard from "../StockCard/StockCard";
 
 import { useEffect } from "react";
-
-
 
 function App() {
   //State of the users Profile
@@ -261,7 +258,8 @@ function App() {
             <Route path="/" element={<LandingPage />} />
             <Route path="/home" element={<Home getProfile={getProfile} getAccount={getAccount} getPortfolio={getPortfolio} 
                                                pastStockPrice={pastStockPrice} portfolio={portfolio} profile= {profile} 
-                                               account={account} historicalPrice={historicalPrice} tickers = {tickers}  />} />
+                                               account={account} historicalPrice={historicalPrice} tickers = {tickers}
+                                               fixedDate ={fixedDate}  />} />
             <Route
               path="/trade"
               element={

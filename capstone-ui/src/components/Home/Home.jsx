@@ -5,14 +5,14 @@ import {Grid, Flex,Center,Box, GridItem, Text, Stack, Container, Button} from '@
 import axios, { all } from "axios";
 import StockGraph from "./StockGraph";
 
-const Home = ({getProfile,getAccount, getPortfolio, pastStockPrice, portfolio, profile, account, historicalPrice, tickers}) => {
+const Home = ({getProfile,getAccount, getPortfolio, pastStockPrice, portfolio, profile, account, historicalPrice, tickers,fixedDate}) => {
   const [metaData, setMetaData] = useState([]);
   const [amznData, setAmznData] = useState([]);
   const [googleData, setGoogleData] = useState([]);
   const [crmData, setCrmData] = useState([]);
   // const [nflxData, setNflxData] = useState([]);
   const [allData, setAllData] = useState([]);
-  const [test,setTest] = useState([]);
+  const [test,setTest] = useState();
 
   const rangeDate = new Date();
   rangeDate.setDate(rangeDate.getDate()- 30);
@@ -79,57 +79,42 @@ const Home = ({getProfile,getAccount, getPortfolio, pastStockPrice, portfolio, p
     }
   }, [metaData, amznData, googleData, crmData]);
   const data = mergeArrays(metaData,amznData,googleData, crmData);
+console.log("THE STOCK" , portfolio)
+useEffect(()=>{
+  if(portfolio != null){
+    const stockCard = portfolio.map((item)=> (
+      <Box borderRadius={30} borderWidth={3} borderColor={'green.500'} p={3}>
+        <Text color='green.500' fontWeight={'bold'} fontSize={'40px'}>{item.ticker}</Text>
+        <Text color={'grey'} fontSize={15}>Purchased on: {fixedDate(item.created_at)}</Text>
+        <Text fontSize={25} color={'green.100'}>{item.quantity}</Text>
+      </Box>
+    ))
+    setTest(stockCard)
 
+  }
+  
+}, [test])
+   console.log("THE POPULATED: ", test)
   return (
         <Box 
+          position={'absolute'}
           w={'full'}
-          h={'100vh'}
-          bgGradient={[
-            'linear(to-b, green.400, black)',
-          ]}
+          bgColor={'#000409'}
+          // bgGradient={[
+          //   'linear(to-b, green.900, black)',
+          // ]}
           
           >
           {profile && account && data.length ? (
             <Stack direction={'row'} padding={20} w={'full'} >
-              <Stack direction={'column'} p={'10'} 
-                     bgColor={'green.700'}
-                     borderRadius={10}>
-
-                <Stack direction={'row'} fontWeight={'medium'} fontSize={50} fontFamily={'Arial'}>
-                <Text >
-                  Welcome 
-                </Text>
-                <Text>
-                {profile.firstName}
-                </Text>
-                </Stack>
-
-                <Box>
-                  <Text fontWeight={'medium'} textDecoration={'underline'}>Total Amount: </Text>
-                  <Stack direction = {'row'} justifyContent={'center'} fontSize={'40'}>
-                    <Text>$</Text>
-                    <Text >      
-                        {account.acc_value}
-                    </Text>
-                    
-                  </Stack>
-                </Box>
-
-                <Box>
-                  <Text fontWeight={'medium'} textDecoration={'underline'}>Buying Power: </Text>
-                  <Stack direction = {'row'} justifyContent={'center'} fontSize={'40'}>
-                    <Text>$</Text>
-                    <Text >      
-                      {account.buying_power}
-                    </Text>
-                    
-                  </Stack>
-                </Box>
-          
+              <Stack direction={'column'} 
+                     p={1}
+                     >      
             {portfolio.length ? (
-               <Text>
-                 The list is available
-               </Text>
+              
+               <Box>
+               {test}
+               </Box>
             ):(
                <Stack direction="column" alignItems={'center'} p={10}>
                  <Text>No stock available</Text>
@@ -140,11 +125,42 @@ const Home = ({getProfile,getAccount, getPortfolio, pastStockPrice, portfolio, p
             )}
               </Stack>
               <Stack direction={'column'} w={'full'}>
-                <Box>
-                  The wacther and graph
+                <Box >
+                <Stack direction={'row'} fontWeight={'medium'} color={'#cccbcc'} fontSize={60} fontFamily={'Arial'}>
+                <Text color={'green.300'}>
+                  Welcome
+                </Text>
+                <Text color={'green.300'}>
+                {profile.firstName} !
+                </Text>
+                </Stack>
+                <Text fontSize={20}color={'grey'}>
+                  Here are your stats for today:
+                </Text>
                 </Box>
+                <Stack direction={'row'}>
+
+                  <Container width={'30%'}  fontSize={'18'} borderRadius={30} borderWidth={3} borderColor={'green.500'}>
+                  <Text fontWeight={'medium'} textDecoration={'underline'} color={'grey'}>Total Amount: </Text>
+                  <Stack direction = {'row'} justifyContent={'center'} fontSize={'40'}>
+                    <Text color={'green.400'}>$</Text>
+                    <Text color={'green.400'}>      
+                        {account.acc_value}
+                    </Text>
+                  </Stack>
+                  </Container>
+
+                  <Container width={'30%'}  fontSize={'18'} borderRadius={30} borderWidth={3} borderColor={'green.500'}>
+                  <Text fontWeight={'medium'} fontSize={'18'} color={'grey'} textDecoration={'underline'}>Buying Power: </Text>
+                  <Stack direction = {'row'} justifyContent={'center'} fontSize={'40px'}>
+                    <Text color={'green.400'}>$</Text>
+                    <Text color={'green.400'}>{account.buying_power}</Text>
+                  </Stack>
+                  </Container>
+                </Stack>
+                
                
-                  <StockGraph priceList={data}/>
+                <StockGraph priceList={data}/>
 
               </Stack>
 
