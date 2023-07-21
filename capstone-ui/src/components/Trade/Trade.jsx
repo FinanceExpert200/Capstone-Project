@@ -1,8 +1,9 @@
 import * as React from "react";
-import axios from "axios";
 import { useEffect } from "react";
 import { Link } from "react-router-dom";
 import "./Trade.css";
+import Trading from "../../TradingCalculations/Trade.js";
+import axios from "axios";
 
 export default function Trade({
   updateStockPrice,

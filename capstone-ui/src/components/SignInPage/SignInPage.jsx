@@ -2,7 +2,7 @@ import React, { useEffect } from "react";
 import "./SignInPage.css";
 import { useState } from "react";
 import axios from "axios";
-import { Box, Button, Center, Flex, Form, Stack, Container, SimpleGrid, Input, Text, Heading } from '@chakra-ui/react'
+import { Box, Button, Center, Flex, Stack, Container, SimpleGrid, Input, Text, Heading } from '@chakra-ui/react'
 // import { useEffect } from "react";
 import Trading from "../../TradingCalculations/PairsTrading.js"
 import MovAvgTrading from "../../TradingCalculations/MovingAverageCrossover.js"
@@ -55,7 +55,10 @@ export default function SignInPage({ setIsLogged, setCurrentUserId}) {
   // https://business.fiu.edu/graduate/insights/img/artificial-intelligence-in-the-stock-market.jpg
   
   return (
-    <Box position={'relative'}
+    <Box 
+      position={'absolute'}
+      w={'full'}
+      h={'100vh'}
       backgroundImage={
         'url(https://business.fiu.edu/graduate/insights/img/artificial-intelligence-in-the-stock-market.jpg)'
       }

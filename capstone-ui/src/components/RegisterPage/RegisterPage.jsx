@@ -2,7 +2,7 @@ import React from "react";
 import axios from "axios";
 import { useState } from "react";
 import './RegistrationPage.css';
-import { Box, Button, Center, Flex, Form, Stack, Container, SimpleGrid, Input, Text, Heading } from '@chakra-ui/react'
+import { Box, Button, Center, Flex, Stack, Container, SimpleGrid, Input, Text, Heading } from '@chakra-ui/react'
 
 const handleAddData = async (event, buying_power, acc_value, email, first_name, last_name, password) => {
   try {
@@ -40,14 +40,17 @@ const RegisterPage = ({ buying_power, acc_value }) => {
 
   return (
 
-    <Box position={'relative'}
+    <Box 
+      position={'absolute'}
+      w={'full'}
+      h={'100vh'}
       backgroundImage={
         'url(https://business.fiu.edu/graduate/insights/img/artificial-intelligence-in-the-stock-market.jpg)'
       }
       backgroundSize={'cover'}
       backgroundPosition={'center center'}
       justifyContent={'center'}
-
+     
     >
       <Container as={SimpleGrid}
         maxW={'7xl'}

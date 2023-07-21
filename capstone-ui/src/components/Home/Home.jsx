@@ -6,14 +6,43 @@ import axios, { all } from "axios";
 import StockGraph from "./StockGraph";
 import MeanReversionStrat from "../../TradingCalculations/MeanReversionStrat.js"
 
-const Home = ({getProfile,getAccount, getPortfolio, pastStockPrice, portfolio, profile, account, historicalPrice, tickers}) => {
+const Home = ({getProfile,getAccount, getPortfolio, pastStockPrice, portfolio, profile, account, historicalPrice, tickers,fixedDate}) => {
   const [metaData, setMetaData] = useState([]);
   const [amznData, setAmznData] = useState([]);
-  const [nflxData, setNflxData] = useState([]);
-  //const [allData, setAllData] = useState([]);
+  const [googleData, setGoogleData] = useState([]);
+  const [crmData, setCrmData] = useState([]);
+  // const [nflxData, setNflxData] = useState([]);
+  const [allData, setAllData] = useState([]);
+  const [test,setTest] = useState();
 
   const rangeDate = new Date();
   rangeDate.setDate(rangeDate.getDate()- 30);
+
+  const mergeArrays = (arr1, arr2, arr3, arr4) => {
+    const mergedArray = [];
+    // Create an object to keep track of merged data
+    const dataMap = {};
+    arr1.forEach(({ date, ...rest }) => {
+      dataMap[date] = { ...dataMap[date], ...rest };
+    });
+    arr2.forEach(({ date, ...rest }) => {
+      dataMap[date] = { ...dataMap[date], ...rest };
+    });
+    arr3.forEach(({ date, ...rest }) => {
+      dataMap[date] = { ...dataMap[date], ...rest };
+    });
+    arr4.forEach(({ date, ...rest }) => {
+      dataMap[date] = { ...dataMap[date], ...rest };
+    });
+  
+  
+    // Convert the data in the dataMap back to an array
+    Object.keys(dataMap).forEach((date) => {
+      mergedArray.push({ date, ...dataMap[date] });
+    });
+  
+    return mergedArray;
+  };
 
   useEffect(()=> {
     getProfile();
@@ -24,77 +53,68 @@ const Home = ({getProfile,getAccount, getPortfolio, pastStockPrice, portfolio, p
       try {
         const meta = await pastStockPrice(tickers[0], rangeDate);
         const amzn = await pastStockPrice(tickers[1], rangeDate);
-        const nflx = await pastStockPrice(tickers[2], rangeDate);
+        const google = await pastStockPrice(tickers[3], rangeDate);
+        const crm = await pastStockPrice(tickers[4], rangeDate);
+        // const nflx = await pastStockPrice(tickers[2], rangeDate);
+
         setMetaData(meta);
         setAmznData(amzn);
-        setNflxData(nflx);
+        setGoogleData(google);
+        setCrmData(crm);
+        // setNflxData(nflx);
+
       } catch (error) {
         console.error(error);
       }
     };
 
     fetchData();
-  }, []); // <-- Missing parenthesis should be here, after the empty dependency array.
 
-  const handleOnclick = () => {
-    MeanReversionStrat.mainFunc();
-  };  
+  },[]);
+  
+//gathers the individual stocks together as sets
+  useEffect(() => {
+    if (metaData.length > 0 && amznData.length > 0 && googleData.length > 0 && crmData.length > 0) {
+      setAllData([metaData, amznData, googleData, crmData]);
 
-  // console.log("Meta: " , metaData);
-  // console.log("Amazon: " , amznData);
-  // console.log("Netflix: " , nflxData);
-  const allData = [metaData, amznData,nflxData];
-  console.log("All Data: ", allData)
+    }
+  }, [metaData, amznData, googleData, crmData]);
+  const data = mergeArrays(metaData,amznData,googleData, crmData);
+console.log("THE STOCK" , portfolio)
+useEffect(()=>{
+  if(portfolio != null){
+    const stockCard = portfolio.map((item)=> (
+      <Box borderRadius={30} borderWidth={3} borderColor={'green.500'} p={3}>
+        <Text color='green.500' fontWeight={'bold'} fontSize={'40px'}>{item.ticker}</Text>
+        <Text color={'grey'} fontSize={15}>Purchased on: {fixedDate(item.created_at)}</Text>
+        <Text fontSize={25} color={'green.100'}>{item.quantity}</Text>
+      </Box>
+    ))
+    setTest(stockCard)
+  }
+  
+}, [test])
+   console.log("THE POPULATED: ", test)
   return (
         <Box 
+          position={'absolute'}
           w={'full'}
-          h={'100vh'}
-          bgGradient={[
-            'linear(to-b, green.400, black)',
-          ]}
+          bgColor={'#000409'}
+          // bgGradient={[
+          //   'linear(to-b, green.900, black)',
+          // ]}
           
           >
-          {profile && account ? (
+          {profile && account && data.length ? (
             <Stack direction={'row'} padding={20} w={'full'} >
-              <Stack direction={'column'} p={'10'} 
-                     bgColor={'#B2D3C2'}
-                     borderRadius={10}>
-
-                <Stack direction={'row'} fontWeight={'medium'} fontSize={50} fontFamily={'Arial'}>
-                <Text >
-                  Welcome 
-                </Text>
-                <Text>
-                {profile.firstName}
-                </Text>
-                </Stack>
-
-                <Box>
-                  <Text fontWeight={'medium'} textDecoration={'underline'}>Total Amount: </Text>
-                  <Stack direction = {'row'} justifyContent={'center'} fontSize={'40'}>
-                    <Text>$</Text>
-                    <Text >      
-                        {account.acc_value}
-                    </Text>
-                    
-                  </Stack>
-                </Box>
-
-                <Box>
-                  <Text fontWeight={'medium'} textDecoration={'underline'}>Buying Power: </Text>
-                  <Stack direction = {'row'} justifyContent={'center'} fontSize={'40'}>
-                    <Text>$</Text>
-                    <Text >      
-                      {account.buying_power}
-                    </Text>
-                    
-                  </Stack>
-                </Box>
-          
-            {!portfolio ? (
-               <Text>
-                 The list is available
-               </Text>
+              <Stack direction={'column'} 
+                     p={1}
+                     >      
+            {portfolio.length ? (
+              
+               <Box>
+               {test}
+               </Box>
             ):(
                <Stack direction="column" alignItems={'center'} p={10}>
                  <Text>No stock available</Text>
@@ -105,24 +125,53 @@ const Home = ({getProfile,getAccount, getPortfolio, pastStockPrice, portfolio, p
             )}
               </Stack>
               <Stack direction={'column'} w={'full'}>
-                <Box>
-                  The wacther and graph
+                <Box >
+                <Stack direction={'row'} fontWeight={'medium'} color={'#cccbcc'} fontSize={60} fontFamily={'Arial'}>
+                <Text color={'green.300'}>
+                  Welcome
+                </Text>
+                <Text color={'green.300'}>
+                {profile.firstName} !
+                </Text>
+                </Stack>
+                <Text fontSize={20}color={'grey'}>
+                  Here are your stats for today:
+                </Text>
                 </Box>
-                {allData ? (
-                  <StockGraph priceList={allData}/>
-                ):(
-                  <Text>Loading...</Text>
-                )}
+                <Stack direction={'row'}>
+
+                  <Container width={'30%'}  fontSize={'18'} borderRadius={30} borderWidth={3} borderColor={'green.500'}>
+                  <Text fontWeight={'medium'} textDecoration={'underline'} color={'grey'}>Total Amount: </Text>
+                  <Stack direction = {'row'} justifyContent={'center'} fontSize={'40'}>
+                    <Text color={'green.400'}>$</Text>
+                    <Text color={'green.400'}>      
+                        {account.acc_value}
+                    </Text>
+                  </Stack>
+                  </Container>
+
+                  <Container width={'30%'}  fontSize={'18'} borderRadius={30} borderWidth={3} borderColor={'green.500'}>
+                  <Text fontWeight={'medium'} fontSize={'18'} color={'grey'} textDecoration={'underline'}>Buying Power: </Text>
+                  <Stack direction = {'row'} justifyContent={'center'} fontSize={'40px'}>
+                    <Text color={'green.400'}>$</Text>
+                    <Text color={'green.400'}>{account.buying_power}</Text>
+                  </Stack>
+                  </Container>
+                </Stack>
                 
+               
+                <StockGraph priceList={data}/>
 
               </Stack>
 
             </Stack>
             
             ):(
-              <Box>
-              Loading...
-            </Box>
+              <Center  w={'full'}
+              h={'100vh'}
+              color={'white'}>
+                <Text>Loading...</Text>
+              </Center>
           )}
           
           

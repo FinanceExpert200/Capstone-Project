@@ -1,17 +1,16 @@
-// import logo from './assets/logo.svg';
-// import logo from "../../assets/logo.svg";
-// import "./App.css";
-import React, { useState } from "react";
+import { useState } from 'react'
+// import reactLogo from './assets/react.svg'
+import viteLogo from '/vite.svg'
+import './App.css'
+
 import {
   BrowserRouter as Router,
   Routes,
   Route,
-  Switch,
   BrowserRouter,
   json,
 } from "react-router-dom";
 import axios from "axios";
-
 
 import LandingPage from "../LandingPage/LandingPage";
 import RegisterPage from "../RegisterPage/RegisterPage";
@@ -84,7 +83,19 @@ function App() {
     }
   }, [isLogged]);
 
+  //a function that restructures the date
+  const fixedDate = (dat) => {
+    try{
+      const date = new Date(dat);
+      let day = date.getDate().toString();
+      let month = (date.getMonth()+1).toString();
+      let year = date.getFullYear();
+      return month + '/' + day + '/' + year;
 
+    }catch(error){
+      console.log(error);
+    }
+  }
 
   // Trading.calculateDisplayedProfit("META")
 
@@ -110,8 +121,8 @@ function App() {
 
   const getPortfolio = async() => {
     try {
-      const res = await axios.get(`http://localhost:3001/trans/account/${localStorage.getItem("currentUserId")}`);
-      setPortfolio(res.data.account);
+      const res = await axios.get(`http://localhost:3001/trans/portfolio/${localStorage.getItem("currentUserId")}`);
+      setPortfolio(res.data.user);
     } catch(error){
       console.log(error)
     } 
@@ -193,14 +204,14 @@ function App() {
   //The function fetches the price of past Stock
   const pastStockPrice = async(tick, date) => {
     try{
-      console.log("history is being used")
+      //console.log("history is being used")
       const list = await Trading.fetchHistoricalData(tick, date);
       //The data now extracts the date and open price
       
       const extractedData = list.map(item => (
         {
-        date: item.date,
-        openPrice: item.open,
+        date: fixedDate(item.date),
+        [tick]: item.open,
       }));
       return extractedData;
       } catch(error){
@@ -265,7 +276,8 @@ function App() {
             <Route path="/" element={<LandingPage />} />
             <Route path="/home" element={<Home getProfile={getProfile} getAccount={getAccount} getPortfolio={getPortfolio} 
                                                pastStockPrice={pastStockPrice} portfolio={portfolio} profile= {profile} 
-                                               account={account} historicalPrice={historicalPrice} tickers = {tickers}  />} />
+                                               account={account} historicalPrice={historicalPrice} tickers = {tickers}
+                                               fixedDate ={fixedDate}  />} />
             <Route
               path="/trade"
               element={
