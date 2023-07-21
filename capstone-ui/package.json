@@ -11,13 +11,16 @@
     "@testing-library/user-event": "^13.5.0",
     "assert": "^2.0.0",
     "axios": "^1.4.0",
+    "chalk": "^5.3.0",
     "chart.js": "^4.3.0",
+    "colors": "^1.4.0",
     "cors": "^2.8.5",
     "datetime-js": "^4.0.0",
     "express": "^4.18.2",
     "finnhub": "^1.2.17",
     "framer-motion": "^10.12.18",
     "nodemon": "^3.0.1",
+    "os-browserify": "^0.3.0",
     "querystring-es3": "^0.2.1",
     "react": "^18.2.0",
     "react-chartjs-2": "^5.2.0",
@@ -53,5 +56,8 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "devDependencies": {
+    "html-webpack-plugin": "^5.5.3"
   }
 }

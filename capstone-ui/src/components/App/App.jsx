@@ -21,7 +21,6 @@ import Navbar from "../NavBar/NavBar";
 import SignInPage from "../SignInPage/SignInPage";
 import Home from "../Home/Home";
 
-import Trading from "../../TradingCalculations/Trade.js"
 
 import StockCard from "../StockCard/StockCard";
 
