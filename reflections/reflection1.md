@@ -19,8 +19,8 @@ Yes, we successfully completed all the planned tasks for this week, including fr
 
 * Did the resources provided to you help prepare you in planning and executing your capstone project sprint this week? Be specific, what resources did you find particularly helpful or which tasks did you need more support on?
 
- Add response here
-
+Yes, the resources provided definitely helped prepare our group execute this weeks sprint. One resource that helped us the most is the github resources that helped us fix our merge conflicts and work with branches
+ 
 * Which features and user stories would you consider “at risk”? How will you change your plan if those items remain “at risk”?
 
- Add response here
+ All of the features mentioned in our user stories are definitely in the scope of being completed 
