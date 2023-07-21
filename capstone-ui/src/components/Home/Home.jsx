@@ -1,9 +1,10 @@
 import React from "react";
 import "./Home.css";
 import { useEffect, useState } from "react";
-import {Grid,Text, Flex,Center,Box, GridItem, Text, Stack, Container, Button} from '@chakra-ui/react'
+import {Grid,Text, Flex,Center,Box, GridItem, Stack, Container, Button} from '@chakra-ui/react'
 import axios, { all } from "axios";
 import StockGraph from "./StockGraph";
+import MeanReversionStrat from "../../TradingCalculations/MeanReversionStrat.js"
 
 const Home = ({getProfile,getAccount, getPortfolio, pastStockPrice, portfolio, profile, account, historicalPrice, tickers}) => {
   const [metaData, setMetaData] = useState([]);
@@ -33,9 +34,11 @@ const Home = ({getProfile,getAccount, getPortfolio, pastStockPrice, portfolio, p
     };
 
     fetchData();
+  }, []); // <-- Missing parenthesis should be here, after the empty dependency array.
 
-  },[]);
-  
+  const handleOnclick = () => {
+    MeanReversionStrat.mainFunc();
+  };  
 
   // console.log("Meta: " , metaData);
   // console.log("Amazon: " , amznData);
@@ -126,7 +129,7 @@ const Home = ({getProfile,getAccount, getPortfolio, pastStockPrice, portfolio, p
           
         </Box>
         
-        
+  
         
         
         );
