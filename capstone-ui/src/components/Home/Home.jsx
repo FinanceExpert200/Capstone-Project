@@ -90,7 +90,6 @@ useEffect(()=>{
       </Box>
     ))
     setTest(stockCard)
-
   }
   
 }, [test])
