@@ -1,7 +1,7 @@
 import React from "react";
 import "./Home.css";
 import { useEffect, useState } from "react";
-import {Grid,Text, Flex,Center,Box, GridItem, Text, Stack, Container, Button} from '@chakra-ui/react'
+import {Grid,Text, Flex,Center,Box, GridItem, Stack, Container, Button} from '@chakra-ui/react'
 import axios, { all } from "axios";
 import StockGraph from "./StockGraph";
 

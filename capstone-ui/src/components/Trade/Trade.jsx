@@ -2,7 +2,8 @@ import * as React from "react";
 import { useEffect } from "react";
 import { Link } from "react-router-dom";
 import "./Trade.css";
-import Trading from "../../TradingCalculations/Trade.js";
+//import Trade from "../../TradingCalculations/Trade.js"
+//import Trading from "../../TradingCalculations/Trade.js";
 import axios from "axios";
 
 export default function Trade({

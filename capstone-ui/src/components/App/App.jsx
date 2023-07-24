@@ -1,6 +1,6 @@
 import { useState } from 'react'
 // import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
+// import viteLogo from '/vite.svg'
 import './App.css'
 
 import {
@@ -15,10 +15,15 @@ import axios from "axios";
 import LandingPage from "../LandingPage/LandingPage";
 import RegisterPage from "../RegisterPage/RegisterPage";
 import TransactionTable from "../TransactionTable/TransactionTable";
-import Trade from "../Trade/Trade";
+import Trading from "../../TradingCalculations/Trade.js"
+
+
+
 import Navbar from "../NavBar/NavBar";
 import SignInPage from "../SignInPage/SignInPage";
 import Home from "../Home/Home";
+import Trade from "../Trade/Trade"
+
 
 
 import StockCard from "../StockCard/StockCard";
@@ -186,7 +191,7 @@ function App() {
   const pastStockPrice = async(tick, date) => {
     try{
       //console.log("history is being used")
-      const list = await Trading.fetchHistoricalData(tick, date);
+      const list = await Trade.fetchHistoricalData(tick, date);
       //The data now extracts the date and open price
       
       const extractedData = list.map(item => (
