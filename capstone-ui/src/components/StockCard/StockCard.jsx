@@ -1,6 +1,7 @@
 // import "../ProductDetail/.css"
 import "./StockCard.css";
 import React from "react";
+import { Box,Button, Center,Input, Text, Stack } from '@chakra-ui/react'
 
 import { useState, useEffect } from "react";
 import axios from "axios";
@@ -52,52 +53,79 @@ export default function StockCard({
     }
   };
 
-//UNDO THIS
-  //console.log("transaction history", acc_value);
-  
+  //UNDO THIS
+  console.log("transaction history", stockInfo);
+
   // here will be some sort of function that displays the stock graph, and just overall infromation based on the stock id that is passed
   return (
-    <div className="stock-card">
+    <Center 
+      w={'full'}
+      h={'100vh'}
+      bgColor={'#F5F5F5'}
+      position={'absolute'}>
+
       {stockInfo && (
-        <div className="buy-component">
-          <h1>
-            {stockInfo.stockName}: {stockInfo.stockPrice}
-          </h1>
-          <div>
-            <label>Quantity:</label>
-            <input
-              type="number"
-              onChange={(event) => handleQuantityChange(event.target.value)}
-            />
-          </div>
-          <button
-            onClick={(event) =>
-              addTransaction(
-                event,
-                stockInfo.stockName,
-                quantity,
-                stockInfo.stockPrice,
-                "buy"
-              )
-            }
-          >
-            Buy
-          </button>
-          <button
-            onClick={(event) =>
-              addTransaction(
-                event,
-                stockInfo.stockName,
-                quantity,
-                stockInfo.stockPrice,
-                "sell"
-              )
-            }
-          >
-            Sell
-          </button>
-        </div>
+        <Stack direction={'row'}>
+          <Stack direction={'column'}>
+          <Text as={'h1'} >
+          {stockInfo.stockName}
+          </Text>
+          <Text>
+          {stockInfo.stockPrice}
+          </Text>
+          <Box>
+            AQUI IDEALMENTE EL GRAPHICO
+          </Box>
+
+          </Stack>
+          <Box bgColor={'#000409'}
+               p={5}>
+
+            <div className="buy-component">
+              <Button
+                onClick={(event) =>
+                  addTransaction(
+                    event,
+                    stockInfo.stockName,
+                    quantity,
+                    stockInfo.stockPrice,
+                    "buy"
+                  )
+                }
+              >
+                Buy
+              </Button>
+              <Button
+                onClick={(event) =>
+                  addTransaction(
+                    event,
+                    stockInfo.stockName,
+                    quantity,
+                    stockInfo.stockPrice,
+                    "sell"
+                  )
+                }
+              >
+                Sell
+              </Button>
+              <div>
+                <Text fontSize={'30px'} color={'green.500'}>Quantity</Text>
+                <Input
+                  color={'grey.300'}
+                  w={20}
+                  type="number"
+                  onChange={(event) => handleQuantityChange(event.target.value)}
+                />
+              </div>
+            </div>
+            <Text color={'white'}>Total Amount: </Text>
+          </Box>
+
+
+
+        </Stack>
       )}
-    </div>
+
+    </Center>
   );
 }

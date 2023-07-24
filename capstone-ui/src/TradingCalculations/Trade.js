@@ -1,5 +1,5 @@
 import axios from 'axios';
-import Chart from 'chart.js';
+// import Chart from 'chart.js';
 export default class Trading {
   // Volatility Breakout Strategy
   // Get the 100 day moving average and compare it to the current price

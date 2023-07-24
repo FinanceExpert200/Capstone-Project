@@ -32,8 +32,6 @@ import { useEffect } from "react";
 
 // import MeanReversionStrat from "../../TradingCalculations/MeanReversionStrat.js"
 
-import Trading from "../../TradingCalculations/Trade.js"  
-
 
 function App() {
 
@@ -102,7 +100,7 @@ function App() {
     }
   }
 
-  // Trading.calculateDisplayedProfit("META")
+ Trading.calculateDisplayedProfit("META")
 
   //The following 3 getter: gets the list of all stocks and account used by the user
   
@@ -210,7 +208,7 @@ function App() {
   const pastStockPrice = async(tick, date) => {
     try{
       //console.log("history is being used")
-      const list = await Trade.fetchHistoricalData(tick, date);
+      const list = await Trading.fetchHistoricalData(tick, date);
       //The data now extracts the date and open price
       
       const extractedData = list.map(item => (
