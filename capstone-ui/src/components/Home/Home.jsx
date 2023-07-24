@@ -5,6 +5,7 @@ import {Grid,Text, Flex,Center,Box, GridItem, Stack, Container, Button} from '@c
 import axios, { all } from "axios";
 import StockGraph from "./StockGraph";
 import MeanReversionStrat from "../../TradingCalculations/MeanReversionStrat.js"
+import MovingAverageCrossover from '../../TradingCalculations/MovingAverageCrossover.js'
 
 const Home = ({getProfile,getAccount, getPortfolio, pastStockPrice, portfolio, profile, account, historicalPrice, tickers,fixedDate}) => {
   const [metaData, setMetaData] = useState([]);
