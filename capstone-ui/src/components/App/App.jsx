@@ -30,7 +30,26 @@ import StockCard from "../StockCard/StockCard";
 
 import { useEffect } from "react";
 
+// import MeanReversionStrat from "../../TradingCalculations/MeanReversionStrat.js"
+
+import Trading from "../../TradingCalculations/Trade.js"  
+
+
 function App() {
+
+
+  // MeanReversionStrat.mainFunc();
+
+
+
+
+
+
+
+
+
+
+
   //State of the users Profile
   const [profile,setProfile] = useState(null);
   const [account,setAccount] = useState(null);
@@ -83,7 +102,7 @@ function App() {
     }
   }
 
-  Trading.calculateDisplayedProfit("META")
+  // Trading.calculateDisplayedProfit("META")
 
   //The following 3 getter: gets the list of all stocks and account used by the user
   
