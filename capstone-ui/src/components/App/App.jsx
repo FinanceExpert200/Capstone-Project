@@ -29,27 +29,15 @@ import TradeCalculations from "../../TradingCalculations/Utilities.js"
 import StockCard from "../StockCard/StockCard";
 
 import { useEffect } from "react";
+import {Text} from '@chakra-ui/react'
 
 // import MeanReversionStrat from "../../TradingCalculations/MeanReversionStrat.js"
-
-// import Trading from "../../TradingCalculations/Trade.js"  
 
 
 function App() {
 
 
   // MeanReversionStrat.mainFunc();
-
-
-
-
-
-
-
-
-
-
-
   //State of the users Profile
   const [profile,setProfile] = useState(null);
   const [account,setAccount] = useState(null);
@@ -65,7 +53,11 @@ function App() {
   const [crmPrice, setCrmPrice] = useState(0);
 
   //State Variable that gatehrs the price in teh last 30 days
-  const [historicalPrice, setHistoricalPrice] = useState([]);
+  const [historicalMeta, setHistoricalMeta] = useState([]);
+  const [historicalAmzn, setHistoricalAmzn] = useState([]);
+  const [historicalGoogle, setHistoricalGoogle] = useState([]);
+  const [historicalCrm, setHistoricalCrm] = useState([]);
+  const [historicalChecker, setHistoricalChecker] = useState(false);
 
   // login functiionaility
   const [isLogged, setIsLogged] = useState(false);
@@ -76,6 +68,36 @@ function App() {
   const [buying_power, setBuyingPower] = useState(10000);
   const [acc_value, setAccValue] = useState(10000);
   const [transactionHistory, setTransactionHistory] = useState();
+
+  const rangeDate = new Date();
+  rangeDate.setDate(rangeDate.getDate()- 30);
+
+  const mergeArrays = (arr1, arr2, arr3, arr4) => {
+    const mergedArray = [];
+    // Create an object to keep track of merged data
+    const dataMap = {};
+    arr1.forEach(({ date, ...rest }) => {
+      dataMap[date] = { ...dataMap[date], ...rest };
+    });
+    arr2.forEach(({ date, ...rest }) => {
+      dataMap[date] = { ...dataMap[date], ...rest };
+    });
+    arr3.forEach(({ date, ...rest }) => {
+      dataMap[date] = { ...dataMap[date], ...rest };
+    });
+    arr4.forEach(({ date, ...rest }) => {
+      dataMap[date] = { ...dataMap[date], ...rest };
+    });
+  
+  
+    // Convert the data in the dataMap back to an array
+    Object.keys(dataMap).forEach((date) => {
+      mergedArray.push({ date, ...dataMap[date] });
+    });
+  
+    return mergedArray;
+  };
+  
 
   useEffect(() => {
     const currentUserId = localStorage.getItem("currentUserId");
@@ -102,7 +124,7 @@ function App() {
     }
   }
 
-  // Trading.calculateDisplayedProfit("META")
+ Trading.calculateDisplayedProfit("META")
 
   //The following 3 getter: gets the list of all stocks and account used by the user
   
@@ -219,9 +241,6 @@ function App() {
   
   // Trading.calculateMovingAverage('AAPL', "2022-02-01");
 
-
-  // console.log("Here is the meta price: ", metaPrice);
-
   const updateStockPrice = async (tickers) => {
     console.log(tickers);
     tickers.forEach(async (ticker) => {
@@ -236,10 +255,11 @@ function App() {
       //console.log("history is being used")
       const list = await TradeCalculations.fetchHistoricalData(tick, date);
       //The data now extracts the date and open price
+      console.log("history is being used", list)
       
       const extractedData = list.map(item => (
         {
-        date: fixedDate(item.date),
+        date: item.date,
         [tick]: item.open,
       }));
       return extractedData;
@@ -274,11 +294,24 @@ function App() {
 
 
   useEffect(() => {
-
-  
-
-  const getTransactions = async (userID) => {
-    axios
+    const fetchData= async()=> {
+      const meta = await pastStockPrice(tickers[0], rangeDate);
+      const amzn = await pastStockPrice(tickers[1], rangeDate);
+      const google = await pastStockPrice(tickers[3], rangeDate);
+      const crm = await pastStockPrice(tickers[4], rangeDate);
+      
+      const [historicalMeta, historicalAmzn, historicalCrm,historicalGoogle] = await Promise.all([
+        meta,amzn,google,crm
+      ]);
+      setHistoricalAmzn(historicalAmzn);
+      setHistoricalCrm(historicalCrm);
+      setHistoricalGoogle(historicalGoogle);
+      setHistoricalMeta(historicalMeta);
+      setHistoricalChecker(true);
+      
+    }
+    const getTransactions = async (userID) => {
+      axios
       .get(`http://localhost:3001/trans/history/${userID}`)
       .then((response) => {
         setTransactionHistory(response.data.userTransactionHistory);
@@ -286,14 +319,12 @@ function App() {
       .catch((error) => {
         console.error(error);
       });
-  };
-
-  getTransactions(12);
+    };
+    fetchData();
+    getTransactions(12);
   }, []);
-  
-  
 
-
+  
 
 
 
@@ -306,8 +337,8 @@ function App() {
             <Route path="/" element={<LandingPage />} />
             <Route path="/home" element={<Home getProfile={getProfile} getAccount={getAccount} getPortfolio={getPortfolio} 
                                                pastStockPrice={pastStockPrice} portfolio={portfolio} profile= {profile} 
-                                               account={account} historicalPrice={historicalPrice} tickers = {tickers}
-                                               fixedDate ={fixedDate}  />} />
+                                               account={account} tickers = {tickers}
+                                               fixedDate ={fixedDate} historicalData={mergeArrays(historicalAmzn,historicalCrm,historicalGoogle,historicalMeta)}  />} />
             <Route
               path="/trade"
               element={
@@ -315,8 +346,9 @@ function App() {
                   updateStockPrice={updateStockPrice}
                   tickers={tickers}
                   stockData={stockData}
+                  historicalData={mergeArrays(historicalAmzn,historicalCrm,historicalGoogle,historicalMeta)}
                 />
-              }
+                }
             />
             <Route
               path="/transaction"
@@ -338,7 +370,17 @@ function App() {
               element={<SignInPage setIsLogged={setIsLogged} 
               setCurrentUserId = {setCurrentUserId} />}
             />
-            <Route path="/trade/:stockId" element={<StockCard updateStockPrice={updateStockPrice} tickers={tickers} currentUserId={currentUserId} stockData={stockData} acc_value={acc_value}/>} />
+            <Route path="/trade/:stockId" element={historicalChecker?(
+                <StockCard
+                  updateStockPrice={updateStockPrice}
+                  tickers={tickers}
+                  stockData={stockData}
+                  currentUserId={currentUserId}
+                  historicalData={mergeArrays(historicalAmzn,historicalCrm,historicalGoogle,historicalMeta)}
+                />
+              ):(<Text>Loading...</Text>)
+                
+              } />
           </Routes>
         </main>
       </BrowserRouter>

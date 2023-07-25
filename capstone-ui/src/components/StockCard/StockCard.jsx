@@ -1,21 +1,27 @@
 // import "../ProductDetail/.css"
 import "./StockCard.css";
 import React from "react";
+import { Box, Button, Center, Flex, Grid, GridItem, Input, Link,Text, Stack, Icon, Container } from '@chakra-ui/react'
 
 import { useState, useEffect } from "react";
 import axios from "axios";
 import { useParams } from "react-router-dom";
+import SingleStockGraph from "../Graph/SingleStockGraph";
 
 export default function StockCard({
   updateStockPrice,
   tickers,
   stockData,
   currentUserId,
+  historicalData,
   acc_value
 }) {
+  const [stateForm, setStateForm] = useState("reg");
+  const [submission,setSubmission] = useState(null);
+  console.log(stateForm);
   const { stockId } = useParams();
   const stockInfo = stockData[stockId];
-
+  console.log("data", historicalData);
   const [quantity, setQuantity] = useState(0);
 
   const handleQuantityChange = (quantity) => {
@@ -47,57 +53,132 @@ export default function StockCard({
         user_id: currentUserId,
         trans_type: trans_type,
       });
+      if(res.status === 201){
+        setStateForm("reg")
+        setSubmission( <Text color={'green.400'}>Your submission was placed successfully!</Text>);
+      }
     } catch (err) {
       console.log(err);
+      //must update the error message
+      setSubmission(<Text color={'red.400'}>Your submission failed</Text>);
     }
   };
 
-//UNDO THIS
-  //console.log("transaction history", acc_value);
-  
+  //UNDO THIS
+  console.log("transaction history", stockInfo);
+
   // here will be some sort of function that displays the stock graph, and just overall infromation based on the stock id that is passed
   return (
-    <div className="stock-card">
-      {stockInfo && (
-        <div className="buy-component">
-          <h1>
-            {stockInfo.stockName}: {stockInfo.stockPrice}
-          </h1>
-          <div>
-            <label>Quantity:</label>
-            <input
-              type="number"
-              onChange={(event) => handleQuantityChange(event.target.value)}
-            />
-          </div>
-          <button
-            onClick={(event) =>
-              addTransaction(
-                event,
-                stockInfo.stockName,
-                quantity,
-                stockInfo.stockPrice,
-                "buy"
-              )
-            }
+    <Flex w={'full'}
+      position={'fixed'}
+      bgColor={'#000409'}
+    >
+      <Grid
+        templateAreas={`
+        "header nav"
+        "main nav"
+      `}
+        w={'full'}
+        h={'100vh'}
+        gridTemplateRows={'1fr'}
+        gridTemplateColumns={'4fr  2fr'}
+        gap='1'
+        p={20}
+        color='blackAlpha.700'
+        fontWeight='bold'
+
+      >
+        <GridItem h={'20vh'} pl='5' area={'header'} borderBottom={'1px'}>
+          <Stack direction={'row'}>
+            
+            <Text as={'h1'} color={'white'}>
+              {stockInfo.stockName}
+            </Text>
+            <Text fontSize={20} mt={'6'} color={'white'}>Apple.Inc</Text>
+
+          </Stack>
+          <Text fontSize={25} color={'white'}> {stockInfo.stockPrice} USD </Text>
+        </GridItem>
+        <GridItem pl='2' area={'main'} h={'100vh'}>
+          <SingleStockGraph data={historicalData} dataName={stockInfo.stockName} />
+        </GridItem>
+
+        <GridItem pl='2' area={'nav'} h={'100vh'}>
+          <Center 
+            borderRadius={10}
+            w={'full'}
+            h={'100%'}
+            display={'flex'}
+            flexDirection={'column'}
+            
+
           >
-            Buy
-          </button>
-          <button
-            onClick={(event) =>
-              addTransaction(
-                event,
-                stockInfo.stockName,
-                quantity,
-                stockInfo.stockPrice,
-                "sell"
-              )
-            }
-          >
-            Sell
-          </button>
-        </div>
-      )}
-    </div>
+            <Stack direction={'row'} justifyContent={'center'} bgColor={'whitesmoke'} >
+              <Link 
+              onClick={(event) => {setSubmission(""),setStateForm("buy")}}  
+              
+              bgColor={stateForm ==="buy" ? ("green.400"):('whitesmoke')} 
+              _hover={{ bg: 'green.400' ,  color:"white" }} 
+              fontSize={'40px'} 
+              color={'Black'} > Buy </Link>
+              <Link 
+              onClick={(event) => {setStateForm("sell")}} 
+              
+              bgColor={stateForm ==="sell" ? ("green.400"):('whitesmoke')}
+              _hover={{ bg: 'green.400' ,  color:"white" }} 
+              fontSize={'40px'} 
+              color={'Black'}> Sell </Link>
+
+            </Stack>
+
+            <Stack direction={'column'} p={10}>
+              <Text fontSize={'30px'} color={'green.500'}>Quantity</Text>
+              <Input
+                color={'white'}
+                w={20}
+                type="number"
+                onChange={(event) => handleQuantityChange(event.target.value)}
+              />
+
+              <Text color={'white'}>Total Amount: </Text>
+
+            </Stack>
+            {submission && submission}
+            {stateForm === "reg" ? (
+              <Text color={'white'}>
+                Choose a type above to start 
+              </Text>
+
+            ) : (
+            
+
+            <Button
+              aligin={'center'}
+              
+              onClick={(event) =>
+                addTransaction(
+                  event,
+                  stockInfo.stockName,
+                  quantity,
+                  stockInfo.stockPrice,
+                  stateForm.toString()
+                )
+              }
+            >
+              {stateForm.toString()}
+            </Button>
+            
+
+            )}
+
+
+          </Center>
+
+        </GridItem>
+        
+
+      </Grid>
+    </Flex>
+
   );
 }
