@@ -17,6 +17,7 @@ export default function StockCard({
   acc_value
 }) {
   const [stateForm, setStateForm] = useState("reg");
+  const [submission,setSubmission] = useState(null);
   console.log(stateForm);
   const { stockId } = useParams();
   const stockInfo = stockData[stockId];
@@ -52,8 +53,14 @@ export default function StockCard({
         user_id: currentUserId,
         trans_type: trans_type,
       });
+      if(res.status === 201){
+        setStateForm("reg")
+        setSubmission( <Text color={'green.400'}>Your submission was placed successfully!</Text>);
+      }
     } catch (err) {
       console.log(err);
+      //must update the error message
+      setSubmission(<Text color={'red.400'}>Your submission failed</Text>);
     }
   };
 
@@ -97,32 +104,37 @@ export default function StockCard({
         </GridItem>
 
         <GridItem pl='2' area={'nav'} h={'100vh'}>
-          <Stack 
+          <Center 
             borderRadius={10}
             w={'full'}
             h={'100%'}
-            p={10}
-            justify={'center'}
+            display={'flex'}
+            flexDirection={'column'}
+            
 
           >
-            <Center direction={'row'}  >
-              <Link onClick={(event) => {
-                setStateForm("buy")
-
-              }}  p={2} bgColor={'whitesmoke'} _hover={{ bg: 'green.400' ,  color:"white" }} fontSize={'40px'} color={'Black'} > Buy </Link>
+            <Stack direction={'row'} justifyContent={'center'} bgColor={'whitesmoke'} >
+              <Link 
+              onClick={(event) => {setSubmission(""),setStateForm("buy")}}  
+              
+              bgColor={stateForm ==="buy" ? ("green.400"):('whitesmoke')} 
+              _hover={{ bg: 'green.400' ,  color:"white" }} 
+              fontSize={'40px'} 
+              color={'Black'} > Buy </Link>
               <Link 
               onClick={(event) => {setStateForm("sell")}} 
-              p={2} bgColor={'whitesmoke'} 
+              
+              bgColor={stateForm ==="sell" ? ("green.400"):('whitesmoke')}
               _hover={{ bg: 'green.400' ,  color:"white" }} 
               fontSize={'40px'} 
               color={'Black'}> Sell </Link>
 
-            </Center>
+            </Stack>
 
-            <Stack direction={'column'}>
+            <Stack direction={'column'} p={10}>
               <Text fontSize={'30px'} color={'green.500'}>Quantity</Text>
               <Input
-                color={'grey.300'}
+                color={'white'}
                 w={20}
                 type="number"
                 onChange={(event) => handleQuantityChange(event.target.value)}
@@ -131,15 +143,18 @@ export default function StockCard({
               <Text color={'white'}>Total Amount: </Text>
 
             </Stack>
+            {submission && submission}
             {stateForm === "reg" ? (
-              <Text>
-
+              <Text color={'white'}>
+                Choose a type above to start 
               </Text>
 
             ) : (
-            <Container>
+            
 
             <Button
+              aligin={'center'}
+              
               onClick={(event) =>
                 addTransaction(
                   event,
@@ -150,14 +165,14 @@ export default function StockCard({
                 )
               }
             >
-              {stateForm.toUpperCase()}
+              {stateForm.toString()}
             </Button>
-            </Container>
+            
 
             )}
 
 
-          </Stack>
+          </Center>
 
         </GridItem>
         

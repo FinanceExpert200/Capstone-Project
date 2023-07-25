@@ -350,6 +350,7 @@ function App() {
                   updateStockPrice={updateStockPrice}
                   tickers={tickers}
                   stockData={stockData}
+                  currentUserId={currentUserId}
                   historicalData={mergeArrays(historicalAmzn,historicalCrm,historicalGoogle,historicalMeta)}
                 />
               ):(<Text>Loading...</Text>)
