@@ -47,7 +47,7 @@ export default class Trading {
             `http://localhost:3001/trans/stock/${ticker}`
           );
           //UNDO THIS
-          //console.log(response.data.data)
+          console.log("TICKER RESPONSE DATA ",response.data.data)
           return response.data.data.c
         } catch (error) {
             console.error(error);

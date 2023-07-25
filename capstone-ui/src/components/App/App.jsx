@@ -24,7 +24,7 @@ import SignInPage from "../SignInPage/SignInPage";
 import Home from "../Home/Home";
 import Trade from "../Trade/Trade"
 
-import Trading from "../../TradingCalculations/Trade"
+
 
 
 
