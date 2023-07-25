@@ -15,8 +15,8 @@ import axios from "axios";
 import LandingPage from "../LandingPage/LandingPage";
 import RegisterPage from "../RegisterPage/RegisterPage";
 import TransactionTable from "../TransactionTable/TransactionTable";
-import Trading from '../../TradingCalculations/MovingAverageCrossover';
-
+//import Trading from '../../TradingCalculations/MovingAverageCrossover';
+import Trading from '../../TradingCalculations/Trade';
 
 
 import Navbar from "../NavBar/NavBar";
@@ -274,7 +274,7 @@ function App() {
   const pastStockPrice = async(tick, date) => {
     try{
       //console.log("history is being used")
-      const list = await TradeCalculations.fetchHistoricalData(tick, date);
+      const list = await Trading.fetchHistoricalData(tick, date);
       //The data now extracts the date and open price
       console.log("history is being used", list)
       
