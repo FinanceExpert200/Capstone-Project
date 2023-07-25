@@ -134,7 +134,7 @@ class Portfolio {
   // Handles the purchasing of a stock by decrementing their buying power and adding the stock to the users portfolio
   static async buyShare(ticker, quantity, curr_price, user_id) {
     // Get the user info
-
+    console.log("current user ID", user_id);
     const currentUser = await this.fetchUserAccountById(user_id);
     console.log("current user", currentUser);
     const existingBuyingPower = currentUser.buying_power;

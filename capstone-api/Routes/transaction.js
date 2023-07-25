@@ -87,7 +87,7 @@ router.post("/buy", async (req, res, next) => {
   try {
     //Access information from the req.body
     const { ticker, quantity, curr_price, user_id, trans_type } = req.body
-    console.log((ticker,quantity,curr_price,user_id))
+    console.log(ticker,quantity,curr_price,user_id)
     //adding purchase to our user Portfolio
     await Portfolio.buyShare(ticker, quantity, curr_price, user_id)
     await Transaction.addTransactionHistory( ticker, quantity, curr_price, user_id, trans_type)
