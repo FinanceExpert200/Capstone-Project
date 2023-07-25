@@ -208,5 +208,13 @@ export default class Trading {
     this.botAccountValue = amount
     this.botBuyingPower = amount
   }
+
+
+  static getAccountValue(){
+    return [this.threeMonthProfit, this.sixMonthProfit, this.botAccountValue]; 
+  }
+
+
+
 }
 

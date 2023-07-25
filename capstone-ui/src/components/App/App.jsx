@@ -124,7 +124,7 @@ function App() {
     }
   }
 
- Trading.calculateDisplayedProfit("META")
+
 
   //The following 3 getter: gets the list of all stocks and account used by the user
   

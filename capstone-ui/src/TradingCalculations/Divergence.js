@@ -5,6 +5,9 @@ export default class  Divergence{
     static buyingPower = 5000
     static accountValue = 5000
     static stocksOwned = 0
+    static threeMonthProfit = 0
+    static SixMonthProfit = 0 
+    static transactionHistory = []
     // First we need to calculate the RSI for all data for a year
     //To do that we can start by calculating the daily price changes
     // 1. pull historical data 
@@ -81,9 +84,32 @@ export default class  Divergence{
             if( currPriceChange > 0 && RSIChange < 0){
                 this.sellStock(ticker,currentMarketData[left] )
             }
+
+
+            //Check if we hit the 6 month and 3 month mark
+            console.log("length ofarray ",dailyPriceChangeArray.length )
+            console.log(`Daily pricechangeArray 3 months  ${(Math.round(dailyPriceChangeArray.length) * 4) / 3} ------ -Right pointer ${right}`)
+            console.log(`Daily pricechangeArray 6 months  ${Math.round(dailyPriceChangeArray.length /2)} ------ -Right pointer ${right}`)
+
+            if (right == Math.round((dailyPriceChangeArray.length / 4) * 3)){
+                console.log("three month mark reached, total account value is ", this.accountValue)
+                this.threeMonthProfit = this.accountValue
+            }
+            if(right == Math.round(dailyPriceChangeArray.length/ 2 )){
+                console.log("six month mark reached, total account value is ", this.accountValue)
+                this.SixMonthProfit = this.accountValue
+            }
+
+
             left ++ 
+
+
+
+
         }   
-        console.log(`Total Account value: ${this.accountValue}`)
+        console.log(`Total Account value over a year: ${this.accountValue} 3 months: ${this.threeMonthProfit}, 6 Months ${this.SixMonthProfit}`)
+        return this.transactionHistory
+        
 
     }
 
@@ -94,6 +120,7 @@ export default class  Divergence{
         if(stock.close <= this.buyingPower){
             this.buyingPower -= stock.close
             this.stocksOwned += 1 
+            this.transactionHistory.push({type: "buy", ticker: ticker, date: stock.date, price: stock.close})
             console.log(chalk.bgBlack.white(`${ticker} Stock purchased for ${stock.close} on ${stock.date}`))
         }
         this.accountValue  = this.buyingPower + (this.stocksOwned * stock.close)
@@ -106,18 +133,27 @@ export default class  Divergence{
         else{
             this.stocksOwned -= 1
             this.buyingPower += stock.close
+            this.transactionHistory.push({type: "sell", ticker: ticker, date: stock.date, price: stock.close})
             console.log(chalk.bgYellow(`${ticker} Stock sold for ${stock.close} on ${stock.date}`))
         }
         this.accountValue  = this.buyingPower + (this.stocksOwned * stock.close)
     }
-
-
-    static async calculateProfit(amount){
-        let totalProfit = 0 
-        individualStock = amount/5
-        this.buyingPower = individualStock
-        let amazonProfit = await this.calculateRSI("AMZN")
+    static setBuyingPowerAndAccountValue(amount){
+        this.buyingPower = amount
+        this.accountValue = amount
     }
+    static getBuyingPower(){
+        return this.buyingPower
+    }
+    static getAccountValue(){
+        
+        return [this.threeMonthProfit, this.SixMonthProfit, this.accountValue]
+    }
+    static getTransactionHistory(){
+        return this.transactionHistory
+    }
+
+
     
 
 
