@@ -4,8 +4,7 @@ import { useEffect, useState } from "react";
 import {Grid,Text, Flex,Center,Box, GridItem, Stack, Container, Button} from '@chakra-ui/react'
 import axios, { all } from "axios";
 import StockGraph from "./StockGraph";
-import MeanReversionStrat from "../../TradingCalculations/MeanReversionStrat.js"
-import MovingAverageCrossover from '../../TradingCalculations/MovingAverageCrossover.js'
+
 
 const Home = ({getProfile,getAccount, getPortfolio, pastStockPrice, portfolio, profile, account, historicalPrice, tickers,fixedDate}) => {
   const [metaData, setMetaData] = useState([]);
@@ -35,7 +34,6 @@ const Home = ({getProfile,getAccount, getPortfolio, pastStockPrice, portfolio, p
     arr4.forEach(({ date, ...rest }) => {
       dataMap[date] = { ...dataMap[date], ...rest };
     });
-  
   
     // Convert the data in the dataMap back to an array
     Object.keys(dataMap).forEach((date) => {
@@ -96,6 +94,10 @@ useEffect(()=>{
   
 }, [test])
    console.log("THE POPULATED: ", test)
+
+
+
+
   return (
         <Box 
           position={'absolute'}

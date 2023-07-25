@@ -15,7 +15,6 @@ import axios from "axios";
 import LandingPage from "../LandingPage/LandingPage";
 import RegisterPage from "../RegisterPage/RegisterPage";
 import TransactionTable from "../TransactionTable/TransactionTable";
-import Trading from "../../TradingCalculations/Trade.js"
 
 
 
@@ -24,8 +23,7 @@ import SignInPage from "../SignInPage/SignInPage";
 import Home from "../Home/Home";
 import Trade from "../Trade/Trade"
 
-import Trading from "../../TradingCalculations/Trade"
-
+import TradeCalculations from "../../TradingCalculations/Utilities.js"
 
 
 import StockCard from "../StockCard/StockCard";
@@ -34,7 +32,7 @@ import { useEffect } from "react";
 
 // import MeanReversionStrat from "../../TradingCalculations/MeanReversionStrat.js"
 
-import Trading from "../../TradingCalculations/Trade.js"  
+// import Trading from "../../TradingCalculations/Trade.js"  
 
 
 function App() {
@@ -158,14 +156,38 @@ function App() {
     },
   };
 
+
+
+
+
 // --------------------------------------------------------------------------------------------------------------
   // this function gets the current price of the stocks
+  const getPercentChange = async (ticker) => {
+    console.log("PERCENT CHANGE-------------")
+    try {
+      const response = await axios.get(
+        `http://localhost:3001/trans/stock/${ticker}`
+      );
+
+
+      const percentChange = response.data.data.dp; // this is the current price of the stock
+      // const currPrice = price.c
+      console.log(percentChange)
+      return percentChange
+      // console.log(price);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+
 
   const getStockPrice = async (ticker) => {
     try {
       const response = await axios.get(
         `http://localhost:3001/trans/stock/${ticker}`
       );
+
 
       const price = response.data.data.c; // this is the current price of the stock
       // const currPrice = price.c
@@ -212,7 +234,7 @@ function App() {
   const pastStockPrice = async(tick, date) => {
     try{
       //console.log("history is being used")
-      const list = await Trade.fetchHistoricalData(tick, date);
+      const list = await TradeCalculations.fetchHistoricalData(tick, date);
       //The data now extracts the date and open price
       
       const extractedData = list.map(item => (
@@ -248,6 +270,7 @@ function App() {
       console.log(err);
     }
   };
+
 
 
   useEffect(() => {
