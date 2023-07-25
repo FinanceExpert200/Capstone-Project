@@ -4,7 +4,6 @@ import { useEffect, useState } from "react";
 import { Grid, Text, Flex, Center, Box, GridItem, Stack, Container, Button } from '@chakra-ui/react'
 import axios, { all } from "axios";
 import StockGraph from "../Graph/StockGraph";
-import MeanReversionStrat from "../../TradingCalculations/MeanReversionStrat.js"
 import MovingAverageCrossover from '../../TradingCalculations/MovingAverageCrossover.js'
 
 const Home = ({getProfile,getAccount, getPortfolio, pastStockPrice, portfolio, profile, account, historicalData, tickers,fixedDate}) => {
@@ -171,24 +170,30 @@ useEffect(()=>{
 
           </Stack>
 
-        </Stack>
+            </Stack>
+            
+            ):(
+              <Center  w={'full'}
+              h={'100vh'}
+              color={'white'}>
+                <Text>Loading...</Text>
+              </Center>
+          )}
+          
+          
+          {/* <div>
+            <h1>My App</h1>
+            <button onClick={showStrat}>Show Strategy</button>
+          </div> */}
+          
+        </Box>
 
-      ) : (
-        <Center w={'full'}
-          h={'100vh'}
-          color={'white'}>
-          <Text>Loading...</Text>
-        </Center>
-      )}
-
-
-
-    </Box>
-
-
-
-
-  );
-};
-
-export default Home;
+        
+        
+  
+        
+        
+        );
+      };
+      
+      export default Home;

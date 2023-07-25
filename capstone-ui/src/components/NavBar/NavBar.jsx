@@ -56,6 +56,10 @@ export default function Navbar({ isLogged, setIsLogged }) {
               <Link href="/transaction" color={'white'}>Transaction</Link>
             
               <Link href="/trade" color={'white'}>Trade</Link>
+
+
+              <Link href="/strategies" color={'white'} _hover={{bgGradient :"linear(to-b, green.100,transparent)", color:'black'}} >Strategies</Link>
+
             
             <Button
               type = "button"
@@ -98,6 +102,12 @@ export default function Navbar({ isLogged, setIsLogged }) {
               _hover={{ bg: 'green.100' }}>
               <Link href="/register"> Register</Link>
             </Button>
+
+
+
+
+
+
             </Stack>
           </Flex>
         )}
