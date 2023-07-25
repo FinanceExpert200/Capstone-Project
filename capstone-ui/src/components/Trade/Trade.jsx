@@ -15,7 +15,6 @@ export default function Trade({
     updateStockPrice(tickers);
   }, []);
   //UNDO THIS
-  //console.log("ticker", tickers);
   const handleRefresh = async () => {
     updateStockPrice(tickers);
   };
