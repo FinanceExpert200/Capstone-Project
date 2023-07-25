@@ -23,7 +23,12 @@ import SignInPage from "../SignInPage/SignInPage";
 import Home from "../Home/Home";
 import Trade from "../Trade/Trade"
 
+// import Trading from "../../TradingCalculations/Trade"
+
+import TradingStrategies from '../TradingStrategies/TradingStrategies';
 import TradeCalculations from "../../TradingCalculations/Utilities.js"
+
+
 
 
 import StockCard from "../StockCard/StockCard";
@@ -381,6 +386,25 @@ function App() {
               ):(<Text>Loading...</Text>)
                 
               } />
+         
+         
+         
+
+            <Route
+              path="/strategies"
+              element={<TradingStrategies />}
+            />
+       
+         
+         
+         
+         
+         
+         
+         
+         
+         
+         
           </Routes>
         </main>
       </BrowserRouter>

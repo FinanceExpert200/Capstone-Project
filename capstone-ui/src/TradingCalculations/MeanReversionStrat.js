@@ -1,43 +1,47 @@
 import axios from "axios";
 
-
 let stockCount = 0;
 
 let botTransactions = [];
 
 let profit = 0;
-let botBuyingPower = 5000;
+let botBuyingPower = 0;
 let botAccValue = 5000;
-
+const tickers = ["META", "AMZN", "NFLX", "GOOGL", "CRM"];
 
 // need to correctly update the botAccValue and botBuyingPower
 // the botbuyingpower is not updated correcty take a look at the console logs
 
-
 export default class MeanReversionStrat {
-  static async mainFunc() {
+  static async mainFunc(budget) {
+    this.setBuyingPower(budget);
 
-    this.calcPrevProfit();
+    // run a for loop where we go through each ticker and calculate the moving averages and execute the trades
+    tickers.forEach((ticker) => {
+      this.calcPrevProfit(ticker);
+    });
+
 
   }
 
+
+
+  static setBuyingPower(amount) {
+    botBuyingPower = amount;
+  }
+
   // the purpose of this function to calculate the profit that you would have made if you had used this strategy in the past
-  static async calcPrevProfit() {
-    // we start by getting the date from a year ago today
+  static async calcPrevProfit(ticker) {
     const oneYearAgo = this.getDateOffset(-365);
 
     // we then get the historical data from a year ago today to today
     const yearHistoricalData = await this.fetchHistoricalData(
-      "AMZN",
+      ticker,
       oneYearAgo,
       this.getCurrDate()
     );
 
-    
-
-
-
-
+    console.log("after first calll", ticker);
 
     // now we have this mega forloop that goes through the entire year of data calculating the moving averages and executing the trades
     for (let i = 0; i < yearHistoricalData.length; i++) {
@@ -48,81 +52,72 @@ export default class MeanReversionStrat {
       let thirtyDayMovingAvg = this.getMovingAverage(thirtyDayWindow);
       let oneTwentyDayMovingAvg = this.getMovingAverage(oneTwentyDayWindow);
 
-
-      if ( (thirtyDayWindow[thirtyDayWindow.length - 1].close < botBuyingPower) && (oneTwentyDayMovingAvg / thirtyDayMovingAvg - 1 >= 0.12)) {
-
-        
-        this.executeBuy(
-          thirtyDayWindow,
-        );
+      if (thirtyDayWindow[thirtyDayWindow.length - 1].close > botBuyingPower) {
+        console.log("NOT ENOUGH MONEY TO BUY");
+      } else if (
+        thirtyDayWindow[thirtyDayWindow.length - 1].close < botBuyingPower &&
+        oneTwentyDayMovingAvg / thirtyDayMovingAvg - 1 >= 0.1
+      ) {
+        this.executeBuy(ticker, thirtyDayWindow);
         stockCount += 1;
       }
 
-      
-      if ( (thirtyDayWindow[thirtyDayWindow.length - 1].close > this.getAvgBuyPrice(botTransactions,0)  ) && (stockCount > 0)) 
-      {
-
-        
-
-        
-        // console.log( (thirtyDayWindow[thirtyDayWindow.length - 1].close) - this.getAvgBuyPrice(botTransactions, 0))
-        profit += (thirtyDayWindow[thirtyDayWindow.length - 1].close) - this.getAvgBuyPrice(botTransactions, 0);
-
-
+      if (
+        thirtyDayWindow[thirtyDayWindow.length - 1].close >
+          this.getAvgBuyPrice(botTransactions, 0) &&
+        stockCount > 0
+      ) {
+        profit +=
+          thirtyDayWindow[thirtyDayWindow.length - 1].close -
+          this.getAvgBuyPrice(botTransactions, 0);
 
         botTransactions.push({
           Type: "Sell",
           Price: thirtyDayWindow[thirtyDayWindow.length - 1].close,
-          Ticker: "AMZN",
+          Ticker: ticker,
           Date: thirtyDayWindow[thirtyDayWindow.length - 1].date,
         });
-
-
-        // this.executeSell(thirtyDayWindow);
-        // botBuyingPower += thirtyDayWindow[thirtyDayWindow.length - 1].close;
         stockCount -= 1;
-
       }
-
     }
 
     console.log("PROFIT", profit);
- 
+    console.log("BOT BUYING POWER", botBuyingPower);
 
-    
+    // reseting the state for each stock
+    botBuyingPower = 5000;
+    botAccValue = 5000;
+    stockCount = 0;
+    profit = 0;
+    botTransactions = [];
   }
 
-  static executeBuy(thirtyDayWindow) {
+  static executeBuy(ticker, thirtyDayWindow) {
     botTransactions.push({
       Type: "Buy",
       Price: thirtyDayWindow[thirtyDayWindow.length - 1].close,
-      Ticker: "AMZN",
+      Ticker: ticker,
       Date: thirtyDayWindow[thirtyDayWindow.length - 1].date,
-      avg_buy_price: this.getAvgBuyPrice(botTransactions, thirtyDayWindow[thirtyDayWindow.length - 1].close),
+      avg_buy_price: this.getAvgBuyPrice(
+        botTransactions,
+        thirtyDayWindow[thirtyDayWindow.length - 1].close
+      ),
     });
 
     botBuyingPower -= thirtyDayWindow[thirtyDayWindow.length - 1].close;
-    console.log("BUYING POWER:", botBuyingPower);
+    // console.log("BUYING POWER:", botBuyingPower);
   }
-
-
-
 
   static executeSell(thirtyDayWindow) {
-   
-      botTransactions.push({
-        Type: "Sell",
-        Price: thirtyDayWindow[thirtyDayWindow.length - 1].close,
-        Ticker: "AMZN",
-        Date: thirtyDayWindow[thirtyDayWindow.length - 1].date,
-      });
+    botTransactions.push({
+      Type: "Sell",
+      Price: thirtyDayWindow[thirtyDayWindow.length - 1].close,
+      Ticker: "AMZN",
+      Date: thirtyDayWindow[thirtyDayWindow.length - 1].date,
+    });
 
-      // botBuyingPower += thirtyDayWindow[thirtyDayWindow.length - 1].close;
-
-
+    // botBuyingPower += thirtyDayWindow[thirtyDayWindow.length - 1].close;
   }
-
-  
 
   static getAvgBuyPrice(botTransactions, currPrice = 0) {
     let avg_price = 0;
@@ -133,7 +128,7 @@ export default class MeanReversionStrat {
     }
 
     avg_price += currPrice;
-    
+
     for (let i = 0; i < botTransactions.length; i++) {
       //iterate through the bot transactions and see what our avg price of the stocks we have bought is
 
@@ -142,12 +137,10 @@ export default class MeanReversionStrat {
         botBuy++;
       }
 
-      if (botTransactions[i].Type == 'Sell') {
+      if (botTransactions[i].Type == "Sell") {
         avg_price -= botTransactions[i].Price;
         botBuy--;
       }
-
-
     }
     if (botBuy != 0) {
       avg_price = avg_price / botBuy;
