@@ -15,7 +15,8 @@ import axios from "axios";
 import LandingPage from "../LandingPage/LandingPage";
 import RegisterPage from "../RegisterPage/RegisterPage";
 import TransactionTable from "../TransactionTable/TransactionTable";
-
+//import Trading from '../../TradingCalculations/MovingAverageCrossover';
+import Trading from '../../TradingCalculations/Trade';
 
 
 import Navbar from "../NavBar/NavBar";
@@ -41,7 +42,6 @@ import {Text} from '@chakra-ui/react'
 
 function App() {
 
-
   // MeanReversionStrat.mainFunc();
   //State of the users Profile
   const [profile,setProfile] = useState(null);
@@ -56,6 +56,13 @@ function App() {
   const [nflxPrice, setNflxPrice] = useState(0);
   const [googlPrice, setGooglPrice] = useState(0);
   const [crmPrice, setCrmPrice] = useState(0);
+
+  //The percentage change
+  const [metaPercent, setMetaPercent] = useState(0);
+  const [amznPercent, setAmznPercent] = useState(0);
+  const [nflxPercent, setNflxPercent] = useState(0);
+  const [googlPercent, setGooglPercent] = useState(0);
+  const [crmPercent, setCrmPercent] = useState(0);
 
   //State Variable that gatehrs the price in teh last 30 days
   const [historicalMeta, setHistoricalMeta] = useState([]);
@@ -129,7 +136,7 @@ function App() {
     }
   }
 
- Trading.calculateDisplayedProfit("META")
+ //Trading.calculateDisplayedProfit("META")
 
   //The following 3 getter: gets the list of all stocks and account used by the user
   
@@ -162,24 +169,39 @@ function App() {
 
   const stockData = {
     "1": {
+      company: "Meta Platforms Inc",
+      logo: "https://upload.wikimedia.org/wikipedia/commons/a/ab/Meta-Logo.png",
       stockName: "META",
       stockPrice: metaPrice,
+      stockPercentage: metaPercent,
     },
     "2": {
+      company: "Amazon.com Inc.",
+      logo: "https://economictimes.indiatimes.com/thumb/msid-59738992,width-640,height-480,resizemode-75,imgsize-25499/amazon.jpg",
       stockName: "AMZN",
       stockPrice: amznPrice,
+      stockPercentage: amznPercent,
     },
      "3" : {
+      company:"Netflix Inc",
+      logo: "https://cdn.cookielaw.org/logos/dd6b162f-1a32-456a-9cfe-897231c7763c/4345ea78-053c-46d2-b11e-09adaef973dc/Netflix_Logo_PMS.png",
       stockName: "NFLX",
       stockPrice: nflxPrice,
+      //stockPercentage: metaPercent,
     },
      "4" : {
+      company:"Alphabet Inc Class A",
+      logo: "https://dvh1deh6tagwk.cloudfront.net/finder-us/wp-uploads/sites/5/2020/04/AlphabetLogo_Supplied_250x250.png",
       stockName: "GOOGL",
       stockPrice: googlPrice,
+      stockPercentage: googlPercent,
     },
       "5" : {
+      company: "Salesforce Inc",
+      logo: "https://www.sfdcstatic.com/common/assets/img/logo-company-large.png",
       stockName: "CRM",
       stockPrice: crmPrice,
+      stockPercentage: crmPercent,
     },
   };
 
@@ -214,7 +236,6 @@ function App() {
       const response = await axios.get(
         `http://localhost:3001/trans/stock/${ticker}`
       );
-
 
       const price = response.data.data.c; // this is the current price of the stock
       // const currPrice = price.c
@@ -258,7 +279,7 @@ function App() {
   const pastStockPrice = async(tick, date) => {
     try{
       //console.log("history is being used")
-      const list = await TradeCalculations.fetchHistoricalData(tick, date);
+      const list = await Trading.fetchHistoricalData(tick, date);
       //The data now extracts the date and open price
       console.log("history is being used", list)
       
@@ -304,15 +325,26 @@ function App() {
       const amzn = await pastStockPrice(tickers[1], rangeDate);
       const google = await pastStockPrice(tickers[3], rangeDate);
       const crm = await pastStockPrice(tickers[4], rangeDate);
+
+      const mPercentage = await getPercentChange(tickers[0]);
+      const aPercentage = await getPercentChange(tickers[1]);
+      const gPercentage = await getPercentChange(tickers[3]);
+      //netflix here
+      const cPercentage = await getPercentChange(tickers[4]);
       
-      const [historicalMeta, historicalAmzn, historicalCrm,historicalGoogle] = await Promise.all([
-        meta,amzn,google,crm
+      const [historicalMeta, historicalAmzn, historicalCrm,historicalGoogle,metaPercent,amznPercent,googlPercent,crmPercent] = await Promise.all([
+        meta,amzn,crm,google,mPercentage,aPercentage,gPercentage,cPercentage
       ]);
       setHistoricalAmzn(historicalAmzn);
       setHistoricalCrm(historicalCrm);
       setHistoricalGoogle(historicalGoogle);
       setHistoricalMeta(historicalMeta);
       setHistoricalChecker(true);
+
+      setMetaPercent(metaPercent);
+      setAmznPercent(amznPercent);
+      setGooglPercent(googlPercent);
+      setCrmPercent(crmPercent);
       
     }
     const getTransactions = async (userID) => {

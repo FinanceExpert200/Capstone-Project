@@ -1,7 +1,8 @@
 // import "../ProductDetail/.css"
 import "./StockCard.css";
 import React from "react";
-import { Box, Button, Center, Flex, Grid, GridItem, Input, Link,Text, Stack, Icon, Container } from '@chakra-ui/react'
+import { Box, Button, Center, Flex, Grid, GridItem, Input,Image, Link,Text, Stack, Icon, Container } from '@chakra-ui/react'
+import { ArrowUpIcon } from '@chakra-ui/icons'
 
 import { useState, useEffect } from "react";
 import axios from "axios";
@@ -21,7 +22,6 @@ export default function StockCard({
   console.log(stateForm);
   const { stockId } = useParams();
   const stockInfo = stockData[stockId];
-  console.log("data", historicalData);
   const [quantity, setQuantity] = useState(0);
 
   const handleQuantityChange = (quantity) => {
@@ -90,14 +90,30 @@ export default function StockCard({
       >
         <GridItem h={'20vh'} pl='5' area={'header'} borderBottom={'1px'}>
           <Stack direction={'row'}>
-            
-            <Text as={'h1'} color={'white'}>
+
+            <Image src={stockInfo.logo} w={100} h={100} borderRadius={'full'} bgColor={'white'}/>        
+            <Text fontSize={70} color={'white'}>
               {stockInfo.stockName}
             </Text>
-            <Text fontSize={20} mt={'6'} color={'white'}>Apple.Inc</Text>
+            <Text fontSize={20} mt={'13'} color={'white'}>{stockInfo.company}</Text>
+            
 
           </Stack>
-          <Text fontSize={25} color={'white'}> {stockInfo.stockPrice} USD </Text>
+          <Stack direction={'row'} mt={5} ml={20}>
+          <Text fontSize={45} color={'white'}> {stockInfo.stockPrice.toFixed(2)} USD</Text>
+          {stockInfo.stockPercentage > 0 ? (
+            <Stack direction={'row'} ml={5} mt={5}>
+              <ArrowUpIcon color={'#00f008'} w={10} h={10}/>
+              <Text fontSize={25} color={'#00f008'} > {stockInfo.stockPercentage.toFixed(2)} % </Text>
+
+            </Stack>
+
+          ):(
+            <Text fontSize={25} color={'red'} mt={5} ml={10}> {stockInfo.stockPercentage} % </Text>
+
+          )}
+
+          </Stack>
         </GridItem>
         <GridItem pl='2' area={'main'} h={'100vh'}>
           <SingleStockGraph data={historicalData} dataName={stockInfo.stockName} />

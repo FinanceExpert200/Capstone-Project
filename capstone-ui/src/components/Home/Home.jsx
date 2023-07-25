@@ -4,82 +4,84 @@ import { useEffect, useState } from "react";
 import { Grid, Text, Flex, Center, Box, GridItem, Stack, Container, Button } from '@chakra-ui/react'
 import axios, { all } from "axios";
 import StockGraph from "../Graph/StockGraph";
+import MeanReversionStrat from "../../TradingCalculations/MeanReversionStrat.js"
+//import MovingAverageCrossover from '../../TradingCalculations/MovingAverageCrossover.js'
 import MovingAverageCrossover from '../../TradingCalculations/MovingAverageCrossover.js'
 
-const Home = ({getProfile,getAccount, getPortfolio, pastStockPrice, portfolio, profile, account, historicalPrice, tickers,fixedDate}) => {
+const Home = ({getProfile,getAccount, getPortfolio, pastStockPrice, portfolio, profile, account, historicalData, tickers,fixedDate}) => {
   const [metaData, setMetaData] = useState([]);
   const [amznData, setAmznData] = useState([]);
   const [googleData, setGoogleData] = useState([]);
   const [crmData, setCrmData] = useState([]);
   // const [nflxData, setNflxData] = useState([]);
-  const [allData, setAllData] = useState([]);
+  //const [allData, setAllData] = useState([]);
   const [test,setTest] = useState();
 
   const rangeDate = new Date();
   rangeDate.setDate(rangeDate.getDate()- 30);
 
-  const mergeArrays = (arr1, arr2, arr3, arr4) => {
-    const mergedArray = [];
-    // Create an object to keep track of merged data
-    const dataMap = {};
-    arr1.forEach(({ date, ...rest }) => {
-      dataMap[date] = { ...dataMap[date], ...rest };
-    });
-    arr2.forEach(({ date, ...rest }) => {
-      dataMap[date] = { ...dataMap[date], ...rest };
-    });
-    arr3.forEach(({ date, ...rest }) => {
-      dataMap[date] = { ...dataMap[date], ...rest };
-    });
-    arr4.forEach(({ date, ...rest }) => {
-      dataMap[date] = { ...dataMap[date], ...rest };
-    });
+  // const mergeArrays = (arr1, arr2, arr3, arr4) => {
+  //   const mergedArray = [];
+  //   // Create an object to keep track of merged data
+  //   const dataMap = {};
+  //   arr1.forEach(({ date, ...rest }) => {
+  //     dataMap[date] = { ...dataMap[date], ...rest };
+  //   });
+  //   arr2.forEach(({ date, ...rest }) => {
+  //     dataMap[date] = { ...dataMap[date], ...rest };
+  //   });
+  //   arr3.forEach(({ date, ...rest }) => {
+  //     dataMap[date] = { ...dataMap[date], ...rest };
+  //   });
+  //   arr4.forEach(({ date, ...rest }) => {
+  //     dataMap[date] = { ...dataMap[date], ...rest };
+  //   });
   
-    // Convert the data in the dataMap back to an array
-    Object.keys(dataMap).forEach((date) => {
-      mergedArray.push({ date, ...dataMap[date] });
-    });
+  //   // Convert the data in the dataMap back to an array
+  //   Object.keys(dataMap).forEach((date) => {
+  //     mergedArray.push({ date, ...dataMap[date] });
+  //   });
   
-    return mergedArray;
-  };
+  //   return mergedArray;
+  // };
 
   useEffect(()=> {
     getProfile();
     getAccount();
     getPortfolio();
     //fetches the data from a promise 
-    const fetchData = async () => {
-      try {
-        const meta = await pastStockPrice(tickers[0], rangeDate);
-        const amzn = await pastStockPrice(tickers[1], rangeDate);
-        const google = await pastStockPrice(tickers[3], rangeDate);
-        const crm = await pastStockPrice(tickers[4], rangeDate);
-        // const nflx = await pastStockPrice(tickers[2], rangeDate);
+    // const fetchData = async () => {
+    //   try {
+    //     const meta = await pastStockPrice(tickers[0], rangeDate);
+    //     const amzn = await pastStockPrice(tickers[1], rangeDate);
+    //     const google = await pastStockPrice(tickers[3], rangeDate);
+    //     const crm = await pastStockPrice(tickers[4], rangeDate);
+    //     // const nflx = await pastStockPrice(tickers[2], rangeDate);
 
-        setMetaData(meta);
-        setAmznData(amzn);
-        setGoogleData(google);
-        setCrmData(crm);
-        // setNflxData(nflx);
+    //     setMetaData(meta);
+    //     setAmznData(amzn);
+    //     setGoogleData(google);
+    //     setCrmData(crm);
+    //     // setNflxData(nflx);
 
-      } catch (error) {
-        console.error(error);
-      }
-    };
+    //   } catch (error) {
+    //     console.error(error);
+    //   }
+    // };
 
-    fetchData();
+    // fetchData();
 
   },[]);
   
 //gathers the individual stocks together as sets
-  useEffect(() => {
-    if (metaData.length > 0 && amznData.length > 0 && googleData.length > 0 && crmData.length > 0) {
-      setAllData([metaData, amznData, googleData, crmData]);
+  // useEffect(() => {
+  //   if (metaData.length > 0 && amznData.length > 0 && googleData.length > 0 && crmData.length > 0) {
+  //     setAllData([metaData, amznData, googleData, crmData]);
 
-    }
-  }, [metaData, amznData, googleData, crmData]);
-  const data = mergeArrays(metaData,amznData,googleData, crmData);
-console.log("THE STOCK" , portfolio)
+  //   }
+  // }, [metaData, amznData, googleData, crmData]);
+  //const data = mergeArrays(metaData,amznData,googleData, crmData);
+//console.log("THE STOCK" , portfolio)
 useEffect(()=>{
   if(portfolio != null){
     const stockCard = portfolio.map((item)=> (
@@ -93,7 +95,7 @@ useEffect(()=>{
   }
   
 }, [test])
-   console.log("THE POPULATED: ", test)
+   //console.log("THE POPULATED: ", test)
 
 
 
