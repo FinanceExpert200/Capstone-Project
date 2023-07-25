@@ -4,7 +4,7 @@ import { useState } from "react";
 import axios from "axios";
 import { Box, Button, Center, Flex, Stack, Container, SimpleGrid, Input, Text, Heading } from '@chakra-ui/react'
 // import { useEffect } from "react";
-import Trading from "../../TradingCalculations/PairsTrading.js"
+import Trading from "../../TradingCalculations/Divergence"
 import MovAvgTrading from "../../TradingCalculations/MovingAverageCrossover.js"
 
 
@@ -42,7 +42,7 @@ const handleLogin = async (event, email, password, setIsLogged, setCurrentUserId
 
   const handleCalc = (event) => {
     event.preventDefault()
-    MovAvgTrading.calculateDisplayedProfit(5000)
+    Trading.calculateRSI("CRM")
 }
 
 
