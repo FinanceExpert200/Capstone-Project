@@ -5,9 +5,9 @@ import { Grid, Text, Flex, Center, Box, GridItem, Stack, Container, Button } fro
 import axios, { all } from "axios";
 import StockGraph from "../Graph/StockGraph";
 import MeanReversionStrat from "../../TradingCalculations/MeanReversionStrat.js"
-import MovingAverageCrossover from '../../TradingCalculations/MovingAverageCrossover.js'
+//import MovingAverageCrossover from '../../TradingCalculations/MovingAverageCrossover.js'
 
-const Home = ({getProfile,getAccount, getPortfolio, pastStockPrice, portfolio, profile, account, historicalPrice, tickers,fixedDate}) => {
+const Home = ({getProfile,getAccount, getPortfolio, pastStockPrice, portfolio, profile, account, historicalData, tickers,fixedDate}) => {
   const [metaData, setMetaData] = useState([]);
   const [amznData, setAmznData] = useState([]);
   const [googleData, setGoogleData] = useState([]);
@@ -79,8 +79,8 @@ const Home = ({getProfile,getAccount, getPortfolio, pastStockPrice, portfolio, p
 
     }
   }, [metaData, amznData, googleData, crmData]);
-  const data = mergeArrays(metaData,amznData,googleData, crmData);
-console.log("THE STOCK" , portfolio)
+  //const data = mergeArrays(metaData,amznData,googleData, crmData);
+//console.log("THE STOCK" , portfolio)
 useEffect(()=>{
   if(portfolio != null){
     const stockCard = portfolio.map((item)=> (
@@ -94,7 +94,7 @@ useEffect(()=>{
   }
   
 }, [test])
-   console.log("THE POPULATED: ", test)
+   //console.log("THE POPULATED: ", test)
 
 
 
