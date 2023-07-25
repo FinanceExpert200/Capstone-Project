@@ -6,6 +6,7 @@ import axios, { all } from "axios";
 import StockGraph from "../Graph/StockGraph";
 import MeanReversionStrat from "../../TradingCalculations/MeanReversionStrat.js"
 //import MovingAverageCrossover from '../../TradingCalculations/MovingAverageCrossover.js'
+import MovingAverageCrossover from '../../TradingCalculations/MovingAverageCrossover.js'
 
 const Home = ({getProfile,getAccount, getPortfolio, pastStockPrice, portfolio, profile, account, historicalData, tickers,fixedDate}) => {
   const [metaData, setMetaData] = useState([]);
@@ -171,24 +172,30 @@ useEffect(()=>{
 
           </Stack>
 
-        </Stack>
+            </Stack>
+            
+            ):(
+              <Center  w={'full'}
+              h={'100vh'}
+              color={'white'}>
+                <Text>Loading...</Text>
+              </Center>
+          )}
+          
+          
+          {/* <div>
+            <h1>My App</h1>
+            <button onClick={showStrat}>Show Strategy</button>
+          </div> */}
+          
+        </Box>
 
-      ) : (
-        <Center w={'full'}
-          h={'100vh'}
-          color={'white'}>
-          <Text>Loading...</Text>
-        </Center>
-      )}
-
-
-
-    </Box>
-
-
-
-
-  );
-};
-
-export default Home;
+        
+        
+  
+        
+        
+        );
+      };
+      
+      export default Home;
