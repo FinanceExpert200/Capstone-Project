@@ -24,7 +24,9 @@ import SignInPage from "../SignInPage/SignInPage";
 import Home from "../Home/Home";
 import Trade from "../Trade/Trade"
 
-import Trading from "../../TradingCalculations/Trade"
+// import Trading from "../../TradingCalculations/Trade"
+
+import TradingStrategies from '../TradingStrategies/TradingStrategies';
 
 
 
@@ -358,6 +360,25 @@ function App() {
               ):(<Text>Loading...</Text>)
                 
               } />
+         
+         
+         
+
+            <Route
+              path="/strategies"
+              element={<TradingStrategies />}
+            />
+       
+         
+         
+         
+         
+         
+         
+         
+         
+         
+         
           </Routes>
         </main>
       </BrowserRouter>
