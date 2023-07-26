@@ -70,7 +70,9 @@ export default function StockCard({
   // here will be some sort of function that displays the stock graph, and just overall infromation based on the stock id that is passed
   return (
     <Flex w={'full'}
-      position={'fixed'}
+
+      position={'absolute'}
+      
       bgColor={'#000409'}
     >
       <Grid
@@ -79,7 +81,6 @@ export default function StockCard({
         "main nav"
       `}
         w={'full'}
-        h={'100vh'}
         gridTemplateRows={'1fr'}
         gridTemplateColumns={'4fr  2fr'}
         gap='1'
@@ -92,19 +93,19 @@ export default function StockCard({
           <Stack direction={'row'}>
 
             <Image src={stockInfo.logo} w={100} h={100} borderRadius={'full'} bgColor={'white'}/>        
-            <Text fontSize={70} color={'white'}>
+            <Text fontSize={70} color={'white'} >
               {stockInfo.stockName}
             </Text>
-            <Text fontSize={20} mt={'13'} color={'white'}>{stockInfo.company}</Text>
+            <Text fontSize={20} mt={'10'} color={'white'}>{stockInfo.company}</Text>
             
 
           </Stack>
           <Stack direction={'row'} mt={5} ml={20}>
-          <Text fontSize={45} color={'white'}> {stockInfo.stockPrice.toFixed(2)} USD</Text>
+          <Text fontSize={45} color={'white'}> {stockInfo.stockPrice} USD</Text>
           {stockInfo.stockPercentage > 0 ? (
             <Stack direction={'row'} ml={5} mt={5}>
               <ArrowUpIcon color={'#00f008'} w={10} h={10}/>
-              <Text fontSize={25} color={'#00f008'} > {stockInfo.stockPercentage.toFixed(2)} % </Text>
+              <Text fontSize={25} color={'#00f008'} > {stockInfo.stockPercentage} % </Text>
 
             </Stack>
 
@@ -119,33 +120,31 @@ export default function StockCard({
           <SingleStockGraph data={historicalData} dataName={stockInfo.stockName} />
         </GridItem>
 
-        <GridItem pl='2' area={'nav'} h={'100vh'}>
+        <GridItem pl='2' area={'nav'} >
           <Center 
             borderRadius={10}
-            w={'full'}
-            h={'100%'}
+            
             display={'flex'}
             flexDirection={'column'}
-            
-
+            bgColor={'#757575'}
           >
-            <Stack direction={'row'} justifyContent={'center'} bgColor={'whitesmoke'} >
+            <Flex direction={'row'}  w={'full'} justify={'center'}>
               <Link 
-              onClick={(event) => {setSubmission(""),setStateForm("buy")}}  
               
-              bgColor={stateForm ==="buy" ? ("green.400"):('whitesmoke')} 
+              onClick={(event) => {setSubmission(""),setStateForm("buy")}}  
+              bgColor={stateForm ==="buy" ? ("green.400"):('transparent')} 
               _hover={{ bg: 'green.400' ,  color:"white" }} 
               fontSize={'40px'} 
               color={'Black'} > Buy </Link>
               <Link 
               onClick={(event) => {setStateForm("sell")}} 
               
-              bgColor={stateForm ==="sell" ? ("green.400"):('whitesmoke')}
+              bgColor={stateForm ==="sell" ? ("green.400"):('transparent')}
               _hover={{ bg: 'green.400' ,  color:"white" }} 
               fontSize={'40px'} 
               color={'Black'}> Sell </Link>
 
-            </Stack>
+            </Flex>
 
             <Stack direction={'column'} p={10}>
               <Text fontSize={'30px'} color={'green.500'}>Quantity</Text>

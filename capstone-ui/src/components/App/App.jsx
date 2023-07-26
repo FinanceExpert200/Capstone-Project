@@ -35,7 +35,7 @@ import TradeCalculations from "../../TradingCalculations/Utilities.js"
 import StockCard from "../StockCard/StockCard";
 
 import { useEffect } from "react";
-import {Text} from '@chakra-ui/react'
+import {Button,Center} from '@chakra-ui/react'
 
 // import MeanReversionStrat from "../../TradingCalculations/MeanReversionStrat.js"
 
@@ -79,7 +79,7 @@ function App() {
 
   const [buying_power, setBuyingPower] = useState(10000);
   const [acc_value, setAccValue] = useState(10000);
-  const [transactionHistory, setTransactionHistory] = useState();
+  const [transactionHistory, setTransactionHistory] = useState(null);
 
   const rangeDate = new Date();
   rangeDate.setDate(rangeDate.getDate()- 30);
@@ -177,7 +177,7 @@ function App() {
     },
     "2": {
       company: "Amazon.com Inc.",
-      logo: "https://economictimes.indiatimes.com/thumb/msid-59738992,width-640,height-480,resizemode-75,imgsize-25499/amazon.jpg",
+      logo: "https://www.citypng.com/public/uploads/preview/-11596400565qsuxfwyv9j.png",
       stockName: "AMZN",
       stockPrice: amznPrice,
       stockPercentage: amznPercent,
@@ -358,7 +358,7 @@ function App() {
       });
     };
     fetchData();
-    getTransactions(12);
+    getTransactions(localStorage.getItem("currentUserId"));
   }, []);
 
   
@@ -389,7 +389,7 @@ function App() {
             />
             <Route
               path="/transaction"
-              element={isLogged?(<TransactionTable transactionHistory={transactionHistory} />):(<LandingPage />)}
+              element={isLogged?(<TransactionTable transactionHistory={transactionHistory} stockData={stockData} fixedDate={fixedDate} />):(<LandingPage />)}
                 
               
             />
@@ -415,7 +415,17 @@ function App() {
                   currentUserId={currentUserId}
                   historicalData={mergeArrays(historicalAmzn,historicalCrm,historicalGoogle,historicalMeta)}
                 />
-              ):(<Text>Loading...</Text>)
+              ):(
+                <Center position={'fixed'} w={'full'} h={'100vh'} bgColor={'#000409'}>
+                  <Button
+                    isLoading
+                    loadingText='Loading'
+                    color='white'
+                    variant='outline'
+                  ></Button>
+
+                </Center>
+              )
                 
               } />
          
