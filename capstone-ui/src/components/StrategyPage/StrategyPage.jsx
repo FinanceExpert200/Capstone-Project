@@ -16,6 +16,7 @@ const StrategyPage = () => {
     const [selectedButtons, setSelectedButtons] = useState([]);
     const [error, seterror] = useState(false)
     const [buyingPower, setBuyingPower] = useState(0)
+    const [allocatedAmount, setAllocatedAmount] = useState(0)
     
     // Here we need to handle each of the buttons
     // This page consists of: 
@@ -129,6 +130,7 @@ const StrategyPage = () => {
     const handleInputChange = (event) => {
         setBuyingPower(event.target.value);
     }
+
     
     
     
@@ -142,7 +144,7 @@ const StrategyPage = () => {
 
                 <div id = "temp2">Selected buttons: {selectedButtons.join(', ')}</div>
                     {error && <div>Pairs Trading can only have 2 options selected</div>}
-                    <input type="number" id="quantity" name="quantity" min="1000" max="10000" placeholder='Amount' onChange = {handleInputChange}/>
+                    <input type="number" id="quantity" name="quantity" placeholder='Amount' onChange = {handleInputChange}/>
                     <button type="submit" className="run-strategy-button" >
                         Run {name} strategy
                     </button>
