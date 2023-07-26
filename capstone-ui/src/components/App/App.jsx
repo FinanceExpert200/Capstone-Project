@@ -153,6 +153,7 @@ function App() {
     try {
       const res = await axios.get(`http://localhost:3001/trans/account/${localStorage.getItem("currentUserId")}`);
       setAccount(res.data.account);
+      console.log("ACCOUNT ", res.data.account)
     } catch(error){
       console.log(error)
     } 
@@ -428,25 +429,12 @@ function App() {
               )
                 
               } />
-         
-         
-         
-
             <Route
               path="/strategies"
               element={<TradingStrategies />}
             />
-       
-         
-         
-         
-         
-         
-         
-         
-         
-         
-         
+
+            <Route path="/strategies/:name" element={<StrategyPage/>}/>
           </Routes>
         </main>
       </BrowserRouter>

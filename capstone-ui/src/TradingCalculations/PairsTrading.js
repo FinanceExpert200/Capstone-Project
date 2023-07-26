@@ -4,12 +4,15 @@ import chalk from "chalk"
 export default class PairsTrading{
     static stockA = {}
     static stockB = {}
-    static totalTrades = 0 
+
     static stockACount = 0 
     static stockBCount = 0 
     static buyingPower = 0
     static accountValue = 0
     static transactionHistory = []
+    static threeMonthProfit = 0 
+    static sixMonthProfit = 0 
+
 
 
 
@@ -76,9 +79,12 @@ export default class PairsTrading{
     //now that we have calculated our standard deviation. We need to gather alot of information and iterate through it in order to figure out when we should buy or sell
     //First we need to fetch the pairs data for 465 days in the future.
     //Then we want to loop through the data, with a 50 day window, and calculate the standard deviation for every day.
-    static async calculateProfit(stockA, stockB){
-        this.buyingPower = 5000
-        this.accountValue = 5000
+    static async calculateProfit(tickerArray,amount){
+        console.log("ticker array ", tickerArray)
+        this.buyingPower = amount
+        this.accountValue = amount
+        let stockA = tickerArray[0]
+        let stockB = tickerArray[1]
         //Fetch the data for 415 day period
         await this.fetchPairsData(stockA, stockB, 450)
         //Now tht our values are set, we can do our calculations
@@ -98,40 +104,49 @@ export default class PairsTrading{
             // When the CURRENT PRICE RATIO is x number of standard deviations BELOW the historical mean we BUY STOCK A 
             // when the CURRENT PRICE RATIO is x number of standard deviations ABOVE the historical mean we SELL STOCK B
             // When the CURRENT PRICE RATIO reverts back to our historical mean, we SELL STOCK A  and BUY STOCK B 
+
+            if (right == Math.round((currPriceRatioArray.length / 4) * 3)) {
+                this.threeMonthProfit = this.accountValue;
+              }
+        
+            if (right == Math.round(currPriceRatioArray.length / 2)) {
+                this.sixMonthProfit = this.accountValue;
+              }
+
             let currentPriceRatio = currPriceRatioArray[right].priceRatio;
             let currentDataB = this.stockB[right]
             let currentDataA = this.stockA[right]
-
-            await this.determineBuyOrSell(currentPriceRatio, currAveragePriceRatio, currStandardDeviation,currentDataA,currentDataB);
+             
+            await this.determineBuyOrSell(currentPriceRatio, currAveragePriceRatio, currStandardDeviation,currentDataA,currentDataB, stockA,stockB);
             left ++ 
             right ++ 
 
             
         }
 
-        console.log(chalk.bgBlue.white("TOTAL TRADES ", this.totalTrades))
+        console.log(chalk.bgBlue.white("TOTAL ACCOUNT VALUE  ", this.threeMonthProfit, this.sixMonthProfit,this.accountValue))
         console.log(this.transactionHistory)
+        return this.transactionHistory
     }
 
-    static async determineBuyOrSell(currentPriceRatio, historicalMean, standardDeviation,currentDataA,currentDataB) {
+    static async determineBuyOrSell(currentPriceRatio, historicalMean, standardDeviation,currentDataA,currentDataB,tickerA,tickerB) {
         let x = .59; // multiplier
+        console.log("tickerA ", tickerA, " TickerB ", tickerB)
         let totalStandardDeviation = standardDeviation * x;
-
 
         if (currentPriceRatio < historicalMean - totalStandardDeviation) {
             // Buy Stock A and Sell Stock B
 
-            await this.buyStockASellStockB(currentDataA,currentDataB)
+            await this.buyStockASellStockB(currentDataA,currentDataB,tickerA,tickerB)
             this.stockACount += 1 
-        }else if (currentPriceRatio > historicalMean + totalStandardDeviation) {        
-            await this.buyStockBSellStockA(currentDataA,currentDataB)
+        }else if (currentPriceRatio > historicalMean + totalStandardDeviation) {    
+               
+            await this.buyStockBSellStockA(currentDataA,currentDataB,tickerA,tickerB) 
   
         }
-       
-        
     }
 
-    static async buyStockASellStockB(currentDataA, currentDataB){
+    static async buyStockASellStockB(currentDataA, currentDataB,tickerA,tickerB){
         console.log("currentDataA", currentDataA)
         //Buy stock A
         //Check the buying power to see if they have enough to buy stock A 
@@ -147,23 +162,23 @@ export default class PairsTrading{
             this.buyingPower = this.buyingPower - currentDataA.close
             //calculate account value
             this.stockACount == this.stockACount + 1
-            this.transactionHistory.push({type: "buy", date: currentDataA.date, price: currentDataA.close })
-            console.log("Successfully bought stock A for $", currentDataA.close)
+            this.transactionHistory.push({type: "buy",ticker: tickerA, date: currentDataA.date, price: currentDataA.close })
+            console.log("Successfully bought ", tickerA, " for $", currentDataA.close)
         }
         //Sell Stock B 
         //Check the stock quantity of Stock B to see if we have enough to sell
         if (this.stockBCount > 0 ){
             this.buyingPower = this.buyingPower +currentDataB.close
             this.stockBCount -= 1
-            console.log("successfully sold stock B for $", currentDataB.close)
-            this.transactionHistory.push({type: "sell", date: currentDataB.date, price: currentDataB.close })
+            console.log("successfully sold ",tickerB," for $", currentDataB.close)
+            this.transactionHistory.push({type: "sell",ticker: tickerB, date: currentDataB.date, price: currentDataB.close })
         } 
 
         this.accountValue = this.buyingPower + (this.stockACount * currentDataA.close) + (this.stockBCount* currentDataB.close)
         console.log(`account value is now ${this.accountValue}`)
     }
 
-    static async buyStockBSellStockA(currentDataA, currentDataB){
+    static async buyStockBSellStockA(currentDataA, currentDataB,tickerA,tickerB){
         console.log(chalk.bgRed.white("BUY STOCK B AND SELL STOCK A ", this.buyingPower));
         //Buy stock B
         //Check the buying power to see if they have enough to buy stock A 
@@ -177,8 +192,8 @@ export default class PairsTrading{
             this.buyingPower = this.buyingPower - currentDataB.close
             //calculate account value
             this.stockBCount = this.stockBCount + 1
-            this.transactionHistory.push({type: "buy", date: currentDataB.date, price: currentDataB.close })
-            console.log(`Successfully Bought stock B for $${currentDataB.close}`)
+            this.transactionHistory.push({type: "buy",ticker: tickerB, date: currentDataB.date, price: currentDataB.close })
+            console.log(`Successfully Bought ${tickerB} for $${currentDataB.close}`)
 
         }
         //Sell Stock A
@@ -186,13 +201,20 @@ export default class PairsTrading{
         if (this.stockACount > 0 ){
             this.buyingPower = this.buyingPower + currentDataA.close
             this.stockACount -= 1
-            this.transactionHistory.push({type: "sell", date: currentDataA.date, price: currentDataA.close })
-            console.log(`Sold Stock A for $${currentDataA.close} `)
+            this.transactionHistory.push({type: "sell",ticker: tickerA, date: currentDataA.date, price: currentDataA.close })
+            console.log(`Sold ${tickerA} for $${currentDataA.close} `)
         }
 
         this.accountValue = this.buyingPower + (this.stockACount * currentDataA.close) + (this.stockBCount* currentDataB.close)
         console.log(`account value is now ${this.accountValue}`)
     
+    }
+
+    static getTransactionHistory(){ 
+        return this.transactionHistory
+    }
+    static getAccountValue(){ 
+        return[this.threeMonthProfit, this.sixMonthProfit,this.accountValue]
     }
 
 

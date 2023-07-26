@@ -1,0 +1,12 @@
+#temp{
+    padding-top: 500px;
+    padding-left: 500px;
+    display: grid;
+}
+#temp2{
+    padding: 30px;
+}
+#quantity{
+    padding: 30px;
+    width: 200px
+}
