@@ -73,7 +73,7 @@ router.post("/add", async (req, res, next) => {
   try {
     //Access information from the req.body
     const { ticker, quantity, curr_price, user_id, trans_type } = req.body
-    transaction  = await Transaction.addTransactionHistory( ticker, quantity, curr_price, user_id, trans_type)
+    const transaction  = await Transaction.addTransactionHistory( ticker, quantity, curr_price, user_id, trans_type)
     return res.status(201).json({transaction});
   } 
   catch (err) {

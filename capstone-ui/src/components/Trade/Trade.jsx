@@ -29,6 +29,7 @@ export default function Trade({
       bgColor={'#000409'}
 
     >
+      {stockData ? (
       <Stack direction={'column'}>
         <Text as='h1' color="#00f008">
           Start Trading!
@@ -44,9 +45,12 @@ export default function Trade({
                   <Text color={'#00f008'} as={'h1'}>
                     {stockData[stockId].stockName}
                   </Text>
+                  {stockData[stockId].stockPrice && (
+
                   <Center fontSize={'30px'} color={'white'}>
                     $ {stockData[stockId].stockPrice.toFixed(2)}
                   </Center>
+                  )}
 
                 </Box>
               </Link>
@@ -54,16 +58,18 @@ export default function Trade({
 
           </Stack>
         </Box>
-        <Center>
-        <form className="refresh-form" onSubmit={(event) => handleRefresh(event)} >
-          <button type="submit" className="refresh-button" >
-            <Text color={'white'}>Refresh</Text>
-          </button>
-        </form>
-
-        </Center>
 
       </Stack>
+
+      ):(
+        <Button
+        isLoading
+        loadingText='Loading'
+        color='white'
+        variant='outline'
+      ></Button>
+
+      )}
     </Center>
 
   );
