@@ -42,7 +42,7 @@ export default function Navbar({ isLogged, setIsLogged }) {
           <>
             
               <Link href="/home" color={'white'} fontWeight={'bold'}>
-                StockStack
+                StockSwap
               </Link>
           
               <Link href="/home" color={'white'} _hover={{bgGradient :"linear(to-b, green.100,transparent)", color:'black'}} >Profile</Link>
@@ -72,7 +72,7 @@ export default function Navbar({ isLogged, setIsLogged }) {
           <Flex align="center" justify="space-between" width = {'full'}>
               <Link href="/">
                 <Text color={'white'} fontWeight={'bold'}>
-                StockStack
+                StockSwap
                 </Text>
               </Link>
             <Stack direction="row" spacing={4} justify="flex-end">

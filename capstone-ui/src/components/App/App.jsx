@@ -17,7 +17,7 @@ import RegisterPage from "../RegisterPage/RegisterPage";
 import TransactionTable from "../TransactionTable/TransactionTable";
 //import Trading from '../../TradingCalculations/MovingAverageCrossover';
 import Trading from '../../TradingCalculations/Trade';
-
+import StrategyPage from "../StrategyPage/StrategyPage"
 
 import Navbar from "../NavBar/NavBar";
 import SignInPage from "../SignInPage/SignInPage";
@@ -211,50 +211,39 @@ function App() {
 
 
 // --------------------------------------------------------------------------------------------------------------
-  // this function gets the current price of the stocks
-  const getPercentChange = async (ticker) => {
-    console.log("PERCENT CHANGE-------------")
-    try {
-      const response = await axios.get(
-        `http://localhost:3001/trans/stock/${ticker}`
-      );
-
-
-      const percentChange = response.data.data.dp; // this is the current price of the stock
-      // const currPrice = price.c
-      console.log(percentChange)
-      return percentChange
-      // console.log(price);
-    } catch (error) {
-      console.error(error);
-    }
-  };
-
 
 
   const getStockPrice = async (ticker) => {
+
     try {
       const response = await axios.get(
         `http://localhost:3001/trans/stock/${ticker}`
       );
 
       const price = response.data.data.c; // this is the current price of the stock
+      const percentChange = response.data.data.dp;  
       // const currPrice = price.c
       switch (ticker) {
         case "META":
           setMetaPrice(price);
+          setMetaPercent(percentChange);
+
           break;
         case "AMZN":
           setAmznPrice(price);
+          setAmznPercent(percentChange)
           break;
         case "NFLX":
           setNflxPrice(price);
+          setNflxPercent(percentChange)
           break;
         case "GOOGL":
           setGooglPrice(price);
+          setGooglPercent(percentChange)
           break;
         case "CRM":
           setCrmPrice(price);
+          setCrmPercent(percentChange);
           break;
         default:
           break;
@@ -326,25 +315,15 @@ function App() {
       const amzn = await pastStockPrice(tickers[1], rangeDate);
       const google = await pastStockPrice(tickers[3], rangeDate);
       const crm = await pastStockPrice(tickers[4], rangeDate);
-
-      const mPercentage = await getPercentChange(tickers[0]);
-      const aPercentage = await getPercentChange(tickers[1]);
-      const gPercentage = await getPercentChange(tickers[3]);
-      //netflix here
-      const cPercentage = await getPercentChange(tickers[4]);
       
-      const [historicalMeta, historicalAmzn, historicalCrm,historicalGoogle,metaPercent,amznPercent,googlPercent,crmPercent] = await Promise.all([
-        meta,amzn,crm,google,mPercentage,aPercentage,gPercentage,cPercentage
+      const [historicalMeta, historicalAmzn, historicalCrm,historicalGoogle] = await Promise.all([
+        meta,amzn,crm,google
       ]);
       setHistoricalAmzn(historicalAmzn);
       setHistoricalCrm(historicalCrm);
       setHistoricalGoogle(historicalGoogle);
       setHistoricalMeta(historicalMeta);
       
-      setMetaPercent(metaPercent);
-      setAmznPercent(amznPercent);
-      setGooglPercent(googlPercent);
-      setCrmPercent(crmPercent);
       
       setHistoricalChecker(true);
     }

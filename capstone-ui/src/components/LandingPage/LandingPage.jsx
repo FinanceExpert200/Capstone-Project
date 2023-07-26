@@ -48,7 +48,7 @@ const LandingPage = () => {
         lineHeight={1.2}
         fontSize={useBreakpointValue({ base: '3xl', md: '4xl' })}
       >
-        StockStack
+        StockSwap
       </Text>
       <Text
         fontWeight={700}

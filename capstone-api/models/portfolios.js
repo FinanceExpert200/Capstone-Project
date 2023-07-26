@@ -175,9 +175,9 @@ class Portfolio {
         parseFloat(existingBuyingPower) +
         parseFloat(quantity) * parseFloat(curr_price);
       console.log("UPDATES BUYING POWER", newBuyingPower);
-      await this.updateBuyingPower(newBuyingPower.toString(), user_id);
 
       this.removeFromUserPortfolio(ticker, quantity, curr_price, user_id);
+      await this.updateBuyingPower(newBuyingPower.toString(), user_id);
       await this.calculateTotalShareValue(user_id);
       console.log("item changed in portfolio");
     }
