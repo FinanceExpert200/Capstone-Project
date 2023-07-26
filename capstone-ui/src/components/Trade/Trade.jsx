@@ -45,9 +45,12 @@ export default function Trade({
                   <Text color={'#00f008'} as={'h1'}>
                     {stockData[stockId].stockName}
                   </Text>
+                  {stockData[stockId].stockPrice && (
+
                   <Center fontSize={'30px'} color={'white'}>
                     $ {stockData[stockId].stockPrice.toFixed(2)}
                   </Center>
+                  )}
 
                 </Box>
               </Link>

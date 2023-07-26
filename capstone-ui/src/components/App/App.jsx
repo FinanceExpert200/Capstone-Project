@@ -339,13 +339,13 @@ function App() {
       setHistoricalCrm(historicalCrm);
       setHistoricalGoogle(historicalGoogle);
       setHistoricalMeta(historicalMeta);
-      setHistoricalChecker(true);
-
+      
       setMetaPercent(metaPercent);
       setAmznPercent(amznPercent);
       setGooglPercent(googlPercent);
       setCrmPercent(crmPercent);
       
+      setHistoricalChecker(true);
     }
     const getTransactions = async (userID) => {
       axios
