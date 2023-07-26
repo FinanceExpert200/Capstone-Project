@@ -4,8 +4,6 @@ import { useState } from "react";
 import axios from "axios";
 import { Box, Button, Center, Flex, Stack, Container, SimpleGrid, Input, Text, Heading } from '@chakra-ui/react'
 // import { useEffect } from "react";
-import Trading from "../../TradingCalculations/PairsTrading.js"
-import MovAvgTrading from "../../TradingCalculations/MovingAverageCrossover.js"
 
 
 // this post request over here verifies if the user email and password combo is valid
@@ -40,10 +38,7 @@ const handleLogin = async (event, email, password, setIsLogged, setCurrentUserId
   }
 };
 
-  const handleCalc = (event) => {
-    event.preventDefault()
-    Trading.calculateProfit("META", "CRM")
-}
+
 
 
 
@@ -128,8 +123,6 @@ export default function SignInPage({ setIsLogged, setCurrentUserId}) {
                 </Button>
 
               </Stack>
-
-              <Button onClick={handleCalc}>Button</Button>
             </Box>
             
 

@@ -15,6 +15,7 @@ import axios from "axios";
 import LandingPage from "../LandingPage/LandingPage";
 import RegisterPage from "../RegisterPage/RegisterPage";
 import TransactionTable from "../TransactionTable/TransactionTable";
+import StrategyPage from '../StrategyPage/StrategyPage';
 
 
 
@@ -146,6 +147,7 @@ function App() {
     try {
       const res = await axios.get(`http://localhost:3001/trans/account/${localStorage.getItem("currentUserId")}`);
       setAccount(res.data.account);
+      console.log("ACCOUNT ", res.data.account)
     } catch(error){
       console.log(error)
     } 
@@ -384,27 +386,13 @@ function App() {
                   historicalData={mergeArrays(historicalAmzn,historicalCrm,historicalGoogle,historicalMeta)}
                 />
               ):(<Text>Loading...</Text>)
-                
               } />
-         
-         
-         
-
             <Route
               path="/strategies"
               element={<TradingStrategies />}
             />
-       
-         
-         
-         
-         
-         
-         
-         
-         
-         
-         
+
+            <Route path="/strategies/:name" element={<StrategyPage/>}/>
           </Routes>
         </main>
       </BrowserRouter>

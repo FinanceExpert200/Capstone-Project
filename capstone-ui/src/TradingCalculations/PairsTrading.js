@@ -79,9 +79,12 @@ export default class PairsTrading{
     //now that we have calculated our standard deviation. We need to gather alot of information and iterate through it in order to figure out when we should buy or sell
     //First we need to fetch the pairs data for 465 days in the future.
     //Then we want to loop through the data, with a 50 day window, and calculate the standard deviation for every day.
-    static async calculateProfit(stockA, stockB,amount){
+    static async calculateProfit(tickerArray,amount){
+        console.log("ticker array ", tickerArray)
         this.buyingPower = amount
         this.accountValue = amount
+        let stockA = tickerArray[0]
+        let stockB = tickerArray[1]
         //Fetch the data for 415 day period
         await this.fetchPairsData(stockA, stockB, 450)
         //Now tht our values are set, we can do our calculations
@@ -210,7 +213,7 @@ export default class PairsTrading{
     static getTransactionHistory(){ 
         return this.transactionHistory
     }
-    static getAcountValue(){ 
+    static getAccountValue(){ 
         return[this.threeMonthProfit, this.sixMonthProfit,this.accountValue]
     }
 
