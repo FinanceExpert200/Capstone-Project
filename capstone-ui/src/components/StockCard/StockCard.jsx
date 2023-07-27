@@ -1,13 +1,14 @@
 // import "../ProductDetail/.css"
 import "./StockCard.css";
 import React from "react";
-import { Box, Button, Center, Flex, Grid, GridItem, Input, Image, Link, Text, Stack, Square, Container } from '@chakra-ui/react'
+import { Box, Button, Center, Flex, Grid, GridItem, Input, Image, Link, Text, Stack, Square, Container, useBoolean } from '@chakra-ui/react'
 import { ArrowUpIcon, ArrowDownIcon } from '@chakra-ui/icons'
 
 import { useState, useEffect } from "react";
 import axios from "axios";
 import { useParams } from "react-router-dom";
 import SingleStockGraph from "../Graph/SingleStockGraph";
+import PopupConfirmation from "./PopupConfirmation";
 
 export default function StockCard({
   updateStockPrice,
@@ -18,8 +19,7 @@ export default function StockCard({
   acc_value
 }) {
   const [stateForm, setStateForm] = useState("reg");
-  const [submission, setSubmission] = useState(null);
-  console.log(stateForm);
+  const [submission, setSubmission] = useState(false);
   const { stockId } = useParams();
   const stockInfo = stockData[stockId];
   const [quantity, setQuantity] = useState(0);
@@ -56,17 +56,18 @@ export default function StockCard({
       if (res.status === 201) {
         setStateForm("reg")
         setQuantity(0)
-        setSubmission(<Text color={'green.400'}>Your submission was placed successfully!</Text>);
+        setSubmission(true);
+        //setSubmission(<Text color={'green.400'}>Your submission was placed successfully!</Text>);
       }
     } catch (err) {
       console.log(err);
       //must update the error message
-      setSubmission(<Text color={'red.400'}>Your submission failed</Text>);
+      //setSubmission(<Text color={'red.400'}>Your submission failed</Text>);
     }
   };
 
   //UNDO THIS
-  console.log("transaction history", stockInfo);
+  console.log("transaction was : ", submission);
 
   // here will be some sort of function that displays the stock graph, and just overall infromation based on the stock id that is passed
   return (
@@ -125,6 +126,11 @@ export default function StockCard({
         </GridItem>
 
         <GridItem pl='2' area={'nav'} position={'relative'}>
+           {submission && ( 
+            <PopupConfirmation submission={submission} name={stockInfo.stockName} 
+                               quantity={quantity} price={stockInfo.stockPrice} 
+                               trans_type={stateForm.toString()}/>
+           )} 
           <Center h={'100vh'} w={'full'}>
             <Box
               w={'full'}
@@ -133,19 +139,20 @@ export default function StockCard({
               flexDirection={'column'}
               bgColor={'#111214'}
             >
+             
               <Flex color='white'>
                 <Square flex='1' _hover={{ bg: 'green.400', color: "white" }} borderRadius={5} bgColor={stateForm === "buy" ? ("green.400") : ('transparent')}>
                   <Link
-                   
+
                     fontWeight={'light'}
-                    onClick={(event) => { setSubmission(""), setStateForm("buy") }}
+                    onClick={(event) => { setStateForm("buy") }}
                     _hover={{ bg: 'green.400', color: "white" }}
                     fontSize={'60px'}
                     color={'white'} > Buy </Link>
                 </Square>
                 <Square flex='1' _hover={{ bg: 'green.400', color: "white" }} borderRadius={3} bgColor={stateForm === "sell" ? ("green.400") : ('transparent')}>
                   <Link
-                    
+
                     fontWeight={'light'}
                     onClick={(event) => { setStateForm("sell") }}
                     _hover={{ bg: 'green.400', color: "white" }}
@@ -167,8 +174,6 @@ export default function StockCard({
                 </Center>
 
               ) : (
-
-
                 <Flex direction={'column'} p={10} >
                   <Flex direction={'row'} justify={'space-between'}>
                     <Text fontSize={'30px'} color={'green.500'} fontWeight={'light'}>Quantity</Text>
@@ -204,10 +209,10 @@ export default function StockCard({
 
                   </Flex>
 
+
                 </Flex>
 
-              )
-              }
+              )}
 
 
             </Box>

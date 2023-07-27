@@ -46,7 +46,6 @@ const Home = ({ getProfile, getAccount, getPortfolio, pastStockPrice, portfolio,
     <Box
       position={'absolute'}
       w={'full'}
-      h={'100vh'}
       bgColor={'#000409'}
       fontWeight={'light'}
     >
