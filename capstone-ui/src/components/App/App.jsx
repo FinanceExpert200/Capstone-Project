@@ -27,6 +27,7 @@ import Trade from "../Trade/Trade"
 // import Trading from "../../TradingCalculations/Trade"
 
 import TradingStrategies from '../TradingStrategies/TradingStrategies';
+import StrategyPage from '../StrategyPage/StrategyPage'
 import TradeCalculations from "../../TradingCalculations/Utilities.js"
 
 
