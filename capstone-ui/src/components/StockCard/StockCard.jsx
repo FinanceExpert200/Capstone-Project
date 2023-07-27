@@ -55,8 +55,8 @@ export default function StockCard({
       });
       if (res.status === 201) {
         setStateForm("reg")
-        setQuantity(0)
         setSubmission(true);
+        // setQuantity(0)
         //setSubmission(<Text color={'green.400'}>Your submission was placed successfully!</Text>);
       }
     } catch (err) {
