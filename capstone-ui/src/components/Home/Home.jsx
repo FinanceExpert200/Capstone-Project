@@ -1,18 +1,23 @@
 import React from "react";
 import "./Home.css";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useContext } from "react";
 import { Grid, Text, Flex, Center, Box, GridItem, Stack, Container, Button } from '@chakra-ui/react'
 import axios, { all } from "axios";
 import StockGraph from "../Graph/StockGraph";
 import MeanReversionStrat from "../../TradingCalculations/MeanReversionStrat.js"
 //import MovingAverageCrossover from '../../TradingCalculations/MovingAverageCrossover.js'
 import MovingAverageCrossover from '../../TradingCalculations/MovingAverageCrossover.js'
+// import { ThemeContext } from "../App/App";
 
 const Home = ({ getProfile, getAccount, getPortfolio, pastStockPrice, portfolio, profile, account, historicalData, tickers, fixedDate }) => {
   const [metaData, setMetaData] = useState([]);
   const [amznData, setAmznData] = useState([]);
   const [googleData, setGoogleData] = useState([]);
   const [crmData, setCrmData] = useState([]);
+
+
+  // const theme = useContext(ThemeContext);
+
 
   const [test, setTest] = useState();
   useEffect(() => {
@@ -46,6 +51,7 @@ const Home = ({ getProfile, getAccount, getPortfolio, pastStockPrice, portfolio,
     <Box
       position={'absolute'}
       w={'full'}
+      h={'100vh'}
       bgColor={'#000409'}
       fontWeight={'light'}
     >

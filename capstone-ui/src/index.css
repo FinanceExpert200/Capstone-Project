@@ -12,7 +12,16 @@
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   -webkit-text-size-adjust: 100%;
+
+  --light-theme-background: white;
+  --light-theme-color: black;
+
+  --dark-theme-background: white;
+  --dark-theme-color: black;
+
 }
+
+
 
 a {
   font-weight: 500;

@@ -6,7 +6,8 @@ import MeanReversionStrat from "../../TradingCalculations/MeanReversionStrat.js"
 import MovingAverageCrossover from "../../TradingCalculations/MovingAverageCrossover.js"
 import Divergence from "../../TradingCalculations/Divergence.js"
 import PairsTrading from "../../TradingCalculations/PairsTrading"
-import { Button } from '@chakra-ui/react';
+import ResultDivergence from './ResultDivergence'
+import { Button,Box,Center } from '@chakra-ui/react';
 
 const StrategyPage = () => {
     const {name} = useParams();
@@ -17,6 +18,9 @@ const StrategyPage = () => {
     const [error, seterror] = useState(false)
     const [buyingPower, setBuyingPower] = useState(0)
     const [allocatedAmount, setAllocatedAmount] = useState(0)
+
+    const [rsi,setRsi] = useState([]);
+
     
     // Here we need to handle each of the buttons
     // This page consists of: 
@@ -51,6 +55,11 @@ const StrategyPage = () => {
             setCurrentTransactionHsitory(transactionHistory);
             
             setCurrentAccountValue(returnedArray)
+            const RSI = await Divergence.getRSIData()
+            //set a var array to display in front end
+            setRsi(RSI);
+            //console.log(RSI)
+            //console.log("ARRAYYYYYY RETURNNNN",transactionHistory);
         } catch (error) {
             console.error("An error occurred:", error);
         }
@@ -70,7 +79,7 @@ const StrategyPage = () => {
         setCurrentAccountValue(0)
         setCurrentTransactionHsitory([])
         if(selectedButtons.length >= 1 ){
-            setRanStrategy(true)
+            
             switch (name) {
                 case "meanreversion":
                     console.log("meanreversion");
@@ -95,7 +104,17 @@ const StrategyPage = () => {
                     console.log("Invalid strategy type.");
                     break;
             }
+            setRanStrategy(true)
         }
+        
+        setSelectedButtons([]);
+        seterror(false);
+        setBuyingPower(0);
+        setAllocatedAmount(0);
+        const quantityInput = document.getElementById("quantity");
+    if (quantityInput) {
+        quantityInput.value = ""; // Reset the input to empty
+    }
 
     }
 
@@ -104,7 +123,7 @@ const StrategyPage = () => {
           <Button
             key={number}
             onClick={() => handleButtonClick(number, name)}
-            colorScheme={selectedButtons.includes(number) ? 'blue' : 'gray'}
+            colorScheme={selectedButtons.includes(number) ? 'green' : 'gray'}
           >
              {number}
           </Button>
@@ -131,15 +150,26 @@ const StrategyPage = () => {
         setBuyingPower(event.target.value);
     }
 
+
+    const stratName = ""; 
+
+
     
     
     
     return (
-        <div id = "temp">StrategyPage
-            <div id = "description">
+        <Box h={'100vh'} w={'full'} bgColor={'#F5F5F5'} position={'absolute'}  >
+            {/* <Box id = "description">
                 {description}
-            </div>
-            <form className="run-strategy-form" onSubmit={(event) => runStrategy(event, name)} >
+            </Box> */}
+            {ranStrategy && currentAccountValue && currentTransactionHistory && rsi ? ( <div>
+                        <ResultDivergence accountValues={currentAccountValue} transactionHistory={currentTransactionHistory} rsi={rsi}/>
+                        <Button onClick={()=>{
+                            setRanStrategy(false);
+                        }}>Run Again</Button>
+                    </div>):
+                    (<Center h={'100vh'} w={'full'} >
+                    <form className="run-strategy-form" onSubmit={(event) => runStrategy(event, name)} >
                 {renderButtons(name)}
 
                 <div id = "temp2">Selected buttons: {selectedButtons.join(', ')}</div>
@@ -148,12 +178,22 @@ const StrategyPage = () => {
                     <button type="submit" className="run-strategy-button" >
                         Run {name} strategy
                     </button>
+                        
 
-                {ranStrategy && <div>3 months profit: {Number(currentAccountValue[0]).toFixed(2)},6 months profit: {Number(currentAccountValue[1]).toFixed(2)}, 1 Year profit: {Number(currentAccountValue[2]).toFixed(2)}</div>}
+                
             </form>
-        </div>
+                    </Center>
+            )}
+                   
+            
+        
+
+        </Box>
     )
-    }
-    
-    export default StrategyPage
-    
+}
+
+export default StrategyPage
+
+{/* 3 months profit: {Number(currentAccountValue[0]).toFixed(2)},
+6 months profit: {Number(currentAccountValue[1]).toFixed(2)}, 
+1 Year profit: {Number(currentAccountValue[2]).toFixed(2)} */}
