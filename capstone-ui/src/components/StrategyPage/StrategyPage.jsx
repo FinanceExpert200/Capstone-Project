@@ -7,10 +7,10 @@ import MovingAverageCrossover from "../../TradingCalculations/MovingAverageCross
 import Divergence from "../../TradingCalculations/Divergence.js"
 import PairsTrading from "../../TradingCalculations/PairsTrading"
 import ResultDivergence from './ResultDivergence'
-import { Button,Box,Center } from '@chakra-ui/react';
+import { Button, Box, Flex,Center,Stack,Text} from '@chakra-ui/react';
 
 const StrategyPage = () => {
-    const {name} = useParams();
+    const { name } = useParams();
     const [currentAccountValue, setCurrentAccountValue] = useState([])
     const [currentTransactionHistory, setCurrentTransactionHsitory] = useState([])
     const [ranStrategy, setRanStrategy] = useState(false)
@@ -19,9 +19,9 @@ const StrategyPage = () => {
     const [buyingPower, setBuyingPower] = useState(0)
     const [allocatedAmount, setAllocatedAmount] = useState(0)
 
-    const [rsi,setRsi] = useState([]);
+    const [rsi, setRsi] = useState(null);
 
-    
+
     // Here we need to handle each of the buttons
     // This page consists of: 
     // A brief description of the strategy and How it works
@@ -32,7 +32,7 @@ const StrategyPage = () => {
     // Tiles that show the company and all trades that were made
 
     let description = ""
-    
+
 
 
     const runMovingAverageCrossoverStrategy = async (selectedStocks) => {
@@ -43,17 +43,17 @@ const StrategyPage = () => {
         setCurrentTransactionHsitory(transactionHistory)
         setCurrentAccountValue(accountValue)
     };
-      
+
     const runMeanReversionStrategy = async () => {
         MeanReversionStrat.mainFunc(5000);
-      
+
     };
     const runDivergenceStrategy = async (selectedStocks) => {
         try {
             console.log("clicked");
             let [transactionHistory, returnedArray] = await Divergence.calculateDisplayedProfit(buyingPower, selectedStocks);
             setCurrentTransactionHsitory(transactionHistory);
-            
+
             setCurrentAccountValue(returnedArray)
             const RSI = await Divergence.getRSIData()
             //set a var array to display in front end
@@ -64,22 +64,22 @@ const StrategyPage = () => {
             console.error("An error occurred:", error);
         }
     }
-    
+
     const runPairsTradingStrategy = async (selectedStocks) => {
-        let transactionHistory = await PairsTrading.calculateProfit(selectedStocks,buyingPower)
+        let transactionHistory = await PairsTrading.calculateProfit(selectedStocks, buyingPower)
         setCurrentAccountValue(PairsTrading.getAccountValue())
         setCurrentTransactionHsitory(transactionHistory)
 
     };
 
-    
+
     const runStrategy = async (event, name) => {
 
         event.preventDefault();
         setCurrentAccountValue(0)
         setCurrentTransactionHsitory([])
-        if(selectedButtons.length >= 1 ){
-            
+        if (selectedButtons.length >= 1) {
+
             switch (name) {
                 case "meanreversion":
                     console.log("meanreversion");
@@ -87,10 +87,10 @@ const StrategyPage = () => {
                     break;
                 case "movingaveragecrossover":
                     //check if at least one item is selected in selectedButtons 
-                    if(selectedButtons.length >= 1){
+                    if (selectedButtons.length >= 1) {
                         runMovingAverageCrossoverStrategy(selectedButtons);
-                        
-                    }        
+
+                    }
                     break;
                 case "divergence":
                     console.log("divergence");
@@ -106,43 +106,43 @@ const StrategyPage = () => {
             }
             setRanStrategy(true)
         }
-        
+
         setSelectedButtons([]);
         seterror(false);
         setBuyingPower(0);
         setAllocatedAmount(0);
         const quantityInput = document.getElementById("quantity");
-    if (quantityInput) {
-        quantityInput.value = ""; // Reset the input to empty
-    }
+        if (quantityInput) {
+            quantityInput.value = ""; // Reset the input to empty
+        }
 
     }
 
     const renderButtons = (name) => {
-        return ["META","AMZN", "GOOGL", "AAPL", "CRM"].map((number) => (
-          <Button
-            key={number}
-            onClick={() => handleButtonClick(number, name)}
-            colorScheme={selectedButtons.includes(number) ? 'green' : 'gray'}
-          >
-             {number}
-          </Button>
+        return ["META", "AMZN", "GOOGL", "AAPL", "CRM"].map((number) => (
+            <Button
+                key={number}
+                onClick={() => handleButtonClick(number, name)}
+                colorScheme={selectedButtons.includes(number) ? 'green' : 'gray'}
+            >
+                {number}
+            </Button>
         ));
     };
     const handleButtonClick = (buttonNumber, name) => {
-        if(name == "pairstrading" && selectedButtons.length > 2){
+        if (name == "pairstrading" && selectedButtons.length > 2) {
             console.log("Pairs trading only works with two stocks, select two in ordet to submit")
             seterror(true)
         }
         if (selectedButtons.includes(buttonNumber)) {
             setSelectedButtons(selectedButtons.filter(num => num !== buttonNumber));
             seterror(false)
-        } 
-        else if(name != "pairstrading" || selectedButtons.length < 2 )  {
-                setSelectedButtons([...selectedButtons, buttonNumber]);
-                seterror(false)
         }
-        else{
+        else if (name != "pairstrading" || selectedButtons.length < 2) {
+            setSelectedButtons([...selectedButtons, buttonNumber]);
+            seterror(false)
+        }
+        else {
             seterror(true)
         }
     };
@@ -151,42 +151,67 @@ const StrategyPage = () => {
     }
 
 
-    const stratName = ""; 
+    const stratName = "";
 
 
-    
-    
-    
+
+
+
     return (
         <Box h={'100vh'} w={'full'} bgColor={'#F5F5F5'} position={'absolute'}  >
             {/* <Box id = "description">
                 {description}
             </Box> */}
-            {ranStrategy && currentAccountValue && currentTransactionHistory && rsi ? ( <div>
-                        <ResultDivergence accountValues={currentAccountValue} transactionHistory={currentTransactionHistory} rsi={rsi}/>
-                        <Button onClick={()=>{
-                            setRanStrategy(false);
-                        }}>Run Again</Button>
-                    </div>):
-                    (<Center h={'100vh'} w={'full'} >
+            {ranStrategy && currentAccountValue && currentTransactionHistory ? (
+                <div>
+                    {rsi ? (
+                        <ResultDivergence accountValues={currentAccountValue} transactionHistory={currentTransactionHistory} rsi={rsi} />
+
+                    ) : (
+                        <Center h={'100vh'}>
+
+                        <Flex direction={'row'} justify={'space-between'} fontSize={'50px'}>
+                            <Stack m={3}>
+                                <Text color={'green.600'}>${Number(currentAccountValue[0]).toFixed(2)}</Text>
+                                <Text>3 month</Text>
+
+                            </Stack>
+                            <Stack m={3}>
+                                <Text color={'green.600'}>${Number(currentAccountValue[1]).toFixed(2)}</Text>
+                                <Text>6 month</Text>
+
+                            </Stack>
+                            <Stack m={3}>
+                                <Text color={'green.600'}>${Number(currentAccountValue[2]).toFixed(2)}</Text>
+                                <Text>1 year</Text>
+
+                            </Stack>
+                        </Flex>
+                        </Center>
+                    )}
+                    <Button onClick={() => {
+                        setRanStrategy(false);
+                    }}>Run Again</Button>
+                </div>) :
+                (<Center h={'100vh'} w={'full'} >
                     <form className="run-strategy-form" onSubmit={(event) => runStrategy(event, name)} >
-                {renderButtons(name)}
+                        {renderButtons(name)}
 
-                <div id = "temp2">Selected buttons: {selectedButtons.join(', ')}</div>
-                    {error && <div>Pairs Trading can only have 2 options selected</div>}
-                    <input type="number" id="quantity" name="quantity" placeholder='Amount' onChange = {handleInputChange}/>
-                    <button type="submit" className="run-strategy-button" >
-                        Run {name} strategy
-                    </button>
-                        
+                        <div id="temp2">Selected buttons: {selectedButtons.join(', ')}</div>
+                        {error && <div>Pairs Trading can only have 2 options selected</div>}
+                        <input type="number" id="quantity" name="quantity" placeholder='Amount' onChange={handleInputChange} />
+                        <button type="submit" className="run-strategy-button" >
+                            Run {name} strategy
+                        </button>
 
-                
-            </form>
-                    </Center>
-            )}
-                   
-            
-        
+
+
+                    </form>
+                </Center>
+                )}
+
+
+
 
         </Box>
     )
