@@ -16,10 +16,10 @@ class Transaction{
   }
 
     // Adds a transaction to the transaction table. Every transaction should be added here
-    static async addTransactionHistory(ticker, quantity, curr_price, user_id, trans_type) {
+    static async addTransactionHistory(ticker, quantity, curr_price, user_id, trans_type, purchased_by) {
       try {
 
-        console.log(`Adding transaction; ticker: ${ticker}, quantity: ${quantity}, curr_price: ${curr_price}, user_id: ${user_id}, trans_type: ${trans_type}`);
+        console.log(`Adding transaction; ticker: ${ticker}, quantity: ${quantity}, curr_price: ${curr_price}, user_id: ${user_id}, trans_type: ${trans_type}, purchased_by ${purchased_by}`);
         
         const query = `
           INSERT INTO transactions (
@@ -27,13 +27,15 @@ class Transaction{
             quantity,
             curr_price,
             user_id,
-            trans_type
+            trans_type,
+            purchased_by
+
           )
-          VALUES ($1, $2, $3, $4, $5)
+          VALUES ($1, $2, $3, $4, $5,$6)
           RETURNING *;
         `;
         
-        const values = [ticker, quantity, curr_price, user_id, trans_type];
+        const values = [ticker, quantity, curr_price, user_id, trans_type,purchased_by];
         const result = await db.query(query, values);
         
         return result.rows[0];

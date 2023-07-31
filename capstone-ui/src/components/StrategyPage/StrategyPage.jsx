@@ -44,7 +44,7 @@ const StrategyPage = () => {
 
     const runMovingAverageCrossoverStrategy = async (selectedStocks) => {
         console.log(selectedStocks)
-        let transactionHistory = await MovingAverageCrossover.calculateDisplayedProfit(buyingPower, selectedStocks)
+        let transactionHistory = await MovingAverageCrossover.calculateDisplayedProfit(simulatedBuyingPower, selectedStocks)
         let accountValue = await MovingAverageCrossover.getAccountValue()
         let ma = MovingAverageCrossover.getMovingAverages()
         console.log("account value ------", accountValue)
@@ -62,7 +62,7 @@ const StrategyPage = () => {
     const runDivergenceStrategy = async (selectedStocks) => {
         try {
             console.log("clicked");
-            let [transactionHistory, returnedArray] = await Divergence.calculateDisplayedProfit(buyingPower, selectedStocks);
+            let [transactionHistory, returnedArray] = await Divergence.calculateDisplayedProfit(simulatedBuyingPower, selectedStocks);
             setCurrentTransactionHsitory(transactionHistory);
 
             setCurrentAccountValue(returnedArray)
@@ -158,8 +158,15 @@ const StrategyPage = () => {
             seterror(true)
         }
     };
-    const handleInputChange = (event) => {
-        setBuyingPower(event.target.value);
+
+    const handleInputChangeForSimulatedBuyingPower = (event) => {
+        console.log(`setting the current simulated buying Power to ${event.target.value}`)
+        setSimulatedBuyingPower(event.target.value);
+    }
+
+    const handleInputChangeForstrategyBuyingPower = (event) =>{
+        event.preventDefault()
+        setStrategyBuyingPower(event.target.value)
     }
 
 

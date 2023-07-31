@@ -181,25 +181,6 @@ export default class Trading {
     let profit = await this.calculateIndividualShare(tickerArray[i], budgetPerStock);
     this.addToTotal(profit);
     }
-
-    // console.log(`AMAZON  ---------------------------------------------------`);
-    // let profitAmzn = await this.calculateIndividualShare("AMZN", budgetPerStock);
-    // this.addToTotal(profitAmzn)
-    // console.log("---------------------------AAPL---------------------------------");
-    // let profitAppl= await this.calculateIndividualShare("AAPL", budgetPerStock);
-    // this.addToTotal(profitAppl)
-    // console.log("---------------------META---------------------------------------");
-    // let profitMeta = await this.calculateIndividualShare("META", budgetPerStock);
-    // this.addToTotal(profitMeta)
-    // console.log("--------------------------GOOGL----------------------------------");
-    // let profitGoogl = await this.calculateIndividualShare("GOOGL", budgetPerStock);
-    // this.addToTotal(profitGoogl)
-    // console.log("----------------------CRM--------------------------------------");
-    // let profitCrm = await this.calculateIndividualShare("CRM", budgetPerStock);
-    // this.addToTotal(profitCrm)
-
-
-
     console.log(`TOTAL ${this.totalAccountValue}, 3 months ${this.totalThreeMonthProfit}, 6 months ${this.totalSixMonthProfit}`);
     console.log(this.botTransactionHistory)
     return this.botTransactionHistory

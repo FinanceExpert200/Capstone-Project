@@ -16,7 +16,7 @@ import RegisterPage from "../RegisterPage/RegisterPage";
 import TransactionTable from "../TransactionTable/TransactionTable";
 //import Trading from '../../TradingCalculations/MovingAverageCrossover';
 import Trading from '../../TradingCalculations/Trade';
-
+import StrategyPage from "../StrategyPage/StrategyPage"
 
 import Navbar from "../NavBar/NavBar";
 import SignInPage from "../SignInPage/SignInPage";
@@ -38,6 +38,11 @@ import StockCard from "../StockCard/StockCard";
 import { useEffect } from "react";
 import {Button,Center} from '@chakra-ui/react'
 
+
+
+
+
+
 // import MeanReversionStrat from "../../TradingCalculations/MeanReversionStrat.js"
 
 export const ThemeContext = createContext();
@@ -47,6 +52,8 @@ function App() {
 // keep for theme consistency
   const [theme, setTheme] = useState('dark');
   // { background: black , color: white } 
+
+
 
   // MeanReversionStrat.mainFunc();
   //State of the users Profile
@@ -86,6 +93,20 @@ function App() {
   const [buying_power, setBuyingPower] = useState(10000);
   const [acc_value, setAccValue] = useState(10000);
   const [transactionHistory, setTransactionHistory] = useState(null);
+
+
+  // -------------------- Strategy Usestate Variables ------------------\\\
+  const [strategyBuyingPower, setStrategyBuyingPower] = useState(0)
+  const [strategyType, setStrategyType] = useState(0)
+
+
+
+
+
+  // Now that we are adding our strategies into our APp, we edit some calculations
+  //  - account value now also includes the bots buying power 
+  //  - we subtract the users buying power from the bots buying power
+
 
   const rangeDate = new Date();
   rangeDate.setDate(rangeDate.getDate()- 30);
@@ -239,6 +260,7 @@ function App() {
 
 
   const getStockPrice = async (ticker) => {
+
     try {
       const response = await axios.get(
         `http://localhost:3001/trans/stock/${ticker}`
@@ -306,6 +328,26 @@ function App() {
     }
   }
 
+  const getStrategy = async() => {
+      try {
+        const res = await axios.get(`http://localhost:3001/strategy/${localStorage.getItem("currentUserId")}`);
+        console.log("STRATEGY ", res.data.data)
+        setStrategyType(res.data.data)
+      } catch(error){
+        console.log(error)
+      } 
+  }
+
+  const removeStrategy = async() => {
+    try {
+        const res = await axios.delete(`http://localhost:3001/strategy/remove/${localStorage.getItem("currentUserId")}`);
+        await getStrategy()
+        await getAccount()
+        console.log(`Removed strategy for user ${localStorage.getItem("currentUserId")}${localStorage.getItem("currentUserId")}`);
+    } catch (error) {
+        console.error(`Failed to remove strategy for user ${userId}:`, error);
+    }
+  }
 
 
   const addTransaction = async (
@@ -388,7 +430,7 @@ function App() {
             <Route path="/home" element={<Home getProfile={getProfile} getAccount={getAccount} getPortfolio={getPortfolio} 
                                                pastStockPrice={pastStockPrice} portfolio={portfolio} profile= {profile} 
                                                account={account} tickers = {tickers}
-                                               fixedDate ={fixedDate} historicalData={mergeArrays(historicalAmzn,historicalCrm,historicalGoogle,historicalMeta)}  />} />
+                                               fixedDate ={fixedDate} historicalData={mergeArrays(historicalAmzn,historicalCrm,historicalGoogle,historicalMeta)} strategyBuyingPower = {strategyBuyingPower} setStrategyBuyingPower = {setStrategyBuyingPower} strategy = {strategyType} setStrategyType = {setStrategyType} getStrategy = {getStrategy} userId = {currentUserId} removeStrategy = {removeStrategy}/>} />
             <Route
               path="/trade"
               element={

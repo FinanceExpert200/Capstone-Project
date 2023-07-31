@@ -169,7 +169,7 @@ export default class PairsTrading{
         //Check the stock quantity of Stock B to see if we have enough to sell
         if (this.stockBCount > 0 ){
             this.buyingPower = this.buyingPower +currentDataB.close
-            this.stockBCount -= 1
+            this.stockBCount -= 1 
             console.log("successfully sold ",tickerB," for $", currentDataB.close)
             this.transactionHistory.push({type: "sell",ticker: tickerB, date: currentDataB.date, price: currentDataB.close })
         } 
@@ -207,7 +207,7 @@ export default class PairsTrading{
 
         this.accountValue = this.buyingPower + (this.stockACount * currentDataA.close) + (this.stockBCount* currentDataB.close)
         console.log(`account value is now ${this.accountValue}`)
-    
+     
     }
 
     static getTransactionHistory(){ 

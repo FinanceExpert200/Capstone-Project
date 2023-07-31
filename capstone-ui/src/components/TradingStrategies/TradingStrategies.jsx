@@ -22,7 +22,8 @@ import { color } from "framer-motion";
 
 
 
-const TradingStrategies = () => {
+const TradingStrategies = ({userId}) => {
+  
   return (
     <Center
       position={'absolute'}
