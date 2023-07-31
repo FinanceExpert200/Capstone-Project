@@ -128,15 +128,13 @@ class User {
         RETURNING *
       `,
       [
-        acc_value, // Assuming these are the desired values as decimal numbers
+        acc_value, 
         buying_power,
         user.id
       ]
     );
     // return the user
-
     console.log(acc_value, buying_power, user.id)
-    
     return user;
 
   }

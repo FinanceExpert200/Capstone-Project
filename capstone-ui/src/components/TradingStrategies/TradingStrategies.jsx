@@ -19,7 +19,8 @@ import {
 
 
 
-const TradingStrategies = () => {
+const TradingStrategies = ({userId}) => {
+  
   return (
     <div id="tempdiv">
       <Link as={RouterLink} to="/strategies/movingaveragecrossover">Moving Average Crossover</Link>

@@ -3,7 +3,7 @@ const router  = express.Router()
 const Transaction = require("../models/transactions")
 const User  = require("../models/users")
 const Portfolio = require("../models/portfolios")
-
+const Strategy = require("../models/strategy")
 const yahooFinance = require('yahoo-finance2').default;
 
 
@@ -86,11 +86,20 @@ router.post("/add", async (req, res, next) => {
 router.post("/buy", async (req, res, next) => {
   try {
     //Access information from the req.body
-    const { ticker, quantity, curr_price, user_id, trans_type } = req.body
-    console.log(ticker,quantity,curr_price,user_id)
-    //adding purchase to our user Portfolio
-    await Portfolio.buyShare(ticker, quantity, curr_price, user_id)
-    await Transaction.addTransactionHistory( ticker, quantity, curr_price, user_id, trans_type)
+    const { ticker, quantity, curr_price, user_id, trans_type, purchased_by } = req.body
+    //if trans_type is NOT USER, we weed to execute Strategy.buyShare instead of Portfolio.buyShare
+    console.log(ticker,quantity,curr_price,user_id,trans_type,purchased_by)
+    if (purchased_by != "user"){
+      await Strategy.buyShare(ticker, quantity, curr_price, user_id)
+      console.log(`${purchased_by} made the purchase`)
+      
+    }
+    else{
+      console.log("User made the purchase")
+      //adding purchase to our user Portfolio
+      await Portfolio.buyShare(ticker, quantity, curr_price, user_id)
+    }
+    await Transaction.addTransactionHistory( ticker, quantity, curr_price, user_id, trans_type,purchased_by)
     let portfolio = await Portfolio.getUserPortfolio(user_id)
     //checking that portfolio works
     return res.status(201).json({portfolio});
@@ -105,11 +114,19 @@ router.post("/buy", async (req, res, next) => {
 router.post("/sell", async (req, res, next) => {
   try {
     //Access information from the req.body
-    const { ticker, quantity, curr_price, user_id, trans_type } = req.body
+    const { ticker, quantity, curr_price, user_id, trans_type, purchased_by} = req.body
     console.log((ticker,quantity,curr_price,user_id))
-    //adding purchase to our user Portfolio
-    await Portfolio.sellShare(ticker, quantity, curr_price, user_id)
-    await Transaction.addTransactionHistory( ticker, quantity, curr_price, user_id, trans_type)
+    //CHecking if the strategy or the user made the trade
+    if (purchased_by != "user"){
+      await Strategy.sellShare(ticker, quantity, curr_price, user_id)
+
+    }
+    else{
+      //adding purchase to our user Portfolio
+      await Portfolio.sellShare(ticker, quantity, curr_price, user_id)
+    }
+    //Add the transaction to our transaction history table
+    await Transaction.addTransactionHistory( ticker, quantity, curr_price, user_id, trans_type, purchased_by)
     let portfolio = await Portfolio.getUserPortfolio(user_id)
     //checking that portfolio works
     return res.status(201).json({portfolio});

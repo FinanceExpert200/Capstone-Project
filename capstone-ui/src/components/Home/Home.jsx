@@ -8,7 +8,7 @@ import MeanReversionStrat from "../../TradingCalculations/MeanReversionStrat.js"
 //import MovingAverageCrossover from '../../TradingCalculations/MovingAverageCrossover.js'
 import MovingAverageCrossover from '../../TradingCalculations/MovingAverageCrossover.js'
 
-const Home = ({ getProfile, getAccount, getPortfolio, pastStockPrice, portfolio, profile, account, historicalData, tickers, fixedDate }) => {
+const Home = ({ getProfile, getAccount, getPortfolio, pastStockPrice, portfolio, profile, account, historicalData, tickers, fixedDate, strategyBuyingPower,setStrategyBuyingPower,strategy, getStrategy, removeStrategy}) => {
   const [metaData, setMetaData] = useState([]);
   const [amznData, setAmznData] = useState([]);
   const [googleData, setGoogleData] = useState([]);
@@ -19,6 +19,7 @@ const Home = ({ getProfile, getAccount, getPortfolio, pastStockPrice, portfolio,
     getProfile();
     getAccount();
     getPortfolio();
+    getStrategy();
   }, []);
 
   //gathers the individual stocks together as sets
@@ -109,6 +110,30 @@ const Home = ({ getProfile, getAccount, getPortfolio, pastStockPrice, portfolio,
                 </Stack>
               </Container>
             </Stack>
+
+            <Stack direction={'row'}>
+
+              {strategy && <Container><Container width={'30%'} fontSize={'18'} borderRadius={15}   bgColor={'#111214'}>
+                <Text fontWeight={'medium'} textDecoration={'underline'} color={'white'}>Strategy: </Text>
+                <Button bgColor={'green.400'} onClick={(event) => {removeStrategy()}}>
+                  Remove Strategy
+                </Button>
+                <Stack direction={'row'} justifyContent={'center'} fontSize={'40'}>
+                  <Text color={'#00f008'}>
+                    {strategy.strategy_name}
+                  </Text>
+                </Stack>
+              </Container>
+
+              <Container width={'30%'} fontSize={'18'} borderRadius={15}  bgColor={'#111214'}>
+                <Text fontWeight={'medium'} fontSize={'18'} color={'white'} textDecoration={'underline'}>Strategy Buying Power: </Text>
+                <Stack direction={'row'} justifyContent={'center'} fontSize={'40px'}  >
+                  <Text color={'#00f008'}>$</Text>
+                  <Text color={'#00f008'}>{strategy.buying_power}</Text>
+                </Stack>
+              </Container>
+              </Container> }
+              </Stack>
 
 
             <StockGraph priceList={historicalData} />

@@ -5,6 +5,7 @@ const { PORT } = require("./config");
 const security = require("./middleware/security");
 const authRoutes = require("./Routes/auth");
 const transactionRoutes = require("./Routes/transaction")
+const strategyRoutes = require("./routes/strategies");
 
 const { BadRequestError, NotFoundError } = require("./utils/errors"); // Import custom error handlers
 
@@ -22,6 +23,7 @@ app.use(security.extractUserFromJwt);
 
 app.use("/auth", authRoutes);
 app.use("/trans", transactionRoutes)
+app.use("/strategy", strategyRoutes)
 
 // app.get("/stock")
 // await yahoo("AAPL")

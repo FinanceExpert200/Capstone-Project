@@ -191,4 +191,12 @@ export default class  Divergence{
             await this.setAccountValue(this.totalThreeMonthProfit,this.totalSixMonthProfit,this.totalAccountValue)
         }
     }
+    
+
+
+
+
+
+
+
 }

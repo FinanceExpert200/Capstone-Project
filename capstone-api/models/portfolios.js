@@ -183,7 +183,7 @@ class Portfolio {
     }
   }
 
-  //returns the quntity of the specified stock owned by a speciied user
+  //returns the quantity of the specified stock owned by a speciied user
   static async getShareQuantityOwned(user_id, ticker) {
     const checkPortfolioQuery = `
     SELECT *
@@ -232,6 +232,14 @@ class Portfolio {
       throw error;
     } finally {
       console.log("Total Cash Value of Account:", totalValue);
+      const userStrategy = await this.doesUserHaveStrategy(user_id)
+      if(userStrategy){
+
+        const strategyBuyingPower = userStrategy.buying_power
+        
+        totalValue += parseFloat(strategyBuyingPower)
+        console.log("Adding strategy buying power", strategyBuyingPower," to total cash value", totalValue);
+      }
       //update the Account value
       await this.updateAccountValue(totalValue, user_id);
     }
@@ -272,6 +280,18 @@ class Portfolio {
     const userValues = [amount.toString(), user_id];
     console.log(`Updating the Account Value of user ${user_id} to ${amount}`);
     await db.query(updateUserAccountValueQuery, userValues);
+  }
+
+  static async doesUserHaveStrategy(userId){
+      try {
+        const query = `SELECT * FROM tradingStrategies WHERE user_id = $1`;
+        const result = await db.query(query, [userId]);
+        const user = result.rows[0];
+        return user
+    } catch (err) {
+        console.error(`Failed to get strategies for user with ID ${userId}: ${err}`);
+        throw err;
+    }
   }
 }
 
