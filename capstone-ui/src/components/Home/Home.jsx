@@ -19,7 +19,8 @@ const Home = ({ getProfile, getAccount, getPortfolio, pastStockPrice, portfolio,
 
   // const theme = useContext(ThemeContext);
   const testRun = async() =>{
-    await Utilities.runCurrentStrategy("movingaveragecrossover")
+    await Utilities.runCurrentStrategy(strategy)
+
 
   }
 

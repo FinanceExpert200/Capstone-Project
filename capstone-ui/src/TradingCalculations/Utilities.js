@@ -1,5 +1,6 @@
 import axios from "axios"
 import MovingAverageCrossover from "./MovingAverageCrossover"
+import Divergence from "./Divergence"
 
 export default class Utilities{
   static selectedStocks = []
@@ -82,6 +83,14 @@ export default class Utilities{
 
       
     };
+    static async getDivergenceStrategyTransactionHistory(selectedStocks,strategy){
+      console.log(selectedStocks)
+      let transactionHistory = await MovingAverageCrossover.calculateDisplayedProfit(strategy.buying_power, selectedStocks)
+
+      
+    };
+
+
 
     static async compareTransactionHistory(transactionHistory){
       //iterate through the array, if the trade is after strategy.last_active, we execute our trade. \
