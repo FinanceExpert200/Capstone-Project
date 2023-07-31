@@ -6,7 +6,7 @@ import { AreaChart, Area,XAxis, YAxis, CartesianGrid, Tooltip, Legend, Responsiv
 
 export default function SingleStockGraph({data, dataName, aspect , color}) {
     return (
-        <ResponsiveContainer  width={'100%'} aspect={aspect}>
+        <ResponsiveContainer  width={'100%'}  aspect={aspect}>
             <AreaChart
              data={data}
              margin={{

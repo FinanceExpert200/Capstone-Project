@@ -2,81 +2,118 @@
 import * as React from 'react';
 //import { Link } from "react-router-dom"
 import "./NavBar.css";
+'use client'
+
 import {
-  Flex,
-  Button,
   Box,
-  Center,
-  Text,
-  Link,
+  Flex,
+  HStack,
+  IconButton,
+  Button,
+  useDisclosure,
+  useColorModeValue,
   Stack,
-  useColorModeValue
-} from '@chakra-ui/react';
+  Link,
+} from '@chakra-ui/react'
+import { HamburgerIcon, CloseIcon } from '@chakra-ui/icons'
 
-export default function Navbar({ isLogged, setIsLogged }) {
-  const bgNav = useColorModeValue('green')
+const Links = ['Profile', 'Trade', 'Transaction', 'Strategies']
+const Routes = ['home', 'trade', 'transaction', 'strategies']
 
+const NavLink = ({link, route}) => {
+
+  return (
+    <Box
+      as="a"
+      px={2}
+      py={1}
+      zIndex={1}
+      rounded={'md'}
+      paddingLeft={'80px'}
+      pr={'80px'}
+      
+      _hover={{
+        textDecoration: 'none',
+        bg: useColorModeValue('green.200', 'green.700'),
+        color:'black'
+      }}
+      href={`/${route}`}>
+        {link}
+    </Box>
+  )
+}
+
+export default function NavBar({ isLogged, setIsLogged }) {
+  const { isOpen, onOpen, onClose } = useDisclosure()
   const handleLogout = (event) => {
-    event.preventDefault(); // Prevents the default form submission behavior
-    setIsLogged(false);
-    console.log(isLogged);
-    localStorage.removeItem("currentUserId");
-    localStorage.removeItem("token");
-    window.location.href = "/";
-
+        event.preventDefault(); // Prevents the default form submission behavior
+        setIsLogged(false);
+        console.log(isLogged);
+        localStorage.removeItem("currentUserId");
+        localStorage.removeItem("token");
+        window.location.href = "/";
+    
   };
 
   return (
-      <Flex
-        align="center"
-        justify="space-between"
-        minH="60px"
-        py={{ base: 2 }}
-        px={{ base: 4 }}
-        position = {'absolute'}
-        zIndex={1}
-        width = {'full'}
-        // bgGradient={'linear(to-r, blackAlpha.600, transparent)'}
-      >
-        {isLogged && (
-          <>
-            
-              <Link href="/home" color={'white'} fontWeight={'bold'}>
-                StockStack
-              </Link>
-          
-              <Link href="/home" color={'white'} _hover={{bgGradient :"linear(to-b, green.100,transparent)", color:'black'}} >Profile</Link>
-
-              <Link href="/transaction" color={'white'}>Transaction</Link>
-            
-              <Link href="/trade" color={'white'}>Trade</Link>
-
-
-              <Link href="/strategies" color={'white'} _hover={{bgGradient :"linear(to-b, green.100,transparent)", color:'black'}} >Strategies</Link>
-
-            
-            <Button
-              type = "button"
+    <>
+    {isLogged && (
+      <Box bg={useColorModeValue('gray.800')} px={4} 
+           zIndex={1} position = {'absolute'} 
+           width = {'full'} pl={'80px'} pr={'80px'} 
+           color={'white'} fontSize={'17px'}>
+        <Flex h={16} alignItems={'center'} justifyContent={'space-between'}>
+          <IconButton
+            size={'md'}
+            icon={isOpen ? <CloseIcon /> : <HamburgerIcon />}
+            aria-label={'Open Menu'}
+            display={{ md: 'none' }}
+            onClick={isOpen ? onClose : onOpen}
+          />
+          <Box as='a' href="/home" fontWeight={'bold'}>StockSwap</Box>
+          <HStack spacing={8} alignItems={'center'}>
+            <HStack as={'nav'} spacing={4} display={{ base: 'none', md: 'flex' }}>
+            {Links.map((link, index) => (
+                <NavLink key={link} link={link} route={Routes[index]} />
+              ))}
+            </HStack>
+          </HStack>
+          <Flex alignItems={'center'}>
+          <Button
               bg={'green.700'}
               rounded={'full'}
               color={'white'}
-              _hover={{ bg: 'green.500' }}
+             _hover={{ bg: 'green.500' }}
               onClick={handleLogout}>
-              <Link href="/register"> Logout</Link>
+             <Link href="/register"> Logout</Link>
             </Button>
-            
-          </>
-        )}
+          </Flex>
+        </Flex>
 
-        {!isLogged && (
-          <Flex align="center" justify="space-between" width = {'full'}>
-              <Link href="/">
-                <Text color={'white'} fontWeight={'bold'}>
-                StockStack
-                </Text>
-              </Link>
-            <Stack direction="row" spacing={4} justify="flex-end">
-            <Button
+        {isOpen &&(
+          <Box pb={4} display={{ md: 'none' }}>
+            <Stack as={'nav'} spacing={4}>
+            {Links.map((link, index) => (
+                <NavLink key={link} link={link} route={Routes[index]} />
+              ))}
+            </Stack>
+          </Box>
+        ) }
+      </Box>
+
+     
+      )}
+      {!isLogged && (
+        <Box bg={'transparent'} px={4} 
+             zIndex={1} position = {'absolute'} 
+             width= {'full'} pl={'80px'} 
+             pr={'80px'} color={'white'} fontSize={'17px'}
+             >
+        <Flex h={16} alignItems={'center'} justifyContent={'space-between'}>
+          
+          <Box as='a' href="/" fontWeight={'bold'}>StockSwap</Box>
+          <Flex alignItems={'center'}>
+          <Button
               bg={'green.400'}
               rounded={'full'}
               color={'white'}
@@ -90,19 +127,20 @@ export default function Navbar({ isLogged, setIsLogged }) {
               _hover={{ bg: 'green.100' }}>
               <Link href="/register"> Register</Link>
             </Button>
-
-
-
-
-
-
-            </Stack>
           </Flex>
+        </Flex>
+
+        {isOpen && (
+          <Box pb={4} display={{ md: 'none' }}>
+            <Stack as={'nav'} spacing={4}>
+            {Links.map((link, index) => (
+                <NavLink key={link} link={link} route={Routes[index]} />
+              ))}
+            </Stack>
+          </Box>
         )}
-      </Flex>
-    
-
-  );
+      </Box>
+      )}
+    </>
+  )
 }
-
-            

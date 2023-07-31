@@ -22,6 +22,7 @@ import Navbar from "../NavBar/NavBar";
 import SignInPage from "../SignInPage/SignInPage";
 import Home from "../Home/Home";
 import Trade from "../Trade/Trade"
+import NotFound from '../NotFound/NotFound';
 
 // import Trading from "../../TradingCalculations/Trade"
 
@@ -446,6 +447,7 @@ function App() {
             />
 
             <Route path="/strategies/:name" element={<StrategyPage/>}/>
+            <Route path="/*" element={<NotFound/>} />
           </Routes>
         </main>
         </BrowserRouter>

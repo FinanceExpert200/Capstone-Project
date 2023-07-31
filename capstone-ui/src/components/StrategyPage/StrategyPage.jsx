@@ -7,7 +7,12 @@ import MovingAverageCrossover from "../../TradingCalculations/MovingAverageCross
 import Divergence from "../../TradingCalculations/Divergence.js"
 import PairsTrading from "../../TradingCalculations/PairsTrading"
 import ResultDivergence from './ResultDivergence'
-import { Button, Box, Flex,Center,Stack,Text} from '@chakra-ui/react';
+import { Button, Box, Heading,Flex,Center,Stack,Text,useColorModeValue,
+    FormControl,
+    Input,
+    FormLabel,
+    FormErrorMessage,
+    FormHelperText,} from '@chakra-ui/react';
 
 const StrategyPage = () => {
     const { name } = useParams();
@@ -107,7 +112,7 @@ const StrategyPage = () => {
             setRanStrategy(true)
         }
 
-        setSelectedButtons([]);
+        //setSelectedButtons([]);
         seterror(false);
         setBuyingPower(0);
         setAllocatedAmount(0);
@@ -124,6 +129,7 @@ const StrategyPage = () => {
                 key={number}
                 onClick={() => handleButtonClick(number, name)}
                 colorScheme={selectedButtons.includes(number) ? 'green' : 'gray'}
+                m={3}
             >
                 {number}
             </Button>
@@ -158,14 +164,15 @@ const StrategyPage = () => {
 
 
     return (
-        <Box h={'100vh'} w={'full'} bgColor={'#F5F5F5'} position={'absolute'}  >
+        <Box h={'100vh'} w={'full'} bgColor={'#171923'} position={'absolute'} paddingLeft={'80px'}
+        pr={'80px'} >
             {/* <Box id = "description">
                 {description}
             </Box> */}
             {ranStrategy && currentAccountValue && currentTransactionHistory ? (
                 <div>
                     {rsi ? (
-                        <ResultDivergence accountValues={currentAccountValue} transactionHistory={currentTransactionHistory} rsi={rsi} />
+                        <ResultDivergence accountValues={currentAccountValue} transactionHistory={currentTransactionHistory} rsi={rsi} companies={selectedButtons} />
 
                     ) : (
                         <Center h={'100vh'}>
@@ -193,20 +200,30 @@ const StrategyPage = () => {
                         setRanStrategy(false);
                     }}>Run Again</Button>
                 </div>) :
-                (<Center h={'100vh'} w={'full'} >
-                    <form className="run-strategy-form" onSubmit={(event) => runStrategy(event, name)} >
+                (<Center h={'100vh'} w={'full'} textColor={'white'} flexDirection={'column'}>
+                    <Heading fontSize={50} m={10} 
+                             bgGradient="linear(to-l, green.100, green)" 
+                             bgClip="text">Select From the Following Companies</Heading>
+                    <Box rounded={'lg'} boxShadow={'lg'} p={8} bgColor={useColorModeValue('gray.700')} >
+                    <Box as={'form'} className="run-strategy-form" onSubmit={(event) => runStrategy(event, name)} >
                         {renderButtons(name)}
 
-                        <div id="temp2">Selected buttons: {selectedButtons.join(', ')}</div>
-                        {error && <div>Pairs Trading can only have 2 options selected</div>}
-                        <input type="number" id="quantity" name="quantity" placeholder='Amount' onChange={handleInputChange} />
-                        <button type="submit" className="run-strategy-button" >
+                        <Box fontSize={'20px'}>Selected buttons:</Box>
+                        <Text m={'10px'} fontSize={'20px'}> {selectedButtons.join(', ')}</Text>
+                        {error && <Text>Pairs Trading can only have 2 options selected</Text>}
+                        <Flex direction={'row'} justify={'space-between'}>
+
+                        <Input type="number" id="quantity" name="quantity" placeholder='Amount' onChange={handleInputChange} w={'30'}/>
+                        <Button type="submit"  >
                             Run {name} strategy
-                        </button>
+                        </Button>
+                        </Flex>
 
 
 
-                    </form>
+                    </Box>
+
+                    </Box>
                 </Center>
                 )}
 

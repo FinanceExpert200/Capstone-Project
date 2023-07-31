@@ -76,10 +76,8 @@ export default function StockCard({
   // here will be some sort of function that displays the stock graph, and just overall infromation based on the stock id that is passed
   return (
     <Flex w={'full'}
-
       position={'absolute'}
-
-      bgColor={'#000409'}
+      bgColor={'#171923'} 
     >
       <Grid
         templateAreas={`
@@ -141,48 +139,45 @@ export default function StockCard({
               borderRadius={10}
               display={'flex'}
               flexDirection={'column'}
-              bgColor={'#111214'}
+              bgColor={'#A3C4BC'}
+              textColor={'black'}
+             
             >
              
-              <Flex color='white'>
-                <Square flex='1' _hover={{ bg: 'green.400', color: "white" }} borderRadius={5} bgColor={stateForm === "buy" ? ("green.400") : ('transparent')}>
+              <Flex textColor='black'>
+                <Square flex='1' _hover={{ bg: 'green.400'}} borderRadius={5} bgColor={stateForm === "buy" ? ("green.400") : ('transparent')}>
                   <Link
 
                     fontWeight={'light'}
                     onClick={(event) => { setStateForm("buy") }}
-                    _hover={{ bg: 'green.400', color: "white" }}
+                    _hover={{ bg: 'green.400' }}
                     fontSize={'60px'}
-                    color={'white'} > Buy </Link>
+                    color={'black'} > Buy </Link>
                 </Square>
                 
-                <Square flex='1' _hover={{ bg: 'green.400', color: "white" }} borderRadius={3} bgColor={stateForm === "sell" ? ("green.400") : ('transparent')}>
+                <Square flex='1' _hover={{ bg: 'green.400' }} borderRadius={3} bgColor={stateForm === "sell" ? ("green.400") : ('transparent')}>
                   <Link
                     fontWeight={'light'}
                     onClick={(event) => { setStateForm("sell") }}
-                    _hover={{ bg: 'green.400', color: "white" }}
+                    _hover={{ bg: 'green.400' }}
                     fontSize={'60px'}
-                    color={'white'}> Sell </Link>
+                    > Sell </Link>
                 </Square>
-              </Flex>
-
-              <Flex direction={'row'} w={'full'} justify={'center'}>
-
-
               </Flex>
 
               {stateForm === "reg" ? (
 
 
-                <Center color={'white'} p={10} fontWeight={'light'}>
+                <Center p={10} fontWeight={'light'} fontSize={'20px'}>
                   Choose a type above to start
                 </Center>
 
               ) : (
                 <Flex direction={'column'} p={10} >
                   <Flex direction={'row'} justify={'space-between'}>
-                    <Text fontSize={'30px'} color={'green.500'} fontWeight={'light'}>Quantity</Text>
+                    <Text fontSize={'30px'}  fontWeight={'light'}>Quantity</Text>
                     <Input
-                      color={'white'}
+                      color={'black'}
                       w={20}
                       h={'40px'}
                       type="number"
@@ -190,8 +185,8 @@ export default function StockCard({
                     />
                   </Flex>
                   <Flex direction={'row'} justify={'space-between'}>
-                    <Text fontSize={'30px'} color={'green.500'} fontWeight={'light'}>Total Amount: </Text>
-                    <Text color={'white'} fontSize={'30px'} fontWeight={'light'}>{totalPrice}</Text>
+                    <Text fontSize={'30px'}  fontWeight={'light'}>Total Amount: </Text>
+                    <Text fontSize={'30px'} fontWeight={'light'}>{totalPrice}</Text>
 
                   </Flex>
                   <Flex justify={'center'} mt={5}>

@@ -28,7 +28,7 @@ const TradingStrategies = () => {
       position={'absolute'}
       w={'full'}
       h={'100vh'}
-      bgColor={'#000409'}
+      bgColor={'#171923'}
       color={'white'}
       fontWeight={'light'}
       fontSize={'1cm'}
