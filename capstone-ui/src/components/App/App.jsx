@@ -1,7 +1,6 @@
-import { useState } from 'react'
-// import reactLogo from './assets/react.svg'
-// import viteLogo from '/vite.svg'
+import { useState, useContext, createContext } from 'react'
 import './App.css'
+//color alternative for background #021809 : more green
 
 import {
   BrowserRouter as Router,
@@ -23,10 +22,12 @@ import Navbar from "../NavBar/NavBar";
 import SignInPage from "../SignInPage/SignInPage";
 import Home from "../Home/Home";
 import Trade from "../Trade/Trade"
+import NotFound from '../NotFound/NotFound';
 
 // import Trading from "../../TradingCalculations/Trade"
 
 import TradingStrategies from '../TradingStrategies/TradingStrategies';
+import StrategyPage from '../StrategyPage/StrategyPage'
 import TradeCalculations from "../../TradingCalculations/Utilities.js"
 
 
@@ -44,8 +45,13 @@ import {Button,Center} from '@chakra-ui/react'
 
 // import MeanReversionStrat from "../../TradingCalculations/MeanReversionStrat.js"
 
+export const ThemeContext = createContext();
+
 
 function App() {
+// keep for theme consistency
+  const [theme, setTheme] = useState('dark');
+  // { background: black , color: white } 
 
 
 
@@ -232,6 +238,25 @@ function App() {
 
 
 // --------------------------------------------------------------------------------------------------------------
+  // this function gets the current price of the stocks
+  // const getPercentChange = async (ticker) => {
+  //   console.log("PERCENT CHANGE-------------")
+  //   try {
+  //     const response = await axios.get(
+  //       `http://localhost:3001/trans/stock/${ticker}`
+  //     );
+
+
+  //     const percentChange = response.data.data.dp; // this is the current price of the stock
+  //     // const currPrice = price.c
+  //     console.log(percentChange)
+  //     return percentChange
+  //     // console.log(price);
+  //   } catch (error) {
+  //     console.error(error);
+  //   }
+  // };
+
 
 
   const getStockPrice = async (ticker) => {
@@ -242,21 +267,19 @@ function App() {
       );
 
       const price = response.data.data.c; // this is the current price of the stock
-      const percentChange = response.data.data.dp;  
-      // const currPrice = price.c
+      const percentChange = response.data.data.dp;
       switch (ticker) {
         case "META":
           setMetaPrice(price);
           setMetaPercent(percentChange);
-
           break;
         case "AMZN":
           setAmznPrice(price);
-          setAmznPercent(percentChange)
+          setAmznPercent(percentChange);
           break;
         case "NFLX":
           setNflxPrice(price);
-          setNflxPercent(percentChange)
+          setNflxPercent(percentChange);
           break;
         case "GOOGL":
           setGooglPrice(price);
@@ -356,6 +379,12 @@ function App() {
       const amzn = await pastStockPrice(tickers[1], rangeDate);
       const google = await pastStockPrice(tickers[3], rangeDate);
       const crm = await pastStockPrice(tickers[4], rangeDate);
+
+      // const mPercentage = await getPercentChange(tickers[0]);
+      // const aPercentage = await getPercentChange(tickers[1]);
+      // const gPercentage = await getPercentChange(tickers[3]);
+      // //netflix here
+      // const cPercentage = await getPercentChange(tickers[4]);
       
       const [historicalMeta, historicalAmzn, historicalCrm,historicalGoogle] = await Promise.all([
         meta,amzn,crm,google
@@ -365,6 +394,10 @@ function App() {
       setHistoricalGoogle(historicalGoogle);
       setHistoricalMeta(historicalMeta);
       
+      // setMetaPercent(metaPercent);
+      // setAmznPercent(amznPercent);
+      // setGooglPercent(googlPercent);
+      // setCrmPercent(crmPercent);
       
       setHistoricalChecker(true);
     }
@@ -388,7 +421,8 @@ function App() {
 
   return (
     <div className="App" >
-      <BrowserRouter>
+      <ThemeContext.Provider value={theme} >
+        <BrowserRouter>
         <main>
           <Navbar isLogged={isLogged} setIsLogged={setIsLogged} /> 
           <Routes>
@@ -428,7 +462,7 @@ function App() {
               element={<SignInPage setIsLogged={setIsLogged} 
               setCurrentUserId = {setCurrentUserId} />}
             />
-            <Route path="/trade/:stockId" element={historicalChecker?(
+            <Route path="/trade/:stockId" element={historicalChecker && stockData?(
                 <StockCard
                   updateStockPrice={updateStockPrice}
                   tickers={tickers}
@@ -454,10 +488,12 @@ function App() {
               element={<TradingStrategies />}
             />
 
-            <Route path="/strategies/:strategyName" element={<StrategyPage userId = {currentUserId} strategyBuyingPower = {strategyBuyingPower} setStrategyBuyingPower = {setStrategyBuyingPower} strategyType = {strategyType} setStrategyType ={setStrategyType} buyingPower = {buying_power} setBuyingPower = {setBuyingPower}/>}/>
+            <Route path="/strategies/:name" element={<StrategyPage/>}/>
+            <Route path="/*" element={<NotFound/>} />
           </Routes>
         </main>
-      </BrowserRouter>
+        </BrowserRouter>
+      </ThemeContext.Provider>
 
       <br />
     </div>

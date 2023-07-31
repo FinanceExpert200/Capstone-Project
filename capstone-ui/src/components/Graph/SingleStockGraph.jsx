@@ -4,9 +4,9 @@ import {Box,Center,Text} from '@chakra-ui/react'
 import {format, parseISO} from "date-fns"
 import { AreaChart, Area,XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
 
-export default function SingleStockGraph({data, dataName}) {
+export default function SingleStockGraph({data, dataName, aspect , color}) {
     return (
-        <ResponsiveContainer  width={'100%'} aspect={2}>
+        <ResponsiveContainer  width={'100%'}  aspect={aspect}>
             <AreaChart
              data={data}
              margin={{
@@ -24,7 +24,7 @@ export default function SingleStockGraph({data, dataName}) {
 
                 </defs>
 
-                <XAxis stroke={'white'} 
+                <XAxis stroke={color} 
                        dataKey={'date'}
                        tickLine={false}
                        tickFormatter={string => {
@@ -34,11 +34,11 @@ export default function SingleStockGraph({data, dataName}) {
                         }
                         return "";
                        }}/>
-                <YAxis stroke={'white'} 
+                <YAxis stroke={color} 
                        domain={['auto', 'auto']} 
                        tickCount={5}
                        tickFormatter={number => `$${number.toFixed(2)}`}/>
-                <Tooltip content = {<CustomizeLabel/>}/>
+                <Tooltip content = {<CustomizeLabel color={color}/>}/>
                 <Legend></Legend>
                 <CartesianGrid opacity={.3} vertical={false}/>
                 <Area
@@ -47,13 +47,14 @@ export default function SingleStockGraph({data, dataName}) {
                   stroke="green" 
                   fillOpacity={1}
                   fill="url(#fade)"
-                  dot = "none"
-                  activeDot={{ r: 4}} />
+                  dot={{ fill: 'transparent', stroke:'transparent'}}
+                  
+                  activeDot={1} />
             </AreaChart>
         </ResponsiveContainer>
     )
 }
-function CustomizeLabel ({active, payload, label}){
+function CustomizeLabel ({active, payload, label, color}){
     if(active){
         return (
             <Box bgColor={'black'} justify={'center'}>
@@ -61,7 +62,7 @@ function CustomizeLabel ({active, payload, label}){
                 {format(parseISO(label), "eeee,d MMM, yyyy")}
                 </Text>
                 
-                <Text color={'white'}>${payload[0].value.toFixed(2)}</Text>
+                <Text color={color}>${payload[0].value.toFixed(2)}</Text>
             </Box>
         )
     }

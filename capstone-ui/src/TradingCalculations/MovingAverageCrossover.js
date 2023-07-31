@@ -202,6 +202,9 @@ export default class Trading {
     console.log(`${this.totalThreeMonthProfit}, ${this.totalSixMonthProfit}, ${this.totalAccountValue}`)
     return [this.totalThreeMonthProfit, this.totalSixMonthProfit, this.totalAccountValue]; 
   }
+  static getMovingAverages(ticker){
+   
+  }
 
 
 

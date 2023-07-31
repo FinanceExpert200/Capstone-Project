@@ -38,12 +38,11 @@ const TransactionTable = ({ transactionHistory, stockData, fixedDate }) => {
   //console.log("TEST",array);
 
   return (
-    <Center
-      w={'full'}
+      <Box p={20} w={'full'}
+      h={'100vh'}
       position={'absolute'}
-      bgColor={'#000409'}>
-      <Box p={20} w={'full'} >
-        <Center w={'full'} as={'h1'} fontWeight={'bold'} justifyContent={'center'} color={'#14AE5C'} >Transaction</Center>
+      bgColor={'#171923'} >
+        <Center w={'full'} as={'h1'} fontWeight={'bold'} justifyContent={'center'} color={'#14AE5C'} >Transactions</Center>
         <Stack direction={'column'} w={'full'}>
           {mergeChecker &&
             array.map((transaction) => (
@@ -92,7 +91,7 @@ const TransactionTable = ({ transactionHistory, stockData, fixedDate }) => {
         </Stack>
       </Box>
 
-    </Center>
+ 
   );
 };
 

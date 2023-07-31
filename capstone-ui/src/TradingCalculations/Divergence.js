@@ -11,7 +11,7 @@ export default class  Divergence{
     static totalAccountValue = 0
     static totalThreeMonthProfit = 0 
     static totalSixMonthProfit = 0 
-
+    static RSIArray = []
     static returnedArray = [0,0,0]
 
 
@@ -43,6 +43,7 @@ export default class  Divergence{
             let currRelativeStrength = averages.averageGain/averages.averageLoss
             let RSI = 100-(100/(1+currRelativeStrength))
             RSIArray.push({date: dailyPriceChange[right].date, RSI: RSI})
+            this.RSIArray.push({date: dailyPriceChange[right].date, RSI: RSI})
             left ++
         }
         await this.determineDivergence(RSIArray, dailyPriceChange, ticker)
@@ -191,12 +192,7 @@ export default class  Divergence{
             await this.setAccountValue(this.totalThreeMonthProfit,this.totalSixMonthProfit,this.totalAccountValue)
         }
     }
-    
-
-
-
-
-
-
-
+    static async getRSIData(){
+        return this.RSIArray
+    }
 }
