@@ -45,6 +45,7 @@ export default function StockCard({
     quantity,
     curr_price,
     trans_type
+
   ) => {
     try {
       event.preventDefault();
@@ -57,6 +58,8 @@ export default function StockCard({
         curr_price: curr_price,
         user_id: currentUserId,
         trans_type: trans_type,
+        purchased_by: "user",
+
       });
       if (res.status === 201) {
         setStateForm("reg")

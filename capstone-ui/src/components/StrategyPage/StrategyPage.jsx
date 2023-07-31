@@ -228,7 +228,7 @@ const StrategyPage = () => {
                         {error && <Text>Pairs Trading can only have 2 options selected</Text>}
                         <Flex direction={'row'} justify={'space-between'}>
 
-                        <Input type="number" id="quantity" name="quantity" placeholder='Amount' onChange={handleInputChange} w={'30'}/>
+                        <Input type="number" id="quantity" name="quantity" placeholder='Amount' onChange={handleInputChangeForstrategyBuyingPower} w={'30'}/>
                         <Button type="submit"  >
                             Run {name} strategy
                         </Button>
