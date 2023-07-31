@@ -16,11 +16,39 @@ class Transaction{
   }
 
     // Adds a transaction to the transaction table. Every transaction should be added here
-    static async addTransactionHistory(ticker, quantity, curr_price, user_id, trans_type, purchased_by) {
-      try {
+    static async addTransactionHistory(ticker, quantity, curr_price, user_id, trans_type, purchased_by, transactionDate) {
+      
+      //if no transaction date is given, we simply dont put anythong which will automatically set date to today 
+      if(!transactionDate){
+        try {
 
-        console.log(`Adding transaction; ticker: ${ticker}, quantity: ${quantity}, curr_price: ${curr_price}, user_id: ${user_id}, trans_type: ${trans_type}, purchased_by ${purchased_by}`);
-        
+          console.log(`Adding transaction; ticker: ${ticker}, quantity: ${quantity}, curr_price: ${curr_price}, user_id: ${user_id}, trans_type: ${trans_type}, purchased_by ${purchased_by}`);
+          
+          const query = `
+            INSERT INTO transactions (
+              ticker,
+              quantity,
+              curr_price,
+              user_id,
+              trans_type,
+              purchased_by
+  
+            )
+            VALUES ($1, $2, $3, $4, $5,$6)
+            RETURNING *;
+          `;
+          
+          const values = [ticker, quantity, curr_price, user_id, trans_type,purchased_by];
+          const result = await db.query(query, values);
+          
+          return result.rows[0];
+        } catch (err) {
+          console.error(err);
+        }
+    }
+    else{
+      console.log(`Adding transaction; ticker: ${ticker}, quantity: ${quantity}, curr_price: ${curr_price}, user_id: ${user_id}, trans_type: ${trans_type}, purchased_by ${purchased_by} DATE (Strategy transaction) ${transactionDate}`);
+        try {
         const query = `
           INSERT INTO transactions (
             ticker,
@@ -28,20 +56,24 @@ class Transaction{
             curr_price,
             user_id,
             trans_type,
-            purchased_by
+            purchased_by,
+            created_at, 
 
           )
-          VALUES ($1, $2, $3, $4, $5,$6)
+          VALUES ($1, $2, $3, $4, $5,$6,$7)
           RETURNING *;
         `;
         
-        const values = [ticker, quantity, curr_price, user_id, trans_type,purchased_by];
+        const values = [ticker, quantity, curr_price, user_id, trans_type,purchased_by,transactionDate];
         const result = await db.query(query, values);
         
         return result.rows[0];
       } catch (err) {
         console.error(err);
       }
+    }
+
+
   }
 
   static async fetchCurrentTickerPrice(ticker) {

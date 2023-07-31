@@ -72,7 +72,7 @@ router.get("/history/:id", async (req, res, next) => {
 router.post("/add", async (req, res, next) => {
   try {
     //Access information from the req.body
-    const { ticker, quantity, curr_price, user_id, trans_type } = req.body
+    const { ticker, quantity, curr_price, user_id, trans_type} = req.body
     const transaction  = await Transaction.addTransactionHistory( ticker, quantity, curr_price, user_id, trans_type)
     return res.status(201).json({transaction});
   } 
@@ -86,7 +86,7 @@ router.post("/add", async (req, res, next) => {
 router.post("/buy", async (req, res, next) => {
   try {
     //Access information from the req.body
-    const { ticker, quantity, curr_price, user_id, trans_type, purchased_by } = req.body
+    const { ticker, quantity, curr_price, user_id, trans_type, purchased_by, transaction_date } = req.body
     //if trans_type is NOT USER, we weed to execute Strategy.buyShare instead of Portfolio.buyShare
     console.log(ticker,quantity,curr_price,user_id,trans_type,purchased_by)
     if (purchased_by != "user"){
@@ -99,7 +99,7 @@ router.post("/buy", async (req, res, next) => {
       //adding purchase to our user Portfolio
       await Portfolio.buyShare(ticker, quantity, curr_price, user_id)
     }
-    await Transaction.addTransactionHistory( ticker, quantity, curr_price, user_id, trans_type,purchased_by)
+    await Transaction.addTransactionHistory( ticker, quantity, curr_price, user_id, trans_type,purchased_by,transaction_date)
     let portfolio = await Portfolio.getUserPortfolio(user_id)
     //checking that portfolio works
     return res.status(201).json({portfolio});
@@ -114,7 +114,7 @@ router.post("/buy", async (req, res, next) => {
 router.post("/sell", async (req, res, next) => {
   try {
     //Access information from the req.body
-    const { ticker, quantity, curr_price, user_id, trans_type, purchased_by} = req.body
+    const { ticker, quantity, curr_price, user_id, trans_type, purchased_by,transaction_date} = req.body
     console.log((ticker,quantity,curr_price,user_id))
     //CHecking if the strategy or the user made the trade
     if (purchased_by != "user"){
@@ -126,7 +126,7 @@ router.post("/sell", async (req, res, next) => {
       await Portfolio.sellShare(ticker, quantity, curr_price, user_id)
     }
     //Add the transaction to our transaction history table
-    await Transaction.addTransactionHistory( ticker, quantity, curr_price, user_id, trans_type, purchased_by)
+    await Transaction.addTransactionHistory( ticker, quantity, curr_price, user_id, trans_type, purchased_by,transaction_date)
     let portfolio = await Portfolio.getUserPortfolio(user_id)
     //checking that portfolio works
     return res.status(201).json({portfolio});
