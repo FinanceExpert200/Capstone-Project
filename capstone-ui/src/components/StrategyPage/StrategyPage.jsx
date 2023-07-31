@@ -24,7 +24,7 @@ const StrategyPage = () => {
     const [error, seterror] = useState(false)
     const [buyingPower, setBuyingPower] = useState(0)
     const [allocatedAmount, setAllocatedAmount] = useState(0)
-
+    const [simulatedBuyingPower, setSimulatedBuyingPower] = useState(0)
     const [rsi, setRsi] = useState(null);
     const [movAverage,setMovingAverage] = useState(null);
 
@@ -228,7 +228,7 @@ const StrategyPage = () => {
                         {error && <Text>Pairs Trading can only have 2 options selected</Text>}
                         <Flex direction={'row'} justify={'space-between'}>
 
-                        <Input type="number" id="quantity" name="quantity" placeholder='Amount' onChange={handleInputChangeForstrategyBuyingPower} w={'30'}/>
+                        <Input type="number" id="quantity" name="quantity" placeholder='Amount' onChange={handleInputChangeForSimulatedBuyingPower} w={'30'}/>
                         <Button type="submit"  >
                             Run {name} strategy
                         </Button>
