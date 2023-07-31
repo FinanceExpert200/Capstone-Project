@@ -1,6 +1,8 @@
 
 import React from "react";
 import "./TradingStrategies.css";
+import MeanReversionStrat from "../../TradingCalculations/MeanReversionStrat.js"
+import EMAStrat from "../../TradingCalculations/EMAStrat.js"
 
 import { Link as RouterLink } from 'react-router-dom';
 import {
@@ -21,6 +23,11 @@ import { color } from "framer-motion";
 // import { Link } from "react-router-dom";
 
 
+  // MeanReversionStrat.mainFunc(5000);
+
+  // EMAStrat.mainFunc(5000);
+
+// };
 
 const TradingStrategies = ({userId}) => {
   

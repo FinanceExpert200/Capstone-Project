@@ -3,33 +3,37 @@ import axios from "axios";
 let stockCount = 0;
 
 let botTransactions = [];
+let thirtyDayMovingAvgArray = [];
+let oneTwentyDayMovingAvgArray = [];
+
 
 let profit = 0;
 let botBuyingPower = 0;
 let botAccValue = 5000;
-const tickers = ["META", "AMZN", "NFLX", "GOOGL", "CRM"];
+// const tickers = ["META", "AMZN", "NFLX", "GOOGL", "CRM"];
+
+let profitYear = 0;
+let profitSixMonths = 0;
+let profitThreeMonths = 0;
 
 // need to correctly update the botAccValue and botBuyingPower
 // the botbuyingpower is not updated correcty take a look at the console logs
 
 export default class MeanReversionStrat {
-  static async mainFunc(budget) {
+  static async mainFunc(budget, selectedTickers) {
+    
     this.setBuyingPower(budget);
 
-    // run a for loop where we go through each ticker and calculate the moving averages and execute the trades
-    tickers.forEach((ticker) => {
+    selectedTickers.forEach((ticker) => {
       this.calcPrevProfit(ticker);
     });
-
-
   }
-
-
 
   static setBuyingPower(amount) {
     botBuyingPower = amount;
   }
 
+ 
   // the purpose of this function to calculate the profit that you would have made if you had used this strategy in the past
   static async calcPrevProfit(ticker) {
     const oneYearAgo = this.getDateOffset(-365);
@@ -41,7 +45,7 @@ export default class MeanReversionStrat {
       this.getCurrDate()
     );
 
-    console.log("after first calll", ticker);
+    console.log("---------------THIS IS FOR-----------------", ticker);
 
     // now we have this mega forloop that goes through the entire year of data calculating the moving averages and executing the trades
     for (let i = 0; i < yearHistoricalData.length; i++) {
@@ -52,8 +56,18 @@ export default class MeanReversionStrat {
       let thirtyDayMovingAvg = this.getMovingAverage(thirtyDayWindow);
       let oneTwentyDayMovingAvg = this.getMovingAverage(oneTwentyDayWindow);
 
+
+      console.log("this is the 30 day moving avg WINDOW", thirtyDayWindow);
+
+
+      thirtyDayMovingAvgArray.push({ticker:ticker, date:thirtyDayWindow[0].date, average:thirtyDayMovingAvg});
+
+      oneTwentyDayMovingAvgArray.push({ticker:ticker, date:oneTwentyDayWindow[0].date, average:oneTwentyDayMovingAvg});
+
+
+
       if (thirtyDayWindow[thirtyDayWindow.length - 1].close > botBuyingPower) {
-        console.log("NOT ENOUGH MONEY TO BUY");
+        // console.log("NOT ENOUGH MONEY TO BUY");
       } else if (
         thirtyDayWindow[thirtyDayWindow.length - 1].close < botBuyingPower &&
         oneTwentyDayMovingAvg / thirtyDayMovingAvg - 1 >= 0.1
@@ -67,10 +81,25 @@ export default class MeanReversionStrat {
           this.getAvgBuyPrice(botTransactions, 0) &&
         stockCount > 0
       ) {
-        profit +=
+        
+        
+        const currentProfit =
           thirtyDayWindow[thirtyDayWindow.length - 1].close -
           this.getAvgBuyPrice(botTransactions, 0);
 
+        // if (i === yearHistoricalData.length - 1) {
+        profitYear += currentProfit;
+        // }
+
+        if (i >= (yearHistoricalData.length - 123)) {
+          profitSixMonths += currentProfit;
+        }
+
+        if (i >= (yearHistoricalData.length - 62)) {
+          profitThreeMonths += currentProfit;
+        }
+
+        
         botTransactions.push({
           Type: "Sell",
           Price: thirtyDayWindow[thirtyDayWindow.length - 1].close,
@@ -81,14 +110,34 @@ export default class MeanReversionStrat {
       }
     }
 
-    console.log("PROFIT", profit);
-    console.log("BOT BUYING POWER", botBuyingPower);
+    console.log("this is the year profit", profitYear, " for ", ticker);
+    console.log(
+      "this is the six month profit",
+      profitSixMonths,
+      " for ",
+      ticker
+    );
+    console.log(
+      "this is the three month profit",
+      profitThreeMonths,
+      " for ",
+      ticker
+    );
+
+    console.log("this is AT", thirtyDayMovingAvgArray)
+
+    console.log("120 LOOKING ADWDED", oneTwentyDayMovingAvgArray);
+
+    // console.log(botTransactions);
 
     // reseting the state for each stock
     botBuyingPower = 5000;
     botAccValue = 5000;
     stockCount = 0;
-    profit = 0;
+    // profit = 0;
+    profitYear = 0;
+    profitSixMonths = 0;
+    profitThreeMonths = 0;
     botTransactions = [];
   }
 

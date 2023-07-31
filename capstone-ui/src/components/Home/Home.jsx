@@ -9,6 +9,7 @@ import MeanReversionStrat from "../../TradingCalculations/MeanReversionStrat.js"
 import MovingAverageCrossover from '../../TradingCalculations/MovingAverageCrossover.js'
 import Utilities from "../../TradingCalculations/Utilities.js"
 // import { ThemeContext } from "../App/App";
+// importy history
 
 const Home = ({ getProfile, getAccount, getPortfolio, pastStockPrice, portfolio, profile, account, historicalData, tickers, fixedDate, strategyBuyingPower,setStrategyBuyingPower,strategy, getStrategy, removeStrategy}) => {
   const [metaData, setMetaData] = useState([]);

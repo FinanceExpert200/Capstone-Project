@@ -162,7 +162,7 @@ function App() {
     }
   }
 
- //Trading.calculateDisplayedProfit("META")
+ Trading.calculateDisplayedProfit("META")
 
   //The following 3 getter: gets the list of all stocks and account used by the user
   
@@ -314,7 +314,7 @@ function App() {
       //console.log("history is being used")
       const list = await Trading.fetchHistoricalData(tick, date);
       //The data now extracts the date and open price
-      console.log("history is being used", list)
+      // console.log("history is being used", list)
       
       const extractedData = list.map(item => (
         {
