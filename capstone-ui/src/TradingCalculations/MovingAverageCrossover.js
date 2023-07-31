@@ -14,6 +14,7 @@ export default class Trading {
   static totalThreeMonthProfit = 0;
   static totalSixMonthProfit = 0;
   static botTransactionHistory = []
+  static movingAveragePercentageArray = []
 
 
   // Function to get the current buying power
@@ -49,6 +50,7 @@ export default class Trading {
     const currentPrice = filteredData[filteredData.length - 1].close;
     const currentDate = filteredData[filteredData.length - 1].date;
 
+    
     this.compareMovingAverage(currentPrice, movingAverage,ticker, currentDate);
 
     return movingAverage;
@@ -58,6 +60,7 @@ export default class Trading {
   static async compareMovingAverage(currentPrice, movingAverage,ticker,date) {
     const percentIncrease = ((currentPrice - movingAverage) / movingAverage) * 100;
     this.totalIncrease += percentIncrease;
+    this.movingAveragePercentageArray.push({ticker: ticker, percentage: percentIncrease})
 
 
     if (percentIncrease < -10) {
@@ -221,8 +224,8 @@ export default class Trading {
     console.log(`${this.totalThreeMonthProfit}, ${this.totalSixMonthProfit}, ${this.totalAccountValue}`)
     return [this.totalThreeMonthProfit, this.totalSixMonthProfit, this.totalAccountValue]; 
   }
-  static getMovingAverages(ticker){
-   
+  static getMovingAverages(){
+   return this.movingAveragePercentageArray;
   }
 
 

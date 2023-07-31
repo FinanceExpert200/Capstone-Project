@@ -7,6 +7,7 @@ import MovingAverageCrossover from "../../TradingCalculations/MovingAverageCross
 import Divergence from "../../TradingCalculations/Divergence.js"
 import PairsTrading from "../../TradingCalculations/PairsTrading"
 import ResultDivergence from './ResultDivergence'
+import ResultMovingAverage from "./ResultMovingAverage"
 import { Button, Box, Heading,Flex,Center,Stack,Text,useColorModeValue,
     FormControl,
     Input,
@@ -25,6 +26,7 @@ const StrategyPage = () => {
     const [allocatedAmount, setAllocatedAmount] = useState(0)
 
     const [rsi, setRsi] = useState(null);
+    const [movAverage,setMovingAverage] = useState(null);
 
 
     // Here we need to handle each of the buttons
@@ -44,10 +46,14 @@ const StrategyPage = () => {
         console.log(selectedStocks)
         let transactionHistory = await MovingAverageCrossover.calculateDisplayedProfit(buyingPower, selectedStocks)
         let accountValue = await MovingAverageCrossover.getAccountValue()
+        let ma = MovingAverageCrossover.getMovingAverages()
         console.log("account value ------", accountValue)
+        console.log("Trade Averages ----- ", ma)
         setCurrentTransactionHsitory(transactionHistory)
         setCurrentAccountValue(accountValue)
+        setMovingAverage(ma);
     };
+    console.log("Moving Average Array -----", movAverage)
 
     const runMeanReversionStrategy = async () => {
         MeanReversionStrat.mainFunc(5000);
@@ -94,7 +100,7 @@ const StrategyPage = () => {
                     //check if at least one item is selected in selectedButtons 
                     if (selectedButtons.length >= 1) {
                         runMovingAverageCrossoverStrategy(selectedButtons);
-
+                        
                     }
                     break;
                 case "divergence":
@@ -174,9 +180,11 @@ const StrategyPage = () => {
                     {rsi ? (
                         <ResultDivergence accountValues={currentAccountValue} transactionHistory={currentTransactionHistory} rsi={rsi} companies={selectedButtons} />
 
-                    ) : (
+                    ) : movAverage ? (
+                        <ResultMovingAverage maArray={movAverage} transactionHistory={currentTransactionHistory} accountValues={currentAccountValue} />
+                    ):(
                         <Center h={'100vh'}>
-
+                        
                         <Flex direction={'row'} justify={'space-between'} fontSize={'50px'}>
                             <Stack m={3}>
                                 <Text color={'green.600'}>${Number(currentAccountValue[0]).toFixed(2)}</Text>
