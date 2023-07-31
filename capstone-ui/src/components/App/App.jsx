@@ -27,7 +27,7 @@ import NotFound from '../NotFound/NotFound';
 // import Trading from "../../TradingCalculations/Trade"
 
 import TradingStrategies from '../TradingStrategies/TradingStrategies';
-import TradeCalculations from "../../TradingCalculations/Utilities.js"
+import Utilities from "../../TradingCalculations/Utilities.js"
 
 
 

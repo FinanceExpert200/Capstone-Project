@@ -69,8 +69,6 @@ const StrategyPage = () => {
             const RSI = await Divergence.getRSIData()
             //set a var array to display in front end
             setRsi(RSI);
-            //console.log(RSI)
-            //console.log("ARRAYYYYYY RETURNNNN",transactionHistory);
         } catch (error) {
             console.error("An error occurred:", error);
         }

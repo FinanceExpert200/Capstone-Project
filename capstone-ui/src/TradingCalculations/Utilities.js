@@ -43,7 +43,7 @@ export default class Utilities{
     static async runCurrentStrategy(strategy){
       // First we need to determine if the user even has a strategy and if the last active != todays date.  If Both conditions are not met then we are finished with our function
       let today = new Date() 
-      if(strategy&& strategy.last_active != timeDay.toISOString()){
+      if(strategy&& strategy.last_active != today.toISOString()){
         console.log("user has a strategy that has not been ran today, running said strategy")
         // now we need a switch statement to figure our our strategy using a switch case
         switch (strategy.strategy_name) {
@@ -54,7 +54,7 @@ export default class Utilities{
           case "movingaveragecrossover":
               //check if at least one item is selected in selectedButtons 
               if (selectedButtons.length >= 1) {
-                  this.runMovingAverageCrossoverStrategy(selectedButtons);
+                  this.getMovingAverageCrossoverStrategyTransactionHistory(this.selectedStocks,strategy);
 
               }
               break;
@@ -76,16 +76,21 @@ export default class Utilities{
       }
     }
 
-    static async runMovingAverageCrossoverStrategy(){
+    static async getMovingAverageCrossoverStrategyTransactionHistory(selectedStocks,strategy){
       console.log(selectedStocks)
-      let transactionHistory = await MovingAverageCrossover.calculateDisplayedProfit(simulatedBuyingPower, selectedStocks)
-      let accountValue = await MovingAverageCrossover.getAccountValue()
-      
+      let transactionHistory = await MovingAverageCrossover.calculateDisplayedProfit(strategy.buying_power, selectedStocks)
+
       
     };
 
     static async compareTransactionHistory(transactionHistory){
-      
+      //iterate through the array, if the trade is after strategy.last_active, we execute our trade. \
+      transactionHistory.map((transaction) => {
+        
+
+
+
+      })
     }
 
 

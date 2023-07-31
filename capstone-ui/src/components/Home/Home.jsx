@@ -7,6 +7,7 @@ import StockGraph from "../Graph/StockGraph";
 import MeanReversionStrat from "../../TradingCalculations/MeanReversionStrat.js"
 //import MovingAverageCrossover from '../../TradingCalculations/MovingAverageCrossover.js'
 import MovingAverageCrossover from '../../TradingCalculations/MovingAverageCrossover.js'
+import Utilities from "../../TradingCalculations/Utilities.js"
 // import { ThemeContext } from "../App/App";
 
 const Home = ({ getProfile, getAccount, getPortfolio, pastStockPrice, portfolio, profile, account, historicalData, tickers, fixedDate, strategyBuyingPower,setStrategyBuyingPower,strategy, getStrategy, removeStrategy}) => {
@@ -17,6 +18,10 @@ const Home = ({ getProfile, getAccount, getPortfolio, pastStockPrice, portfolio,
 
 
   // const theme = useContext(ThemeContext);
+  const testRun = async() =>{
+    await Utilities.runCurrentStrategy("movingaveragecrossover")
+
+  }
 
 
   const [test, setTest] = useState();
@@ -113,6 +118,8 @@ const Home = ({ getProfile, getAccount, getPortfolio, pastStockPrice, portfolio,
                   <Text color={'#00f008'}>{account.buying_power}</Text>
                 </Stack>
               </Container>
+
+              <Button onClick= {testRun}>test </Button>
             </Stack>
 
             <Stack direction={'row'}>
