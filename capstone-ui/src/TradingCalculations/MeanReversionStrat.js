@@ -3,13 +3,24 @@ import axios from "axios";
 let stockCount = 0;
 
 let botTransactions = [];
+
+
 let thirtyDayMovingAvgArray = [];
 let oneTwentyDayMovingAvgArray = [];
+let transactionsHistory = [];
+let profitArray = [];
+
+
+let thirtyDayMovingAvgArray = [];
+let oneTwentyDayMovingAvgArray = [];
+let transactionsHistory = [];
+let profitArray = [];
 
 
 let profit = 0;
 let botBuyingPower = 0;
 let botAccValue = 5000;
+// const tickers = ["META", "AMZN", "NFLX", "GOOGL", "CRM"];
 // const tickers = ["META", "AMZN", "NFLX", "GOOGL", "CRM"];
 
 let profitYear = 0;
@@ -34,7 +45,6 @@ export default class MeanReversionStrat {
   static setBuyingPower(amount) {
     botBuyingPower = amount;
   }
-
  
   // the purpose of this function to calculate the profit that you would have made if you had used this strategy in the past
   static async calcPrevProfit(ticker, budget, selectedTickers) {
@@ -58,9 +68,9 @@ export default class MeanReversionStrat {
       let thirtyDayMovingAvg = this.getMovingAverage(thirtyDayWindow);
       let oneTwentyDayMovingAvg = this.getMovingAverage(oneTwentyDayWindow);
 
+      
 
-
-      thirtyDayMovingAvgArray.push({ticker:ticker, date:thirtyDayWindow[0].date, average:thirtyDayMovingAvg});
+      thirtyDayMovingAvgArray.push({ticker:ticker, date:thirtyDayWindow[0].date, average:thirtyDayMovingAvg, close:thirtyDayWindow[0].close});
 
       oneTwentyDayMovingAvgArray.push({ticker:ticker, date:oneTwentyDayWindow[0].date, average:oneTwentyDayMovingAvg});
 
@@ -86,7 +96,6 @@ export default class MeanReversionStrat {
         const currentProfit =
           thirtyDayWindow[thirtyDayWindow.length - 1].close -
           this.getAvgBuyPrice(botTransactions, 0);
-
         // if (i === yearHistoricalData.length - 1) {
         profitYear += currentProfit;
         // }
@@ -128,8 +137,10 @@ export default class MeanReversionStrat {
 
     // console.log("120 LOOKING ADWDED", oneTwentyDayMovingAvgArray);
 
-    // console.log(botTransactions);
-
+    
+    transactionsHistory.push({[ticker]: botTransactions});
+    profitArray.push({[ticker]: {profitThreeMonths,profitSixMonths,profitYear}})
+    console.log("profit YEAR",profitArray);
     // reseting the state for each stock
     this.setBuyingPower((budget/selectedTickers.length));
     botAccValue = 5000;
@@ -259,5 +270,8 @@ export default class MeanReversionStrat {
     } catch (err) {
       console.log(err);
     }
+  }
+  static async fetchResult(){
+    return [transactionsHistory, profitArray, thirtyDayMovingAvgArray, oneTwentyDayMovingAvgArray]
   }
 }

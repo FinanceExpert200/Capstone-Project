@@ -25,6 +25,11 @@ const Home = ({ getProfile, getAccount, getPortfolio, pastStockPrice, portfolio,
 
 
   }
+  const testRun = async() =>{
+    await Utilities.runCurrentStrategy(strategy)
+
+
+  }
 
 
   const [test, setTest] = useState();

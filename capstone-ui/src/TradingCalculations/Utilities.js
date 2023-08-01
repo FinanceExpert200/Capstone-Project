@@ -30,7 +30,33 @@ export default class Utilities {
       console.log(err);
     }
   }
+    try {
+      const res = await axios.post("http://localhost:3001/trans/historical", {
+        ticker: ticker,
+        startDate: startDate,
+        endDate: endDate,
+      });
+      // console.log(res.data);
+      return res.data.result;
+    } catch (err) {
+      console.log(err);
+    }
+  }
 
+  // gets teh date prior to the day you input and returns it in a form that can be used for the yfinance api
+  static getDatePrior(days) {
+    const d = new Date();
+    d.setDate(d.getDate() - days);
+    const year = d.getFullYear();
+    const month = this.formatNumber(d.getMonth() + 1);
+    const day = this.formatNumber(d.getDate());
+    return `${year}-${month}-${day}`;
+  }
+
+  // Helper function to format a number with leading zero if less than 10
+  static formatNumber(num) {
+    return num < 10 ? `0${num}` : num.toString();
+  }
   // gets teh date prior to the day you input and returns it in a form that can be used for the yfinance api
   static getDatePrior(days) {
     const d = new Date();
@@ -91,6 +117,9 @@ export default class Utilities {
 
       
     };
+    static async getDivergenceStrategyTransactionHistory(selectedStocks,strategy){
+      console.log(selectedStocks)
+      let transactionHistory = await MovingAverageCrossover.calculateDisplayedProfit(strategy.buying_power, selectedStocks)
 
   
 
@@ -142,8 +171,11 @@ export default class Utilities {
 
 
 
+    static async compareTransactionHistory(transactionHistory){
+      //iterate through the array, if the trade is after strategy.last_active, we execute our trade. \
+      transactionHistory.map((transaction) => {
+        
 
-    
 
 
   

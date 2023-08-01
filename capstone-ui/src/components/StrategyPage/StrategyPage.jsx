@@ -38,11 +38,10 @@ const StrategyPage = ({userId,strategyBuyingPower,setStrategyBuyingPower,strateg
 
 
 
-  // The test buying power
-  const [simulatedBuyingPower, setSimulatedBuyingPower] = useState(0);
   const [rsi, setRsi] = useState(null);
   const [movAverage, setMovingAverage] = useState(null);
-
+  const [thirtyDayAvr,setThirtyDayAvr] = useState(null)
+  const [oneTwentyDayAvr, setOneTwentyDayAvr] = useState(null);
 
   // Here we need to handle each of the buttons
   // This page consists of:
@@ -107,6 +106,13 @@ const StrategyPage = ({userId,strategyBuyingPower,setStrategyBuyingPower,strateg
 
   const runMeanReversionStrategy = async (selectedTickers) => {
     MeanReversionStrat.mainFunc(simulatedBuyingPower, selectedTickers);
+    let result = await MeanReversionStrat.fetchResult();
+    console.log("TRANSACTION::", result)
+    setCurrentTransactionHsitory(result[0]);
+    setCurrentAccountValue(result[1]);
+    setThirtyDayAvr(result[2]);
+    setOneTwentyDayAvr(result[3]);
+
   };
 
 
@@ -125,6 +131,7 @@ const StrategyPage = ({userId,strategyBuyingPower,setStrategyBuyingPower,strateg
           selectedStocks
         );
       setCurrentTransactionHsitory(transactionHistory);
+
             setCurrentAccountValue(returnedArray)
             const RSI = await Divergence.getRSIData()
             //set a var array to display in front end
@@ -261,7 +268,7 @@ const StrategyPage = ({userId,strategyBuyingPower,setStrategyBuyingPower,strateg
         <div id = "temp">StrategyPage
             {/* <div id = "description">
                 {description}
-            </div>  */}
+            </Box> */}
       {ranStrategy && currentAccountValue && currentTransactionHistory ? (
         <div>
           {rsi ? (
@@ -277,7 +284,14 @@ const StrategyPage = ({userId,strategyBuyingPower,setStrategyBuyingPower,strateg
               transactionHistory={currentTransactionHistory}
               accountValues={currentAccountValue}
             />
-          ) : (
+          ) : thirtyDayAvr && oneTwentyDayAvr ?(
+            <ResultMeanReversion 
+              transactionHistory={currentTransactionHistory}
+              accountValue={currentAccountValue}
+              thrityDayAverage={thirtyDayAvr}
+              twentyDayAverage={oneTwentyDayAvr}
+              companies={selectedTickers}/>
+          ):(
             <Center h={"100vh"}>
               <Flex
                 direction={"row"}
@@ -372,8 +386,10 @@ const StrategyPage = ({userId,strategyBuyingPower,setStrategyBuyingPower,strateg
     )
 }
 
-export default StrategyPage
+export default StrategyPage;
 
-{/* 3 months profit: {Number(currentAccountValue[0]).toFixed(2)},
+{
+  /* 3 months profit: {Number(currentAccountValue[0]).toFixed(2)},
 6 months profit: {Number(currentAccountValue[1]).toFixed(2)}, 
-1 Year profit: {Number(currentAccountValue[2]).toFixed(2)} */}
+1 Year profit: {Number(currentAccountValue[2]).toFixed(2)} */
+}
