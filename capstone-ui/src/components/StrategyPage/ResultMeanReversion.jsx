@@ -4,7 +4,18 @@ import StrategyGraph from "../Graph/StrategyGraph";
 
 
 export default function ResultMeanReversion({accountValue, transactionHistory, thrityDayAverage, twentyDayAverage,companies }){
-    
+    let companyArray =[];
+    companies.map((company)=>{
+        const info = thrityDayAverage.filter((t)=>{
+            t.ticker === company;
+            return {
+                t
+            }
+        })
+        console.log(info)
+        companyArray.push({[company]: []})
+    })
+    console.log("THE ARRAY",companyArray)
     return (
         <Flex direction={'column'} w={'full'} h={'80vh'} mt={10} p={10} textColor={'white'}>
         <Heading>Mean Reversion</Heading>
