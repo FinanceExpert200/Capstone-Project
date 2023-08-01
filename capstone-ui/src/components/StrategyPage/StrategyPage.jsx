@@ -102,7 +102,7 @@ const StrategyPage = () => {
     setCurrentAccountValue(accountValue);
     setMovingAverage(ma);
   };
-  console.log("Moving Average Array -----", movAverage);
+  // console.log("Moving Average Array -----", movAverage);
 
   const runMeanReversionStrategy = async (selectedTickers) => {
     MeanReversionStrat.mainFunc(simulatedBuyingPower, selectedTickers);
@@ -115,9 +115,12 @@ const StrategyPage = () => {
 
   };
 
+
+
   const runEMAStrategy = async (selectedTickers) => {
     EMAStrat.mainFunc(simulatedBuyingPower, selectedTickers);
   };
+
 
   const runDivergenceStrategy = async (selectedStocks) => {
     try {

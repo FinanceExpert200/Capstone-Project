@@ -25,11 +25,12 @@ let profitThreeMonths = 0;
 export default class MeanReversionStrat {
   static async mainFunc(budget, selectedTickers) {
     
-    this.setBuyingPower(budget);
+    this.setBuyingPower((budget/selectedTickers.length));
+
 
 
     selectedTickers.forEach((ticker) => {
-      this.calcPrevProfit(ticker);
+      this.calcPrevProfit(ticker, budget, selectedTickers);
     });
   }
 
@@ -39,7 +40,7 @@ export default class MeanReversionStrat {
 
  
   // the purpose of this function to calculate the profit that you would have made if you had used this strategy in the past
-  static async calcPrevProfit(ticker) {
+  static async calcPrevProfit(ticker, budget, selectedTickers) {
     const oneYearAgo = this.getDateOffset(-365);
 
     // we then get the historical data from a year ago today to today
@@ -60,9 +61,7 @@ export default class MeanReversionStrat {
       let thirtyDayMovingAvg = this.getMovingAverage(thirtyDayWindow);
       let oneTwentyDayMovingAvg = this.getMovingAverage(oneTwentyDayWindow);
 
-
-      console.log("this is the 30 day moving avg WINDOW", thirtyDayWindow);
-
+      
 
       thirtyDayMovingAvgArray.push({ticker:ticker, date:thirtyDayWindow[0].date, average:thirtyDayMovingAvg, close:thirtyDayWindow[0].close});
 
@@ -137,10 +136,10 @@ export default class MeanReversionStrat {
     profitArray.push({[ticker]: {profitThreeMonths,profitSixMonths,profitYear}})
     console.log("profit YEAR",profitArray);
     // reseting the state for each stock
-    botBuyingPower = 5000;
+    this.setBuyingPower((budget/selectedTickers.length));
     botAccValue = 5000;
     stockCount = 0;
-    // profit = 0;
+    
     profitYear = 0;
     profitSixMonths = 0;
     profitThreeMonths = 0;
