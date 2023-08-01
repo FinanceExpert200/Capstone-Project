@@ -265,7 +265,14 @@ const StrategyPage = ({userId,strategyBuyingPower,setStrategyBuyingPower,strateg
     
     
     return (
-        <div id = "temp">StrategyPage
+      <Box
+      h={"100vh"}
+      w={"full"}
+      bgColor={"#171923"}
+      position={"absolute"}
+      paddingLeft={"80px"}
+      pr={"80px"}
+    >
             {/* <div id = "description">
                 {description}
             </Box> */}
@@ -382,7 +389,7 @@ const StrategyPage = ({userId,strategyBuyingPower,setStrategyBuyingPower,strateg
 
 
 
-        </div>
+        </Box>
     )
 }
 
