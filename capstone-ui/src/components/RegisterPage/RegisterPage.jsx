@@ -3,7 +3,7 @@ import axios from "axios";
 import { useState } from "react";
 import './RegistrationPage.css';
 import { Box, Button, Center, Flex, Stack, Container, SimpleGrid, Input, Text, Heading } from '@chakra-ui/react'
-import bcrypt from "bcryptjs";
+//import bcrypt from "bcryptjs";
 
 const handleAddData = async (event, buying_power, acc_value, email, first_name, last_name, password) => {
   try {
