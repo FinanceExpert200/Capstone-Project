@@ -42,6 +42,7 @@ import {Button,Center} from '@chakra-ui/react'
 
 
 
+
 // import MeanReversionStrat from "../../TradingCalculations/MeanReversionStrat.js"
 
 export const ThemeContext = createContext();
@@ -161,7 +162,7 @@ function App() {
       console.log(error);
     }
   }
-
+  console.log("CURRENT USER ", currentUserId)
  //Trading.calculateDisplayedProfit("META")
 
   //The following 3 getter: gets the list of all stocks and account used by the user
@@ -484,10 +485,10 @@ function App() {
               } />
             <Route
               path="/strategies"
-              element={<TradingStrategies />}
+              element={<TradingStrategies strategyBuyingPower = {strategyBuyingPower} setStrategyBuyingPower = {setStrategyBuyingPower} strategy = {strategyType} setStrategyType = {setStrategyType} getStrategy = {getStrategy} userId = {currentUserId} removeStrategy = {removeStrategy}/>}
             />
 
-            <Route path="/strategies/:name" element={<StrategyPage/>}/>
+            <Route path="/strategies/:name" element={<StrategyPage strategyBuyingPower = {strategyBuyingPower} setStrategyBuyingPower = {setStrategyBuyingPower} buyingPower = {buying_power} strategy = {strategyType} setStrategyType = {setStrategyType} getStrategy = {getStrategy} userId = {currentUserId} removeStrategy = {removeStrategy}/>}/>
             <Route path="/*" element={<NotFound/>} />
           </Routes>
         </main>

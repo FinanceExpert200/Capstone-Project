@@ -29,9 +29,12 @@ class Strategy{
             if(newBuyingPower < 0) {
                 throw new BadRequestError(`User doesn't have enough buying power`);
             }
-            
+        
+            console.log("NEW BUYING POWER ", newBuyingPower)
+            "NEW BUYING POWER FOR THE USER "
             // Update the buying power in the account table
-            await this.updateBuyingPower(newBuyingPower, userId);
+            await Portfolio.updateBuyingPower(newBuyingPower, userId);
+
             console.log("updated the Users buying power");
     
             // Insert the new strategy into the tradingStrategies table

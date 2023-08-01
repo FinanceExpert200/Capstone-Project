@@ -7,6 +7,8 @@ import StockGraph from "../Graph/StockGraph";
 import MeanReversionStrat from "../../TradingCalculations/MeanReversionStrat.js"
 //import MovingAverageCrossover from '../../TradingCalculations/MovingAverageCrossover.js'
 import MovingAverageCrossover from '../../TradingCalculations/MovingAverageCrossover.js'
+import Divergence from "../../TradingCalculations/Divergence";
+import Utilities from "../../TradingCalculations/Utilities"
 // import { ThemeContext } from "../App/App";
 
 const Home = ({ getProfile, getAccount, getPortfolio, pastStockPrice, portfolio, profile, account, historicalData, tickers, fixedDate, strategyBuyingPower,setStrategyBuyingPower,strategy, getStrategy, removeStrategy}) => {
@@ -45,7 +47,12 @@ const Home = ({ getProfile, getAccount, getPortfolio, pastStockPrice, portfolio,
   }, [test])
   //console.log("THE POPULATED: ", test)
 
+  const runTest = async () =>{
+    console.log("Strategy", strategy)
+    await Utilities.runCurrentStrategy(strategy)
 
+
+  }
 
 
   return (
@@ -57,6 +64,7 @@ const Home = ({ getProfile, getAccount, getPortfolio, pastStockPrice, portfolio,
     >
       {profile && account && portfolio && historicalData ? (
         <Stack direction={'row'} padding={20} w={'full'} >
+          <Button onClick={runTest}>test</Button>
           <Stack direction={'column'}
             p={1}
 

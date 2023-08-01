@@ -153,12 +153,14 @@ export default class PairsTrading{
         console.log(chalk.bgGreen("BUY STOCK A AND SELL STOCK B Buying power: ", this.buyingPower));
         if(this.buyingPower < currentDataA.close){
             console.log(chalk.red("NOT ENOUGH MONEY TO BUY THE STOCK A"))
+            
         }
         if(this.stockBCount < 0){
             console.log(chalk.red("Not NOT ENOUGH STOKED B OWNED TO SELL"))
+            
         }
     
-        if(this.buyingPower >= currentDataA.close){
+        else if(this.buyingPower >= currentDataA.close){
             this.buyingPower = this.buyingPower - currentDataA.close
             //calculate account value
             this.stockACount == this.stockACount + 1
@@ -167,7 +169,7 @@ export default class PairsTrading{
         }
         //Sell Stock B 
         //Check the stock quantity of Stock B to see if we have enough to sell
-        if (this.stockBCount > 0 ){
+        else if (this.stockBCount > 0 ){
             this.buyingPower = this.buyingPower +currentDataB.close
             this.stockBCount -= 1 
             console.log("successfully sold ",tickerB," for $", currentDataB.close)
@@ -184,11 +186,13 @@ export default class PairsTrading{
         //Check the buying power to see if they have enough to buy stock A 
         if(this.buyingPower < currentDataB.close){
             console.log(chalk.red("NOT ENOUGH MONEY TO BUY THE STOCK B"))
+            
         }
         if(this.stockACount == 0){
             console.log(chalk.red("Not NOT ENOUGH OF STOCK A OWNED TO SELL"))
+            
         }
-        if(this.buyingPower >= currentDataB.close){
+        else if(this.buyingPower >= currentDataB.close){
             this.buyingPower = this.buyingPower - currentDataB.close
             //calculate account value
             this.stockBCount = this.stockBCount + 1
@@ -198,7 +202,7 @@ export default class PairsTrading{
         }
         //Sell Stock A
         //Check the stock quantity of Stock B to see if we have enough to sell
-        if (this.stockACount > 0 ){
+        else if (this.stockACount > 0 ){
             this.buyingPower = this.buyingPower + currentDataA.close
             this.stockACount -= 1
             this.transactionHistory.push({type: "sell",ticker: tickerA, date: currentDataA.date, price: currentDataA.close })
