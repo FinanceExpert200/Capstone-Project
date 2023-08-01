@@ -3,8 +3,11 @@ import axios from "axios";
 let stockCount = 0;
 
 let botTransactions = [];
+
 let thirtyDayMovingAvgArray = [];
 let oneTwentyDayMovingAvgArray = [];
+let transactionsHistory = [];
+let profitArray = [];
 
 
 let profit = 0;
@@ -58,9 +61,9 @@ export default class MeanReversionStrat {
       let thirtyDayMovingAvg = this.getMovingAverage(thirtyDayWindow);
       let oneTwentyDayMovingAvg = this.getMovingAverage(oneTwentyDayWindow);
 
+      
 
-
-      thirtyDayMovingAvgArray.push({ticker:ticker, date:thirtyDayWindow[0].date, average:thirtyDayMovingAvg});
+      thirtyDayMovingAvgArray.push({ticker:ticker, date:thirtyDayWindow[0].date, average:thirtyDayMovingAvg, close:thirtyDayWindow[0].close});
 
       oneTwentyDayMovingAvgArray.push({ticker:ticker, date:oneTwentyDayWindow[0].date, average:oneTwentyDayMovingAvg});
 
@@ -128,8 +131,10 @@ export default class MeanReversionStrat {
 
     // console.log("120 LOOKING ADWDED", oneTwentyDayMovingAvgArray);
 
-    // console.log(botTransactions);
-
+    
+    transactionsHistory.push({[ticker]: botTransactions});
+    profitArray.push({[ticker]: {profitThreeMonths,profitSixMonths,profitYear}})
+    console.log("profit YEAR",profitArray);
     // reseting the state for each stock
     this.setBuyingPower((budget/selectedTickers.length));
     botAccValue = 5000;
@@ -259,5 +264,8 @@ export default class MeanReversionStrat {
     } catch (err) {
       console.log(err);
     }
+  }
+  static async fetchResult(){
+    return [transactionsHistory, profitArray, thirtyDayMovingAvgArray, oneTwentyDayMovingAvgArray]
   }
 }
