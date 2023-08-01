@@ -4,15 +4,18 @@ let stockCount = 0;
 
 let botTransactions = [];
 
+
 let thirtyDayMovingAvgArray = [];
 let oneTwentyDayMovingAvgArray = [];
 let transactionsHistory = [];
 let profitArray = [];
 
 
+
 let profit = 0;
 let botBuyingPower = 0;
 let botAccValue = 5000;
+// const tickers = ["META", "AMZN", "NFLX", "GOOGL", "CRM"];
 // const tickers = ["META", "AMZN", "NFLX", "GOOGL", "CRM"];
 
 let profitYear = 0;
@@ -37,7 +40,6 @@ export default class MeanReversionStrat {
   static setBuyingPower(amount) {
     botBuyingPower = amount;
   }
-
  
   // the purpose of this function to calculate the profit that you would have made if you had used this strategy in the past
   static async calcPrevProfit(ticker, budget, selectedTickers) {
@@ -89,7 +91,6 @@ export default class MeanReversionStrat {
         const currentProfit =
           thirtyDayWindow[thirtyDayWindow.length - 1].close -
           this.getAvgBuyPrice(botTransactions, 0);
-
         // if (i === yearHistoricalData.length - 1) {
         profitYear += currentProfit;
         // }

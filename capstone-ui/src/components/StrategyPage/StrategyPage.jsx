@@ -2,13 +2,13 @@ import React from "react";
 import { useState } from "react";
 import { useParams } from "react-router";
 import "./StrategyPage.css";
+import axios from "axios"
 import MeanReversionStrat from "../../TradingCalculations/MeanReversionStrat.js";
 import MovingAverageCrossover from "../../TradingCalculations/MovingAverageCrossover.js";
 import Divergence from "../../TradingCalculations/Divergence.js";
 import PairsTrading from "../../TradingCalculations/PairsTrading";
 import ResultDivergence from "./ResultDivergence";
 import ResultMovingAverage from "./ResultMovingAverage";
-import ResultMeanReversion from "./ResultMeanReversion";
 import {
   Button,
   Box,
@@ -25,7 +25,7 @@ import {
   FormHelperText,
 } from "@chakra-ui/react";
 
-const StrategyPage = () => {
+const StrategyPage = ({userId,strategyBuyingPower,setStrategyBuyingPower,strategyType,setStrategyType, buyingPower, setBuyingPower}) => {
   const { name } = useParams();
   const [currentAccountValue, setCurrentAccountValue] = useState([]);
   const [currentTransactionHistory, setCurrentTransactionHsitory] = useState(
@@ -34,15 +34,15 @@ const StrategyPage = () => {
   const [ranStrategy, setRanStrategy] = useState(false);
   const [selectedTickers, setselectedTickers] = useState([]);
   const [error, seterror] = useState(false);
-  const [buyingPower, setBuyingPower] = useState(0);
-  const [allocatedAmount, setAllocatedAmount] = useState(0);
-  const [simulatedBuyingPower, setSimulatedBuyingPower] = useState(0);
+
+
+
 
   const [rsi, setRsi] = useState(null);
   const [movAverage, setMovingAverage] = useState(null);
   const [thirtyDayAvr,setThirtyDayAvr] = useState(null)
   const [oneTwentyDayAvr, setOneTwentyDayAvr] = useState(null);
-
+  const [simulatedBuyingPower, setSimulatedBuyingPower] = useState(0)
   // Here we need to handle each of the buttons
   // This page consists of:
   // A brief description of the strategy and How it works
@@ -144,7 +144,7 @@ const StrategyPage = () => {
   const runPairsTradingStrategy = async (selectedStocks) => {
     let transactionHistory = await PairsTrading.calculateProfit(
       selectedStocks,
-      buyingPower
+      simulatedBuyingPower
     );
     setCurrentAccountValue(PairsTrading.getAccountValue());
     setCurrentTransactionHsitory(transactionHistory);
@@ -193,7 +193,7 @@ const StrategyPage = () => {
     //setselectedTickers([]);
     seterror(false);
     setBuyingPower(0);
-    setAllocatedAmount(0);
+    setSimulatedBuyingPower(0);
     const quantityInput = document.getElementById("quantity");
     if (quantityInput) {
       quantityInput.value = ""; // Reset the input to empty
@@ -237,23 +237,36 @@ const StrategyPage = () => {
     setSimulatedBuyingPower(event.target.value);
   };
 
-  const handleInputChangeForstrategyBuyingPower = (event) => {
-    event.preventDefault();
-    setStrategyBuyingPower(event.target.value);
-  };
+    const handleInputChangeForstrategyBuyingPower = (event) =>{
+        event.preventDefault()
+        setStrategyBuyingPower(event.target.value)
+    }
 
-  const stratName = "";
+    const addStrategyToUser = async (strategyName, strategyBuyingPower, currentUserId) => {
+        console.log(`StrategyName ${strategyName} Buying Power ${strategyBuyingPower}, UserID: ${currentUserId} user buying power ${buyingPower}`)
+        //Check if the user has enough money to gve to the bot
+        if(buyingPower > strategyBuyingPower){
+            try {
 
-  return (
-    <Box
-      h={"100vh"}
-      w={"full"}
-      bgColor={"#171923"}
-      position={"absolute"}
-      paddingLeft={"80px"}
-      pr={"80px"}
-    >
-      {/* <Box id = "description">
+                const res = await axios.post(`http://localhost:3001/strategy/add`, {
+                  strategy_type: strategyName,
+                  buying_power: strategyBuyingPower,
+                  user_id: currentUserId
+                });
+                console.log(res.data);
+            } catch (err) {
+                console.log(err);
+            }
+        }
+        else{
+            console.error("INSUFFICIENT FUNDS")
+        }
+    };
+    
+    
+    return (
+        <div id = "temp">StrategyPage
+            {/* <div id = "description">
                 {description}
             </Box> */}
       {ranStrategy && currentAccountValue && currentTransactionHistory ? (
@@ -342,32 +355,36 @@ const StrategyPage = () => {
             >
               {renderButtons(name)}
 
-              <Box fontSize={"20px"}>Selected buttons:</Box>
-              <Text m={"10px"} fontSize={"20px"}>
-                {" "}
-                {selectedTickers.join(", ")}
-              </Text>
-              {error && (
-                <Text>Pairs Trading can only have 2 options selected</Text>
-              )}
-              <Flex direction={"row"} justify={"space-between"}>
-                <Input
-                  type="number"
-                  id="quantity"
-                  name="quantity"
-                  placeholder="Amount"
-                  onChange={handleInputChangeForSimulatedBuyingPower}
-                  w={"30"}
-                />
-                <Button type="submit">Run {name} strategy</Button>
-              </Flex>
-            </Box>
-          </Box>
-        </Center>
-      )}
-    </Box>
-  );
-};
+                        <Box fontSize={'20px'}>Selected buttons:</Box>
+                        <Text m={'10px'} fontSize={'20px'}> {selectedTickers.join(', ')}</Text>
+                        {error && <Text>Pairs Trading can only have 2 options selected</Text>}
+                        <Flex direction={'row'} justify={'space-between'}>
+
+                        <Input type="number" id="quantity" name="quantity" placeholder='Amount' onChange={handleInputChangeForSimulatedBuyingPower} w={'30'}/>
+                        <Button type="submit"  >
+                            Run {name} strategy
+                        </Button>
+                        </Flex>
+
+                
+                    </Box>
+
+                    <Input type="number" id="quantity" name="quantity" placeholder='Amount' onChange={handleInputChangeForstrategyBuyingPower} w={'30'}/>
+                        <Button onClick={(event) => { event.preventDefault(); addStrategyToUser(name, strategyBuyingPower, userId)}}  >
+                            set {name} strategy
+                        </Button>
+                    </Box>
+
+
+                </Center>
+                )}
+
+
+
+
+        </div>
+    )
+}
 
 export default StrategyPage;
 
