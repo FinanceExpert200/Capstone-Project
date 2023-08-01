@@ -7,9 +7,10 @@ import StockGraph from "../Graph/StockGraph";
 import MeanReversionStrat from "../../TradingCalculations/MeanReversionStrat.js"
 //import MovingAverageCrossover from '../../TradingCalculations/MovingAverageCrossover.js'
 import MovingAverageCrossover from '../../TradingCalculations/MovingAverageCrossover.js'
-import Divergence from "../../TradingCalculations/Divergence";
-import Utilities from "../../TradingCalculations/Utilities"
+import Divergence from "../../TradingCalculations/Divergence.js";
+import Utilities from "../../TradingCalculations/Utilities.js"
 // import { ThemeContext } from "../App/App";
+// importy history
 
 const Home = ({ getProfile, getAccount, getPortfolio, pastStockPrice, portfolio, profile, account, historicalData, tickers, fixedDate, strategyBuyingPower,setStrategyBuyingPower,strategy, getStrategy, removeStrategy}) => {
   const [metaData, setMetaData] = useState([]);
@@ -19,6 +20,11 @@ const Home = ({ getProfile, getAccount, getPortfolio, pastStockPrice, portfolio,
 
 
   // const theme = useContext(ThemeContext);
+  const testRun = async() =>{
+    await Utilities.runCurrentStrategy(strategy)
+
+
+  }
 
 
   const [test, setTest] = useState();
@@ -121,6 +127,7 @@ const Home = ({ getProfile, getAccount, getPortfolio, pastStockPrice, portfolio,
                   <Text color={'#00f008'}>{account.buying_power}</Text>
                 </Stack>
               </Container>
+
             </Stack>
 
             <Stack direction={'row'}>

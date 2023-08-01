@@ -7,7 +7,7 @@ import { Box, Button, Center, Flex, Stack, Container, SimpleGrid, Input, Text, H
 
 
 // this post request over here verifies if the user email and password combo is valid
-const handleLogin = async (event, email, password, setIsLogged, setCurrentUserId) => {
+const handleLogin = async (event, email, password, setIsLogged, setCurrentUserId, setErrorMessage, errorMessage) => {
   console.log("trying to log in...")
   
   try {
@@ -21,7 +21,7 @@ const handleLogin = async (event, email, password, setIsLogged, setCurrentUserId
       }
     );
 
-      console.log(res.data.user)
+    console.log(res.data.user)
     setCurrentUserId(res.data.user.id);
     localStorage.setItem("currentUserId", res.data.user.id);
     localStorage.setItem("token", res.data.token)
@@ -34,7 +34,12 @@ const handleLogin = async (event, email, password, setIsLogged, setCurrentUserId
     // this will take you to the 
     window.location.href = "/home";
   } catch (err) {
-    console.log(err.message);
+    
+    
+    // console.log(err.response.data.error.message)
+    setErrorMessage(err.response.data.error.message);
+    // err.response.data.error.message
+    // console.log(errorMessage)
   }
 };
 
@@ -48,6 +53,8 @@ export default function SignInPage({ setIsLogged, setCurrentUserId}) {
   const [password, setPassword] = useState("");
   //https://g.foolcdn.com/image/?url=https%3A%2F%2Fg.foolcdn.com%2Feditorial%2Fimages%2F548475%2Fgettyimages-1035991674.jpg&op=resize&w=1200&h=630
   // https://business.fiu.edu/graduate/insights/img/artificial-intelligence-in-the-stock-market.jpg
+
+  const [errorMessage, setErrorMessage] = useState("");
   
   return (
     <Box 
@@ -91,7 +98,7 @@ export default function SignInPage({ setIsLogged, setCurrentUserId}) {
             </Stack >
             <Box as={'form'}
               onSubmit={(event) =>
-                handleLogin(event, email, password, setIsLogged, setCurrentUserId)
+                handleLogin(event, email, password, setIsLogged, setCurrentUserId, setErrorMessage, errorMessage)
               }>
               <Stack spacing={4}
                 marginBottom={4}>
@@ -121,7 +128,7 @@ export default function SignInPage({ setIsLogged, setCurrentUserId}) {
                   {/* add a hover action for the button */}
                   Login
                 </Button>
-
+                {errorMessage && <p>Error: {errorMessage}</p>}
               </Stack>
             </Box>
             

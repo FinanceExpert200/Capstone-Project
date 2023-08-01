@@ -64,7 +64,7 @@ export default class Trading {
           endDate: endDate
         });
 //UNDO THIS
-        console.log(res.data);
+        // console.log(res.data);
         return res.data.result
       } catch (err) {
         console.log(err);

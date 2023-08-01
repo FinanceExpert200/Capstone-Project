@@ -27,7 +27,7 @@ import NotFound from '../NotFound/NotFound';
 // import Trading from "../../TradingCalculations/Trade"
 
 import TradingStrategies from '../TradingStrategies/TradingStrategies';
-import TradeCalculations from "../../TradingCalculations/Utilities.js"
+import Utilities from "../../TradingCalculations/Utilities.js"
 
 
 
@@ -315,7 +315,7 @@ function App() {
       //console.log("history is being used")
       const list = await Trading.fetchHistoricalData(tick, date);
       //The data now extracts the date and open price
-      console.log("history is being used", list)
+      // console.log("history is being used", list)
       
       const extractedData = list.map(item => (
         {

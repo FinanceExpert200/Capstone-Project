@@ -3,6 +3,7 @@ import axios from "axios";
 import { useState } from "react";
 import './RegistrationPage.css';
 import { Box, Button, Center, Flex, Stack, Container, SimpleGrid, Input, Text, Heading } from '@chakra-ui/react'
+//import bcrypt from "bcryptjs";
 
 const handleAddData = async (event, buying_power, acc_value, email, first_name, last_name, password) => {
   try {
@@ -25,7 +26,13 @@ const handleAddData = async (event, buying_power, acc_value, email, first_name, 
 
     window.location.href = "/login";
   } catch (err) {
+
+
     console.log(err);
+
+
+    setErrorMessage(err.response.data.error.message);
+
   }
 };
 
@@ -37,6 +44,11 @@ const RegisterPage = ({ buying_power, acc_value }) => {
   const [first_name, setFirstName] = useState("");
   const [last_name, setLastName] = useState("");
   const [password, setPassword] = useState("");
+  const [hashedPassword, setHashedPassword] = useState("");
+  const [errorMessage, setErrorMessage] = useState("");
+
+
+
 
   return (
 
@@ -142,6 +154,7 @@ const RegisterPage = ({ buying_power, acc_value }) => {
                   {/* add a hover action for the button */}
                   Sign Up
                 </Button>
+                {errorMessage && <p>Error: {errorMessage}</p>}
               </Stack>
 
             </Box>

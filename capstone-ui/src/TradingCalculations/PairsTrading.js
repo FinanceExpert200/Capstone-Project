@@ -1,5 +1,5 @@
 import Utilities from "./Utilities";
-import chalk from "chalk"
+import chalk from "chalk";
 
 export default class PairsTrading{
     static stockA = {}
@@ -16,70 +16,75 @@ export default class PairsTrading{
 
 
 
-    //For this strategy, we need to take in two comanies which can be mixed and matched by the user. 
-    // ---------- Implementation ---------------\\
-    // 1. Data Retrieval - Fetch the given comapnies from the api in utilities and store them to static variables since we will need them throughout the entirety of our class
-    //      - Gather data for a year right now, we might increase that time period later
-    // 2. Calculate the Price Ratio - Now we need to get the price ratio by dividing the price of one asset by the other asset
-    // 3. Calculate the Mean and Standard Deviation
-    static async fetchPairsData(stockA, stockB, datePrior){
-        //Calclate the date a year prior to today
-        let dayPrior = await Utilities.getDatePrior(datePrior)
-        // Now we use the yearPrior Date to fetch our data
-        this.stockA = await Utilities.fetchHistoricalData(stockA, dayPrior)
-        this.stockB = await Utilities.fetchHistoricalData(stockB,dayPrior)
-        console.log(`Stock A and Stock B Calculated`)
-        this.calculatePriceRatio(this.stockA, this.stockB)
-    }
+  //For this strategy, we need to take in two comanies which can be mixed and matched by the user.
+  // ---------- Implementation ---------------\\
+  // 1. Data Retrieval - Fetch the given comapnies from the api in utilities and store them to static variables since we will need them throughout the entirety of our class
+  //      - Gather data for a year right now, we might increase that time period later
+  // 2. Calculate the Price Ratio - Now we need to get the price ratio by dividing the price of one asset by the other asset
+  // 3. Calculate the Mean and Standard Deviation
+  static async fetchPairsData(stockA, stockB, datePrior) {
+    //Calclate the date a year prior to today
+    let dayPrior = await Utilities.getDatePrior(datePrior);
+    // Now we use the yearPrior Date to fetch our data
+    this.stockA = await Utilities.fetchHistoricalData(stockA, dayPrior);
+    this.stockB = await Utilities.fetchHistoricalData(stockB, dayPrior);
+    console.log(`Stock A and Stock B Calculated`);
+    this.calculatePriceRatio(this.stockA, this.stockB);
+  }
 
-    // Returns an array of objects containing the date and the price ratio of the two stocks that were inputted
-    static async calculatePriceRatio(dataTableA, dataTableB){
-        // now we start at the top of both data tables, iterate through, and divide the closing price of each data table. 
-        // After we calculated the price, we add this data to an object containing the date and we put it in an array
-        let currPriceRatioArray = []
-        for(let i = 0; i < dataTableA.length; i++){
-            let priceRatio = dataTableA[i].close / dataTableB[i].close
-            if(dataTableA[i].date !=dataTableB[i].date ){
-                console.log(chalk.bgRed("DATES ARE NOT THE SAME"))
-                break
-            }
-            // Add the price ratio and the date to an object and add it to the price ratio array
-            currPriceRatioArray.push({date: dataTableA[i].date, priceRatio: priceRatio})
-        }
-
-        console.log("Price Ratio")
-        console.log(currPriceRatioArray)
-        return currPriceRatioArray
-    }
-
-    //Now we want to calculate the mean of our historical data. 
-    static async calculateAveragePriceRatio(priceRatioArray) {
-        let totalPriceRatio = 0;
-        priceRatioArray.map((currPriceRatio) => {
-          totalPriceRatio = totalPriceRatio + currPriceRatio.priceRatio;
-        });
-      
-        let averagePriceRatio = totalPriceRatio / priceRatioArray.length;
-        return averagePriceRatio;
+  // Returns an array of objects containing the date and the price ratio of the two stocks that were inputted
+  static async calculatePriceRatio(dataTableA, dataTableB) {
+    // now we start at the top of both data tables, iterate through, and divide the closing price of each data table.
+    // After we calculated the price, we add this data to an object containing the date and we put it in an array
+    let currPriceRatioArray = [];
+    for (let i = 0; i < dataTableA.length; i++) {
+      let priceRatio = dataTableA[i].close / dataTableB[i].close;
+      if (dataTableA[i].date != dataTableB[i].date) {
+        console.log(chalk.bgRed("DATES ARE NOT THE SAME"));
+        break;
       }
-      
-      static async calculateStandardDeviation(averagePriceRatio, priceRatioArray) {
-        let totalDifference = 0;
-        priceRatioArray.map((currPriceRatio) => {
-          let difference = currPriceRatio.priceRatio - averagePriceRatio;
-          totalDifference = totalDifference + Math.pow(difference, 2);
-        });
-
-        // Take the square root of the sum
-        
-        let standardDeviation = Math.sqrt(totalDifference / (priceRatioArray.length - 1));
-        return standardDeviation;
+      // Add the price ratio and the date to an object and add it to the price ratio array
+      currPriceRatioArray.push({
+        date: dataTableA[i].date,
+        priceRatio: priceRatio,
+      });
     }
+
+    console.log("Price Ratio");
+    console.log(currPriceRatioArray);
+    return currPriceRatioArray;
+  }
+
+  //Now we want to calculate the mean of our historical data.
+  static async calculateAveragePriceRatio(priceRatioArray) {
+    let totalPriceRatio = 0;
+    priceRatioArray.map((currPriceRatio) => {
+      totalPriceRatio = totalPriceRatio + currPriceRatio.priceRatio;
+    });
+
+    let averagePriceRatio = totalPriceRatio / priceRatioArray.length;
+    return averagePriceRatio;
+  }
+
+  static async calculateStandardDeviation(averagePriceRatio, priceRatioArray) {
+    let totalDifference = 0;
+    priceRatioArray.map((currPriceRatio) => {
+      let difference = currPriceRatio.priceRatio - averagePriceRatio;
+      totalDifference = totalDifference + Math.pow(difference, 2);
+    });
+
+    // Take the square root of the sum
+
+    let standardDeviation = Math.sqrt(
+      totalDifference / (priceRatioArray.length - 1)
+    );
+    return standardDeviation;
+  }
 
     //now that we have calculated our standard deviation. We need to gather alot of information and iterate through it in order to figure out when we should buy or sell
     //First we need to fetch the pairs data for 465 days in the future.
     //Then we want to loop through the data, with a 50 day window, and calculate the standard deviation for every day.
-    static async calculateProfit(tickerArray,amount){
+    static async calculateProfit(tickerArray, amount){
         console.log("ticker array ", tickerArray)
         this.buyingPower = amount
         this.accountValue = amount
@@ -176,9 +181,12 @@ export default class PairsTrading{
             this.transactionHistory.push({type: "sell",ticker: tickerB, date: currentDataB.date, price: currentDataB.close })
         } 
 
-        this.accountValue = this.buyingPower + (this.stockACount * currentDataA.close) + (this.stockBCount* currentDataB.close)
-        console.log(`account value is now ${this.accountValue}`)
-    }
+    this.accountValue =
+      this.buyingPower +
+      this.stockACount * currentDataA.close +
+      this.stockBCount * currentDataB.close;
+    console.log(`account value is now ${this.accountValue}`);
+  }
 
     static async buyStockBSellStockA(currentDataA, currentDataB,tickerA,tickerB){
         console.log(chalk.bgRed.white("BUY STOCK B AND SELL STOCK A ", this.buyingPower));
