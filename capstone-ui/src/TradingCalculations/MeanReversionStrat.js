@@ -3,8 +3,11 @@ import axios from "axios";
 let stockCount = 0;
 
 let botTransactions = [];
+
 let thirtyDayMovingAvgArray = [];
 let oneTwentyDayMovingAvgArray = [];
+let transactionsHistory = [];
+let profitArray = [];
 
 
 let profit = 0;
@@ -23,6 +26,7 @@ export default class MeanReversionStrat {
   static async mainFunc(budget, selectedTickers) {
     
     this.setBuyingPower(budget);
+
 
     selectedTickers.forEach((ticker) => {
       this.calcPrevProfit(ticker);
@@ -60,7 +64,7 @@ export default class MeanReversionStrat {
       console.log("this is the 30 day moving avg WINDOW", thirtyDayWindow);
 
 
-      thirtyDayMovingAvgArray.push({ticker:ticker, date:thirtyDayWindow[0].date, average:thirtyDayMovingAvg});
+      thirtyDayMovingAvgArray.push({ticker:ticker, date:thirtyDayWindow[0].date, average:thirtyDayMovingAvg, close:thirtyDayWindow[0].close});
 
       oneTwentyDayMovingAvgArray.push({ticker:ticker, date:oneTwentyDayWindow[0].date, average:oneTwentyDayMovingAvg});
 
@@ -124,12 +128,14 @@ export default class MeanReversionStrat {
       ticker
     );
 
-    console.log("this is AT", thirtyDayMovingAvgArray)
+    // console.log("this is AT", thirtyDayMovingAvgArray)
 
-    console.log("120 LOOKING ADWDED", oneTwentyDayMovingAvgArray);
+    // console.log("120 LOOKING ADWDED", oneTwentyDayMovingAvgArray);
 
-    // console.log(botTransactions);
-
+    
+    transactionsHistory.push({[ticker]: botTransactions});
+    profitArray.push({[ticker]: {profitThreeMonths,profitSixMonths,profitYear}})
+    console.log("profit YEAR",profitArray);
     // reseting the state for each stock
     botBuyingPower = 5000;
     botAccValue = 5000;
@@ -259,5 +265,8 @@ export default class MeanReversionStrat {
     } catch (err) {
       console.log(err);
     }
+  }
+  static async fetchResult(){
+    return [transactionsHistory, profitArray, thirtyDayMovingAvgArray, oneTwentyDayMovingAvgArray]
   }
 }

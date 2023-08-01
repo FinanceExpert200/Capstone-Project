@@ -8,6 +8,7 @@ import Divergence from "../../TradingCalculations/Divergence.js";
 import PairsTrading from "../../TradingCalculations/PairsTrading";
 import ResultDivergence from "./ResultDivergence";
 import ResultMovingAverage from "./ResultMovingAverage";
+import ResultMeanReversion from "./ResultMeanReversion";
 import {
   Button,
   Box,
@@ -36,8 +37,11 @@ const StrategyPage = () => {
   const [buyingPower, setBuyingPower] = useState(0);
   const [allocatedAmount, setAllocatedAmount] = useState(0);
   const [simulatedBuyingPower, setSimulatedBuyingPower] = useState(0);
+
   const [rsi, setRsi] = useState(null);
   const [movAverage, setMovingAverage] = useState(null);
+  const [thirtyDayAvr,setThirtyDayAvr] = useState(null)
+  const [oneTwentyDayAvr, setOneTwentyDayAvr] = useState(null);
 
   // Here we need to handle each of the buttons
   // This page consists of:
@@ -102,6 +106,13 @@ const StrategyPage = () => {
 
   const runMeanReversionStrategy = async (selectedTickers) => {
     MeanReversionStrat.mainFunc(simulatedBuyingPower, selectedTickers);
+    let result = await MeanReversionStrat.fetchResult();
+    console.log("TRANSACTION::", result)
+    setCurrentTransactionHsitory(result[0]);
+    setCurrentAccountValue(result[1]);
+    setThirtyDayAvr(result[2]);
+    setOneTwentyDayAvr(result[3]);
+
   };
 
   const runEMAStrategy = async (selectedTickers) => {
@@ -257,7 +268,14 @@ const StrategyPage = () => {
               transactionHistory={currentTransactionHistory}
               accountValues={currentAccountValue}
             />
-          ) : (
+          ) : thirtyDayAvr && oneTwentyDayAvr ?(
+            <ResultMeanReversion 
+              transactionHistory={currentTransactionHistory}
+              accountValue={currentAccountValue}
+              thrityDayAverage={thirtyDayAvr}
+              twentyDayAverage={oneTwentyDayAvr}
+              companies={selectedTickers}/>
+          ):(
             <Center h={"100vh"}>
               <Flex
                 direction={"row"}
