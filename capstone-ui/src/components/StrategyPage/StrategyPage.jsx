@@ -42,7 +42,7 @@ const StrategyPage = ({userId,strategyBuyingPower,setStrategyBuyingPower,strateg
   const [movAverage, setMovingAverage] = useState(null);
   const [thirtyDayAvr,setThirtyDayAvr] = useState(null)
   const [oneTwentyDayAvr, setOneTwentyDayAvr] = useState(null);
-
+  const [simulatedBuyingPower, setSimulatedBuyingPower] = useState(0)
   // Here we need to handle each of the buttons
   // This page consists of:
   // A brief description of the strategy and How it works

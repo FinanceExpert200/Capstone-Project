@@ -11,11 +11,6 @@ let transactionsHistory = [];
 let profitArray = [];
 
 
-let thirtyDayMovingAvgArray = [];
-let oneTwentyDayMovingAvgArray = [];
-let transactionsHistory = [];
-let profitArray = [];
-
 
 let profit = 0;
 let botBuyingPower = 0;

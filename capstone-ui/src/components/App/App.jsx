@@ -27,7 +27,7 @@ import NotFound from '../NotFound/NotFound';
 // import Trading from "../../TradingCalculations/Trade"
 
 import TradingStrategies from '../TradingStrategies/TradingStrategies';
-import Utilities from "../../TradingCalculations/Utilities.js"
+
 import Utilities from "../../TradingCalculations/Utilities.js"
 
 
@@ -489,7 +489,7 @@ function App() {
               element={<TradingStrategies strategyBuyingPower = {strategyBuyingPower} setStrategyBuyingPower = {setStrategyBuyingPower} strategy = {strategyType} setStrategyType = {setStrategyType} getStrategy = {getStrategy} userId = {currentUserId} removeStrategy = {removeStrategy}/>}
             />
 
-            <Route path="/strategies/:name" element={<StrategyPage strategyBuyingPower = {strategyBuyingPower} setStrategyBuyingPower = {setStrategyBuyingPower} buyingPower = {buying_power} strategy = {strategyType} setStrategyType = {setStrategyType} getStrategy = {getStrategy} userId = {currentUserId} removeStrategy = {removeStrategy}/>}/>
+            <Route path="/strategies/:name" element={<StrategyPage strategyBuyingPower = {strategyBuyingPower} setStrategyBuyingPower = {setStrategyBuyingPower} buyingPower = {buying_power} setBuyingPower={setBuyingPower} strategy = {strategyType} setStrategyType = {setStrategyType} getStrategy = {getStrategy} userId = {currentUserId} removeStrategy = {removeStrategy}/>}/>
             <Route path="/*" element={<NotFound/>} />
           </Routes>
         </main>
