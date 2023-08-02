@@ -68,6 +68,7 @@ class Strategy{
                 return null;
             }
             console.log(user);
+            await Portfolio.calculateTotalShareValue(userId)
             return user;
         } catch (err) {
             console.error(`Failed to get strategies for user with ID ${userId}: ${err}`);
