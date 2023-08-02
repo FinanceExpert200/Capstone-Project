@@ -45,7 +45,7 @@ const Home = ({
   const [amznData, setAmznData] = useState([]);
   const [googleData, setGoogleData] = useState([]);
   const [crmData, setCrmData] = useState([]);
-  let formattedStrategyName = ""
+  let formattedStrategyName = "";
 
   // const theme = useContext(ThemeContext);
 
@@ -92,28 +92,27 @@ const Home = ({
     }
   }, [test]);
   //console.log("THE POPULATED: ", test)
-  const formatStrategyName = (name)=>{
+  const formatStrategyName = (name) => {
     switch (name) {
       case "meanreversion":
-      formattedStrategyName =  "Mean Reversion"
+        formattedStrategyName = "Mean Reversion";
       case "movingaveragecrossover":
-        formattedStrategyName = "Moving Average Crossover"
+        formattedStrategyName = "Moving Average Crossover";
       case "divergence":
-        formattedStrategyName = "Relative StrengthI Divergence"
+        formattedStrategyName = "Relative StrengthI Divergence";
       case "pairstrading":
-        formattedStrategyName =  "Pairs Trading"
+        formattedStrategyName = "Pairs Trading";
       case "exponentialmovingaverage":
-        formattedStrategyName = "Exponential Moving Average"
-        
+        formattedStrategyName = "Exponential Moving Average";
+
       default:
         break;
     }
-  }
+  };
 
-  if (typeof strategy !== 'undefined' && strategy){
-    formatStrategyName(strategy.strategy_name)
+  if (typeof strategy !== "undefined" && strategy) {
+    formatStrategyName(strategy.strategy_name);
   }
-
 
   return (
     <Box
@@ -132,12 +131,7 @@ const Home = ({
                   Stocks Available
                 </Text>
                 {portfolio.map((item, key) => (
-
-
                   <Link to={`/trade/${item.id}`} key={item.ticker}>
-
-
-
                     <Box borderRadius={25} bgColor={"#111214"} p={3} mb={5}>
                       <Text
                         align={"center"}
@@ -159,11 +153,7 @@ const Home = ({
                         {item.quantity}
                       </Text>
                     </Box>
-
-
                   </Link>
-
-                  
                 ))}
               </Box>
             ) : (
@@ -241,21 +231,38 @@ const Home = ({
               </Container>
             </Stack>
 
-            <Stack direction={'row'}>
-
-              {strategy && <Container><Container width={'30%'} fontSize={'18'} borderRadius={15}   bgColor={'#111214'}>
-                <Text fontWeight={'medium'} textDecoration={'underline'} color={'white'}>Strategy: </Text>
-                <Button bgColor={'green.400'} onClick={(event) => {removeStrategy()}}>
-                  Remove Strategy
-                </Button>
-                <Stack direction={'row'} justifyContent={'center'} fontSize={'40'}>
-                  <Text color={'#00f008'}>
-                    {formattedStrategyName}
-                  </Text>
-
-
-                </Stack>
-              </Container>
+            <Stack direction={"row"}>
+              {strategy && (
+                <Container>
+                  <Container
+                    width={"30%"}
+                    fontSize={"18"}
+                    borderRadius={15}
+                    bgColor={"#111214"}
+                  >
+                    <Text
+                      fontWeight={"medium"}
+                      textDecoration={"underline"}
+                      color={"white"}
+                    >
+                      Strategy:{" "}
+                    </Text>
+                    <Button
+                      bgColor={"green.400"}
+                      onClick={(event) => {
+                        removeStrategy();
+                      }}
+                    >
+                      Remove Strategy
+                    </Button>
+                    <Stack
+                      direction={"row"}
+                      justifyContent={"center"}
+                      fontSize={"40"}
+                    >
+                      <Text color={"#00f008"}>{formattedStrategyName}</Text>
+                    </Stack>
+                  </Container>
 
                   <Container
                     width={"30%"}
