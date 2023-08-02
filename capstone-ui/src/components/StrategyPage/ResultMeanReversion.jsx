@@ -5,14 +5,19 @@ import MeanReversionGraph from "../Graph/MeanReversionGraph";
 
 
 export default function ResultMeanReversion({ accountValue, transactionHistory, thrityDayAverage, twentyDayAverage, companies }) {
-  console.log("thirtyDAYAVERAGE",transactionHistory);
+  
   const [checker, setChecker] = useState(0);
   const [meanReversionArray, setMeanReversionArray] = useState(null)
   const [history,setHistory] = useState(null)
   useEffect(() => {
     const updatedHistory = companies.map((company) => {
-      const c = thrityDayAverage.filter((comp) => comp.ticker === company);
+      console.log("company", company, thrityDayAverage.length)
+      const c = thrityDayAverage.filter((comp) => {
+        console.log("comp", comp.ticker)
+        return comp.ticker === company
+      });
       const t = twentyDayAverage.filter((comp) => comp.ticker === company);
+      console.log("t", t, "c", c)
       const updatedC = c.map((co) => {
         const matchingTap = t.find((tap) => tap.ticker === co.ticker && tap.date === co.date);
         if (matchingTap) {
@@ -26,12 +31,15 @@ export default function ResultMeanReversion({ accountValue, transactionHistory, 
         return { [company]: updatedC };
       }
     });
-    console.log("BEING USED")
-    setChecker(checker + 1);
+    console.log("BEING USED", updatedHistory)
+    // if (checker > companies.length){
+
+      // setChecker(checker + 1);
+    // }
     //console.log("BODY LENGTH",checker)
-    if (checker == companies.length) {
+    // if (checker == companies.length) {
       setMeanReversionArray(updatedHistory);
-    }
+    // }
     //filter and arranges the transactionHistory based on company's name
     const transaction = companies.map((company) => {
       return transactionHistory.filter((comp) => comp.map((c)=>{
@@ -42,8 +50,8 @@ export default function ResultMeanReversion({ accountValue, transactionHistory, 
     setHistory(transaction);
 
 
-  }, [companies, thrityDayAverage, twentyDayAverage, checker])
-  console.log("History: ",history);
+  }, [companies, thrityDayAverage, twentyDayAverage])
+  console.log("Array: ",meanReversionArray);
   return (
     <Flex direction={'column'} w={'full'} h={'80vh'} mt={10} p={10} textColor={'white'}>
       <Heading>Mean Reversion</Heading>

@@ -105,7 +105,7 @@ const StrategyPage = ({userId,strategyBuyingPower,setStrategyBuyingPower,strateg
   // console.log("Moving Average Array -----", movAverage);
 
   const runMeanReversionStrategy = async (selectedTickers) => {
-    MeanReversionStrat.mainFunc(simulatedBuyingPower, selectedTickers);
+    await MeanReversionStrat.mainFunc(simulatedBuyingPower, selectedTickers);
     let transaction = await MeanReversionStrat.getTransactionHistory();
     let profitArray = await MeanReversionStrat.getProfitArray();
     let thirtyDayArray = await MeanReversionStrat.getThirtyDayAvgArray();
@@ -267,7 +267,7 @@ const StrategyPage = ({userId,strategyBuyingPower,setStrategyBuyingPower,strateg
         }
     };
     
-    
+    console.log("selected tickers", selectedTickers);
     return (
       <Box
       h={"100vh"}
