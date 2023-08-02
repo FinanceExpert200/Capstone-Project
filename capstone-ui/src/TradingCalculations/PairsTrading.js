@@ -17,6 +17,10 @@ export default class PairsTrading{
 
 
 
+    static allDataArray = []
+  
+
+
 
 
 
@@ -126,6 +130,8 @@ export default class PairsTrading{
             let currentPriceRatio = currPriceRatioArray[right].priceRatio;
             let currentDataB = this.stockB[right]
             let currentDataA = this.stockA[right]
+
+            this.allDataArray.push({date: currPriceRatioArray[right].date, historical_mean: currAveragePriceRatio, price_ratio: currentPriceRatio,standard_deviation: currStandardDeviation})
              
             await this.determineBuyOrSell(currentPriceRatio, currAveragePriceRatio, currStandardDeviation,currentDataA,currentDataB, stockA,stockB);
             left ++ 
@@ -231,7 +237,11 @@ export default class PairsTrading{
         }
         console.log(`Account value is now ${this.accountValue}`);
     }
-    
+    static getAllDataArray(){
+       return this.allDataArray
+    }
+
+
 
     static getTransactionHistory(){ 
         return this.transactionHistory
@@ -245,6 +255,7 @@ export default class PairsTrading{
     static getPriceRatio(){
         return this.priceRatioArray
     }
+
 
 
 }

@@ -36,6 +36,9 @@ router.post("/active", async (req, res, next) => {
   }
 });
 
+
+
+
 //We need a router to get the router information
 
 
@@ -52,6 +55,9 @@ router.get("/:id", async (req, res, next) => {
       next(err);
     }
 });
+
+
+
 
 router.delete("/remove/:id", async (req, res, next) => {
     try {

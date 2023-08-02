@@ -153,6 +153,11 @@ const StrategyPage = ({userId,strategyBuyingPower,setStrategyBuyingPower,strateg
     setCurrentAccountValue(PairsTrading.getAccountValue());
     setPriceRatioArray(PairsTrading.getPriceRatio())
     setCurrentTransactionHsitory(transactionHistory);
+    console.log("PAIRS TRADING DATA")
+    const pairsTradingData = PairsTrading.getAllDataArray()
+    console.log(pairsTradingData)
+
+    
   };
 
   const runStrategy = async (event, name) => {
