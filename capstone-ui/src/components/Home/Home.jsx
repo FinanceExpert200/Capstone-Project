@@ -92,25 +92,25 @@ const Home = ({
     }
   }, [test]);
   //console.log("THE POPULATED: ", test)
-  const formatStrategyName = (name)=>{
+  const formatStrategyName = (name) => {
     switch (name) {
       case "meanreversion":
-      formattedStrategyName =  "Mean Reversion"
+        formattedStrategyName = "Mean Reversion"
       case "movingaveragecrossover":
         formattedStrategyName = "Moving Average Crossover"
       case "divergence":
         formattedStrategyName = "Relative StrengthI Divergence"
       case "pairstrading":
-        formattedStrategyName =  "Pairs Trading"
+        formattedStrategyName = "Pairs Trading"
       case "exponentialmovingaverage":
         formattedStrategyName = "Exponential Moving Average"
-        
+
       default:
         break;
     }
   }
 
-  if (typeof strategy !== 'undefined' && strategy){
+  if (typeof strategy !== 'undefined' && strategy) {
     formatStrategyName(strategy.strategy_name)
   }
 
@@ -163,7 +163,7 @@ const Home = ({
 
                   </Link>
 
-                  
+
                 ))}
               </Box>
             ) : (
@@ -242,10 +242,9 @@ const Home = ({
             </Stack>
 
             <Stack direction={'row'}>
-
-              {strategy && <Container><Container width={'30%'} fontSize={'18'} borderRadius={15}   bgColor={'#111214'}>
+              {strategy && <Container><Container width={'30%'} fontSize={'18'} borderRadius={15} bgColor={'#111214'}>
                 <Text fontWeight={'medium'} textDecoration={'underline'} color={'white'}>Strategy: </Text>
-                <Button bgColor={'green.400'} onClick={(event) => {removeStrategy()}}>
+                <Button bgColor={'green.400'} onClick={(event) => { removeStrategy() }}>
                   Remove Strategy
                 </Button>
                 <Stack direction={'row'} justifyContent={'center'} fontSize={'40'}>
@@ -257,30 +256,30 @@ const Home = ({
                 </Stack>
               </Container>
 
-                  <Container
-                    width={"30%"}
+                <Container
+                  width={"30%"}
+                  fontSize={"18"}
+                  borderRadius={15}
+                  bgColor={"#111214"}
+                >
+                  <Text
+                    fontWeight={"medium"}
                     fontSize={"18"}
-                    borderRadius={15}
-                    bgColor={"#111214"}
+                    color={"white"}
+                    textDecoration={"underline"}
                   >
-                    <Text
-                      fontWeight={"medium"}
-                      fontSize={"18"}
-                      color={"white"}
-                      textDecoration={"underline"}
-                    >
-                      Strategy Buying Power:{" "}
-                    </Text>
-                    <Stack
-                      direction={"row"}
-                      justifyContent={"center"}
-                      fontSize={"40px"}
-                    >
-                      <Text color={"#00f008"}>$</Text>
-                      <Text color={"#00f008"}>{strategy.buying_power}</Text>
-                    </Stack>
-                  </Container>
+                    Strategy Buying Power:{" "}
+                  </Text>
+                  <Stack
+                    direction={"row"}
+                    justifyContent={"center"}
+                    fontSize={"40px"}
+                  >
+                    <Text color={"#00f008"}>$</Text>
+                    <Text color={"#00f008"}>{strategy.buying_power}</Text>
+                  </Stack>
                 </Container>
+              </Container>
               )}
             </Stack>
 

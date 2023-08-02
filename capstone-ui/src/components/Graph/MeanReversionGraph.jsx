@@ -24,7 +24,7 @@ export default function MeanReversionGraph({data, dataName, aspect , color, thir
                        tickLine={false}
                        tickFormatter={string => {
                         const date = parseISO(string);
-                        if(date.getDate() % 4 === 0){
+                        if(date.getDate() % 1 === 0){
                             return format(date,"MMM,d")
                         }
                         return "";
@@ -32,8 +32,8 @@ export default function MeanReversionGraph({data, dataName, aspect , color, thir
                 <YAxis stroke={color} 
                        domain={['auto', 'auto']} 
                        tickCount={5}
-                       tickFormatter={number => `${number}%`}/>
-                <Tooltip content = {<CustomizeLabel color={color}/>}/>
+                       tickFormatter={number => `${number}`}/>
+                <Tooltip />
                 <Legend></Legend>
                 <CartesianGrid opacity={.3} vertical={false}/>
                 <Line

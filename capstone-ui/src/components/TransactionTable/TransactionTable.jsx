@@ -7,6 +7,7 @@ const TransactionTable = ({ transactionHistory, stockData, fixedDate }) => {
   const [array, setArray] = useState([]);
   const [mergeChecker, setMergeChecker] = useState(false)
   //convert the stockData object to an array
+  //console.log("HISTORYYY--: ", transactionHistory)
 
   useEffect(() => {
     if (transactionHistory && stockData) {

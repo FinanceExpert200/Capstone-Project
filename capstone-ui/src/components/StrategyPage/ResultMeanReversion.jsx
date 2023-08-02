@@ -48,7 +48,7 @@ export default function ResultMeanReversion({ accountValue, transactionHistory, 
 
         </TabList>
         <TabPanels>
-          {meanReversionArray.length > 0 ? (
+          {meanReversionArray.length === companies.length ? (
             meanReversionArray.map((array, index) => (
               <TabPanel key={index} w={'full'} h={30}>
                 <MeanReversionGraph
