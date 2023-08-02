@@ -17,7 +17,7 @@ import {
 } from '@chakra-ui/react'
 import { HamburgerIcon, CloseIcon } from '@chakra-ui/icons'
 
-const Links = ['Home', 'Trade', 'History of Transactions', 'Strategies']
+const Links = ['Profile', 'Trade', 'Transaction', 'Strategies']
 const Routes = ['home', 'trade', 'transaction', 'strategies']
 
 const NavLink = ({link, route}) => {
@@ -113,10 +113,20 @@ export default function NavBar({ isLogged, setIsLogged }) {
           
           <Box as='a' href="/" fontWeight={'bold'}>StockSwap</Box>
           <Flex alignItems={'center'}>
-          
-          
-
-
+          <Button
+              bg={'green.400'}
+              rounded={'full'}
+              color={'white'}
+              _hover={{ bg: 'green.500' }}>
+              <Link href="/login">Sign In</Link>
+            </Button>
+            <Button
+              bg={'whiteAlpha.600'}
+              rounded={'full'}
+              color={'black'}
+              _hover={{ bg: 'green.100' }}>
+              <Link href="/register"> Register</Link>
+            </Button>
           </Flex>
         </Flex>
 
