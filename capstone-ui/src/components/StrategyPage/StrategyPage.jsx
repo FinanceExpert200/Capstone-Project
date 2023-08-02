@@ -102,7 +102,8 @@ const StrategyPage = ({userId,strategyBuyingPower,setStrategyBuyingPower,strateg
     setCurrentAccountValue(accountValue);
     setMovingAverage(ma);
   };
-  // console.log("Moving Average Array -----", movAverage);
+  console.log("Moving Average Array -----", currentTransactionHistory);
+  console.log("PROFIT ---", currentAccountValue)
 
   const runMeanReversionStrategy = async (selectedTickers) => {
     MeanReversionStrat.mainFunc(simulatedBuyingPower, selectedTickers);
@@ -290,6 +291,7 @@ const StrategyPage = ({userId,strategyBuyingPower,setStrategyBuyingPower,strateg
               maArray={movAverage}
               transactionHistory={currentTransactionHistory}
               accountValues={currentAccountValue}
+              companies={selectedTickers}
             />
           ) : thirtyDayAvr && oneTwentyDayAvr ?(
             <ResultMeanReversion 
