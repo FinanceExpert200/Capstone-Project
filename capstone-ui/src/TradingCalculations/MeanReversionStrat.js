@@ -65,7 +65,7 @@ export default class MeanReversionStrat {
 
       
 
-      thirtyDayMovingAvgArray.push({ticker:ticker, date:thirtyDayWindow[0].date, thirtyDayAverage:thirtyDayMovingAvg, close:thirtyDayWindow[0].close});
+      thirtyDayMovingAvgArray.push({ticker:ticker, date:thirtyDayWindow[0].date, thirtyDayAverage:thirtyDayMovingAvg, close:thirtyDayWindow[0].close, twentyOneAverage:oneTwentyDayMovingAvg});
 
       oneTwentyDayMovingAvgArray.push({ticker:ticker, date:oneTwentyDayWindow[0].date, twentyOneAverage:oneTwentyDayMovingAvg});
 

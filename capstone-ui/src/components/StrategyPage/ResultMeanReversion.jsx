@@ -4,43 +4,26 @@ import StrategyGraph from "../Graph/StrategyGraph";
 import MeanReversionGraph from "../Graph/MeanReversionGraph";
 
 
-export default function ResultMeanReversion({ accountValue, transactionHistory, thrityDayAverage, twentyDayAverage, companies }) {
+export default function ResultMeanReversion({ accountValue, transactionHistory, averageArray, companies }) {
   
   const [checker, setChecker] = useState(0);
-  const [meanReversionArray, setMeanReversionArray] = useState(null)
+  const [meanReversionArray, setMeanReversionArray] = useState([])
   const [history,setHistory] = useState(null)
   useEffect(() => {
-    const updatedHistory = companies.map((company) => {
-      console.log("company", company, thrityDayAverage.length)
-      const c = thrityDayAverage.filter((comp) => {
-        console.log("comp", comp.ticker)
-        return comp.ticker === company
+    let updatedHistory  = [];
+    if(averageArray.length > 0){
+        updatedHistory = companies.map((company) => {
+        const c = averageArray.filter((comp) => {
+          return comp.ticker === company
+        });
+          return  {[company]: c };
+        
       });
-      const t = twentyDayAverage.filter((comp) => comp.ticker === company);
-      console.log("t", t, "c", c)
-      const updatedC = c.map((co) => {
-        const matchingTap = t.find((tap) => tap.ticker === co.ticker && tap.date === co.date);
-        if (matchingTap) {
-          return { ...co, twentyOneAverage: matchingTap.twentyOneAverage };
-        } else {
-          return co;
-        }
-      })
-      //console.log("UPDATED ",updatedC )
-      if (updatedC.length > 0) {
-        return { [company]: updatedC };
-      }
-    });
-    console.log("BEING USED", updatedHistory)
-    // if (checker > companies.length){
+    }
+      if(updatedHistory.length > 0){
 
-      // setChecker(checker + 1);
-    // }
-    //console.log("BODY LENGTH",checker)
-    // if (checker == companies.length) {
-      setMeanReversionArray(updatedHistory);
-    // }
-    //filter and arranges the transactionHistory based on company's name
+        setMeanReversionArray(updatedHistory);
+      }
     const transaction = companies.map((company) => {
       return transactionHistory.filter((comp) => comp.map((c)=>{
         c.Ticker === company;
@@ -50,7 +33,8 @@ export default function ResultMeanReversion({ accountValue, transactionHistory, 
     setHistory(transaction);
 
 
-  }, [companies, thrityDayAverage, twentyDayAverage])
+  }, [companies, averageArray])
+
   console.log("Array: ",meanReversionArray);
   return (
     <Flex direction={'column'} w={'full'} h={'80vh'} mt={10} p={10} textColor={'white'}>
@@ -64,7 +48,7 @@ export default function ResultMeanReversion({ accountValue, transactionHistory, 
 
         </TabList>
         <TabPanels>
-          {meanReversionArray ? (
+          {meanReversionArray.length > 0 ? (
             meanReversionArray.map((array, index) => (
               <TabPanel key={index} w={'full'} h={30}>
                 <MeanReversionGraph
