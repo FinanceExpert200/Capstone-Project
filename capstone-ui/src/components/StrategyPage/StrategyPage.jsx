@@ -9,6 +9,9 @@ import Divergence from "../../TradingCalculations/Divergence.js";
 import PairsTrading from "../../TradingCalculations/PairsTrading";
 import ResultDivergence from "./ResultDivergence";
 import ResultMovingAverage from "./ResultMovingAverage";
+import ResultMeanReversion from "./ResultMeanReversion";
+import ResultPairsTrading from "./ResultPairsTrading";
+
 import {
   Button,
   Box,
@@ -28,21 +31,18 @@ import {
 const StrategyPage = ({userId,strategyBuyingPower,setStrategyBuyingPower,strategyType,setStrategyType, buyingPower, setBuyingPower}) => {
   const { name } = useParams();
   const [currentAccountValue, setCurrentAccountValue] = useState([]);
-  const [currentTransactionHistory, setCurrentTransactionHsitory] = useState(
-    []
-  );
+  const [currentTransactionHistory, setCurrentTransactionHsitory] = useState([]);
   const [ranStrategy, setRanStrategy] = useState(false);
   const [selectedTickers, setselectedTickers] = useState([]);
   const [error, seterror] = useState(false);
-
-
-
 
   const [rsi, setRsi] = useState(null);
   const [movAverage, setMovingAverage] = useState(null);
   const [thirtyDayAvr,setThirtyDayAvr] = useState(null)
   const [oneTwentyDayAvr, setOneTwentyDayAvr] = useState(null);
   const [simulatedBuyingPower, setSimulatedBuyingPower] = useState(0)
+  const [priceRatioArray, setPriceRatioArray] = useState(null)
+  const [test,setTest] = useState(null)
   // Here we need to handle each of the buttons
   // This page consists of:
   // A brief description of the strategy and How it works
@@ -106,14 +106,16 @@ const StrategyPage = ({userId,strategyBuyingPower,setStrategyBuyingPower,strateg
   console.log("PROFIT ---", currentAccountValue)
 
   const runMeanReversionStrategy = async (selectedTickers) => {
-    MeanReversionStrat.mainFunc(simulatedBuyingPower, selectedTickers);
-    let result = await MeanReversionStrat.fetchResult();
-    console.log("TRANSACTION::", result)
-    setCurrentTransactionHsitory(result[0]);
-    setCurrentAccountValue(result[1]);
-    setThirtyDayAvr(result[2]);
-    setOneTwentyDayAvr(result[3]);
-
+    await MeanReversionStrat.mainFunc(simulatedBuyingPower, selectedTickers);
+    let transaction = await MeanReversionStrat.getTransactionHistory();
+    let profitArray = await MeanReversionStrat.getProfitArray();
+    let thirtyDayArray = await MeanReversionStrat.getThirtyDayAvgArray();
+    let oneTwentyDayArray = await MeanReversionStrat.getOneTwentyDayAvgArray()
+    
+    setCurrentTransactionHsitory(transaction);
+    setCurrentAccountValue(profitArray);
+    setThirtyDayAvr(thirtyDayArray);
+    setOneTwentyDayAvr(oneTwentyDayArray);
   };
 
 
@@ -147,7 +149,9 @@ const StrategyPage = ({userId,strategyBuyingPower,setStrategyBuyingPower,strateg
       selectedStocks,
       simulatedBuyingPower
     );
+    setTest(PairsTrading.getTransactionHistory());
     setCurrentAccountValue(PairsTrading.getAccountValue());
+    setPriceRatioArray(PairsTrading.getPriceRatio())
     setCurrentTransactionHsitory(transactionHistory);
     console.log("PAIRS TRADING DATA")
     const pairsTradingData = PairsTrading.getAllDataArray()
@@ -269,7 +273,7 @@ const StrategyPage = ({userId,strategyBuyingPower,setStrategyBuyingPower,strateg
         }
     };
     
-    
+    console.log("selected tickers", selectedTickers);
     return (
       <Box
       h={"100vh"}
@@ -279,9 +283,6 @@ const StrategyPage = ({userId,strategyBuyingPower,setStrategyBuyingPower,strateg
       paddingLeft={"80px"}
       pr={"80px"}
     >
-            {/* <div id = "description">
-                {description}
-            </Box> */}
       {ranStrategy && currentAccountValue && currentTransactionHistory ? (
         <div>
           {rsi ? (
@@ -305,6 +306,12 @@ const StrategyPage = ({userId,strategyBuyingPower,setStrategyBuyingPower,strateg
               thrityDayAverage={thirtyDayAvr}
               twentyDayAverage={oneTwentyDayAvr}
               companies={selectedTickers}/>
+          ): priceRatioArray ? (
+            <ResultPairsTrading accountValue={currentAccountValue} 
+                                transactionHistory={currentTransactionHistory} 
+                                companies={selectedTickers}
+                                priceRatioArray={priceRatioArray} 
+                                test={test}/>
           ):(
             <Center h={"100vh"}>
               <Flex
@@ -336,6 +343,7 @@ const StrategyPage = ({userId,strategyBuyingPower,setStrategyBuyingPower,strateg
           <Button
             onClick={() => {
               setRanStrategy(false);
+              setselectedTickers([]);
             }}
           >
             Run Again
