@@ -9,6 +9,7 @@ import Divergence from "../../TradingCalculations/Divergence.js";
 import PairsTrading from "../../TradingCalculations/PairsTrading";
 import ResultDivergence from "./ResultDivergence";
 import ResultMovingAverage from "./ResultMovingAverage";
+import ResultMeanReversion from "./ResultMeanReversion";
 import {
   Button,
   Box,
