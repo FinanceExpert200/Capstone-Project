@@ -12,12 +12,12 @@ import Utilities from "../../TradingCalculations/Utilities.js"
 // import { ThemeContext } from "../App/App";
 // importy history
 
-const Home = ({ getProfile, getAccount, getPortfolio, pastStockPrice, portfolio, profile, account, historicalData, tickers, fixedDate, strategyBuyingPower,setStrategyBuyingPower,strategy, getStrategy, removeStrategy}) => {
+const Home = ({ getProfile, getAccount, getPortfolio, pastStockPrice, portfolio, profile, account, historicalData, tickers, fixedDate, strategyBuyingPower,setStrategyBuyingPower,strategy, getStrategy, removeStrategy,formattedStrategyName}) => {
   const [metaData, setMetaData] = useState([]);
   const [amznData, setAmznData] = useState([]);
   const [googleData, setGoogleData] = useState([]);
   const [crmData, setCrmData] = useState([]);
-  let formattedStrategyName = ""
+
 
   // const theme = useContext(ThemeContext);
 
@@ -61,27 +61,8 @@ const Home = ({ getProfile, getAccount, getPortfolio, pastStockPrice, portfolio,
 
   }, [test])
   //console.log("THE POPULATED: ", test)
-  const formatStrategyName = (name)=>{
-    switch (name) {
-      case "meanreversion":
-      formattedStrategyName =  "Mean Reversion"
-      case "movingaveragecrossover":
-        formattedStrategyName = "Moving Average Crossover"
-      case "divergence":
-        formattedStrategyName = "Relative StrengthI Divergence"
-      case "pairstrading":
-        formattedStrategyName =  "Pairs Trading"
-      case "exponentialmovingaverage":
-        formattedStrategyName = "Exponential Moving Average"
-        
-      default:
-        break;
-    }
-  }
 
-  if (typeof strategy !== 'undefined' && strategy){
-    formatStrategyName(strategy.strategy_name)
-  }
+
 
 
   return (
@@ -103,7 +84,7 @@ const Home = ({ getProfile, getAccount, getPortfolio, pastStockPrice, portfolio,
               <Box >
                 <Text as={'h1'} color={'whitesmoke'}> Stocks Available</Text>
                 {portfolio.map((item, key) => (
-                  <Box borderRadius={25}   bgColor={'#111214'} p={3} mb={5}>
+                  <Box borderRadius={25}   bgColor={'#111214'} p={3} mb={5} onClick={(event) => { window.location.href = "/trade" }}>
                     <Text align={'center'} color='#04e168' fontWeight={'bold'} fontSize={'50px'}>{item.ticker}</Text>
                     <Text color={'white'} fontSize={'20px'}>Purchased on: {fixedDate(item.created_at)}</Text>
                     <Text mr={3} align={'right'} fontSize={'35px'} color={'green.300'}>{item.quantity}</Text>
@@ -113,7 +94,7 @@ const Home = ({ getProfile, getAccount, getPortfolio, pastStockPrice, portfolio,
               </Box>
             ) : (
               <Stack direction="column" alignItems={'center'} p={10} color={'white'}>
-                <Text>No stock available</Text>
+                <Text>No stocks owned </Text>
                 <Button bgColor={'green.400'} onClick={(event) => { window.location.href = "/trade" }}>
                   Start Trading!
                 </Button>
@@ -134,7 +115,7 @@ const Home = ({ getProfile, getAccount, getPortfolio, pastStockPrice, portfolio,
             <Stack direction={'row'} >
 
               <Container width={'30%'} fontSize={'18'} borderRadius={15}   bgColor={'#111214'}>
-                <Text fontWeight={'medium'} color={'white'}>Total Amount: </Text>
+                <Text fontWeight={'medium'} color={'white'}>Account Value: </Text>
                 <Stack direction={'row'} justifyContent={'center'} fontSize={'40'} fontWeight={'medium'}>
                   <Text color={'#00f008'}>$</Text>
                   <Text  color={'#00f008'}>

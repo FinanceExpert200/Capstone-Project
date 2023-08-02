@@ -330,12 +330,33 @@ function App() {
       console.error(error);
     }
   }
+  const formatStrategyName = (name) => {
+    console.log("NAME OF STOCK ***********", name)
+    switch (name) {
+      case "meanreversion":
+        setFormattedStrategyName("Mean Reversion");
+        break;
+      case "movingaveragecrossover":
+        setFormattedStrategyName("Moving Average Crossover");
+        break;
+      case "divergence":
+        setFormattedStrategyName("Relative Strength Divergence");
+        break;
+      case "pairstrading":
+        setFormattedStrategyName("Pairs Trading");
+        break;
+      default:
+        break;
+    }
+}
 
   const getStrategy = async() => {
       try {
         const res = await axios.get(`http://localhost:3001/strategy/${localStorage.getItem("currentUserId")}`);
         console.log("STRATEGY ", res.data.data)
         setStrategyType(res.data.data)
+        formatStrategyName(res.data.data.strategy_name)
+        
       } catch(error){
         console.log(error)
       } 

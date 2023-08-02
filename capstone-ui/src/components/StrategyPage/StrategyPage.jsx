@@ -58,16 +58,17 @@ const StrategyPage = ({userId,strategyBuyingPower,setStrategyBuyingPower,strateg
   const formatStrategyName = (name)=>{
     switch (name) {
       case "meanreversion":
-
         formattedName =  "Mean Reversion"
+        break
       case "movingaveragecrossover":
         formattedName = "Moving Average Crossover"
+        break
       case "divergence":
-        formattedName = "Relative StrengthI Divergence"
+        formattedName = "Relative Strength Divergence"
+        break
       case "pairstrading":
         formattedName =  "Pairs Trading"
-      case "exponentialmovingaverage":
-        formattedName = "Exponential Moving Average"
+        break
         
       default:
         break;
@@ -409,7 +410,7 @@ const StrategyPage = ({userId,strategyBuyingPower,setStrategyBuyingPower,strateg
 
                         <Input type="number" id="quantity" name="quantity" placeholder='Amount' onChange={handleInputChangeForSimulatedBuyingPower} w={'30'}/>
                         <Button type="submit"  >
-                            Run {formattedName} strategy
+                            Run {formattedName} Simulation
                         </Button>
                         </Flex>
 
@@ -418,7 +419,7 @@ const StrategyPage = ({userId,strategyBuyingPower,setStrategyBuyingPower,strateg
 
                     <Input type="number" id="quantity" name="quantity" placeholder='Amount' onChange={handleInputChangeForstrategyBuyingPower} w={'30'}/>
                         <Button onClick={(event) => { event.preventDefault(); addStrategyToUser(name, strategyBuyingPower, userId)}}  >
-                            set {formattedName} strategy
+                            Add {formattedName} Strategy To Account
                         </Button>
                     </Box>
 
