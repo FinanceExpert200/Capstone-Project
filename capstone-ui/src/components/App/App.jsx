@@ -192,41 +192,42 @@ function App() {
     try {
       const res = await axios.get(`http://localhost:3001/trans/portfolio/${localStorage.getItem("currentUserId")}`);
       setPortfolio(res.data.user);
+      console.log("PORTFOLIO ", res.data.user)
     } catch(error){
       console.log(error)
     } 
   }
 
   const stockData = {
-    "1": {
+    "2": {
       company: "Meta Platforms Inc",
       logo: "https://upload.wikimedia.org/wikipedia/commons/a/ab/Meta-Logo.png",
       stockName: "META",
       stockPrice: metaPrice,
       stockPercentage: metaPercent,
     },
-    "2": {
+    "4": {
       company: "Amazon.com Inc.",
       logo: "https://www.citypng.com/public/uploads/preview/-11596400565qsuxfwyv9j.png",
       stockName: "AMZN",
       stockPrice: amznPrice,
       stockPercentage: amznPercent,
     },
-     "3" : {
+     "1" : {
       company:"Netflix Inc",
       logo: "https://cdn.cookielaw.org/logos/dd6b162f-1a32-456a-9cfe-897231c7763c/4345ea78-053c-46d2-b11e-09adaef973dc/Netflix_Logo_PMS.png",
       stockName: "NFLX",
       stockPrice: nflxPrice,
       //stockPercentage: metaPercent,
     },
-     "4" : {
+     "5" : {
       company:"Alphabet Inc Class A",
       logo: "https://dvh1deh6tagwk.cloudfront.net/finder-us/wp-uploads/sites/5/2020/04/AlphabetLogo_Supplied_250x250.png",
       stockName: "GOOGL",
       stockPrice: googlPrice,
       stockPercentage: googlPercent,
     },
-      "5" : {
+      "3" : {
       company: "Salesforce Inc",
       logo: "https://www.sfdcstatic.com/common/assets/img/logo-company-large.png",
       stockName: "CRM",

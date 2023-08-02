@@ -63,7 +63,7 @@ export default function Trade({
           Start Trading!
         </Heading>
         <Text color={'white'} fontSize={{base:'sm', sm:'lg'}}>
-         Choose one of the following company....
+         Choose from the following companies...
         </Text>
 
         <Container  maxW={'5xl'} mt={12}>
