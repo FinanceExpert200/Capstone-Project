@@ -99,6 +99,7 @@ function App() {
   // -------------------- Strategy Usestate Variables ------------------\\\
   const [strategyBuyingPower, setStrategyBuyingPower] = useState(0)
   const [strategyType, setStrategyType] = useState(0)
+  const [formattedStrategyName, setFormattedStrategyName] = useState()
 
 
 
@@ -260,6 +261,7 @@ function App() {
 
 
 
+
   const getStockPrice = async (ticker) => {
 
     try {
@@ -372,6 +374,8 @@ function App() {
     }
   };
 
+  
+
 
 
   useEffect(() => {
@@ -431,7 +435,7 @@ function App() {
             <Route path="/home" element={<Home getProfile={getProfile} getAccount={getAccount} getPortfolio={getPortfolio} 
                                                pastStockPrice={pastStockPrice} portfolio={portfolio} profile= {profile} 
                                                account={account} tickers = {tickers}
-                                               fixedDate ={fixedDate} historicalData={mergeArrays(historicalAmzn,historicalCrm,historicalGoogle,historicalMeta)} strategyBuyingPower = {strategyBuyingPower} setStrategyBuyingPower = {setStrategyBuyingPower} strategy = {strategyType} setStrategyType = {setStrategyType} getStrategy = {getStrategy} userId = {currentUserId} removeStrategy = {removeStrategy}/>} />
+                                               fixedDate ={fixedDate} historicalData={mergeArrays(historicalAmzn,historicalCrm,historicalGoogle,historicalMeta)} strategyBuyingPower = {strategyBuyingPower} setStrategyBuyingPower = {setStrategyBuyingPower} strategy = {strategyType} setStrategyType = {setStrategyType} getStrategy = {getStrategy} userId = {currentUserId} removeStrategy = {removeStrategy} formattedStrategyName = {formattedStrategyName}/>} />
             <Route
               path="/trade"
               element={
@@ -486,10 +490,10 @@ function App() {
               } />
             <Route
               path="/strategies"
-              element={<TradingStrategies strategyBuyingPower = {strategyBuyingPower} setStrategyBuyingPower = {setStrategyBuyingPower} strategy = {strategyType} setStrategyType = {setStrategyType} getStrategy = {getStrategy} userId = {currentUserId} removeStrategy = {removeStrategy}/>}
+              element={<TradingStrategies strategyBuyingPower = {strategyBuyingPower} setStrategyBuyingPower = {setStrategyBuyingPower} strategy = {strategyType} setStrategyType = {setStrategyType} getStrategy = {getStrategy} userId = {currentUserId} removeStrategy = {removeStrategy} />}
             />
 
-            <Route path="/strategies/:name" element={<StrategyPage strategyBuyingPower = {strategyBuyingPower} setStrategyBuyingPower = {setStrategyBuyingPower} buyingPower = {buying_power} setBuyingPower={setBuyingPower} strategy = {strategyType} setStrategyType = {setStrategyType} getStrategy = {getStrategy} userId = {currentUserId} removeStrategy = {removeStrategy}/>}/>
+            <Route path="/strategies/:name" element={<StrategyPage strategyBuyingPower = {strategyBuyingPower} setStrategyBuyingPower = {setStrategyBuyingPower} buyingPower = {buying_power} setBuyingPower={setBuyingPower} strategy = {strategyType} setStrategyType = {setStrategyType} getStrategy = {getStrategy} userId = {currentUserId} removeStrategy = {removeStrategy} setFormattedStrategyName = {setFormattedStrategyName}/>}/>
             <Route path="/*" element={<NotFound/>} />
           </Routes>
         </main>

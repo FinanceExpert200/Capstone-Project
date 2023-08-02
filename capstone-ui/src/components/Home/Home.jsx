@@ -17,7 +17,7 @@ const Home = ({ getProfile, getAccount, getPortfolio, pastStockPrice, portfolio,
   const [amznData, setAmznData] = useState([]);
   const [googleData, setGoogleData] = useState([]);
   const [crmData, setCrmData] = useState([]);
-
+  let formattedStrategyName = ""
 
   // const theme = useContext(ThemeContext);
 
@@ -61,12 +61,26 @@ const Home = ({ getProfile, getAccount, getPortfolio, pastStockPrice, portfolio,
 
   }, [test])
   //console.log("THE POPULATED: ", test)
+  const formatStrategyName = (name)=>{
+    switch (name) {
+      case "meanreversion":
+      formattedStrategyName =  "Mean Reversion"
+      case "movingaveragecrossover":
+        formattedStrategyName = "Moving Average Crossover"
+      case "divergence":
+        formattedStrategyName = "Relative StrengthI Divergence"
+      case "pairstrading":
+        formattedStrategyName =  "Pairs Trading"
+      case "exponentialmovingaverage":
+        formattedStrategyName = "Exponential Moving Average"
+        
+      default:
+        break;
+    }
+  }
 
-  const runTest = async () =>{
-    console.log("Strategy", strategy)
-    await Utilities.runCurrentStrategy(strategy)
-
-
+  if (typeof strategy !== 'undefined' && strategy){
+    formatStrategyName(strategy.strategy_name)
   }
 
 
@@ -148,7 +162,7 @@ const Home = ({ getProfile, getAccount, getPortfolio, pastStockPrice, portfolio,
                 </Button>
                 <Stack direction={'row'} justifyContent={'center'} fontSize={'40'}>
                   <Text color={'#00f008'}>
-                    {strategy.strategy_name}
+                    {formattedStrategyName}
                   </Text>
 
 
