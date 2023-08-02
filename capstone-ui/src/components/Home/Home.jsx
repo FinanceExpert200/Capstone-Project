@@ -154,6 +154,8 @@ const Home = ({
                       </Text>
                     </Box>
                   </Link>
+
+                  
                 ))}
               </Box>
             ) : (
@@ -264,30 +266,30 @@ const Home = ({
                     </Stack>
                   </Container>
 
-                  <Container
-                    width={"30%"}
+                <Container
+                  width={"30%"}
+                  fontSize={"18"}
+                  borderRadius={15}
+                  bgColor={"#111214"}
+                >
+                  <Text
+                    fontWeight={"medium"}
                     fontSize={"18"}
-                    borderRadius={15}
-                    bgColor={"#111214"}
+                    color={"white"}
+                    textDecoration={"underline"}
                   >
-                    <Text
-                      fontWeight={"medium"}
-                      fontSize={"18"}
-                      color={"white"}
-                      textDecoration={"underline"}
-                    >
-                      Strategy Buying Power:{" "}
-                    </Text>
-                    <Stack
-                      direction={"row"}
-                      justifyContent={"center"}
-                      fontSize={"40px"}
-                    >
-                      <Text color={"#00f008"}>$</Text>
-                      <Text color={"#00f008"}>{strategy.buying_power}</Text>
-                    </Stack>
-                  </Container>
+                    Strategy Buying Power:{" "}
+                  </Text>
+                  <Stack
+                    direction={"row"}
+                    justifyContent={"center"}
+                    fontSize={"40px"}
+                  >
+                    <Text color={"#00f008"}>$</Text>
+                    <Text color={"#00f008"}>{strategy.buying_power}</Text>
+                  </Stack>
                 </Container>
+              </Container>
               )}
             </Stack>
 

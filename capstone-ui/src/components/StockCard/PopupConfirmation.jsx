@@ -16,8 +16,6 @@ import {
 export default function PopupConfirmation ({submission,name,quantity,price,trans_type}){
     const type = trans_type === "buy" ? ('bought'):('sold')
    
-    console.log("TRANS TYPE", type)
-
     return (
       <Modal
         isCentered
@@ -28,18 +26,14 @@ export default function PopupConfirmation ({submission,name,quantity,price,trans
         <ModalContent>
         <Box bgColor={'white'} textAlign={'center'} borderRadius={5} top={0} >
         <CheckCircleIcon bgColor={'white'} color={'green'} w={'100px'} mt={'-50px'} borderRadius={'50%'} h={100} boxShadow={'0,2px,5px,rgba(0,0,0,0.2)'}/>
-          
+          <ModalCloseButton />
           <ModalBody mb={3}>
             <Heading mb={3} as={'h2'}>Transaction Success!</Heading>
             <Text fontWeight={'light'}>You have successfully {type} {quantity} stocks from {name} for a total of ${price}</Text>
             <Text fontWeight={'light'}>Click below to return to your profile</Text>
           </ModalBody>
           
-          <Button mb={5} onClick={()=>{window.location.href = "/home";}}> Trade More</Button>
-          <Button mb={5} onClick={()=>{window.location.href = "/trade";}}> Back to home</Button>
-          
-
-
+          <Button mb={5} onClick={()=>{window.location.href = "/home";}}> Back to home</Button>
          
           </Box>
         </ModalContent>
