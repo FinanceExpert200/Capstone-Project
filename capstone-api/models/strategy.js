@@ -125,6 +125,7 @@ class Strategy{
     static async sellShare(ticker, quantity, currPrice, userId){
         // Fetch the users portfolio so we can check if they have enough stock quantity to sell
         const currentUser = await Portfolio.fetchUserAccountById(userId)
+        console.log("sellshare in strat")
         const stockQuantityOwned = await Portfolio.getShareQuantityOwned(userId, ticker)
         if(quantity > stockQuantityOwned) { 
             throw new Error("Not enough stock owned to sell")
@@ -150,6 +151,21 @@ class Strategy{
         const strategy = await this.getUserStrategies(userId)
         return strategy.buying_power
     }
+
+    static async updateLastActive(date, userId){
+        const updateUserBuyingPowerQuery = `
+        UPDATE tradingStrategies
+        SET last_active = $1
+        WHERE user_id = $2;
+        `;
+        const userValues = [date, userId];
+        console.log(
+          `Updating the Date of STRATEGY user ${userId} to ${userId}`
+        );
+        const result = await db.query(updateUserBuyingPowerQuery, userValues);
+        return result
+    }
+
 
 
     static async updateBuyingPower(amount, userID) {

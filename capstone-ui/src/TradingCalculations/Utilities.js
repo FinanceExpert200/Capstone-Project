@@ -1,6 +1,8 @@
 import axios from "axios"
 import MovingAverageCrossover from "./MovingAverageCrossover"
 import Divergence from "./Divergence"
+import PairsTrading from "./PairsTrading"
+import chalk from "chalk"
 
 
 export default class Utilities {
@@ -40,7 +42,10 @@ export default class Utilities {
       console.log("STRATEGY IN BACKEND ", strategy)
       // First we need to determine if the user even has a strategy and if the last active != todays date.  If Both conditions are not met then we are finished with our function
       let today = new Date() 
-      if(strategy&& strategy.last_active != today.toISOString()){
+      let lastActive = new Date(strategy.last_active)
+
+      console.log(`Last active ${lastActive}, today ${today.toLocaleDateString()}`)
+      if(lastActive.toLocaleDateString() != today.toLocaleDateString()){
         console.log("user has a strategy that has not been ran today, running said strategy")
         // now we need a switch statement to figure our our strategy using a switch case
         switch (strategy.strategy_name) {
@@ -53,11 +58,11 @@ export default class Utilities {
               break;
           case "divergence":
               console.log("divergence");
-              this.getDivergenceTransactionHistory(this.selectedStocks,strategy);
+              this.getDivergenceTransactionHistory(this.selectedStocks,strategy)
               break;
           case "pairstrading":
               console.log("pairstrading");
-              this.runPairsTradingStrategy(this.selectedStocks,strategy);
+              this.getPairsTradingTransactionHistory(this.selectedStocks,strategy);
               break;
           default:
               console.log("Invalid strategy type.");
@@ -69,25 +74,31 @@ export default class Utilities {
       }
     }
 
+    static async getPairsTradingTransactionHistory(selectedStocks,strategy){
+
+      await PairsTrading.calculateProfit(selectedStocks,strategy.buying_power)
+      const transactionHistory = await PairsTrading.getUnfilteredTransactionHistory()
+      console.log(transactionHistory)
+      this.compareTransactionHistory(transactionHistory,strategy)
+    };
+
 
     static async getMovingAverageCrossoverTransactionHistory(selectedStocks,strategy){
-      console.log(selectedStocks)
-      console.log("STRTEGY%%%%%")
-      console.log(strategy)
-      let transactionHistory = await MovingAverageCrossover.calculateDisplayedProfit(strategy.buying_power, selectedStocks)
+      await MovingAverageCrossover.calculateDisplayedProfit(strategy.buying_power, selectedStocks)
+      let transactionHistory = await MovingAverageCrossover.getUnfilteredData()
+      console.log(transactionHistory)
       this.compareTransactionHistory(transactionHistory,strategy)
+    };
 
-
+    static async getDivergenceTransactionHistory(selectedStocks, strategy){
+      console.log(selectedStocks)
+      await Divergence.calculateDisplayedProfit(strategy.buying_power, selectedStocks);
+      const transactionHistory = await Divergence.getUnfilteredData()
+      this.compareTransactionHistory(transactionHistory,strategy)
       
     };
-    static async getDivergenceStrategyTransactionHistory(selectedStocks,strategy){
-      console.log(selectedStocks)
-      let transactionHistory = await MovingAverageCrossover.calculateDisplayedProfit(strategy.buying_power, selectedStocks)
-    }
-  
 
     static async addTransaction(transaction,strategy){
-      console.log("addTransaction Hit")
       try {
         const res = await axios.post(`http://localhost:3001/trans/${transaction.type}`, {
           ticker: transaction.ticker,
@@ -95,42 +106,50 @@ export default class Utilities {
           curr_price: transaction.price,
           user_id: strategy.user_id,
           trans_type: transaction.type,
-          purchased_by: strategy.strategy_name
+          purchased_by: strategy.strategy_name,
+          transaction_date: transaction.date
+
         });
         if (res.status === 201) {
-          console.log("Transaction successfully executed from the strategy")
+          console.log(chalk.green("Transaction successfully executed from the strategy"))
         }
       } catch (err) {
-        console.log(err);
-        //must update the error message
+        console.log("Bot trying to sell stocks it doesnt own");
       }
     };
   
-
-
-
-
-
-
-    static async getDivergenceTransactionHistory(selectedStocks, strategy){
-      console.log(selectedStocks)
-      let [transactionHistory, accountValue] = await Divergence.calculateDisplayedProfit(strategy.buying_power, selectedStocks);
-    
-      this.compareTransactionHistory(transactionHistory,strategy)
-      
-    };
-
-
-
     static async compareTransactionHistory(transactionHistory,strategy){
-      
+      const lastActive  = await this.toStartDay(strategy.last_active)
       transactionHistory.map((transaction) => {
-        console.log(`last active ${strategy.last_active} transaction date ${transaction.date}`)
-        if(transaction.date>=strategy.last_active){
+        //console.log(`last active ${lastActive} transaction date ${transaction.date}`)
+        if(transaction.date>=lastActive){
           //we want to perform the transaction 
           this.addTransaction(transaction, strategy)
         }
+
       })
+      let today = new Date()
+      //After running the funciton, we need to update our last active date to today
+      this.updateLastActive(today.toISOString(), strategy.user_id)
     }
+
+    static async updateLastActive(date, userId){
+      //Updates the date of the current strategy
+      try {
+        const res = await axios.post("http://localhost:3001/strategy/active", {
+          date: date,
+          user_id: userId,
+        });
+      } catch (err) {
+        console.log(err);
+      }
+    }
+
+    static async toStartDay(isoString) {
+      let date = new Date(isoString);
+      date.setHours(0, 0, 0, 0); // Set hours, minutes, seconds and milliseconds to 0
+      return date.toISOString();
+    } 
+
 }
 

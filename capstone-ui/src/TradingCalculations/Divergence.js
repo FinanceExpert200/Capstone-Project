@@ -13,6 +13,7 @@ export default class  Divergence{
     static totalSixMonthProfit = 0 
     static RSIArray = []
     static returnedArray = [0,0,0]
+    static unfilteredHistoricalData = []
 
 
 
@@ -26,6 +27,7 @@ export default class  Divergence{
     //Calculating the RSI for a specific company
     static async calculateRSI(ticker){
         //fetch historicalData from a  year prior
+        
         let yearPrior = Utilities.getDatePrior(445)
         let tickerHistoricalData = await Utilities.fetchHistoricalData(ticker,yearPrior)
         let RSIArray = []
@@ -87,7 +89,7 @@ export default class  Divergence{
                 this.sellStock(ticker,currentMarketData[left] )
             }
             // Save the data from the three month and six month mark 
-            if (right == Math.round((dailyPriceChangeArray.length / 4) * 3)){
+            if (right == Math.round((dailyPriceChangeArray.length / 4))){
                 console.log("three month mark reached, total account value is ", this.accountValue)
                 threeMonthProfit = this.accountValue
             }
@@ -105,9 +107,10 @@ export default class  Divergence{
     }
 
     static buyStock(ticker, stock){
+        this.unfilteredHistoricalData.push({type: "buy", ticker: ticker, date: stock.date, price: stock.close})
         //If We dont have enough buying power to purchase the stock, we display a mesage and continue
         if(stock.close > this.buyingPower){
-            console.log(chalk.bgRed("CANNOT PURCHASE STOCK, INSUFFICIENT BUYING POWER"))
+            // console.log(chalk.bgRed("CANNOT PURCHASE STOCK, INSUFFICIENT BUYING POWER"))
         }
         if(stock.close <= this.buyingPower){
             //If we do have sufficient funds, we decrement our buying power and we increment the amount of stocks owned one
@@ -115,15 +118,16 @@ export default class  Divergence{
             this.buyingPower -= stock.close
             this.stocksOwned += 1 
             this.transactionHistory.push({type: "buy", ticker: ticker, date: stock.date, price: stock.close})
-            console.log(chalk.bgBlack.white(`${ticker} Stock purchased for ${stock.close} on ${stock.date}`))
+            // console.log(chalk.bgBlack.white(`${ticker} Stock purchased for ${stock.close} on ${stock.date}`))
         }
         this.accountValue  = this.buyingPower + (this.stocksOwned * stock.close)
     }
 
     static sellStock(ticker, stock){
+        this.unfilteredHistoricalData.push({type: "sell", ticker: ticker, date: stock.date, price: stock.close})
         if(this.stocksOwned === 0){
             //Check if we have enough stock owned to sell
-            console.log(chalk.bgRed("We dont have any stock to sell"))
+            // console.log(chalk.bgRed("We dont have any stock to sell"))
         }
         else{
             // If we do then we decrement the amount owned and add the trade to our transaction history
@@ -194,5 +198,8 @@ export default class  Divergence{
     }
     static async getRSIData(){
         return this.RSIArray
+    }
+    static async getUnfilteredData(){
+        return this.unfilteredHistoricalData
     }
 }

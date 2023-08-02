@@ -21,6 +21,21 @@ router.post("/add", async (req, res, next) => {
     }
 });
 
+router.post("/active", async (req, res, next) => {
+  try {
+
+    const { date, user_id} = req.body
+
+    const updatedLastActive = await Strategy.updateLastActive(date, user_id)
+
+    return res.status(201).json({updatedLastActive})
+  } 
+  catch (err) {
+      console.error(err);
+      next(err);
+  }
+});
+
 //We need a router to get the router information
 
 

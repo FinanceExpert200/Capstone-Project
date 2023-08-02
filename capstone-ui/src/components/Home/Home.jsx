@@ -20,20 +20,29 @@ const Home = ({ getProfile, getAccount, getPortfolio, pastStockPrice, portfolio,
 
 
   // const theme = useContext(ThemeContext);
-  const testRun = async() =>{
-    await Utilities.runCurrentStrategy(strategy)
-
-
-  }
 
 
   const [test, setTest] = useState();
   useEffect(() => {
-    getProfile();
-    getAccount();
-    getPortfolio();
-    getStrategy();
+    const fetchDataAndRunStrategy = async () => {
+      await getProfile();
+      await getAccount();
+      await getPortfolio();
+      await getStrategy();
+    };
+  
+    fetchDataAndRunStrategy();
   }, []);
+
+  useEffect(() => {
+    const runCurrentStrategy = async() => {
+      if (strategy) {
+        console.log("Strategy in home,", strategy);
+        await Utilities.runCurrentStrategy(strategy);
+      }
+    }
+    runCurrentStrategy();
+  }, [strategy]);
 
   //gathers the individual stocks together as sets
 
@@ -70,7 +79,7 @@ const Home = ({ getProfile, getAccount, getPortfolio, pastStockPrice, portfolio,
     >
       {profile && account && portfolio && historicalData ? (
         <Stack direction={'row'} padding={20} w={'full'} >
-          <Button onClick={runTest}>test</Button>
+    
           <Stack direction={'column'}
             p={1}
 
@@ -141,6 +150,8 @@ const Home = ({ getProfile, getAccount, getPortfolio, pastStockPrice, portfolio,
                   <Text color={'#00f008'}>
                     {strategy.strategy_name}
                   </Text>
+
+
                 </Stack>
               </Container>
 

@@ -4,6 +4,7 @@ const { BadRequestError, UnauthorizedError } = require("../utils/errors");
 const User = require("./users");
 const Transaction = require("./transactions");
 
+
 class Portfolio {
   // Gets the Users portfolio by their ID
   static async getUserPortfolio(userId) {
@@ -185,6 +186,7 @@ class Portfolio {
 
   //returns the quantity of the specified stock owned by a speciied user
   static async getShareQuantityOwned(user_id, ticker) {
+    console.log(`user_id ${user_id}, ticker ${ticker}`)
     const checkPortfolioQuery = `
     SELECT *
     FROM portfolio
@@ -192,12 +194,11 @@ class Portfolio {
     `;
     const values = [user_id, ticker];
     const result = await db.query(checkPortfolioQuery, values);
-    console.log(result);
-
+    console.log(result.rows[0].quantity)
     if (result.rows[0].quantity == 0) {
-      throw new Error("Stock Not owned");
+      throw new Error(ticker, "stock Not owned");
     } else {
-      return result.rows[0].quantity;
+      return result.rows[0].quantity
     }
   }
 

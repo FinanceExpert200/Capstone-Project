@@ -24,6 +24,9 @@ export default function StockCard({
   const stockInfo = stockData[stockId];
   const [quantity, setQuantity] = useState(0);
   const [totalPrice,setTotalPrice] = useState(0);
+
+  const [errorMessage, setErrorMessage] = useState("");
+
   const handleQuantityChange = (quantity) => {
     const parsedQuantity = parseInt(quantity, 10);
     setQuantity(parsedQuantity);
@@ -62,12 +65,17 @@ export default function StockCard({
 
       });
       if (res.status === 201) {
-        setStateForm("reg")
+        //setStateForm("reg")
         setSubmission(true);
         //setSubmission(<Text color={'green.400'}>Your submission was placed successfully!</Text>);
       }
     } catch (err) {
-      console.log(err);
+      // console.log(err);
+      console.error(err.response.data.error.message);
+
+
+
+
       //must update the error message
       //setSubmission(<Text color={'red.400'}>Your submission failed</Text>);
     }

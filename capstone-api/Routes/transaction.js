@@ -132,7 +132,7 @@ router.post("/sell", async (req, res, next) => {
       purchased_by,
       transaction_date,
     } = req.body;
-    console.log((ticker, quantity, curr_price, user_id));
+    console.log(`RESULTS (sell)(${ticker},${quantity}, ${curr_price}, ${user_id})`);
     //CHecking if the strategy or the user made the trade
     if (purchased_by != "user") {
       await Strategy.sellShare(ticker, quantity, curr_price, user_id);
@@ -154,7 +154,7 @@ router.post("/sell", async (req, res, next) => {
     //checking that portfolio works
     return res.status(201).json({ portfolio });
   } catch (err) {
-    console.error(err);
+    console.log(err)
     next(err);
   }
 });
