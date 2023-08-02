@@ -38,11 +38,9 @@ const StrategyPage = ({userId,strategyBuyingPower,setStrategyBuyingPower,strateg
 
   const [rsi, setRsi] = useState(null);
   const [movAverage, setMovingAverage] = useState(null);
-  const [thirtyDayAvr,setThirtyDayAvr] = useState(null)
-  const [oneTwentyDayAvr, setOneTwentyDayAvr] = useState(null);
+  const [arrayAvr,setArrayAvr] = useState(null)
   const [simulatedBuyingPower, setSimulatedBuyingPower] = useState(0)
   const [priceRatioArray, setPriceRatioArray] = useState(null)
-  const [test,setTest] = useState(null)
   // Here we need to handle each of the buttons
   // This page consists of:
   // A brief description of the strategy and How it works
@@ -109,13 +107,11 @@ const StrategyPage = ({userId,strategyBuyingPower,setStrategyBuyingPower,strateg
     await MeanReversionStrat.mainFunc(simulatedBuyingPower, selectedTickers);
     let transaction = await MeanReversionStrat.getTransactionHistory();
     let profitArray = await MeanReversionStrat.getProfitArray();
-    let thirtyDayArray = await MeanReversionStrat.getThirtyDayAvgArray();
-    let oneTwentyDayArray = await MeanReversionStrat.getOneTwentyDayAvgArray()
-    
+    let AvgArray = await MeanReversionStrat.getThirtyDayAvgArray();
+    //console.log("THIRTY DAY : ", thirtyDayArray)
     setCurrentTransactionHsitory(transaction);
     setCurrentAccountValue(profitArray);
-    setThirtyDayAvr(thirtyDayArray);
-    setOneTwentyDayAvr(oneTwentyDayArray);
+    setArrayAvr(AvgArray);
   };
 
 
@@ -294,12 +290,11 @@ const StrategyPage = ({userId,strategyBuyingPower,setStrategyBuyingPower,strateg
               accountValues={currentAccountValue}
               companies={selectedTickers}
             />
-          ) : thirtyDayAvr && oneTwentyDayAvr ?(
+          ) : arrayAvr ?(
             <ResultMeanReversion 
               transactionHistory={currentTransactionHistory}
               accountValue={currentAccountValue}
-              thrityDayAverage={thirtyDayAvr}
-              twentyDayAverage={oneTwentyDayAvr}
+              averageArray={arrayAvr}
               companies={selectedTickers}/>
           ): priceRatioArray ? (
             <ResultPairsTrading accountValue={currentAccountValue} 
