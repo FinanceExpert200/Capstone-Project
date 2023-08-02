@@ -96,14 +96,19 @@ const Home = ({
     switch (name) {
       case "meanreversion":
         formattedStrategyName = "Mean Reversion";
+        break
       case "movingaveragecrossover":
         formattedStrategyName = "Moving Average Crossover";
+        break
       case "divergence":
         formattedStrategyName = "Relative StrengthI Divergence";
+        break
       case "pairstrading":
         formattedStrategyName = "Pairs Trading";
+        break
       case "exponentialmovingaverage":
         formattedStrategyName = "Exponential Moving Average";
+        break
 
       default:
         break;
