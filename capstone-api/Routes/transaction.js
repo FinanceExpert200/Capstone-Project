@@ -154,7 +154,7 @@ router.post("/sell", async (req, res, next) => {
     //checking that portfolio works
     return res.status(201).json({ portfolio });
   } catch (err) {
-    console.error(err);
+    console.log(err)
     next(err);
   }
 });
