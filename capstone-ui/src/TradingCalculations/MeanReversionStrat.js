@@ -65,7 +65,7 @@ export default class MeanReversionStrat {
 
       
 
-      thirtyDayMovingAvgArray.push({ticker:ticker, date:thirtyDayWindow[0].date, thirtyDayAverage:thirtyDayMovingAvg, close:thirtyDayWindow[0].close});
+      thirtyDayMovingAvgArray.push({ticker:ticker, date:thirtyDayWindow[0].date, thirtyDayAverage:thirtyDayMovingAvg, close:thirtyDayWindow[0].close, twentyOneAverage:oneTwentyDayMovingAvg});
 
       oneTwentyDayMovingAvgArray.push({ticker:ticker, date:oneTwentyDayWindow[0].date, twentyOneAverage:oneTwentyDayMovingAvg});
 
@@ -133,7 +133,7 @@ export default class MeanReversionStrat {
     // console.log("120 LOOKING ADWDED", oneTwentyDayMovingAvgArray);
 
     
-    transactionsHistory.push({[ticker]: botTransactions});
+    transactionsHistory.push(botTransactions);
     profitArray.push({[ticker]: {profitThreeMonths,profitSixMonths,profitYear}})
     console.log("profit YEAR",profitArray);
     // reseting the state for each stock
@@ -266,7 +266,16 @@ export default class MeanReversionStrat {
       console.log(err);
     }
   }
-  static async fetchResult(){
-    return [transactionsHistory, profitArray, thirtyDayMovingAvgArray, oneTwentyDayMovingAvgArray]
+  static async getTransactionHistory(){
+    return transactionsHistory
+  }
+  static async getProfitArray(){
+    return profitArray
+  }
+  static async getThirtyDayAvgArray(){
+    return thirtyDayMovingAvgArray
+  }
+  static async getOneTwentyDayAvgArray(){
+    return oneTwentyDayMovingAvgArray
   }
 }

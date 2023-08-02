@@ -28,7 +28,7 @@ import { color } from "framer-motion";
 
 
 
-const TradingStrategies = ({ userId }) => {
+const TradingStrategies = ({ userId , setFormattedStrategyName}) => {
   return (
     <Center
       position={"absolute"}

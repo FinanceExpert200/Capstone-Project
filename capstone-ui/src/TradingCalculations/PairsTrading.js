@@ -13,6 +13,13 @@ export default class PairsTrading{
     static threeMonthProfit = 0 
     static sixMonthProfit = 0 
     static unfilteredTransactionHistory = []
+    static priceRatioArray =[]
+
+
+
+    static allDataArray = []
+  
+
 
 
 
@@ -98,7 +105,7 @@ export default class PairsTrading{
         let left = 0 
         let right = 49
         
-        
+        this.priceRatioArray = currPriceRatioArray;
         //Now we loop through and calculate the standard deviation fo the designated time frame. left to right pointer and calculate the average deviation
         while(right != currPriceRatioArray.length){
             //calculate average price ratio between left and right pointers
@@ -123,6 +130,8 @@ export default class PairsTrading{
             let currentPriceRatio = currPriceRatioArray[right].priceRatio;
             let currentDataB = this.stockB[right]
             let currentDataA = this.stockA[right]
+
+            this.allDataArray.push({date: currPriceRatioArray[right].date, historical_mean: currAveragePriceRatio, price_ratio: currentPriceRatio,standard_deviation: currStandardDeviation})
              
             await this.determineBuyOrSell(currentPriceRatio, currAveragePriceRatio, currStandardDeviation,currentDataA,currentDataB, stockA,stockB);
             left ++ 
@@ -228,7 +237,11 @@ export default class PairsTrading{
         }
         console.log(`Account value is now ${this.accountValue}`);
     }
-    
+    static getAllDataArray(){
+       return this.allDataArray
+    }
+
+
 
     static getTransactionHistory(){ 
         return this.transactionHistory
@@ -238,6 +251,9 @@ export default class PairsTrading{
     }
     static getUnfilteredTransactionHistory(){
         return this.unfilteredTransactionHistory
+    }
+    static getPriceRatio(){
+        return this.priceRatioArray
     }
 
 

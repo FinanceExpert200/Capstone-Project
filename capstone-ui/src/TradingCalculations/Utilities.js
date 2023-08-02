@@ -6,7 +6,7 @@ import chalk from "chalk"
 
 
 export default class Utilities {
-  static selectedStocks = ["META","AAPL"]
+  static selectedStocks = ["META","AAPL", "AMZN", "NFLX", "CRM", "GOOGL"]
   static selectedStrategy = ''
   static numberOfDBCalls = 0 
 
@@ -150,6 +150,8 @@ export default class Utilities {
       date.setHours(0, 0, 0, 0); // Set hours, minutes, seconds and milliseconds to 0
       return date.toISOString();
     } 
+
+
 
 }
 

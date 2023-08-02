@@ -10,6 +10,9 @@ import PairsTrading from "../../TradingCalculations/PairsTrading";
 import ResultDivergence from "./ResultDivergence";
 import ResultMovingAverage from "./ResultMovingAverage";
 import ResultMeanReversion from "./ResultMeanReversion";
+import ResultPairsTrading from "./ResultPairsTrading";
+import EMAStrat from "../../TradingCalculations/EMAStrat";
+
 import {
   Button,
   Box,
@@ -28,22 +31,18 @@ import {
 
 const StrategyPage = ({userId,strategyBuyingPower,setStrategyBuyingPower,strategyType,setStrategyType, buyingPower, setBuyingPower}) => {
   const { name } = useParams();
+  let formattedName = ''
   const [currentAccountValue, setCurrentAccountValue] = useState([]);
-  const [currentTransactionHistory, setCurrentTransactionHsitory] = useState(
-    []
-  );
+  const [currentTransactionHistory, setCurrentTransactionHsitory] = useState([]);
   const [ranStrategy, setRanStrategy] = useState(false);
   const [selectedTickers, setselectedTickers] = useState([]);
   const [error, seterror] = useState(false);
 
-
-
-
   const [rsi, setRsi] = useState(null);
   const [movAverage, setMovingAverage] = useState(null);
-  const [thirtyDayAvr,setThirtyDayAvr] = useState(null)
-  const [oneTwentyDayAvr, setOneTwentyDayAvr] = useState(null);
+  const [arrayAvr,setArrayAvr] = useState(null)
   const [simulatedBuyingPower, setSimulatedBuyingPower] = useState(0)
+  const [priceRatioArray, setPriceRatioArray] = useState(null)
   // Here we need to handle each of the buttons
   // This page consists of:
   // A brief description of the strategy and How it works
@@ -54,6 +53,28 @@ const StrategyPage = ({userId,strategyBuyingPower,setStrategyBuyingPower,strateg
   // Tiles that show the company and all trades that were made
 
   //   let description = "";
+
+  // Now we need to reormat name 
+  const formatStrategyName = (name)=>{
+    switch (name) {
+      case "meanreversion":
+
+        formattedName =  "Mean Reversion"
+      case "movingaveragecrossover":
+        formattedName = "Moving Average Crossover"
+      case "divergence":
+        formattedName = "Relative StrengthI Divergence"
+      case "pairstrading":
+        formattedName =  "Pairs Trading"
+      case "exponentialmovingaverage":
+        formattedName = "Exponential Moving Average"
+        
+      default:
+        break;
+    }
+  }
+  formatStrategyName(name)
+
 
   const displayDescription = (name) => {
     let description = "";
@@ -107,14 +128,14 @@ const StrategyPage = ({userId,strategyBuyingPower,setStrategyBuyingPower,strateg
   console.log("PROFIT ---", currentAccountValue)
 
   const runMeanReversionStrategy = async (selectedTickers) => {
-    MeanReversionStrat.mainFunc(simulatedBuyingPower, selectedTickers);
-    let result = await MeanReversionStrat.fetchResult();
-    console.log("TRANSACTION::", result)
-    setCurrentTransactionHsitory(result[0]);
-    setCurrentAccountValue(result[1]);
-    setThirtyDayAvr(result[2]);
-    setOneTwentyDayAvr(result[3]);
-
+    await MeanReversionStrat.mainFunc(simulatedBuyingPower, selectedTickers);
+    let transaction = await MeanReversionStrat.getTransactionHistory();
+    let profitArray = await MeanReversionStrat.getProfitArray();
+    let AvgArray = await MeanReversionStrat.getThirtyDayAvgArray();
+    //console.log("THIRTY DAY : ", thirtyDayArray)
+    setCurrentTransactionHsitory(transaction);
+    setCurrentAccountValue(profitArray);
+    setArrayAvr(AvgArray);
   };
 
 
@@ -148,9 +169,18 @@ const StrategyPage = ({userId,strategyBuyingPower,setStrategyBuyingPower,strateg
       selectedStocks,
       simulatedBuyingPower
     );
+    setTest(PairsTrading.getTransactionHistory());
     setCurrentAccountValue(PairsTrading.getAccountValue());
+    setPriceRatioArray(PairsTrading.getPriceRatio())
     setCurrentTransactionHsitory(transactionHistory);
+    console.log("PAIRS TRADING DATA")
+    const pairsTradingData = PairsTrading.getAllDataArray()
+    console.log(pairsTradingData)
+
+    
   };
+
+
 
   const runStrategy = async (event, name) => {
     event.preventDefault();
@@ -162,26 +192,28 @@ const StrategyPage = ({userId,strategyBuyingPower,setStrategyBuyingPower,strateg
       setRanStrategy(true);
       switch (name) {
         case "meanreversion":
-          //   console.log("meanreversion");
           runMeanReversionStrategy(selectedTickers);
           break;
 
         case "movingaveragecrossover":
           if (selectedTickers.length >= 1) {
+     
             runMovingAverageCrossoverStrategy(selectedTickers);
           }
           break;
 
         case "divergence":
-          console.log("divergence");
+
+ 
           runDivergenceStrategy(selectedTickers);
           break;
         case "pairstrading":
-          console.log("pairstrading");
+          
+    
           runPairsTradingStrategy(selectedTickers);
           break;
-        case "EMAstrat":
-          console.log("EMAStrat");
+        case "exponentialmovingaverage":
+
           runEMAStrategy(selectedTickers);
           break;
 
@@ -203,7 +235,7 @@ const StrategyPage = ({userId,strategyBuyingPower,setStrategyBuyingPower,strateg
   };
 
   const renderButtons = (name) => {
-    return ["META", "AMZN", "GOOGL", "AAPL", "CRM"].map((number) => (
+    return ["META", "AMZN", "GOOGL", "AAPL", "CRM", "NFLX"].map((number) => (
       <Button
         key={number}
         onClick={() => handleButtonClick(number, name)}
@@ -256,6 +288,8 @@ const StrategyPage = ({userId,strategyBuyingPower,setStrategyBuyingPower,strateg
                   user_id: currentUserId
                 });
                 console.log(res.data);
+                console.log("Formatted name ", formattedName)
+                
             } catch (err) {
                 console.log(err);
             }
@@ -265,7 +299,7 @@ const StrategyPage = ({userId,strategyBuyingPower,setStrategyBuyingPower,strateg
         }
     };
     
-    
+    console.log("selected tickers", selectedTickers);
     return (
       <Box
       h={"100vh"}
@@ -275,9 +309,6 @@ const StrategyPage = ({userId,strategyBuyingPower,setStrategyBuyingPower,strateg
       paddingLeft={"80px"}
       pr={"80px"}
     >
-            {/* <div id = "description">
-                {description}
-            </Box> */}
       {ranStrategy && currentAccountValue && currentTransactionHistory ? (
         <div>
           {rsi ? (
@@ -294,13 +325,18 @@ const StrategyPage = ({userId,strategyBuyingPower,setStrategyBuyingPower,strateg
               accountValues={currentAccountValue}
               companies={selectedTickers}
             />
-          ) : thirtyDayAvr && oneTwentyDayAvr ?(
+          ) : arrayAvr ?(
             <ResultMeanReversion 
               transactionHistory={currentTransactionHistory}
               accountValue={currentAccountValue}
-              thrityDayAverage={thirtyDayAvr}
-              twentyDayAverage={oneTwentyDayAvr}
+              averageArray={arrayAvr}
               companies={selectedTickers}/>
+          ): priceRatioArray ? (
+            <ResultPairsTrading accountValue={currentAccountValue} 
+                                transactionHistory={currentTransactionHistory} 
+                                companies={selectedTickers}
+                                priceRatioArray={priceRatioArray} 
+                                test={test}/>
           ):(
             <Center h={"100vh"}>
               <Flex
@@ -332,6 +368,7 @@ const StrategyPage = ({userId,strategyBuyingPower,setStrategyBuyingPower,strateg
           <Button
             onClick={() => {
               setRanStrategy(false);
+              setselectedTickers([]);
             }}
           >
             Run Again
@@ -372,7 +409,7 @@ const StrategyPage = ({userId,strategyBuyingPower,setStrategyBuyingPower,strateg
 
                         <Input type="number" id="quantity" name="quantity" placeholder='Amount' onChange={handleInputChangeForSimulatedBuyingPower} w={'30'}/>
                         <Button type="submit"  >
-                            Run {name} strategy
+                            Run {formattedName} strategy
                         </Button>
                         </Flex>
 
@@ -381,7 +418,7 @@ const StrategyPage = ({userId,strategyBuyingPower,setStrategyBuyingPower,strateg
 
                     <Input type="number" id="quantity" name="quantity" placeholder='Amount' onChange={handleInputChangeForstrategyBuyingPower} w={'30'}/>
                         <Button onClick={(event) => { event.preventDefault(); addStrategyToUser(name, strategyBuyingPower, userId)}}  >
-                            set {name} strategy
+                            set {formattedName} strategy
                         </Button>
                     </Box>
 
