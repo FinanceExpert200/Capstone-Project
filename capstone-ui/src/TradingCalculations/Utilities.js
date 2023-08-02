@@ -6,7 +6,7 @@ import chalk from "chalk"
 
 
 export default class Utilities {
-  static selectedStocks = ["META","AAPL"]
+  static selectedStocks = ["META","AAPL", "AMZN", "NFLX", "CRM", "GOOGL"]
   static selectedStrategy = ''
   static numberOfDBCalls = 0 
 
