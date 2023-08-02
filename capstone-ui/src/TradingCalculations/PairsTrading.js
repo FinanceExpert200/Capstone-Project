@@ -12,6 +12,7 @@ export default class PairsTrading{
     static transactionHistory = []
     static threeMonthProfit = 0 
     static sixMonthProfit = 0 
+    static unfilteredTransactionHistory = []
 
 
 
@@ -110,12 +111,13 @@ export default class PairsTrading{
             // when the CURRENT PRICE RATIO is x number of standard deviations ABOVE the historical mean we SELL STOCK B
             // When the CURRENT PRICE RATIO reverts back to our historical mean, we SELL STOCK A  and BUY STOCK B 
 
-            if (right == Math.round((currPriceRatioArray.length / 4) * 3)) {
-                this.threeMonthProfit = this.accountValue;
+            if (right == Math.round((currPriceRatioArray.length / 4))) {
+        
+                this.threeMonthProfit = this.accountValue 
               }
         
             if (right == Math.round(currPriceRatioArray.length / 2)) {
-                this.sixMonthProfit = this.accountValue;
+                this.sixMonthProfit = this.accountValue 
               }
 
             let currentPriceRatio = currPriceRatioArray[right].priceRatio;
@@ -129,7 +131,7 @@ export default class PairsTrading{
             
         }
 
-        console.log(chalk.bgBlue.white("TOTAL ACCOUNT VALUE  ", this.threeMonthProfit, this.sixMonthProfit,this.accountValue))
+        console.log(chalk.bgBlue.white("TOTAL ACCOUNT VALUE  ", this.threeMonthProfit + this.accountValue, this.sixMonthProfit + this.accountValue,this.accountValue))
         console.log(this.transactionHistory)
         return this.transactionHistory
     }
@@ -141,92 +143,101 @@ export default class PairsTrading{
 
         if (currentPriceRatio < historicalMean - totalStandardDeviation) {
             // Buy Stock A and Sell Stock B
-
             await this.buyStockASellStockB(currentDataA,currentDataB,tickerA,tickerB)
-            this.stockACount += 1 
         }else if (currentPriceRatio > historicalMean + totalStandardDeviation) {    
-               
             await this.buyStockBSellStockA(currentDataA,currentDataB,tickerA,tickerB) 
   
         }
     }
 
-    static async buyStockASellStockB(currentDataA, currentDataB,tickerA,tickerB){
-        console.log("currentDataA", currentDataA)
-        //Buy stock A
-        //Check the buying power to see if they have enough to buy stock A 
+    static async buyStockASellStockB(currentDataA, currentDataB, tickerA, tickerB){
+        this.unfilteredTransactionHistory.push({type: "buy",ticker: tickerA, date: currentDataA.date, price: currentDataA.close });
+        this.unfilteredTransactionHistory.push({type: "sell",ticker: tickerB, date: currentDataB.date, price: currentDataB.close });
+    
         console.log(chalk.bgGreen("BUY STOCK A AND SELL STOCK B Buying power: ", this.buyingPower));
-        if(this.buyingPower < currentDataA.close){
-            console.log(chalk.red("NOT ENOUGH MONEY TO BUY THE STOCK A"))
-            
-        }
-        if(this.stockBCount < 0){
-            console.log(chalk.red("Not NOT ENOUGH STOKED B OWNED TO SELL"))
-            
+    
+        // Buy stock A
+        if(this.buyingPower >= currentDataA.close){
+            this.buyingPower = this.buyingPower - currentDataA.close;
+            this.stockACount += 1; // incremented with +=, not ==
+    
+            this.transactionHistory.push({type: "buy",ticker: tickerA, date: currentDataA.date, price: currentDataA.close });
+            console.log(`Successfully bought ${tickerA} for $${currentDataA.close}`);
+        } else {
+            console.log(chalk.red("NOT ENOUGH MONEY TO BUY THE STOCK A"));
         }
     
-        else if(this.buyingPower >= currentDataA.close){
-            this.buyingPower = this.buyingPower - currentDataA.close
-            //calculate account value
-            this.stockACount == this.stockACount + 1
-            this.transactionHistory.push({type: "buy",ticker: tickerA, date: currentDataA.date, price: currentDataA.close })
-            console.log("Successfully bought ", tickerA, " for $", currentDataA.close)
+        // Sell Stock B 
+        if(this.stockBCount > 0){
+            this.buyingPower = this.buyingPower + currentDataB.close;
+            this.stockBCount -= 1;
+    
+            this.transactionHistory.push({type: "sell",ticker: tickerB, date: currentDataB.date, price: currentDataB.close });
+            console.log(`Successfully sold ${tickerB} for $${currentDataB.close}`);
+        } else {
+            console.log(chalk.red("NOT ENOUGH STOCK B OWNED TO SELL"));
         }
-        //Sell Stock B 
-        //Check the stock quantity of Stock B to see if we have enough to sell
-        else if (this.stockBCount > 0 ){
-            this.buyingPower = this.buyingPower +currentDataB.close
-            this.stockBCount -= 1 
-            console.log("successfully sold ",tickerB," for $", currentDataB.close)
-            this.transactionHistory.push({type: "sell",ticker: tickerB, date: currentDataB.date, price: currentDataB.close })
-        } 
-
-    this.accountValue =
-      this.buyingPower +
-      this.stockACount * currentDataA.close +
-      this.stockBCount * currentDataB.close;
-    console.log(`account value is now ${this.accountValue}`);
-  }
-
-    static async buyStockBSellStockA(currentDataA, currentDataB,tickerA,tickerB){
-        console.log(chalk.bgRed.white("BUY STOCK B AND SELL STOCK A ", this.buyingPower));
-        //Buy stock B
-        //Check the buying power to see if they have enough to buy stock A 
-        if(this.buyingPower < currentDataB.close){
-            console.log(chalk.red("NOT ENOUGH MONEY TO BUY THE STOCK B"))
-            
+    
+        this.accountValue = this.buyingPower;
+        if (this.stockACount > 0) {
+          this.accountValue += this.stockACount * currentDataA.close;
         }
-        if(this.stockACount == 0){
-            console.log(chalk.red("Not NOT ENOUGH OF STOCK A OWNED TO SELL"))
-            
+        if (this.stockBCount > 0) {
+          this.accountValue += this.stockBCount * currentDataB.close;
         }
-        else if(this.buyingPower >= currentDataB.close){
-            this.buyingPower = this.buyingPower - currentDataB.close
-            //calculate account value
-            this.stockBCount = this.stockBCount + 1
-            this.transactionHistory.push({type: "buy",ticker: tickerB, date: currentDataB.date, price: currentDataB.close })
-            console.log(`Successfully Bought ${tickerB} for $${currentDataB.close}`)
-
-        }
-        //Sell Stock A
-        //Check the stock quantity of Stock B to see if we have enough to sell
-        else if (this.stockACount > 0 ){
-            this.buyingPower = this.buyingPower + currentDataA.close
-            this.stockACount -= 1
-            this.transactionHistory.push({type: "sell",ticker: tickerA, date: currentDataA.date, price: currentDataA.close })
-            console.log(`Sold ${tickerA} for $${currentDataA.close} `)
-        }
-
-        this.accountValue = this.buyingPower + (this.stockACount * currentDataA.close) + (this.stockBCount* currentDataB.close)
-        console.log(`account value is now ${this.accountValue}`)
-     
+        console.log(`Account value is now ${this.accountValue}`);
     }
+    
+
+    static async buyStockBSellStockA(currentDataA, currentDataB, tickerA, tickerB){
+        this.unfilteredTransactionHistory.push({type: "sell",ticker: tickerA, date: currentDataA.date, price: currentDataA.close });
+        this.unfilteredTransactionHistory.push({type: "buy",ticker: tickerB, date: currentDataB.date, price: currentDataB.close });
+        console.log(chalk.bgRed.white("BUY STOCK B AND SELL STOCK A ", this.buyingPower));
+    
+        // Buy stock B
+        // Check the buying power to see if they have enough to buy stock B
+        if(this.buyingPower >= currentDataB.close){
+            this.buyingPower = this.buyingPower - currentDataB.close;
+            // calculate account value
+            this.stockBCount = this.stockBCount + 1;
+            this.transactionHistory.push({type: "buy",ticker: tickerB, date: currentDataB.date, price: currentDataB.close });
+            
+            console.log(`Successfully Bought ${tickerB} for $${currentDataB.close}`);
+        } else {
+
+            console.log(chalk.red("NOT ENOUGH MONEY TO BUY THE STOCK B"));
+        }
+    
+        // Sell Stock A
+        // Check the stock quantity of Stock A to see if we have enough to sell
+        if (this.stockACount > 0){
+            this.buyingPower = this.buyingPower + currentDataA.close;
+            this.stockACount -= 1;
+            this.transactionHistory.push({type: "sell",ticker: tickerA, date: currentDataA.date, price: currentDataA.close });
+            console.log(`Sold ${tickerA} for $${currentDataA.close}`);
+        } else {
+            console.log(chalk.red("Not enough of Stock A owned to sell"));
+        }
+    
+        this.accountValue = this.buyingPower;
+        if (this.stockACount > 0) {
+          this.accountValue += this.stockACount * currentDataA.close;
+        }
+        if (this.stockBCount > 0) {
+          this.accountValue += this.stockBCount * currentDataB.close;
+        }
+        console.log(`Account value is now ${this.accountValue}`);
+    }
+    
 
     static getTransactionHistory(){ 
         return this.transactionHistory
     }
     static getAccountValue(){ 
         return[this.threeMonthProfit, this.sixMonthProfit,this.accountValue]
+    }
+    static getUnfilteredTransactionHistory(){
+        return this.unfilteredTransactionHistory
     }
 
 

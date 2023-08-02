@@ -21,26 +21,27 @@ class Transaction {
     user_id,
     trans_type,
     purchased_by,
-    transactionDate
+    transaction_date
   ) {
     //if no transaction date is given, we simply dont put anythong which will automatically set date to today
-    if (!transactionDate) {
+    console.log("TRANSACTION DATE",transaction_date)
+    if (!transaction_date) {
       try {
         console.log(
           `Adding transaction; ticker: ${ticker}, quantity: ${quantity}, curr_price: ${curr_price}, user_id: ${user_id}, trans_type: ${trans_type}, purchased_by ${purchased_by}`
         );
         const query = `
-            INSERT INTO transactions (
-              ticker,
-              quantity,
-              curr_price,
-              user_id,
-              trans_type,
-              purchased_by
-            )
-            VALUES ($1, $2, $3, $4, $5,$6)
-            RETURNING *;
-          `;
+        INSERT INTO transactions (
+            ticker,
+            quantity,
+            curr_price,
+            user_id,
+            trans_type,
+            purchased==_by
+        )
+        VALUES ($1, $2, $3, $4, $5, $6)
+        RETURNING *;
+    `;
         const values = [
           ticker,
           quantity,
@@ -56,7 +57,7 @@ class Transaction {
       }
     } else {
       console.log(
-        `Adding transaction; ticker: ${ticker}, quantity: ${quantity}, curr_price: ${curr_price}, user_id: ${user_id}, trans_type: ${trans_type}, purchased_by ${purchased_by} DATE (Strategy transaction) ${transactionDate}`
+        `Adding transaction; ticker: ${ticker}, quantity: ${quantity}, curr_price: ${curr_price}, user_id: ${user_id}, trans_type: ${trans_type}, purchased_by ${purchased_by} DATE (Strategy transaction) ${transaction_date}`
       );
       try {
         const query = `
@@ -67,7 +68,7 @@ class Transaction {
             user_id,
             trans_type,
             purchased_by,
-            created_at,
+            created_at
           )
           VALUES ($1, $2, $3, $4, $5,$6,$7)
           RETURNING *;
@@ -79,7 +80,7 @@ class Transaction {
           user_id,
           trans_type,
           purchased_by,
-          transactionDate,
+          transaction_date,
         ];
         const result = await db.query(query, values);
         return result.rows[0];
