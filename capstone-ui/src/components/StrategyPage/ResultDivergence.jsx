@@ -40,7 +40,7 @@ export default function ResultDisplay ({accountValues,transactionHistory,rsi,com
 
                     </Circle>
                 </Flex>
-                <Tabs variant='enclosed' borderColor={'black'} w={'full'} p={5} >
+          <Tabs variant='enclosed' borderColor={'black'} w={'full'} p={5} >
           <TabList p={1} >
             {companies.map((company)=>(
                 <Tab >{company}</Tab>

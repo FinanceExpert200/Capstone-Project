@@ -13,6 +13,8 @@ export default class PairsTrading{
     static threeMonthProfit = 0 
     static sixMonthProfit = 0 
 
+    static priceRatioArray =[]
+
 
 
 
@@ -97,7 +99,7 @@ export default class PairsTrading{
         let left = 0 
         let right = 49
         
-        
+        this.priceRatioArray = currPriceRatioArray;
         //Now we loop through and calculate the standard deviation fo the designated time frame. left to right pointer and calculate the average deviation
         while(right != currPriceRatioArray.length){
             //calculate average price ratio between left and right pointers
@@ -228,7 +230,9 @@ export default class PairsTrading{
     static getAccountValue(){ 
         return[this.threeMonthProfit, this.sixMonthProfit,this.accountValue]
     }
-
+    static getPriceRatio(){
+        return this.priceRatioArray
+    }
 
 
 }
