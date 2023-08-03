@@ -18,6 +18,21 @@ class Portfolio {
     return result.rows;
   }
 
+    // gets all the stock of a particular ticker of a certain user
+    static async getTickerByUser(userId, ticker) {
+      const query = `
+            SELECT *
+            FROM portfolio
+            WHERE user_id = $1 AND ticker = $2
+          `;
+  
+        const result = await db.query(query, [userId, ticker]);
+        const res = result.rows;
+        return res;
+    }
+
+
+
   // Adds a stock to the user's portfolio (Used when buying a new stock)
   static async addToUserPortfolio(ticker, quantity, curr_price, user_id) {
     // First, check if the stock is already in the table

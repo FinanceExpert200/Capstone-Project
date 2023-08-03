@@ -13,6 +13,12 @@ class Transaction {
     const exercise = result.rows;
     return exercise;
   }
+
+
+
+
+
+
   // Adds a transaction to the transaction table. Every transaction should be added here
   static async addTransactionHistory(
     ticker,

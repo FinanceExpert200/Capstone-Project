@@ -37,6 +37,8 @@ import StockCard from "../StockCard/StockCard";
 
 import { useEffect } from "react";
 import {Button,Center} from '@chakra-ui/react'
+// import { get } from '../../../../capstone-api/Routes/auth';
+// import { get } from '../../../../capstone-api/Routes/auth';
 
 
 
@@ -53,6 +55,7 @@ function App() {
 // keep for theme consistency
   // const [theme, setTheme] = useState('dark');
   // { background: black , color: white } 
+
 
 
 
@@ -164,8 +167,32 @@ function App() {
       console.log(error);
     }
   }
-  console.log("CURRENT USER ", currentUserId)
+  // console.log("CURRENT USER ", currentUserId)
  //Trading.calculateDisplayedProfit("META")
+
+//  /stock/:ticker
+
+
+// /avgbuyprice/:ticker/:user_id
+
+
+ const getTickerViaUser = async(ticker) => {
+  try {
+    const res = await axios.get(`http://localhost:3001/trans/avgbuyprice/${ticker}/${localStorage.getItem("currentUserId")}`);
+    // setAccount(res.data.account);
+    console.log("THIS IS THE WORK U WANNA SEE ", res.data.data)
+  } catch(error){
+    console.log(error.response.data.error.message)
+  } 
+}
+
+getTickerViaUser('GOOGL');
+getTickerViaUser('META');
+getTickerViaUser('AMZN');
+
+
+
+
 
   //The following 3 getter: gets the list of all stocks and account used by the user
   
@@ -173,16 +200,19 @@ function App() {
     try {
       const res = await axios.get(`http://localhost:3001/auth/profile/${localStorage.getItem("currentUserId")}`);
       setProfile(res.data.user);
+      // console.log("PROFILE ", res.data.user)
     } catch(error){
       console.log(error)
     } 
   }
 
+  // getProfile();
+
   const getAccount = async() => {
     try {
       const res = await axios.get(`http://localhost:3001/trans/account/${localStorage.getItem("currentUserId")}`);
       setAccount(res.data.account);
-      console.log("ACCOUNT ", res.data.account)
+      // console.log("ACCOUNT ", res.data.account)
     } catch(error){
       console.log(error)
     } 
@@ -192,7 +222,7 @@ function App() {
     try {
       const res = await axios.get(`http://localhost:3001/trans/portfolio/${localStorage.getItem("currentUserId")}`);
       setPortfolio(res.data.user);
-      console.log("PORTFOLIO ", res.data.user)
+      // console.log("PORTFOLIO ", res.data.user)
     } catch(error){
       console.log(error)
     } 
@@ -335,7 +365,7 @@ function App() {
   const getStrategy = async() => {
       try {
         const res = await axios.get(`http://localhost:3001/strategy/${localStorage.getItem("currentUserId")}`);
-        console.log("STRATEGY ", res.data.data)
+        // console.log("STRATEGY ", res.data.data)
         setStrategyType(res.data.data)
       } catch(error){
         console.log(error)

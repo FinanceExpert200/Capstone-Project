@@ -29,6 +29,30 @@ router.get("/stock/:ticker", async (req, res, next) => {
     next(err);
   }
 });
+
+
+
+// get the avgbuyprice of a stock for a user
+router.get("/avgbuyprice/:ticker/:user_id", async (req, res, next) => {
+
+  const ticker = req.params.ticker;
+  const user_id = req.params.user_id;
+  console.log(ticker, user_id);
+  try {
+    const data = await Portfolio.getTickerByUser(user_id, ticker);
+    console.log("DATA: ", data);
+    return res.status(200).json({ data });
+  } catch (err) {
+    console.log(err.message);
+    next(err);
+  }
+});
+
+
+
+
+
+
 // Access the Portfolio information for a specified user (Each stock they own and quantity)
 router.get("/portfolio/:id", async (req, res, next) => {
   try {

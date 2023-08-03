@@ -64,7 +64,7 @@ const Home = ({
   useEffect(() => {
     const runCurrentStrategy = async () => {
       if (strategy) {
-        console.log("Strategy in home,", strategy);
+        // console.log("Strategy in home,", strategy);
         await Utilities.runCurrentStrategy(strategy);
       }
     };
@@ -133,7 +133,7 @@ const Home = ({
               <Box>
                 <Text as={"h1"} color={"whitesmoke"}>
                   {" "}
-                  Stocks Available
+                  Stocks Owned
                 </Text>
                 {portfolio.map((item, key) => (
                   <Link to={`/trade/${item.id}`} key={item.ticker}>
@@ -204,7 +204,7 @@ const Home = ({
                 bgColor={"#111214"}
               >
                 <Text fontWeight={"medium"} color={"white"}>
-                  Total Amount:{" "}
+                  Account Value:{" "}
                 </Text>
                 <Stack
                   direction={"row"}
