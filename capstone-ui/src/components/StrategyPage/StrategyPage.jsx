@@ -1,5 +1,5 @@
 import React from "react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useParams } from "react-router";
 import "./StrategyPage.css";
 import axios from "axios"
@@ -40,9 +40,13 @@ const StrategyPage = ({userId,strategyBuyingPower,setStrategyBuyingPower,strateg
 
   const [rsi, setRsi] = useState(null);
   const [movAverage, setMovingAverage] = useState(null);
-  const [arrayAvr,setArrayAvr] = useState(null)
+  const [arrayAvr,setArrayAvr] = useState([])
   const [simulatedBuyingPower, setSimulatedBuyingPower] = useState(0)
-  const [priceRatioArray, setPriceRatioArray] = useState(null)
+  const [pairsTradeArray, setPairsTradeArray] = useState(null)
+  
+
+  //const [priceRatioArray, setPriceRatioArray] = useState(null)
+  //const [test,setTest] = useState(null);
   // Here we need to handle each of the buttons
   // This page consists of:
   // A brief description of the strategy and How it works
@@ -142,7 +146,10 @@ const StrategyPage = ({userId,strategyBuyingPower,setStrategyBuyingPower,strateg
     setArrayAvr(AvgArray);
   };
 
-
+  useEffect(() => {
+    console.log("ARRAY AVERAGE HAS CHANGED in strategy!")
+    console.log(arrayAvr)
+  }, [arrayAvr])
 
   const runEMAStrategy = async (selectedTickers) => {
     EMAStrat.mainFunc(simulatedBuyingPower, selectedTickers);
@@ -173,13 +180,15 @@ const StrategyPage = ({userId,strategyBuyingPower,setStrategyBuyingPower,strateg
       selectedStocks,
       simulatedBuyingPower
     );
-    setTest(PairsTrading.getTransactionHistory());
+    // setTest(PairsTrading.getTransactionHistory());
     setCurrentAccountValue(PairsTrading.getAccountValue());
-    setPriceRatioArray(PairsTrading.getPriceRatio())
+    // setPriceRatioArray(PairsTrading.getPriceRatio())
     setCurrentTransactionHsitory(transactionHistory);
     console.log("PAIRS TRADING DATA")
     const pairsTradingData = PairsTrading.getAllDataArray()
-    console.log(pairsTradingData)
+    setPairsTradeArray(pairsTradingData);
+    console.log("TRADE DATA", pairsTradeArray)
+    //console.log("TEST", test)
 
     
   };
@@ -201,7 +210,6 @@ const StrategyPage = ({userId,strategyBuyingPower,setStrategyBuyingPower,strateg
 
         case "movingaveragecrossover":
           if (selectedTickers.length >= 1) {
-     
             runMovingAverageCrossoverStrategy(selectedTickers);
           }
           break;
@@ -329,18 +337,18 @@ const StrategyPage = ({userId,strategyBuyingPower,setStrategyBuyingPower,strateg
               accountValues={currentAccountValue}
               companies={selectedTickers}
             />
-          ) : arrayAvr ?(
+          ) : arrayAvr ? (
             <ResultMeanReversion 
               transactionHistory={currentTransactionHistory}
               accountValue={currentAccountValue}
               averageArray={arrayAvr}
               companies={selectedTickers}/>
-          ): priceRatioArray ? (
+          ): pairsTradeArray ? (
             <ResultPairsTrading accountValue={currentAccountValue} 
                                 transactionHistory={currentTransactionHistory} 
                                 companies={selectedTickers}
-                                priceRatioArray={priceRatioArray} 
-                                test={test}/>
+                                pairsData ={pairsTradeArray}
+                               />
           ):(
             <Center h={"100vh"}>
               <Flex
