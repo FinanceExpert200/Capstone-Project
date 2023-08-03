@@ -44,6 +44,7 @@ router.get("/portfolio/:id", async (req, res, next) => {
 router.get("/history/:id", async (req, res, next) => {
   try {
     const userId = req.params.id;
+    console.log("THE ID",userId)
     const userTransactionHistory = await Transaction.getTransactionHistory(
       userId
     ); // Pass the exercise ID and user ID to the method

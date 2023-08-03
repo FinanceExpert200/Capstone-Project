@@ -37,7 +37,7 @@ class Transaction {
             curr_price,
             user_id,
             trans_type,
-            purchased==_by
+            purchased_by
         )
         VALUES ($1, $2, $3, $4, $5, $6)
         RETURNING *;

@@ -13,9 +13,6 @@ export default function ResultMeanReversion({ accountValue, transactionHistory, 
 
   useEffect(() => {
     setTimeout(()=>{
-      console.log("AVERAGE ARRAY HAS CHANGED!")
-      console.log(averageArray)
-      console.log(averageArray.length)
       fetchMeanReversionData()
       setPageUpdated(true)
     },700
@@ -23,8 +20,6 @@ export default function ResultMeanReversion({ accountValue, transactionHistory, 
   }, [averageArray])
 
   function fetchMeanReversionData() {
-    console.log("Array length in fetch: ")
-    console.log(averageArray.length)
       if (averageArray) {
         console.log("the array length is greater than zero.")
         const updatedHistory = companies.map((company) => {
@@ -36,31 +31,6 @@ export default function ResultMeanReversion({ accountValue, transactionHistory, 
       }
     }
 
-
-
-  // useEffect(() => {
-  //   async function fetchMeanReversionData() {
-  //     if (averageArray.length > 0) {
-  //       const updatedHistory = await Promise.all(companies.map((company) => {
-  //         const c = averageArray.filter((comp) => comp.ticker === company);
-  //         return { [company]: c };
-  //       }));
-  //       setMeanReversionArray(updatedHistory);
-  //     }
-
-  //     // const transaction = await Promise.all(companies.map(async (company) => {
-  //     //   return transactionHistory.filter((comp) => {
-  //     //     return comp.map((c) => {
-  //     //       return c.Ticker === company;
-  //     //     });
-  //     //   });
-  //     // }));
-  //     // setHistory(transaction);
-  //   }
-
-  //   fetchMeanReversionData();
-  // }, [companies, averageArray])
-
   console.log("Array: ",meanReversionArray);
   return (
     <Flex direction={'column'} w={'full'} h={'80vh'} mt={10} p={10} textColor={'white'}>
@@ -71,7 +41,6 @@ export default function ResultMeanReversion({ accountValue, transactionHistory, 
             <Tab >{company}</Tab>
           ))
           }
-
         </TabList>
         <TabPanels>
           {meanReversionArray.length === companies.length ? (

@@ -44,9 +44,6 @@ const StrategyPage = ({userId,strategyBuyingPower,setStrategyBuyingPower,strateg
   const [simulatedBuyingPower, setSimulatedBuyingPower] = useState(0)
   const [pairsTradeArray, setPairsTradeArray] = useState(null)
   
-
-  //const [priceRatioArray, setPriceRatioArray] = useState(null)
-  //const [test,setTest] = useState(null);
   // Here we need to handle each of the buttons
   // This page consists of:
   // A brief description of the strategy and How it works
@@ -56,7 +53,6 @@ const StrategyPage = ({userId,strategyBuyingPower,setStrategyBuyingPower,strateg
   // A part that shows the total profatibility of the straregy
   // Tiles that show the company and all trades that were made
 
-  //   let description = "";
 
   // Now we need to reormat name 
   const formatStrategyName = (name)=>{
