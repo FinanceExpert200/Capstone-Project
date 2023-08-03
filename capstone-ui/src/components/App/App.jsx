@@ -46,12 +46,12 @@ import {Button,Center} from '@chakra-ui/react'
 
 // import MeanReversionStrat from "../../TradingCalculations/MeanReversionStrat.js"
 
-export const ThemeContext = createContext();
+// export const ThemeContext = createContext();
 
 
 function App() {
 // keep for theme consistency
-  const [theme, setTheme] = useState('dark');
+  // const [theme, setTheme] = useState('dark');
   // { background: black , color: white } 
 
 
@@ -411,6 +411,7 @@ function App() {
       axios
       .get(`http://localhost:3001/trans/history/${userID}`)
       .then((response) => {
+        console.log("HISTORY in APP: ", response)
         setTransactionHistory(response.data.userTransactionHistory);
       })
       .catch((error) => {
@@ -427,7 +428,7 @@ function App() {
 
   return (
     <div className="App" >
-      <ThemeContext.Provider value={theme} >
+      {/* <ThemeContext.Provider value={theme} > */}
         <BrowserRouter>
         <main>
           <Navbar isLogged={isLogged} setIsLogged={setIsLogged} /> 
@@ -499,7 +500,7 @@ function App() {
           </Routes>
         </main>
         </BrowserRouter>
-      </ThemeContext.Provider>
+      {/* </ThemeContext.Provider> */}
 
       <br />
     </div>

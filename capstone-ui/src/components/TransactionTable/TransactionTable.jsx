@@ -6,8 +6,7 @@ import { Box, Center, Image, Text, Flex, Stack } from '@chakra-ui/react'
 const TransactionTable = ({ transactionHistory, stockData, fixedDate }) => {
   const [array, setArray] = useState([]);
   const [mergeChecker, setMergeChecker] = useState(false)
-  //convert the stockData object to an array
-  //console.log("HISTORYYY--: ", transactionHistory)
+  console.log("HISTORY: ",transactionHistory)
 
   useEffect(() => {
     if (transactionHistory && stockData) {
