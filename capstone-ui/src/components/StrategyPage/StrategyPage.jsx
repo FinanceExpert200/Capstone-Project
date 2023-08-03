@@ -40,9 +40,10 @@ const StrategyPage = ({userId,strategyBuyingPower,setStrategyBuyingPower,strateg
 
   const [rsi, setRsi] = useState(null);
   const [movAverage, setMovingAverage] = useState(null);
-  const [arrayAvr,setArrayAvr] = useState([])
-  const [simulatedBuyingPower, setSimulatedBuyingPower] = useState(0)
+  const [arrayAvr,setArrayAvr] = useState(null)
   const [pairsTradeArray, setPairsTradeArray] = useState(null)
+  //quanity set is here
+  const [simulatedBuyingPower, setSimulatedBuyingPower] = useState(0)
   
   // Here we need to handle each of the buttons
   // This page consists of:
@@ -128,8 +129,8 @@ const StrategyPage = ({userId,strategyBuyingPower,setStrategyBuyingPower,strateg
     setCurrentAccountValue(accountValue);
     setMovingAverage(ma);
   };
-  console.log("Moving Average Array -----", currentTransactionHistory);
-  console.log("PROFIT ---", currentAccountValue)
+  //console.log("Moving Average Array -----", currentTransactionHistory);
+  //console.log("PROFIT ---", currentAccountValue)
 
   const runMeanReversionStrategy = async (selectedTickers) => {
     await MeanReversionStrat.mainFunc(simulatedBuyingPower, selectedTickers);
@@ -141,11 +142,6 @@ const StrategyPage = ({userId,strategyBuyingPower,setStrategyBuyingPower,strateg
     setCurrentAccountValue(profitArray);
     setArrayAvr(AvgArray);
   };
-
-  useEffect(() => {
-    console.log("ARRAY AVERAGE HAS CHANGED in strategy!")
-    console.log(arrayAvr)
-  }, [arrayAvr])
 
   const runEMAStrategy = async (selectedTickers) => {
     EMAStrat.mainFunc(simulatedBuyingPower, selectedTickers);
@@ -195,9 +191,9 @@ const StrategyPage = ({userId,strategyBuyingPower,setStrategyBuyingPower,strateg
     event.preventDefault();
     setCurrentAccountValue(0);
     setCurrentTransactionHsitory([]);
-    console.log(name);
+    console.log(event);
 
-    if (selectedTickers.length >= 1) {
+    if (selectedTickers.length >= 1 && simulatedBuyingPower > 0) {
       setRanStrategy(true);
       switch (name) {
         case "meanreversion":
@@ -230,7 +226,9 @@ const StrategyPage = ({userId,strategyBuyingPower,setStrategyBuyingPower,strateg
           break;
       }
       setRanStrategy(true);
-    }
+    }else(
+      seterror(true)
+    )
 
     //setselectedTickers([]);
     seterror(false);
@@ -319,7 +317,7 @@ const StrategyPage = ({userId,strategyBuyingPower,setStrategyBuyingPower,strateg
     >
       {ranStrategy && currentAccountValue && currentTransactionHistory ? (
         <div>
-          {rsi ? (
+          { rsi ? (
             <ResultDivergence
               accountValues={currentAccountValue}
               transactionHistory={currentTransactionHistory}

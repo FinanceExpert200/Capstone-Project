@@ -6,7 +6,7 @@ import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, Legend, Responsi
 import { LineChart, Line,Label } from 'recharts';
 
 export default function MeanReversionGraph({ data, dataName, aspect, color, thirty, twenty }) {
-  console.log("THE ARRAY CALLED ", data)
+  //console.log("THE ARRAY CALLED ", data)
   return (
     <ResponsiveContainer width={'100%'} aspect={aspect}>
       <LineChart

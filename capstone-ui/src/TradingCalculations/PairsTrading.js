@@ -243,7 +243,7 @@ export default class PairsTrading{
 
 
 
-    static getTransactionHistory(){ 
+    static getTransactionHistory(){
         return this.transactionHistory
     }
     static getAccountValue(){ 
