@@ -37,6 +37,7 @@ const StrategyPage = ({userId,strategyBuyingPower,setStrategyBuyingPower,strateg
   const [ranStrategy, setRanStrategy] = useState(false);
   const [selectedTickers, setselectedTickers] = useState([]);
   const [error, seterror] = useState(false);
+  const [errorMessage, setErrorMessage] = useState('');
 
   const [rsi, setRsi] = useState(null);
   const [movAverage, setMovingAverage] = useState(null);
@@ -65,7 +66,7 @@ const StrategyPage = ({userId,strategyBuyingPower,setStrategyBuyingPower,strateg
         formattedName = "Moving Average Crossover"
         break
       case "divergence":
-        formattedName = "Relative StrengthI Divergence"
+        formattedName = "Relative Strength Divergence"
         break
       case "pairstrading":
         formattedName =  "Pairs Trading"
@@ -191,9 +192,10 @@ const StrategyPage = ({userId,strategyBuyingPower,setStrategyBuyingPower,strateg
     event.preventDefault();
     setCurrentAccountValue(0);
     setCurrentTransactionHsitory([]);
-    console.log(event);
+    //console.log();
 
     if (selectedTickers.length >= 1 && simulatedBuyingPower > 0) {
+      console.log('GOT ACCEPTED')
       setRanStrategy(true);
       switch (name) {
         case "meanreversion":
@@ -226,9 +228,13 @@ const StrategyPage = ({userId,strategyBuyingPower,setStrategyBuyingPower,strateg
           break;
       }
       setRanStrategy(true);
-    }else(
+    }else if(simulatedBuyingPower < 0 && selectedTickers.length >= 1){
+      console.log("BEING USED HERE ")
+      setErrorMessage("WRONG TYPE")
       seterror(true)
-    )
+
+    }
+    
 
     //setselectedTickers([]);
     seterror(false);
@@ -306,6 +312,7 @@ const StrategyPage = ({userId,strategyBuyingPower,setStrategyBuyingPower,strateg
     };
     
     console.log("selected tickers", selectedTickers);
+  
     return (
       <Box
       h={"100vh"}
