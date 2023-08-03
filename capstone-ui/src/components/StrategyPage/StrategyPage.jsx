@@ -210,7 +210,6 @@ const StrategyPage = ({userId,strategyBuyingPower,setStrategyBuyingPower,strateg
 
         case "movingaveragecrossover":
           if (selectedTickers.length >= 1) {
-     
             runMovingAverageCrossoverStrategy(selectedTickers);
           }
           break;

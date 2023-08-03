@@ -12,10 +12,14 @@ export default function ResultMeanReversion({ accountValue, transactionHistory, 
   const [pageUpdated, setPageUpdated] = useState(false)
 
   useEffect(() => {
-    console.log("AVERAGE ARRAY HAS CHANGED!")
-    console.log(averageArray)
-    fetchMeanReversionData()
-    setPageUpdated(true)
+    setTimeout(()=>{
+      console.log("AVERAGE ARRAY HAS CHANGED!")
+      console.log(averageArray)
+      console.log(averageArray.length)
+      fetchMeanReversionData()
+      setPageUpdated(true)
+    },700
+    )
   }, [averageArray])
 
   function fetchMeanReversionData() {
@@ -27,6 +31,7 @@ export default function ResultMeanReversion({ accountValue, transactionHistory, 
           const c = averageArray.filter((comp) => comp.ticker === company);
           return { [company]: c };
         });
+        console.log("Before set Meanreversion data - UPDATED history: ", updatedHistory)
         setMeanReversionArray(updatedHistory);
       }
     }
@@ -79,6 +84,7 @@ export default function ResultMeanReversion({ accountValue, transactionHistory, 
                   color="white"
                   thirty="thirtyDayAverage"
                   twenty="twentyOneAverage"
+                  key={index}
                 />
               </TabPanel>
             ))
