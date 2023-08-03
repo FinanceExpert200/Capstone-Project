@@ -30,11 +30,13 @@ export default class MeanReversionStrat {
     
     this.setBuyingPower((budget/selectedTickers.length));
 
-
-
-    selectedTickers.forEach((ticker) => {
-      this.calcPrevProfit(ticker, budget, selectedTickers);
-    });
+    for (const ticker of selectedTickers) {
+      await this.calcPrevProfit(ticker, budget, selectedTickers);
+    }
+  //console.log("THE TRADE HISTORY : ", transactionsHistory)
+    // selectedTickers.forEach((ticker) => {
+    //   this.calcPrevProfit(ticker, budget, selectedTickers);
+    // });
   }
 
   static setBuyingPower(amount) {
@@ -113,7 +115,7 @@ export default class MeanReversionStrat {
         stockCount -= 1;
       }
     }
-
+    console.log("transaction first called ", botTransactions);
     console.log("this is the year profit", profitYear, " for ", ticker);
     console.log(
       "this is the six month profit",
@@ -130,10 +132,13 @@ export default class MeanReversionStrat {
 
     // console.log("this is AT", thirtyDayMovingAvgArray)
 
-    // console.log("120 LOOKING ADWDED", oneTwentyDayMovingAvgArray);
+     
 
-    
-    transactionsHistory.push(botTransactions);
+    botTransactions.map((bot)=>{
+      //console.log('being called here!', bot)
+      transactionsHistory.push(bot);
+    })
+    //console.log('the instance of this trade: ', transactionsHistory)
     profitArray.push({[ticker]: {profitThreeMonths,profitSixMonths,profitYear}})
     console.log("profit YEAR",profitArray);
     // reseting the state for each stock
@@ -141,11 +146,19 @@ export default class MeanReversionStrat {
     botAccValue = 5000;
     stockCount = 0;
     
+
+    await this.resetState();
+    
+  }
+
+  static async resetState() {
     profitYear = 0;
     profitSixMonths = 0;
     profitThreeMonths = 0;
-    botTransactions = [];
+    //botTransactions = []
+    botTransactions.length = 0;
   }
+
 
   static executeBuy(ticker, thirtyDayWindow) {
     botTransactions.push({
@@ -267,10 +280,14 @@ export default class MeanReversionStrat {
     }
   }
   static async getTransactionHistory(){
-    return transactionsHistory
+    const placeholder = transactionsHistory;
+    transactionsHistory= []
+    return placeholder
   }
   static async getProfitArray(){
-    return profitArray
+    const placeholder = profitArray;
+    profitArray =[]
+    return placeholder
   }
   static async getThirtyDayAvgArray(){
     return thirtyDayMovingAvgArray
