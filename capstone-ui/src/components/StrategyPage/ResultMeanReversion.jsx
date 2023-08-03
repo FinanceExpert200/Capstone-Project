@@ -9,31 +9,52 @@ export default function ResultMeanReversion({ accountValue, transactionHistory, 
   const [checker, setChecker] = useState(0);
   const [meanReversionArray, setMeanReversionArray] = useState([])
   const [history,setHistory] = useState(null)
-  useEffect(() => {
-    let updatedHistory  = [];
-    if(averageArray.length > 0){
-        updatedHistory = companies.map((company) => {
-        const c = averageArray.filter((comp) => {
-          return comp.ticker === company
-        });
-          return  {[company]: c };
-        
-      });
-    }
-      if(updatedHistory.length > 0){
+  const [pageUpdated, setPageUpdated] = useState(false)
 
+  useEffect(() => {
+    console.log("AVERAGE ARRAY HAS CHANGED!")
+    console.log(averageArray)
+    fetchMeanReversionData()
+    setPageUpdated(true)
+  }, [averageArray])
+
+  function fetchMeanReversionData() {
+    console.log("Array length in fetch: ")
+    console.log(averageArray.length)
+      if (averageArray) {
+        console.log("the array length is greater than zero.")
+        const updatedHistory = companies.map((company) => {
+          const c = averageArray.filter((comp) => comp.ticker === company);
+          return { [company]: c };
+        });
         setMeanReversionArray(updatedHistory);
       }
-    const transaction = companies.map((company) => {
-      return transactionHistory.filter((comp) => comp.map((c)=>{
-        c.Ticker === company;
-
-      }))
-    });
-    setHistory(transaction);
+    }
 
 
-  }, [companies, averageArray])
+
+  // useEffect(() => {
+  //   async function fetchMeanReversionData() {
+  //     if (averageArray.length > 0) {
+  //       const updatedHistory = await Promise.all(companies.map((company) => {
+  //         const c = averageArray.filter((comp) => comp.ticker === company);
+  //         return { [company]: c };
+  //       }));
+  //       setMeanReversionArray(updatedHistory);
+  //     }
+
+  //     // const transaction = await Promise.all(companies.map(async (company) => {
+  //     //   return transactionHistory.filter((comp) => {
+  //     //     return comp.map((c) => {
+  //     //       return c.Ticker === company;
+  //     //     });
+  //     //   });
+  //     // }));
+  //     // setHistory(transaction);
+  //   }
+
+  //   fetchMeanReversionData();
+  // }, [companies, averageArray])
 
   console.log("Array: ",meanReversionArray);
   return (
