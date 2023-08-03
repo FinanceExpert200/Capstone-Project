@@ -3,12 +3,15 @@ import MovingAverageCrossover from "./MovingAverageCrossover"
 import Divergence from "./Divergence"
 import PairsTrading from "./PairsTrading"
 import chalk from "chalk"
+import { last } from "lodash"
+
 
 
 export default class Utilities {
-  static selectedStocks = ["META","AAPL", "AMZN", "NFLX", "CRM", "GOOGL"]
+  static selectedStocks = ["META", "AMZN", "NFLX", "CRM", "GOOGL"]
   static selectedStrategy = ''
   static numberOfDBCalls = 0 
+  static strategyTrades = []
 
   static async fetchHistoricalData (ticker,startDate,endDate = new Date().toISOString().split("T")[0]) {
     this.numberOfDBCalls = this.numberOfDBCalls + 1;
@@ -111,27 +114,32 @@ export default class Utilities {
 
         });
         if (res.status === 201) {
+          this.strategyTrades.push({ticker: transaction.ticker,quantity: 1,curr_price: transaction.price,user_id: strategy.user_id,trans_type: transaction.type,purchased_by: strategy.strategy_name,transaction_date: transaction.date})
           console.log(chalk.green("Transaction successfully executed from the strategy"))
         }
       } catch (err) {
-        console.log("Bot trying to sell stocks it doesnt own");
+        console.log(err);
       }
     };
   
     static async compareTransactionHistory(transactionHistory,strategy){
       const lastActive  = await this.toStartDay(strategy.last_active)
-      transactionHistory.map((transaction) => {
-        //console.log(`last active ${lastActive} transaction date ${transaction.date}`)
-        if(transaction.date>=lastActive){
-          //we want to perform the transaction 
-          this.addTransaction(transaction, strategy)
-        }
-
-      })
+      
+      // Since map function doesn't wait for promises, it's better to use a for loop
+      for (const transaction of transactionHistory) {
+          //console.log(`last active ${lastActive} transaction date ${transaction.date}`)
+          if(transaction.date>=lastActive){
+              console.log("date", transaction.date , "last ran ", lastActive)
+              //we want to perform the transaction 
+              await this.addTransaction(transaction, strategy) // await added here
+          }
+      }
+      
       let today = new Date()
       //After running the funciton, we need to update our last active date to today
-      this.updateLastActive(today.toISOString(), strategy.user_id)
-    }
+      await this.updateLastActive(today.toISOString(), strategy.user_id)
+      this.updateAccountValue(strategy.user_id)
+  }
 
     static async updateLastActive(date, userId){
       //Updates the date of the current strategy
@@ -141,7 +149,7 @@ export default class Utilities {
           user_id: userId,
         });
       } catch (err) {
-        console.log(err);
+        console.log(err.response.data);
       }
     }
 
@@ -150,6 +158,15 @@ export default class Utilities {
       date.setHours(0, 0, 0, 0); // Set hours, minutes, seconds and milliseconds to 0
       return date.toISOString();
     } 
+    static updateAccountValue = async(userId) => {
+      try {
+        const res = await axios.get(`http://localhost:3001/strategy/update/${userId}`);
+        console.log("Total share value updated")
+        console.log(this.strategyTrades)
+      } catch(error){
+        console.log(error.response.data)
+      } 
+    }
 
 
 

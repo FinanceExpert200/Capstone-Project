@@ -3,7 +3,7 @@ import './TransactionTable.css';
 import { useState, useEffect } from 'react';
 import { Box, Center, Image, Text, Flex, Stack } from '@chakra-ui/react'
 
-const TransactionTable = ({ transactionHistory, stockData, fixedDate }) => {
+const TransactionTable = ({ transactionHistory, stockData, fixedDate}) => {
   const [array, setArray] = useState([]);
   const [mergeChecker, setMergeChecker] = useState(false)
   console.log("HISTORY: ",transactionHistory)
@@ -25,6 +25,7 @@ const TransactionTable = ({ transactionHistory, stockData, fixedDate }) => {
             quantity: transaction.quantity,
             trans_type: transaction.trans_type,
             user_id: transaction.user_id,
+            purchased_by: transaction.purchased_by
 
           });
         }
@@ -36,6 +37,30 @@ const TransactionTable = ({ transactionHistory, stockData, fixedDate }) => {
     }
   }, [stockData, transactionHistory])
   //console.log("TEST",array);
+
+  const formatPurchasedBy = (name) => {
+    switch (name) {
+      case "meanreversion":
+        return "Mean Reversion";
+ 
+      case "movingaveragecrossover":
+        return "Moving Average Crossover";
+        
+      case "divergence":
+        return "Relative Strength Divergence";
+        
+      case "pairstrading":
+        return "Pairs Trading";
+   
+      case "exponentialmovingaverage":
+        return "Exponential Moving Average";
+        
+      case "user":
+        return "User";
+      default:
+        return "user"
+    }
+  };
 
   return (
       <Box p={20} w={'full'}
@@ -75,13 +100,14 @@ const TransactionTable = ({ transactionHistory, stockData, fixedDate }) => {
 
                       <Text as={'h1'} fontWeight={'bold'} mb={0}>{transaction.stockName}</Text>
                       <Text>{transaction.company}</Text>
+                      <Text>Transaction Made By {formatPurchasedBy(transaction.purchased_by)} </Text>
                     </Stack>
 
                   </Stack>
 
                   <Stack direction={'column'} justify="flex-end" >
                     <Text  as={'h1'} fontWeight={'bold'} mb={0}>${transaction.curr_price}</Text>
-                    <Text ml={125} fontSize={'20px'}>{transaction.quantity} Stock</Text>
+                    <Text ml={125} fontSize={'20px'}>Quantity: {transaction.quantity}</Text>
                   </Stack>
                 </Stack>
 

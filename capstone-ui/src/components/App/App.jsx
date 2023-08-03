@@ -481,7 +481,7 @@ getTickerViaUser('AMZN');
             />
             <Route
               path="/transaction"
-              element={isLogged?(<TransactionTable transactionHistory={transactionHistory} stockData={stockData} fixedDate={fixedDate} />):(<LandingPage />)}
+              element={isLogged?(<TransactionTable transactionHistory={transactionHistory} stockData={stockData} fixedDate={fixedDate} username = {profile} />):(<LandingPage />)}
                 
               
             />

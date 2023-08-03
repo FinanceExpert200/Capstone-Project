@@ -21,6 +21,7 @@ import MeanReversionStrat from "../../TradingCalculations/MeanReversionStrat.js"
 import MovingAverageCrossover from "../../TradingCalculations/MovingAverageCrossover.js";
 import Divergence from "../../TradingCalculations/Divergence.js";
 import Utilities from "../../TradingCalculations/Utilities.js";
+import ClickPopover from "../Popover/Popover"
 // import { ThemeContext } from "../App/App";
 // importy history
 
@@ -66,6 +67,7 @@ const Home = ({
       if (strategy) {
         // console.log("Strategy in home,", strategy);
         await Utilities.runCurrentStrategy(strategy);
+        await getAccount()
       }
     };
     runCurrentStrategy();
@@ -101,7 +103,7 @@ const Home = ({
         formattedStrategyName = "Moving Average Crossover";
         break
       case "divergence":
-        formattedStrategyName = "Relative StrengthI Divergence";
+        formattedStrategyName = "Relative Strength Divergence";
         break
       case "pairstrading":
         formattedStrategyName = "Pairs Trading";
@@ -134,9 +136,10 @@ const Home = ({
                 <Text as={"h1"} color={"whitesmoke"}>
                   {" "}
                   Stocks Owned
+                  Stocks Owned
                 </Text>
                 {portfolio.map((item, key) => (
-                  <Link to={`/trade/${item.id}`} key={item.ticker}>
+                  <Link to={`/trade`} key={item.ticker}>
                     <Box borderRadius={25} bgColor={"#111214"} p={3} mb={5}>
                       <Text
                         align={"center"}
@@ -170,7 +173,7 @@ const Home = ({
                 p={10}
                 color={"white"}
               >
-                <Text>No stock available</Text>
+                <Text>No stocks owned</Text>
                 <Button
                   bgColor={"green.400"}
                   onClick={(event) => {
@@ -204,7 +207,7 @@ const Home = ({
                 bgColor={"#111214"}
               >
                 <Text fontWeight={"medium"} color={"white"}>
-                  Account Value:{" "}
+                  <ClickPopover word="Account Value" display = "Account Value" color ={"white"} description= "The account value is your buying power and the current price of all your stocks added together. If you had $20 in your pocket and owned a salesforce stock, your account value would be $20 plus the current price of the stock"/>{" "}
                 </Text>
                 <Stack
                   direction={"row"}
@@ -224,7 +227,8 @@ const Home = ({
                 bgColor={"#111214"}
               >
                 <Text fontWeight={"medium"} fontSize={"18"} color={"white"}>
-                  Buying Power:{" "}
+                <ClickPopover word="Buying Power" display = "Buying Power" color ={"white"} description= "Buying power is the amount of money you have to buy stocks. If you had $20 and owned a salesforce stock, your buying power would be $20"/>{" "}
+{" "}
                 </Text>
                 <Stack
                   direction={"row"}

@@ -11,12 +11,14 @@ router.get("/account/:id", async (req, res, next) => {
   try {
     const userId = req.params.id;
     const account = await Portfolio.fetchUserAccountById(userId); // Pass the exercise ID and user ID to the method
+    
     return res.status(200).json({ account }); // Use 200 OK status code for a successful response
   } catch (err) {
     console.error("Error is: ", err);
     next(err);
   }
 });
+
 router.get("/stock/:ticker", async (req, res, next) => {
   const ticker = req.params.ticker;
   console.log(ticker);
@@ -195,5 +197,6 @@ router.post("/historical", async (req, res, next) => {
     console.error(error);
   }
 });
+
 router.post("/", async (req, res, next) => {});
 module.exports = router;

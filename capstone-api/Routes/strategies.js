@@ -55,7 +55,19 @@ router.get("/:id", async (req, res, next) => {
       next(err);
     }
 });
-
+router.get("/update/:id", async (req, res, next) => {
+  const userId = req.params.id;
+  console.log("userID")
+  console.log(userId);
+  try {
+    await Portfolio.calculateTotalShareValue(userId);
+    console.log("Total share value updated");
+    return res.status(200).json("Total share value updated");
+  } catch (err) {
+    console.log(err.message);
+    next(err);
+  }
+});
 
 
 

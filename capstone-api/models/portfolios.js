@@ -209,13 +209,15 @@ class Portfolio {
     `;
     const values = [user_id, ticker];
     const result = await db.query(checkPortfolioQuery, values);
-    console.log(result.rows[0].quantity)
-    if (result.rows[0].quantity == 0) {
-      throw new Error(ticker, "stock Not owned");
+
+    // Check if the query returned any rows
+    if (result.rows.length === 0) {
+        throw new Error(ticker + " stock not owned");
     } else {
-      return result.rows[0].quantity
+        console.log(result.rows[0].quantity)
+        return result.rows[0].quantity
     }
-  }
+}
 
   static async calculateTotalShareValue(user_id) {
     let currentUser = await this.fetchUserAccountById(user_id);
@@ -276,6 +278,7 @@ class Portfolio {
   }
   //gets the users account using their user ID
   static async fetchUserAccountById(user_id) {
+    
     const query = `
         SELECT *
         FROM account

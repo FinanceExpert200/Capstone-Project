@@ -9,6 +9,8 @@ import axios from "axios";
 import { useParams } from "react-router-dom";
 import SingleStockGraph from "../Graph/SingleStockGraph";
 import PopupConfirmation from "./PopupConfirmation";
+import Popover from "../Popover/Popover"
+
 
 export default function StockCard({
   updateStockPrice,
@@ -101,25 +103,25 @@ export default function StockCard({
 
             <Image src={stockInfo.logo} w={100} h={100} borderRadius={'full'} bgColor={'white'} />
             <Text fontSize={70} color={'white'} fontWeight={'light'}>
-              {stockInfo.stockName}
+              <Popover word ="Ticker" display ={stockInfo.stockName} color = "white"  description={"A ticker is just a nickname for a companies stock. Every stock has a different ticker."} />
             </Text>
             <Text fontSize={20} mt={'10'} color={'white'} fontWeight={'light'}>{stockInfo.company}</Text>
 
 
           </Stack>
           <Stack direction={'row'} mt={5} ml={20}>
-            <Text fontSize={45} color={'white'} fontWeight={'light'}> {stockInfo.stockPrice} USD</Text>
+            <Text fontSize={45} color={'white'} fontWeight={'light'}><Popover word = "Current Price" display = {stockInfo.stockPrice.toFixed(2)} color ='white'  description = {`This is the current price of a stock. This price can change every second from people buying and selling the stock. Check the price again in a few minutes and the price will likely have changed`}/>  USD</Text>
             {stockInfo.stockPercentage > 0 ? (
               <Stack direction={'row'} ml={5} mt={5}>
                 <ArrowUpIcon color={'#00f008'} w={10} h={10} />
-                <Text fontSize={25} color={'#00f008'} fontWeight={'light'} > {stockInfo.stockPercentage} % </Text>
+                <Text fontSize={25} color={'#00f008'} fontWeight={'light'} > {<Popover word = "Percent Change" display = {stockInfo.stockPercentage.toFixed(1)} color = {'#00f008'} description = {`The percent change is how much the price has gone up or down compared to the previous day. In this case the price has gone up by ${stockInfo.stockPercentage.toFixed(1)}% since yesterday`}/>} % </Text>
 
               </Stack>
 
             ) : (
               <Stack direction={'row'} ml={5} mt={5}>
                 <ArrowDownIcon color={'red'} w={10} h={10} />
-                <Text fontSize={25} color={'red'} > {stockInfo.stockPercentage} % </Text>
+                <Text fontSize={25} color={'red'} > {<Popover word = "Percent Change" display = {stockInfo.stockPercentage.toFixed(1)} color ='red'  description = {`The percent change is how much the price has gone up or down compared to the previous day. In this case the price has gone down by ${stockInfo.stockPercentage.toFixed(1)}% since yesterday`}/>} % </Text>
               </Stack>
 
             )}

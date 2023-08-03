@@ -19,6 +19,24 @@ export default function Trade({
     updateStockPrice(tickers);
   };
 
+  const formattedStockName = (name) => {
+    switch (name) {
+      case "NFLX":
+        return "Netflix";
+      case "META":
+        return "Facebook";
+      case "CRM":
+        return "Salesforce";
+
+      case "AMZN":
+        return "Amazon";
+      case "GOOGL":
+        return "Google";
+      default:
+        break;
+    }
+  };
+
   const Card = ({route,price,name}) => {
     return (
       <Box
@@ -34,6 +52,7 @@ export default function Trade({
           <Stack align={'center'} spacing={2}>
             <Box mt={2} textColor={'white'}>
               <Heading fontSize={'50px'}>{name}</Heading>
+              <Text>{formattedStockName(name)}</Text>
               {price && (
               <Text mt={1} fontSize={'25px'}>${price.toFixed(2)}</Text>
               )}

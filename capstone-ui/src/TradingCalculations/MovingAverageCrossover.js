@@ -117,7 +117,7 @@ export default class Trading {
 
   // Function to calculate displayed profit over a year period
   static async calculateIndividualShare(ticker, budgetPerStock) {
-    const startDate = this.getDatePrior(550);
+    const startDate = this.getDatePrior(600);
     const sixMonthsPrior = this.getDatePrior(180);
     const threeMonthsPrior = this.getDatePrior(90);
     const currentDate = this.getDatePrior(0);
@@ -142,6 +142,7 @@ export default class Trading {
       this.calculateMovingAverage(oneYearHistoricalData, oneYearHistoricalData[leftPointer].date, oneYearHistoricalData[rightPointer].date, ticker);
 
       if (rightPointer == Math.round((oneYearHistoricalData.length / 4))) {
+        console.log("three months hit, account value is ", this.botAccountValue)
         this.threeMonthProfit = this.botAccountValue;
       }
 

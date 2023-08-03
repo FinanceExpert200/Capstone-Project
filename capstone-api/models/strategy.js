@@ -68,7 +68,6 @@ class Strategy{
                 return null;
             }
             console.log(user);
-            await Portfolio.calculateTotalShareValue(userId)
             return user;
         } catch (err) {
             console.error(`Failed to get strategies for user with ID ${userId}: ${err}`);
@@ -108,16 +107,15 @@ class Strategy{
     static async buyShare(ticker, quantity, currPrice, userId){
         const currentBuyingPower = await this.getStrategyBuyingPower(userId)
         const totalStockValue = Number.parseFloat(currPrice) * quantity
-        
+
         if(Number.parseFloat(currentBuyingPower) > totalStockValue){
             console.log("updated Buying Power " , totalStockValue , quantity, currentBuyingPower)
             const newBuyingPower = Number.parseFloat(currentBuyingPower) - totalStockValue
             await this.updateBuyingPower(newBuyingPower.toString(), userId)
             await Portfolio.addToUserPortfolio(ticker, quantity, currPrice, userId)
-            await Portfolio.calculateTotalShareValue(userId)
         }
         else{
-            console.error("Insufficient funds to make the transaction")
+            throw new Error("Insufficient Funds to buy stock")
         }
         
         
@@ -141,8 +139,7 @@ class Strategy{
             //update buying power for strategy
             await this.updateBuyingPower(newBuyingPower.toString(), userId)
             console.log(`Updating Buying power to ${newBuyingPower}`)
-            // Finally update the account value 
-            await Portfolio.calculateTotalShareValue(userId)
+            
 
         }
     }

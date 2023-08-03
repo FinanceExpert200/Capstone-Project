@@ -415,7 +415,7 @@ const StrategyPage = ({userId,strategyBuyingPower,setStrategyBuyingPower,strateg
 
                         <Input type="number" id="quantity" name="quantity" placeholder='Amount' onChange={handleInputChangeForSimulatedBuyingPower} w={'30'}/>
                         <Button type="submit"  >
-                            Run {formattedName} strategy
+                            Simulate {formattedName} Strategy
                         </Button>
                         </Flex>
 
@@ -424,7 +424,7 @@ const StrategyPage = ({userId,strategyBuyingPower,setStrategyBuyingPower,strateg
 
                     <Input type="number" id="quantity" name="quantity" placeholder='Amount' onChange={handleInputChangeForstrategyBuyingPower} w={'30'}/>
                         <Button onClick={(event) => { event.preventDefault(); addStrategyToUser(name, strategyBuyingPower, userId)}}  >
-                            set {formattedName} strategy
+                            Add {formattedName} Strategy To Account
                         </Button>
                     </Box>
 
