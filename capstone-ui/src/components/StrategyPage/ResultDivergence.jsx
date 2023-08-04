@@ -24,7 +24,7 @@ export default function ResultDisplay({ accountValues, transactionHistory, rsi, 
 
 
   return (
-    <Flex direction={'column'} w={'full'} h={'80vh'} mt={10} p={10} textColor={'#03314b'}>
+    <Flex direction={'column'} w={'full'} h={'full'} mt={10} p={10} textColor={'#03314b'}>
       <Box bgColor={'#03314b'} minH={'30vh'} w={'full'} p={7}>
         <Flex direction={'row'} w={'full'} justify={'space-between'} textColor={'white'}>
           <Heading fontWeight={'light'}>Divergence Strategy</Heading>

@@ -305,7 +305,7 @@ const Home = ({
                   textColor={'#1ecc97'}
                 >
                   <Text >$</Text>
-                  <Text >{account.acc_value}</Text>
+                  <Text >{account.buying_power}</Text>
                 </Stack>
 
           </Square>
