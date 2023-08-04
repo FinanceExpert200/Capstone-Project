@@ -174,7 +174,6 @@ const Home = ({
                 <Text as={"h1"} color={"whitesmoke"}>
                   {" "}
                   Stocks Owned
-                  Stocks Owned
                 </Text>
                 {portfolio.map((item, key) => (
                   <Link to={`/trade`} key={item.ticker}>
@@ -287,63 +286,71 @@ const Home = ({
             </Stack>
 
             <Stack direction={"row"}>
-              {strategy && (
-                <Container>
-                  <Container
-                    width={"30%"}
-                    fontSize={"18"}
-                    borderRadius={15}
-                    bgColor={"#111214"}
-                  >
-                    <Text
-                      fontWeight={"medium"}
-                      textDecoration={"underline"}
-                      color={"white"}
-                    >
-                      Strategy:{" "}
-                    </Text>
-                    <Button
-                      bgColor={"green.400"}
-                      onClick={(event) => {
-                        removeStrategy();
-                      }}
-                    >
-                      Remove Strategy
-                    </Button>
-                    <Stack
-                      direction={"row"}
-                      justifyContent={"center"}
-                      fontSize={"40"}
-                    >
-                      <Text color={"#00f008"}>{formattedStrategyName}</Text>
-                    </Stack>
-                  </Container>
+            {strategy && (
+    <Container
+      display={"flex"}
+      flexDirection={"column"}
+      alignItems={"center"}
+      justifyContent={"center"}
+      width={"30%"}
+      fontSize={"18"}
+      borderRadius={15}
+      bgColor={"#111214"}
+      mb={4}
+    >
+      <Text
+        fontWeight={"medium"}
+        textDecoration={"underline"}
+        color={"white"}
+      >
+        Strategy:{" "}
+      </Text>
+      <Button
+        bgColor={"green.400"}
+        onClick={(event) => {
+          removeStrategy();
+        }}
+        mt={2}
+      >
+        Remove Strategy
+      </Button>
+      <Stack
+        direction={"row"}
+        justifyContent={"center"}
+        fontSize={"40"}
+        mt={2}
+      >
+        <Text color={"#00f008"}>{formattedStrategyName}</Text>
+      </Stack>
 
-                  <Container
-                    width={"30%"}
-                    fontSize={"18"}
-                    borderRadius={15}
-                    bgColor={"#111214"}
-                  >
-                    <Text
-                      fontWeight={"medium"}
-                      fontSize={"18"}
-                      color={"white"}
-                      textDecoration={"underline"}
-                    >
-                      Strategy Buying Power:{" "}
-                    </Text>
-                    <Stack
-                      direction={"row"}
-                      justifyContent={"center"}
-                      fontSize={"40px"}
-                    >
-                      <Text color={"#00f008"}>$</Text>
-                      <Text color={"#00f008"}>{strategy.buying_power}</Text>
-                    </Stack>
-                  </Container>
-                </Container>
-              )}
+      <Container
+        width={"100%"}
+        fontSize={"18"}
+        borderRadius={15}
+        bgColor={"#111214"}
+        mt={4}
+      >
+        <Text
+          fontWeight={"medium"}
+          fontSize={"18"}
+          color={"white"}
+          textDecoration={"underline"}
+        >
+          Strategy Buying Power:{" "}
+        </Text>
+        <Stack
+          direction={"row"}
+          justifyContent={"center"}
+          fontSize={"40px"}
+          mt={2}
+        >
+          <Text color={"#00f008"}>$</Text>
+          <Text color={"#00f008"}>{strategy.buying_power}</Text>
+        </Stack>
+      </Container>
+    </Container>
+)}
+
             </Stack>
 
             <StockGraph priceList={historicalData} />

@@ -7,7 +7,7 @@ import { Heading, Button, Box, Center, Circle, Square, Stack, Text, Flex,
 import StrategyGraph from '../Graph/StrategyGraph';
 //maArray, transactionHistory, accountValues
 
-export default function MovingAverageResult({ maArray, transactionHistory, accountValues, companies }) {
+export default function MovingAverageResult({ maArray, transactionHistory, accountValues, companies, buyingPower }) {
   console.log('Moving Average Result: ', transactionHistory)
   const [history, setHistory] = useState([]);
   const [transHistory, setTransHistory] = useState([])
@@ -24,7 +24,9 @@ export default function MovingAverageResult({ maArray, transactionHistory, accou
     setTransHistory(updatedTransaction)
 
   }, [companies, transactionHistory])
-  console.log("HISTORY_____ ", transHistory)
+  
+  console.log("BO", buyingPower)
+
   return (
     <Flex direction={'column'} w={'full'} h={'80vh'} mt={10} p={10} textColor={'white'}>
       <Heading>Moving Average</Heading>
@@ -53,18 +55,21 @@ export default function MovingAverageResult({ maArray, transactionHistory, accou
       <Flex direction={'row'} justify={'space-between'}>
         <Flex direction={'row'} >
           <Circle m={2} bgColor={'white'} w={'200px'} h={'200px'} display={'flex'} flexDirection={'column'}>
-            <Text color={'green.600'} fontSize={30}>${Number(accountValues[0]).toFixed(2)}</Text>
-            <Text color={'black'} fontSize={30}>3 month</Text>
+            <Text color={'black'} fontSize={30}>3 Month Profit</Text>
+            <Text color={Number(accountValues[0]) < 0 ? 'red.600' : 'green.600'} fontSize={30}>${Number(accountValues[0]).toFixed(2)}</Text>
+            
 
           </Circle>
           <Circle m={2} bgColor={'white'} w={'200px'} h={'200px'} display={'flex'} flexDirection={'column'}>
-            <Text color={'green.600'} fontSize={30}>${Number(accountValues[1]).toFixed(2)}</Text>
-            <Text color={'black'} fontSize={30}>6 month</Text>
+          <Text color={'black'} fontSize={30}>6 Month Profit</Text>
+          <Text color={Number(accountValues[1]) < 0 ? 'red.600' : 'green.600'} fontSize={30}>${Number(accountValues[1]).toFixed(2)}</Text>
+            
 
           </Circle>
           <Circle m={2} bgColor={'white'} w={'200px'} h={'200px'} display={'flex'} flexDirection={'column'}>
-            <Text color={'green.600'} fontSize={30}>${Number(accountValues[2]).toFixed(2)}</Text>
-            <Text color={'black'} fontSize={30}>1 year</Text>
+            <Text color={'black'} fontSize={30}>1 Year Profit</Text>
+            <Text color={Number(accountValues[2]) < 0 ? 'red.600' : 'green.600'} fontSize={30}>${Number(accountValues[2]).toFixed(2)}</Text>
+            
 
           </Circle>
         </Flex>

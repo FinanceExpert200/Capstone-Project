@@ -566,6 +566,10 @@ function App() {
                       historicalGoogle,
                       historicalMeta
                     )}
+                  account = {account}
+                  getAccount = {getAccount}
+                  getPortfolio={getPortfolio}
+                  portfolio = {portfolio}
                   />
                 ) : (
                   <Center

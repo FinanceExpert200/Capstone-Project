@@ -8,6 +8,7 @@ import {
 import { format, parseISO } from "date-fns"
 import PairsTradeGraph from "../Graph/PairsTradeGraph";
 
+
 export default function ResultMeanReversion({ accountValue, transactionHistory, companies, pairsData }) {
     // console.log("account:___", accountValue)
     // console.log("history:___", transactionHistory)
@@ -35,18 +36,21 @@ export default function ResultMeanReversion({ accountValue, transactionHistory, 
 
                 <Flex direction={'row'} >
                     <Circle m={2} bgColor={'white'} w={'200px'} h={'200px'} display={'flex'} flexDirection={'column'}>
-                        <Text color={'green.600'} fontSize={30}>${Number(accountValue[0]).toFixed(2)}</Text>
-                        <Text color={'black'} fontSize={30}>3 month</Text>
+                    <Text color={'black'} fontSize={30}>3 month</Text>
+                    <Text color={Number(accountValue[0]) < 0 ? 'red.600' : 'green.600'} fontSize={30}>${Number(accountValue[0]).toFixed(2)}</Text>
+
 
                     </Circle>
                     <Circle m={2} bgColor={'white'} w={'200px'} h={'200px'} display={'flex'} flexDirection={'column'}>
-                        <Text color={'green.600'} fontSize={30}>${Number(accountValue[1]).toFixed(2)}</Text>
-                        <Text color={'black'} fontSize={30}>6 month</Text>
+                    <Text color={'black'} fontSize={30}>6 month</Text>
+                    <Text color={Number(accountValue[1]) < 0 ? 'red.600' : 'green.600'} fontSize={30}>${Number(accountValue[1]).toFixed(2)}</Text>
+                        
 
                     </Circle>
                     <Circle m={2} bgColor={'white'} w={'200px'} h={'200px'} display={'flex'} flexDirection={'column'}>
-                        <Text color={'green.600'} fontSize={30}>${Number(accountValue[2]).toFixed(2)}</Text>
-                        <Text color={'black'} fontSize={30}>1 year</Text>
+                    <Text color={'black'} fontSize={30}>1 year</Text>
+                    <Text color={Number(accountValue[2]) < 0 ? 'red.600' : 'green.600'} fontSize={30}>${Number(accountValue[2]).toFixed(2)}</Text>
+                        
 
                     </Circle>
                 </Flex>

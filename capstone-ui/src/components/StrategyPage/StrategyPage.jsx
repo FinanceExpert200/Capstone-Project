@@ -59,13 +59,13 @@ const StrategyPage = ({userId,strategyBuyingPower,setStrategyBuyingPower,strateg
   const formatStrategyName = (name)=>{
     switch (name) {
       case "meanreversion":
-
         formattedName =  "Mean Reversion"
+        break
       case "movingaveragecrossover":
         formattedName = "Moving Average Crossover"
         break
       case "divergence":
-        formattedName = "Relative StrengthI Divergence"
+        formattedName = "Relative Strength Divergence"
         break
       case "pairstrading":
         formattedName =  "Pairs Trading"
@@ -125,8 +125,10 @@ const StrategyPage = ({userId,strategyBuyingPower,setStrategyBuyingPower,strateg
     let ma = MovingAverageCrossover.getMovingAverages();
     console.log("account value ------", accountValue);
     console.log("Trade Averages ----- ", ma);
+
     setCurrentTransactionHsitory(transactionHistory);
-    setCurrentAccountValue(accountValue);
+    let result = accountValue.map(value => value - simulatedBuyingPower);
+    setCurrentAccountValue(result);
     setMovingAverage(ma);
   };
   //console.log("Moving Average Array -----", currentTransactionHistory);
@@ -147,6 +149,11 @@ const StrategyPage = ({userId,strategyBuyingPower,setStrategyBuyingPower,strateg
     EMAStrat.mainFunc(simulatedBuyingPower, selectedTickers);
   };
 
+  if(simulatedBuyingPower != 0 ){
+    console.log("SimulatedBuyingPower ",simulatedBuyingPower)
+  }
+
+
 
   const runDivergenceStrategy = async (selectedStocks) => {
     try {
@@ -156,9 +163,9 @@ const StrategyPage = ({userId,strategyBuyingPower,setStrategyBuyingPower,strateg
           simulatedBuyingPower,
           selectedStocks
         );
+        let result = returnedArray.map(value => value - simulatedBuyingPower);
       setCurrentTransactionHsitory(transactionHistory);
-
-            setCurrentAccountValue(returnedArray)
+            setCurrentAccountValue(result)
             const RSI = await Divergence.getRSIData()
             //set a var array to display in front end
             setRsi(RSI);
@@ -172,8 +179,10 @@ const StrategyPage = ({userId,strategyBuyingPower,setStrategyBuyingPower,strateg
       selectedStocks,
       simulatedBuyingPower
     );
+    let accountValue  = PairsTrading.getAccountValue()
     // setTest(PairsTrading.getTransactionHistory());
-    setCurrentAccountValue(PairsTrading.getAccountValue());
+    let result = accountValue.map(value => value - simulatedBuyingPower);
+    setCurrentAccountValue(result)
     // setPriceRatioArray(PairsTrading.getPriceRatio())
     setCurrentTransactionHsitory(transactionHistory);
     console.log("PAIRS TRADING DATA")
@@ -305,7 +314,9 @@ const StrategyPage = ({userId,strategyBuyingPower,setStrategyBuyingPower,strateg
         }
     };
     
-    console.log("selected tickers", selectedTickers);
+    console.log("selected tickers", buyingPower);
+
+    
     return (
       <Box
       h={"100vh"}
@@ -323,6 +334,7 @@ const StrategyPage = ({userId,strategyBuyingPower,setStrategyBuyingPower,strateg
               transactionHistory={currentTransactionHistory}
               rsi={rsi}
               companies={selectedTickers}
+              buyingPower={buyingPower}
             />
           ) : movAverage ? (
             <ResultMovingAverage
@@ -330,18 +342,22 @@ const StrategyPage = ({userId,strategyBuyingPower,setStrategyBuyingPower,strateg
               transactionHistory={currentTransactionHistory}
               accountValues={currentAccountValue}
               companies={selectedTickers}
+              buyingPower={buyingPower}
             />
           ) : arrayAvr ? (
             <ResultMeanReversion 
               transactionHistory={currentTransactionHistory}
               accountValue={currentAccountValue}
               averageArray={arrayAvr}
-              companies={selectedTickers}/>
+              companies={selectedTickers}
+              buyingPower={buyingPower}/>
+              
           ): pairsTradeArray ? (
             <ResultPairsTrading accountValue={currentAccountValue} 
                                 transactionHistory={currentTransactionHistory} 
                                 companies={selectedTickers}
                                 pairsData ={pairsTradeArray}
+                                buyingPower={simulatedBuyingPower}
                                />
           ):(
             <Center h={"100vh"}>
@@ -351,22 +367,20 @@ const StrategyPage = ({userId,strategyBuyingPower,setStrategyBuyingPower,strateg
                 fontSize={"50px"}
               >
                 <Stack m={3}>
-                  <Text color={"green.600"}>
-                    ${Number(currentAccountValue[0]).toFixed(2)}
-                  </Text>
-                  <Text>3 month</Text>
+                  <Text color={"green.600"}>${Number(currentAccountValue[0]).toFixed(2)}</Text>
+                  <Text>3 Month Profit</Text>
                 </Stack>
                 <Stack m={3}>
                   <Text color={"green.600"}>
                     ${Number(currentAccountValue[1]).toFixed(2)}
                   </Text>
-                  <Text>6 month</Text>
+                  <Text>6 Month Profit</Text>
                 </Stack>
                 <Stack m={3}>
                   <Text color={"green.600"}>
                     ${Number(currentAccountValue[2]).toFixed(2)}
                   </Text>
-                  <Text>1 year</Text>
+                  <Text>1 Year Profit</Text>
                 </Stack>
               </Flex>
             </Center>

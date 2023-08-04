@@ -25,18 +25,21 @@ export default function ResultDisplay ({accountValues,transactionHistory,rsi,com
                
                 <Flex direction={'row'} >
                     <Circle m={2} bgColor={'white'} w={'200px'} h={'200px'} display={'flex'} flexDirection={'column'}>
-                        <Text color={'green.600'} fontSize={30}>${Number(accountValues[0]).toFixed(2)}</Text> 
-                        <Text color={'black'} fontSize={30}>3 month</Text>
+                    <Text color={'black'} fontSize={30}>3 Month Profit</Text>
+                    <Text color={Number(accountValues[0]) < 0 ? 'red.600' : 'green.600'} fontSize={30}>${Number(accountValues[0]).toFixed(2)}</Text>
+                      
 
                     </Circle>
                     <Circle m={2} bgColor={'white'} w={'200px'} h={'200px'} display={'flex'} flexDirection={'column'}>
-                        <Text color={'green.600'} fontSize={30}>${Number(accountValues[1]).toFixed(2)}</Text> 
-                        <Text color={'black'} fontSize={30}>6 month</Text>
+                    <Text color={'black'} fontSize={30}>6 Month Profit</Text>
+                    <Text color={Number(accountValues[1]) < 0 ? 'red.600' : 'green.600'} fontSize={30}>${Number(accountValues[1]).toFixed(2)}</Text>
+                      
 
                     </Circle>
                     <Circle m={2} bgColor={'white'} w={'200px'} h={'200px'} display={'flex'} flexDirection={'column'}>
-                        <Text color={'green.600'} fontSize={30}>${Number(accountValues[2]).toFixed(2)}</Text> 
-                        <Text color={'black'} fontSize={30}>1 year</Text>
+                    <Text color={'black'} fontSize={30}>1 Year Profit</Text>
+                    <Text color={Number(accountValues[2]) < 0 ? 'red.600' : 'green.600'} fontSize={30}>${Number(accountValues[2]).toFixed(2)}</Text>
+                    
 
                     </Circle>
                 </Flex>
