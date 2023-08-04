@@ -273,11 +273,14 @@ export default function ResultMeanReversion({
                             <Td>{c.Ticker}</Td>
                             <Td>{format(parseISO(c.Date), "MMM, d, yyyy")}</Td>
                             <Td>
-                              <Tag bg="whiteAlpha.600">
-                                {c.Type.slice(0, 1).toUpperCase() +
-                                  c.Type.slice(1, c.Type.length)}
-                              </Tag>
-                            </Td>
+                            {c.type === 'buy' ? (
+                              <Tag colorScheme='green'>{c.Type.slice(0, 1).toUpperCase() + c.Type.slice(1, c.Type.length)}</Tag>
+
+                            ):(
+                              <Tag colorScheme='red'>{c.Type.slice(0, 1).toUpperCase() + c.Type.slice(1, c.Type.length)}</Tag>
+                            )}
+                            
+                          </Td>
                             <Td isNumeric>${c.Price.toFixed(2)}</Td>
                           </Tr>
                         ))}
@@ -304,17 +307,7 @@ export default function ResultMeanReversion({
             )}
           </TabPanels>
 
-          {/* <TabPanels>
-            {transHistory.map((company) => (
-              <TabPanel key={company} overflow="scroll" h={'25vh'}>
-                <Flex direction={'column'} justify={'space-between'} align={'center'}>
-                  {company.map((c) => (
-                    <Text key={c.ticker}>{c.ticker}</Text>
-                  ))}
-                </Flex>
-              </TabPanel>
-            ))}
-          </TabPanels> */}
+
         </Tabs>
       </Flex>
     </Flex>

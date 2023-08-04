@@ -85,30 +85,13 @@ export default function MovingAverageResult({
           </Text>
         </Flex>
       </Box>
-
-      <Container
-        color="#edf0f5"
-        p={4}
-        w={"full"}
-        mt={"-120px"}
-        h={300}
-        boxShadow={"0,2px,5px,rgba(0,0,0,0.2)"}
-      >
-        <Flex
-          direction={"row"}
-          justify={"space-between"}
-          bgColor={"#edf0f5"}
-          borderRadius={"5"}
-          pl={3}
-          pr={3}
-          boxShadow={"20px 20px 90px grey"}
-        >
-          <Square
-            w={"auto"}
-            h={"200px"}
-            display={"flex"}
-            flexDirection={"column"}
-            justify={"center"}
+      <Container color='#edf0f5' p={4} w={'full'} mt={'-120px'}  h={300} boxShadow={'0,2px,5px,rgba(0,0,0,0.2)'}>
+        <Flex direction={'row'} justify={'space-between'} 
+              bgColor={'#edf0f5'} borderRadius={'5'} 
+              pl={3} pr={3} boxShadow={'20px 20px 30px grey'}>
+          <Square w={'auto'} h={'200px'} 
+            display={'flex'} flexDirection={'column'}
+            justify={'center'}
           >
             <Text
               color={Number(accountValues[0]) < 0 ? "red.600" : "#1ecc97"}
@@ -224,10 +207,13 @@ export default function MovingAverageResult({
                           <Td>{c.ticker}</Td>
                           <Td>{format(parseISO(c.date), "MMM, d, yyyy")}</Td>
                           <Td>
-                            <Tag bg="whiteAlpha.600">
-                              {c.type.slice(0, 1).toUpperCase() +
-                                c.type.slice(1, c.type.length)}
-                            </Tag>
+                            {c.type === 'buy' ? (
+                              <Tag colorScheme='green'>{c.type.slice(0, 1).toUpperCase() + c.type.slice(1, c.type.length)}</Tag>
+
+                            ):(
+                              <Tag colorScheme='red'>{c.type.slice(0, 1).toUpperCase() + c.type.slice(1, c.type.length)}</Tag>
+                            )}
+                            
                           </Td>
                           <Td isNumeric>${c.price.toFixed(2)}</Td>
                         </Tr>

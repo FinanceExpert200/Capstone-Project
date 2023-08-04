@@ -90,7 +90,8 @@ function CustomizeLabel({ active, payload, label, color }) {
       <>
         {
           payload.map((entry, index) => (
-            <Tag key={`item-${index}`} mr={3} bg="whiteAlpha.600">
+            <Tag key= {index === 0 ? 'red' : 'green'} 
+                 mr={3} bg="whiteAlpha.600">
               <MinusIcon color={'green'}/>{entry.value}</Tag>
           ))
         }

@@ -20,6 +20,7 @@ import {
   Flex,
   Center,
   Stack,
+  Tag,
   Text,
   Input,
   Alert,
@@ -38,6 +39,8 @@ const StrategyPage = ({ userId, strategyBuyingPower, setStrategyBuyingPower, str
   const [error, seterror] = useState(false);
   const [error2, setError2] = useState(false)
   const [errorMessage, setErrorMessage] = useState('');
+  const [success,setSuccess] = useState(false);
+  const requirement = ['minimum: 500', 'maxiumum: 10000' ]
 
   const [rsi, setRsi] = useState(null);
   const [movAverage, setMovingAverage] = useState(null);
@@ -285,6 +288,7 @@ const StrategyPage = ({ userId, strategyBuyingPower, setStrategyBuyingPower, str
       console.log(
         "Pairs trading only works with two stocks, select two in ordet to submit"
       );
+      requirement.push('Select at least 2 Tickers')
       seterror(true);
     } else if (name != "pairstrading" && selectedTickers.length === 0) {
       setErrorMessage("you must select a ticker")
@@ -294,6 +298,7 @@ const StrategyPage = ({ userId, strategyBuyingPower, setStrategyBuyingPower, str
       setselectedTickers(selectedTickers.filter((num) => num !== buttonNumber));
       seterror(false);
     } else if (name != "pairstrading" || selectedTickers.length < 2) {
+      requirement.push('Select at least 1 Ticker')
       setselectedTickers([...selectedTickers, buttonNumber]);
       seterror(false);
     } else {
@@ -332,6 +337,7 @@ const StrategyPage = ({ userId, strategyBuyingPower, setStrategyBuyingPower, str
       } catch (err) {
         console.log(err);
       }
+      setSuccess(true)
     }
     else {
       console.error("INSUFFICIENT FUNDS")
@@ -384,30 +390,7 @@ const StrategyPage = ({ userId, strategyBuyingPower, setStrategyBuyingPower, str
               buyingPower={bo}
             />
           ) : (
-            <Center h={"100vh"}>
-              <Flex
-                direction={"row"}
-                justify={"space-between"}
-                fontSize={"50px"}
-              >
-                <Stack m={3}>
-                  <Text color={"green.600"}>${Number(currentAccountValue[0]).toFixed(2)}</Text>
-                  <Text>3 Month Profit</Text>
-                </Stack>
-                <Stack m={3}>
-                  <Text color={"green.600"}>
-                    ${Number(currentAccountValue[1]).toFixed(2)}
-                  </Text>
-                  <Text>6 Month Profit</Text>
-                </Stack>
-                <Stack m={3}>
-                  <Text color={"green.600"}>
-                    ${Number(currentAccountValue[2]).toFixed(2)}
-                  </Text>
-                  <Text>1 Year Profit</Text>
-                </Stack>
-              </Flex>
-            </Center>
+            <Button isLoading loadingText="Loading" color="white" variant="outline"></Button>
           )}
           <Button
             onClick={() => {
@@ -439,7 +422,13 @@ const StrategyPage = ({ userId, strategyBuyingPower, setStrategyBuyingPower, str
           >
             Select From the Following Companies
           </Heading>
-          <Text mb={3}>Requirments:</Text>
+          <Flex direction={'row'} justify={'space-between'}>
+          <Text mb={3} fontSize={'25'}>Requirements:</Text>
+          {requirement.map((req)=>(
+            <Tag mb={3} bg="green.500" color={'white'} mr={1} ml={1}>{req}</Tag>
+            ))}
+
+          </Flex>
           <Box
             rounded={"lg"}
             boxShadow={'20px 20px 30px grey'}
@@ -481,9 +470,23 @@ const StrategyPage = ({ userId, strategyBuyingPower, setStrategyBuyingPower, str
             <Button bg={'blackAlpha.200'} _hover={{ bg: "green.500", color: "white" }} onClick={(event) => { event.preventDefault(); addStrategyToUser(name, strategyBuyingPower, userId) }}  >
               Add Strategy To Account
             </Button>
-
             </Flex>
 
+            {success && (
+                <Alert status='success' w={'auto'} fontSize={'sm'} mt={3} mb={3}>
+                <AlertIcon />
+                <AlertDescription>{formattedName} has been successfully added!</AlertDescription>
+              </Alert>
+            )}
+            {success && (
+              <Center w={'full'} >
+
+              <Button as='a' href='/home' bg={'blackAlpha.200'} _hover={{ bg: "green.500", color: "white" }}>
+                Back to Home
+              </Button>
+              </Center>
+
+            )}
           </Box>
 
         </Center>
