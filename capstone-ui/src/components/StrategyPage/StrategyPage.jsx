@@ -21,15 +21,14 @@ import {
   Center,
   Stack,
   Text,
-  useColorModeValue,
-  FormControl,
   Input,
-  FormLabel,
-  FormErrorMessage,
-  FormHelperText,
+  Alert,
+  AlertIcon,
+  AlertTitle,
+  AlertDescription,
 } from "@chakra-ui/react";
 
-const StrategyPage = ({userId,strategyBuyingPower,setStrategyBuyingPower,strategyType,setStrategyType, buyingPower, setBuyingPower}) => {
+const StrategyPage = ({ userId, strategyBuyingPower, setStrategyBuyingPower, strategyType, setStrategyType, buyingPower, setBuyingPower }) => {
   const { name } = useParams();
   let formattedName = ''
   const [currentAccountValue, setCurrentAccountValue] = useState([]);
@@ -37,16 +36,17 @@ const StrategyPage = ({userId,strategyBuyingPower,setStrategyBuyingPower,strateg
   const [ranStrategy, setRanStrategy] = useState(false);
   const [selectedTickers, setselectedTickers] = useState([]);
   const [error, seterror] = useState(false);
-  const [error2,setError2] = useState(false)
+  const [error2, setError2] = useState(false)
   const [errorMessage, setErrorMessage] = useState('');
 
   const [rsi, setRsi] = useState(null);
   const [movAverage, setMovingAverage] = useState(null);
-  const [arrayAvr,setArrayAvr] = useState(null)
+  const [arrayAvr, setArrayAvr] = useState(null)
   const [pairsTradeArray, setPairsTradeArray] = useState(null)
   //quanity set is here
   const [simulatedBuyingPower, setSimulatedBuyingPower] = useState(0)
-  
+  const [bo, setBO] = useState(0);
+
   // Here we need to handle each of the buttons
   // This page consists of:
   // A brief description of the strategy and How it works
@@ -58,10 +58,10 @@ const StrategyPage = ({userId,strategyBuyingPower,setStrategyBuyingPower,strateg
 
 
   // Now we need to reormat name 
-  const formatStrategyName = (name)=>{
+  const formatStrategyName = (name) => {
     switch (name) {
       case "meanreversion":
-        formattedName =  "Mean Reversion"
+        formattedName = "Mean Reversion"
         break;
       case "movingaveragecrossover":
         formattedName = "Moving Average Crossover"
@@ -70,12 +70,12 @@ const StrategyPage = ({userId,strategyBuyingPower,setStrategyBuyingPower,strateg
         formattedName = "Relative Strength Divergence"
         break
       case "pairstrading":
-        formattedName =  "Pairs Trading"
+        formattedName = "Pairs Trading"
         break
       case "exponentialmovingaverage":
         formattedName = "Exponential Moving Average"
         break
-        
+
       default:
         break;
     }
@@ -151,8 +151,8 @@ const StrategyPage = ({userId,strategyBuyingPower,setStrategyBuyingPower,strateg
     EMAStrat.mainFunc(simulatedBuyingPower, selectedTickers);
   };
 
-  if(simulatedBuyingPower != 0 ){
-    console.log("SimulatedBuyingPower ",simulatedBuyingPower)
+  if (simulatedBuyingPower != 0) {
+    console.log("SimulatedBuyingPower ", simulatedBuyingPower)
   }
 
 
@@ -165,23 +165,23 @@ const StrategyPage = ({userId,strategyBuyingPower,setStrategyBuyingPower,strateg
           simulatedBuyingPower,
           selectedStocks
         );
-        let result = returnedArray.map(value => value - simulatedBuyingPower);
+      let result = returnedArray.map(value => value - simulatedBuyingPower);
       setCurrentTransactionHsitory(transactionHistory);
-            setCurrentAccountValue(result)
-            const RSI = await Divergence.getRSIData()
-            //set a var array to display in front end
-            setRsi(RSI);
-        } catch (error) {
-            console.error("An error occurred:", error);
-        }
+      setCurrentAccountValue(result)
+      const RSI = await Divergence.getRSIData()
+      //set a var array to display in front end
+      setRsi(RSI);
+    } catch (error) {
+      console.error("An error occurred:", error);
     }
+  }
 
   const runPairsTradingStrategy = async (selectedStocks) => {
     let transactionHistory = await PairsTrading.calculateProfit(
       selectedStocks,
       simulatedBuyingPower
     );
-    let accountValue  = PairsTrading.getAccountValue()
+    let accountValue = PairsTrading.getAccountValue()
     // setTest(PairsTrading.getTransactionHistory());
     let result = accountValue.map(value => value - simulatedBuyingPower);
     setCurrentAccountValue(result)
@@ -193,7 +193,7 @@ const StrategyPage = ({userId,strategyBuyingPower,setStrategyBuyingPower,strateg
     console.log("TRADE DATA", pairsTradeArray)
     //console.log("TEST", test)
 
-    
+
   };
 
 
@@ -217,17 +217,12 @@ const StrategyPage = ({userId,strategyBuyingPower,setStrategyBuyingPower,strateg
           break;
 
         case "divergence":
-
- 
           runDivergenceStrategy(selectedTickers);
           break;
         case "pairstrading":
-          
-    
           runPairsTradingStrategy(selectedTickers);
           break;
         case "exponentialmovingaverage":
-
           runEMAStrategy(selectedTickers);
           break;
 
@@ -236,30 +231,30 @@ const StrategyPage = ({userId,strategyBuyingPower,setStrategyBuyingPower,strateg
           break;
       }
       setRanStrategy(true);
-    }else if(selectedTickers.length === 0 && simulatedBuyingPower < 500 && simulatedBuyingPower > 0){
+    } else if (selectedTickers.length === 0 && simulatedBuyingPower < 500 && simulatedBuyingPower > 0) {
       setErrorMessage("You must select a ticker and input a minimum of $500 to start");
       setError2(true)
-      console.log("ERRORS" , {errorMessage})
+      console.log("ERRORS", { errorMessage })
     }
-    else if(simulatedBuyingPower < 500 && simulatedBuyingPower > 0 ){
+    else if (simulatedBuyingPower < 500 && simulatedBuyingPower > 0) {
       console.log("BEING USED HERE ")
-      setErrorMessage("The minimum account allowed is $500");
+      setErrorMessage("Must input a minimum amount allowed is $500");
       setError2(true)
-      console.log("ERRORS" , {errorMessage})
+      console.log("ERRORS", { errorMessage })
     }
-    else if(selectedTickers.length === 0){
+    else if (selectedTickers.length === 0) {
       console.log("You must select at least one ticker")
       setErrorMessage("You must select at least one ticker");
       setError2(true)
-      console.log("ERRORS" , {errorMessage})
+      console.log("ERRORS", { errorMessage })
     }
-    else if(simulatedBuyingPower < 0){
+    else if (simulatedBuyingPower < 0) {
       console.log("length error here ")
       setErrorMessage("Quantity cannot be a negative number");
       setError2(true)
-      console.log("ERRORS" , {errorMessage})
+      console.log("ERRORS", { errorMessage })
     }
-    
+
 
     //setselectedTickers([]);
     seterror(false);
@@ -276,7 +271,9 @@ const StrategyPage = ({userId,strategyBuyingPower,setStrategyBuyingPower,strateg
       <Button
         key={number}
         onClick={() => handleButtonClick(number, name)}
-        colorScheme={selectedTickers.includes(number) ? "green" : "gray"}
+        bg={selectedTickers.includes(number) ? "green.500" : "#bbdbcb"}
+        color={selectedTickers.includes(number) ? "white" : "#03314b"}
+        _hover={{ bg: "green.500", color: "white" }}
         m={3}
       >
         {number}
@@ -289,7 +286,7 @@ const StrategyPage = ({userId,strategyBuyingPower,setStrategyBuyingPower,strateg
         "Pairs trading only works with two stocks, select two in ordet to submit"
       );
       seterror(true);
-    }else if(name != "pairstrading" && selectedTickers.length === 0){
+    } else if (name != "pairstrading" && selectedTickers.length === 0) {
       setErrorMessage("you must select a ticker")
       seterror(true);
     }
@@ -310,57 +307,58 @@ const StrategyPage = ({userId,strategyBuyingPower,setStrategyBuyingPower,strateg
       `setting the current simulated buying Power to ${event.target.value}`
     );
     setSimulatedBuyingPower(event.target.value);
+    setBO(event.target.value)
   };
 
-    const handleInputChangeForstrategyBuyingPower = (event) =>{
-        event.preventDefault()
-        setStrategyBuyingPower(event.target.value)
+  const handleInputChangeForstrategyBuyingPower = (event) => {
+    event.preventDefault()
+    setStrategyBuyingPower(event.target.value)
+  }
+
+  const addStrategyToUser = async (strategyName, strategyBuyingPower, currentUserId) => {
+    console.log(`StrategyName ${strategyName} Buying Power ${strategyBuyingPower}, UserID: ${currentUserId} user buying power ${buyingPower}`)
+    //Check if the user has enough money to gve to the bot
+    if (buyingPower > strategyBuyingPower) {
+      try {
+
+        const res = await axios.post(`http://localhost:3001/strategy/add`, {
+          strategy_type: strategyName,
+          buying_power: strategyBuyingPower,
+          user_id: currentUserId
+        });
+        console.log(res.data);
+        console.log("Formatted name ", formattedName)
+
+      } catch (err) {
+        console.log(err);
+      }
     }
+    else {
+      console.error("INSUFFICIENT FUNDS")
+    }
+  };
 
-    const addStrategyToUser = async (strategyName, strategyBuyingPower, currentUserId) => {
-        console.log(`StrategyName ${strategyName} Buying Power ${strategyBuyingPower}, UserID: ${currentUserId} user buying power ${buyingPower}`)
-        //Check if the user has enough money to gve to the bot
-        if(buyingPower > strategyBuyingPower){
-            try {
+  console.log("selected tickers", simulatedBuyingPower);
 
-                const res = await axios.post(`http://localhost:3001/strategy/add`, {
-                  strategy_type: strategyName,
-                  buying_power: strategyBuyingPower,
-                  user_id: currentUserId
-                });
-                console.log(res.data);
-                console.log("Formatted name ", formattedName)
-                
-            } catch (err) {
-                console.log(err);
-            }
-        }
-        else{
-            console.error("INSUFFICIENT FUNDS")
-        }
-    };
-    
-    console.log("selected tickers", buyingPower);
 
-    
-    return (
-      <Box
+  return (
+    <Box
       h={"100vh"}
       w={"full"}
-      bgColor={"#171923"}
+      bgColor={'#ecf2f3'}
       position={"absolute"}
       paddingLeft={"80px"}
       pr={"80px"}
     >
       {ranStrategy && currentAccountValue && currentTransactionHistory ? (
         <div>
-          { rsi ? (
+          {rsi ? (
             <ResultDivergence
               accountValues={currentAccountValue}
               transactionHistory={currentTransactionHistory}
               rsi={rsi}
               companies={selectedTickers}
-              buyingPower={buyingPower}
+              buyingPower={bo}
             />
           ) : movAverage ? (
             <ResultMovingAverage
@@ -368,24 +366,24 @@ const StrategyPage = ({userId,strategyBuyingPower,setStrategyBuyingPower,strateg
               transactionHistory={currentTransactionHistory}
               accountValues={currentAccountValue}
               companies={selectedTickers}
-              buyingPower={buyingPower}
+              buyingPower={bo}
             />
           ) : arrayAvr ? (
-            <ResultMeanReversion 
+            <ResultMeanReversion
               transactionHistory={currentTransactionHistory}
-              accountValue={currentAccountValue}
+              accountValues={currentAccountValue}
               averageArray={arrayAvr}
               companies={selectedTickers}
-              buyingPower={buyingPower}/>
-              
-          ): pairsTradeArray ? (
-            <ResultPairsTrading accountValue={currentAccountValue} 
-                                transactionHistory={currentTransactionHistory} 
-                                companies={selectedTickers}
-                                pairsData ={pairsTradeArray}
-                                buyingPower={simulatedBuyingPower}
-                               />
-          ):(
+              buyingPower={bo} />
+
+          ) : pairsTradeArray ? (
+            <ResultPairsTrading accountValues={currentAccountValue}
+              transactionHistory={currentTransactionHistory}
+              companies={selectedTickers}
+              pairsData={pairsTradeArray}
+              buyingPower={bo}
+            />
+          ) : (
             <Center h={"100vh"}>
               <Flex
                 direction={"row"}
@@ -424,22 +422,30 @@ const StrategyPage = ({userId,strategyBuyingPower,setStrategyBuyingPower,strateg
         <Center
           h={"100vh"}
           w={"full"}
-          textColor={"white"}
+          textColor={"#03314b"}
           flexDirection={"column"}
         >
           <Heading
             fontSize={50}
-            m={10}
-            bgGradient="linear(to-l, green.100, green)"
-            bgClip="text"
+
+            color={'#03314b'}
+          >
+            {formattedName} Simulation
+          </Heading>
+          <Heading
+            fontSize={30}
+            m={8}
+            color={'#03314b'}
           >
             Select From the Following Companies
           </Heading>
+          <Text mb={3}>Requirments:</Text>
           <Box
             rounded={"lg"}
-            boxShadow={"lg"}
+            boxShadow={'20px 20px 30px grey'}
             p={8}
-            bgColor={useColorModeValue("gray.700")}
+            borderWidth={3} borderColor={'#90abad'}
+
           >
             <Box
               as={"form"}
@@ -448,42 +454,46 @@ const StrategyPage = ({userId,strategyBuyingPower,setStrategyBuyingPower,strateg
             >
               {renderButtons(name)}
 
-                        <Box fontSize={'20px'}>Selected buttons:</Box>
-                        <Text m={'10px'} fontSize={'20px'}> {selectedTickers.join(', ')}</Text>
-                        {error && <Text>Pairs Trading can only have 2 options selected</Text>}
+              <Box fontSize={'20px'}>Selected buttons:</Box>
+              <Text m={'10px'} fontSize={'20px'}> {selectedTickers.join(', ')}</Text>
+              {error && (<Alert status='warning'>
+                <AlertIcon />
+                <AlertDescription>Pairs Trading can only have 2 options selected</AlertDescription>
+              </Alert>)}
 
-                        <Flex direction={'row'} justify={'space-between'}>
+              <Flex direction={'row'} justify={'space-between'}>
 
-                        <Input type="number" id="quantity" name="quantity" placeholder='Amount' onChange={handleInputChangeForSimulatedBuyingPower} w={'30'}/>
-                        <Button type="submit"  >
-                            Simulate {formattedName} Strategy
-                        </Button>
-                        </Flex>
-                        {error2 && <Text> {errorMessage}</Text>}
-
-                
-                    </Box>
-
-                    <Input type="number" id="quantity" name="quantity" placeholder='Amount' onChange={handleInputChangeForstrategyBuyingPower} w={'30'}/>
-                        <Button onClick={(event) => { event.preventDefault(); addStrategyToUser(name, strategyBuyingPower, userId)}}  >
-                            Add {formattedName} Strategy To Account
-                        </Button>
-                    </Box>
-
-                </Center>
-                )}
+                <Input type="number" id="quantity" name="quantity" placeholder='Amount' onChange={handleInputChangeForSimulatedBuyingPower} w={'30'} />
+                <Button type="submit" bg={'blackAlpha.200'} _hover={{ bg: "green.500", color: "white" }}>
+                  Run Strategy
+                </Button>
+              </Flex>
+              
+              {error2 && (<Alert status='warning' w={'auto'} fontSize={'sm'} mt={3} mb={3}>
+                <AlertIcon />
+                <AlertDescription>{errorMessage}</AlertDescription>
+              </Alert>)}
 
 
+            </Box>
+            <Flex mt={3} mb={3} justify={'space-between'}>
+            <Input type="number" id="quantity" name="quantity" placeholder='Amount' onChange={handleInputChangeForstrategyBuyingPower} w={'30'} />
+            <Button bg={'blackAlpha.200'} _hover={{ bg: "green.500", color: "white" }} onClick={(event) => { event.preventDefault(); addStrategyToUser(name, strategyBuyingPower, userId) }}  >
+              Add Strategy To Account
+            </Button>
+
+            </Flex>
+
+          </Box>
+
+        </Center>
+      )}
 
 
-        </Box>
-    )
+
+
+    </Box>
+  )
 }
 
 export default StrategyPage;
-
-{
-  /* 3 months profit: {Number(currentAccountValue[0]).toFixed(2)},
-6 months profit: {Number(currentAccountValue[1]).toFixed(2)}, 
-1 Year profit: {Number(currentAccountValue[2]).toFixed(2)} */
-}

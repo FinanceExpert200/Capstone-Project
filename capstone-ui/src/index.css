@@ -6,7 +6,7 @@
 
   color-scheme: light dark;
   color: rgba(255, 255, 255, 0.87);
-  background-color: #242424;
+  background-color: #ecf2f3;
 
   font-synthesis: none;
   text-rendering: optimizeLegibility;
@@ -14,11 +14,11 @@
   -moz-osx-font-smoothing: grayscale;
   -webkit-text-size-adjust: 100%;
 
-  --light-theme-background: #213547;
-  --light-theme-color: #213547;
+  --light-theme-background: #ecf2f3;
+  --light-theme-color: #ecf2f3;
 
   --dark-theme-background: white;
-  --dark-theme-color: black;
+  --dark-theme-color: #ecf2f3;
 
 }
 
@@ -30,7 +30,8 @@ a {
   text-decoration: inherit;
 }
 a:hover {
-  color: white;
+  color: #03314b;
+  box-shadow: 20px 20px 50px grey;
 }
 
 body {
@@ -67,7 +68,7 @@ button:focus-visible {
 @media (prefers-color-scheme: light) {
   :root {
     color: #213547;
-    background-color: #171923;
+    background-color: #ecf2f3;
   }
   a:hover {
     color: white;

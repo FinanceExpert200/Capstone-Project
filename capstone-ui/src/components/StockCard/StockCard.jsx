@@ -138,7 +138,8 @@ export default function StockCard({
   return (
     <Flex w={'full'}
       position={'absolute'}
-      bgColor={'#171923'} 
+      bgColor={'#ecf2f3'} 
+      textColor={'#03314b'}
     >
       <Grid
         templateAreas={`
@@ -159,17 +160,17 @@ export default function StockCard({
 
             <Image src={stockInfo.logo} w={100} h={100} borderRadius={'full'} bgColor={'white'} />
             <Text fontSize={70} color={'white'} fontWeight={'light'}>
-              <Popover word ="Ticker" display ={stockInfo.stockName} color = "white"  description={"A ticker is just a nickname for a companies stock. Every stock has a different ticker."} />
+              <Popover word ="Ticker" display ={stockInfo.stockName} color={'#03314b'}  description={"A ticker is just a nickname for a companies stock. Every stock has a different ticker."} />
             </Text>
-            <Text fontSize={20} mt={'10'} color={'white'} fontWeight={'light'}>{stockInfo.company}</Text>
+            <Text fontSize={20} mt={'10'} color={'#03314b'} fontWeight={'light'}>{stockInfo.company}</Text>
 
 
           </Stack>
           <Stack direction={'row'} mt={5} ml={20}>
-            <Text fontSize={45} color={'white'} fontWeight={'light'}>Price: $<Popover word = "Current Price" display = {stockInfo.stockPrice.toFixed(2)} color ='white'  description = {`This is the current price of a stock. This price can change every second from people buying and selling the stock. Check the price again in a few minutes and the price will likely have changed`}/>  USD</Text>
+            <Text fontSize={45}  color={'#03314b'} fontWeight={'light'}>Price: $<Popover word = "Current Price" display = {stockInfo.stockPrice.toFixed(2)} color ='#03314b'  description = {`This is the current price of a stock. This price can change every second from people buying and selling the stock. Check the price again in a few minutes and the price will likely have changed`}/>  USD</Text>
             {stockInfo.stockPercentage > 0 ? (
               <Stack direction={'row'} ml={5} mt={5}>
-                <Text fontSize={25} color={'white'} fontWeight={'light'}>Percent Change: </Text>
+                <Text fontSize={25} color={'#03314b'} fontWeight={'light'}>Percent Change: </Text>
                 <ArrowUpIcon color={'#00f008'} w={10} h={10} />
                 <Text fontSize={25} color={'#00f008'} fontWeight={'light'}> <Popover word = "Percent Change" display = {stockInfo.stockPercentage.toFixed(1)} color = {'#00f008'} description = {`The percent change is how much the price has gone up or down compared to the previous day. In this case the price has gone up by ${stockInfo.stockPercentage.toFixed(1)}% since yesterday`}/> % </Text>
 
@@ -177,7 +178,7 @@ export default function StockCard({
 
             ) : (
               <Stack direction={'row'} ml={5} mt={5}>
-                <Text fontSize={25} color={'white'} fontWeight={'light'}>Percent Change: </Text>
+                <Text fontSize={25} color={'#03314b'} fontWeight={'light'}>Percent Change: </Text>
                 <ArrowDownIcon color={'red'} w={10} h={10} />
                 <Text fontSize={25} color={'red'} > {<Popover word = "Percent Change" display = {stockInfo.stockPercentage.toFixed(1)} color ='red'  description = {`The percent change is how much the price has gone up or down compared to the previous day. In this case the price has gone down by ${stockInfo.stockPercentage.toFixed(1)}% since yesterday`}/>} % </Text>
               </Stack>
@@ -186,13 +187,8 @@ export default function StockCard({
           </Stack>
         </GridItem>
         <GridItem pl='2' area={'main'} h={'100vh'}>
-          <SingleStockGraph data={historicalData} dataName={stockInfo.stockName} aspect={2} color={'white'}/>
+          <SingleStockGraph data={historicalData} dataName={stockInfo.stockName} aspect={2} color={'#03314b'}/>
         </GridItem>
-        
-
-
-
-        
 
         <GridItem pl='2' area={'nav'} position={'relative'}>
            {submission && ( 
@@ -220,29 +216,27 @@ export default function StockCard({
               borderRadius={10}
               display={'flex'}
               flexDirection={'column'}
-              bgColor={'#A3C4BC'}
-              textColor={'black'}
+              bgColor={'#03314b'}
+              textColor={'white'}
              
             >
               
              
               <Flex textColor='black'>
-                <Square flex='1' _hover={{ bg: 'green.400'}} borderRadius={5} bgColor={stateForm === "buy" ? ("green.400") : ('transparent')}>
+                <Square flex='1' _hover={{ bg: '#1ecc97'}} borderRadius={5} bgColor={stateForm === "buy" ? ('transparent') : ('#1ecc97')}>
                   <Link
 
                     fontWeight={'light'}
                     onClick={(event) => { setStateForm("buy") }}
-                    _hover={{ bg: 'green.400' }}
                     fontSize={'60px'}
                     color={'black'} 
                     > Buy </Link>
                 </Square>
                 
-                <Square flex='1' _hover={{ bg: 'green.400' }} borderRadius={3} bgColor={stateForm === "sell" ? ("green.400") : ('transparent')}>
+                <Square flex='1' _hover={{ bg: '#1ecc97' }} borderRadius={3} bgColor={stateForm === "sell" ? ('transparent') : ('#1ecc97')}>
                   <Link
                     fontWeight={'light'}
                     onClick={(event) => { setStateForm("sell") }}
-                    _hover={{ bg: 'green.400' }}
                     fontSize={'60px'}
                     
                     > Sell </Link>
@@ -276,7 +270,7 @@ export default function StockCard({
                   </Flex>
                   <Flex direction={'row'} justify={'space-between'}>
                     <Text fontSize={'30px'}  fontWeight={'light'}>New Buying Power: </Text>
-                    <Text fontSize={'30px'} fontWeight={'light'} color={buyingPower < 0 ? 'red' : 'black'}>
+                    <Text fontSize={'30px'} fontWeight={'light'} color={buyingPower < 0 ? 'red' : '#1ecc97'}>
                       ${buyingPower}
                     </Text>
                   </Flex>
