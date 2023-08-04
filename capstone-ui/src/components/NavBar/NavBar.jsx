@@ -57,7 +57,7 @@ export default function NavBar({ isLogged, setIsLogged }) {
   return (
     <>
     {isLogged && (
-      <Box bg={useColorModeValue('gray.800')} px={4} 
+      <Box bg={'#03314b'} px={4} 
            zIndex={1} position = {'absolute'} 
            width = {'full'} pl={'80px'} pr={'80px'} 
            color={'white'} fontSize={'17px'}>
@@ -79,7 +79,7 @@ export default function NavBar({ isLogged, setIsLogged }) {
           </HStack>
           <Flex alignItems={'center'}>
           <Button
-              bg={'green.700'}
+              bg={'#1ecc97'}
               rounded={'full'}
               color={'white'}
              _hover={{ bg: 'green.500' }}
@@ -112,20 +112,14 @@ export default function NavBar({ isLogged, setIsLogged }) {
           
           <Box as='a' href="/" fontWeight={'bold'}>StockSwap</Box>
           <Flex alignItems={'center'}>
-          {/* <Button
-              bg={'green.400'}
+          <Button
+              bg={'#1ecc97'}
               rounded={'full'}
               color={'white'}
               _hover={{ bg: 'green.500' }}>
               <Link href="/login">Sign In</Link>
-            </Button> */}
-            {/* <Button
-              bg={'whiteAlpha.600'}
-              rounded={'full'}
-              color={'black'}
-              _hover={{ bg: 'green.100' }}>
-              <Link href="/register"> Register</Link>
-            </Button> */}
+            </Button> 
+           
           </Flex>
         </Flex>
 

@@ -43,18 +43,20 @@ export default function Trade({
         as='a'
         maxW={{base:'full',md:'275px'}}
         w={'full'}
-        bg={useColorModeValue('green.600')}
         borderRadius={'lg'}
+        borderWidth={3}
+        borderColor={'#90abad'}
         overflow={'hidden'}
         p={5}
-        href={`/trade/${route}`}       
+        href={`/trade/${route}`} 
+          
         >
           <Stack align={'center'} spacing={2}>
-            <Box mt={2} textColor={'white'}>
+            <Box mt={2} >
               <Heading fontSize={'50px'}>{name}</Heading>
               <Text>{formattedStockName(name)}</Text>
               {price && (
-              <Text mt={1} fontSize={'25px'}>${price.toFixed(2)}</Text>
+              <Text mt={1} fontSize={'25px'} color={'#1ecc97'}>${price.toFixed(2)}</Text>
               )}
             </Box>
 
@@ -68,21 +70,21 @@ export default function Trade({
     
     <Center 
     p={4} 
-    bgColor={'#171923'} 
+    bgColor={'#ecf2f3'} 
     pos={'absolute'}
     w={'full'}
     h={'100vh'}
+    textColor={'#03314b'}
     >
       {stockData ? (
 
       <Stack spacing={4} as={Container} mt={20}
              maxW={'5xl'} textAlign={'center'} >
-        <Heading color={'white'}  fontWeight={'bold'} fontSize={'80px'} bgGradient="linear(to-l, green.100, green)"
-        bgClip="text">
+        <Heading fontWeight={'bold'} fontSize={'80px'} >
           Start Trading!
         </Heading>
-        <Text color={'white'} fontSize={{base:'sm', sm:'lg'}}>
-         Choose from the following companies...
+        <Text  fontSize={{base:'medium', sm:'medium'}}>
+         Choose from one of the following companies...
         </Text>
 
         <Container  maxW={'5xl'} mt={12}>
@@ -105,8 +107,9 @@ export default function Trade({
         <Button
     isLoading
     loadingText='Loading'
-    color='white'
+    color='black'
     variant='outline'
+    bgColor={'#ecf2f3'} 
   ></Button>
       )}
 
@@ -115,52 +118,3 @@ export default function Trade({
 );
 }
 
-{/* <Center
-  position={'absolute'}
-  w={'full'}
-  h={'100vh'}
- 
-  >
-  {stockData ? (
-  <Stack direction={'column'}>
-    <Text as='h1' color="#00f008">
-      Start Trading!
-    </Text>
-    <Text as='h1' color='whiteSmoke'>
-      Choose from the following companies
-    </Text>
-    <Box>
-      <Stack direction={'row'}>
-        <Card></Card>
-        {Object.keys(stockData).map((stockId) => (
-          <Link to={stockId} key={stockId}>
-            <Box borderColor={'green'} borderWidth={3} borderRadius={10} p={5}>
-              <Text color={'#00f008'} as={'h1'}>
-                {stockData[stockId].stockName}
-              </Text>
-              {stockData[stockId].stockPrice && (
-
-              <Center fontSize={'30px'} color={'white'}>
-                $ {stockData[stockId].stockPrice.toFixed(2)}
-              </Center>
-              )}
-
-            </Box>
-          </Link>
-        ))}
-
-      </Stack>
-    </Box>
-
-  </Stack>
-
-  ):(
-    <Button
-    isLoading
-    loadingText='Loading'
-    color='white'
-    variant='outline'
-  ></Button>
-
-  )}
-</Center> */}

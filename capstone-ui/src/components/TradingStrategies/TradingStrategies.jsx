@@ -1,8 +1,9 @@
-import React from "react";
+import {React,useState} from "react";
 import "./TradingStrategies.css";
 import MeanReversionStrat from "../../TradingCalculations/MeanReversionStrat.js";
 import EMAStrat from "../../TradingCalculations/EMAStrat.js";
-
+import StrategyPage from "../StrategyPage/StrategyPage";
+import { useParams } from "react-router";
 import { Link as RouterLink } from "react-router-dom";
 import {
   Link,
@@ -29,13 +30,16 @@ import { color } from "framer-motion";
 
 
 const TradingStrategies = ({ userId , setFormattedStrategyName}) => {
+  const { name } = useParams();
+  const [formDisplay,setFormDisplay] = useState(false)
+  const [submission,setSubmission] = useState(false);
   return (
     <Center
       position={"absolute"}
       w={"full"}
       h={"100vh"}
-      bgColor={"#171923"}
-      color={"white"}
+      bgColor={'#ecf2f3'}
+      color={'#03314b'}
       fontWeight={"light"}
       fontSize={"1cm"}
       display={"flex"}
@@ -46,17 +50,32 @@ const TradingStrategies = ({ userId , setFormattedStrategyName}) => {
           <Text ml={1}>Learn More</Text>
         </Square>
 
-        <Tabs variant="enclosed" borderColor={"black"} w={"full"} p={5}>
-          <TabList p={1}>
-            <Tab>Moving Average Crossover</Tab>
-            <Tab>Mean Reversion</Tab>
-            <Tab>RSI Divergence</Tab>
-            <Tab>Pairs Trading</Tab>
-            <Tab>Exponential Moving Average</Tab>
+        <Tabs variant="enclosed" borderColor={'#03314b'} w={"full"} p={5}>
+          <TabList >
+          <Tab _selected={{ color: 'white', bg: '#03314b' }} 
+                _hover={{ bg: "green.500", color: "white" }}
+               borderTopRadius={5} borderBottomRadius={0}>
+                Moving Average Crossover
+          </Tab>
+          <Tab _selected={{ color: 'white', bg: '#03314b' }} 
+                _hover={{ bg: "green.500", color: "white" }}
+               borderTopRadius={5} borderBottomRadius={0}>
+                Mean Reversion
+          </Tab>
+          <Tab _selected={{ color: 'white', bg: '#03314b' }} 
+               _hover={{ bg: "green.500", color: "white" }}
+               borderTopRadius={5} borderBottomRadius={0}>
+                RSI Divergence
+          </Tab>
+          <Tab _selected={{ color: 'white', bg: '#03314b' }} 
+               _hover={{ bg: "green.500", color: "white" }}
+               borderTopRadius={5} borderBottomRadius={0}>
+                Pairs Trading
+          </Tab>
           </TabList>
 
           <TabPanels>
-            <TabPanel>
+            <TabPanel >
               <Flex
                 direction={"column"}
                 justify={"space-between"}
@@ -72,14 +91,19 @@ const TradingStrategies = ({ userId , setFormattedStrategyName}) => {
                   sell, as recent prices are lower, indicating the stock may be
                   on a downward trend.
                 </Text>
-                <Link as={RouterLink} to="/strategies/movingaveragecrossover">
+                
                   <Button
+                    as={'a'}
+                    href="/strategies/movingaveragecrossover"
                     fontSize={"20px"}
+                    bg="#bbdbcb"
+                    color={'#03314b'}
                     _hover={{ bg: "green.500", color: "white" }}
                   >
+
                     Moving Average Crossover
                   </Button>
-                </Link>
+               
               </Flex>
             </TabPanel>
 
@@ -97,14 +121,18 @@ const TradingStrategies = ({ userId , setFormattedStrategyName}) => {
                   rebounds and aligns with its 120-day moving average, we
                   execute a SELL order to secure profits.
                 </Text>
-                <Link as={RouterLink} to="/strategies/meanreversion">
+                
                   <Button
+                    as={'a'}
+                    href="/strategies/meanreversion"
                     fontSize={"20px"}
+                    bg="#bbdbcb"
+                    color={'#03314b'}
                     _hover={{ bg: "green.500", color: "white" }}
                   >
                     Mean Reversion
                   </Button>
-                </Link>
+                
               </Flex>
             </TabPanel>
 
@@ -121,14 +149,18 @@ const TradingStrategies = ({ userId , setFormattedStrategyName}) => {
                   goes down, it tells us to sell, thinking the price might go
                   down.
                 </Text>
-                <Link as={RouterLink} to="/strategies/divergence">
+               
                   <Button
+                    as={'a'}
+                    href="/strategies/divergence"
                     fontSize={"20px"}
+                    bg="#bbdbcb"
+                    color={'#03314b'}
                     _hover={{ bg: "green.500", color: "white" }}
                   >
                     RSI Divergence
                   </Button>
-                </Link>
+                
               </Flex>
             </TabPanel>
 
@@ -144,38 +176,21 @@ const TradingStrategies = ({ userId , setFormattedStrategyName}) => {
                   divided by the price of the other. It calculates the
                   historical average and standard deviation of this ratio.
                 </Text>
-                <Link as={RouterLink} to="/strategies/pairstrading">
+                
                   <Button
+                    as={'a'}
+                    href="/strategies/pairstrading"
                     fontSize={"20px"}
+                    bg="#bbdbcb"
+                    color={'#03314b'}
                     _hover={{ bg: "green.500", color: "white" }}
                   >
                     Pairs Trading
                   </Button>
-                </Link>
+               
               </Flex>
             </TabPanel>
 
-            <TabPanel>
-              <Flex
-                direction={"column"}
-                justify={"space-between"}
-                align={"center"}
-              >
-                <Text fontSize={30}>
-                  The Exponential Moving Average (EMA) is a type of moving
-                  average that places a greater weight and significance on the
-                  most recent data points.
-                </Text>
-                <Link as={RouterLink} to="/strategies/exponentialmovingaverage">
-                  <Button
-                    fontSize={"20px"}
-                    _hover={{ bg: "green.500", color: "white" }}
-                  >
-                    Exponential Moving Average
-                  </Button>
-                </Link>
-              </Flex>
-            </TabPanel>
           </TabPanels>
         </Tabs>
       </Flex>

@@ -12,13 +12,17 @@ import PopupConfirmation from "./PopupConfirmation";
 import Popover from "../Popover/Popover"
 
 
+
 export default function StockCard({
   updateStockPrice,
   tickers,
   stockData,
   currentUserId,
   historicalData,
-  acc_value
+  account,
+  getAccount,
+  getPortfolio,
+  portfolio
 }) {
 
   const [stateForm, setStateForm] = useState("reg");
@@ -31,19 +35,67 @@ export default function StockCard({
 
   const [quantity, setQuantity] = useState(0);
   const [totalPrice,setTotalPrice] = useState(0);
+  const [buyingPower, setBuyingPower] = useState(0)
+  const [disableButton, setDisableButton] = useState(true)
+  const [errorMsg, setErrorMsg] = useState(null)
+
   const handleQuantityChange = (quantity) => {
-    const parsedQuantity = parseInt(quantity, 10);
-    setQuantity(parsedQuantity);
-    if( parsedQuantity > 0){
-      setTotalPrice(parsedQuantity*stockInfo.stockPrice);
-    }else{
-      setTotalPrice(0);
+    if(account && portfolio && stockInfo) {
+      let objectWithTicker = portfolio.find(item => item.ticker === stockInfo.stockName);
+  
+      let parsedQuantity = Math.floor(parseInt(quantity, 10));
+  
+      // Check if the quantity is negative
+      if(parsedQuantity < 0) {
+        parsedQuantity = 0;
+      }
+  
+      setQuantity(parsedQuantity);
+  
+      if(parsedQuantity > 0){
+        setTotalPrice((parsedQuantity*stockInfo.stockPrice).toFixed(2));
+        if (stateForm.toString() == "buy"){
+          const newBuyingPower = (parseFloat(account.buying_power) - parsedQuantity*stockInfo.stockPrice).toFixed(2)
+          setBuyingPower(newBuyingPower);
+  
+          if(newBuyingPower < 0 ){
+            setSubmission(false);
+            setDisableButton(true);
+            setErrorMsg('You do not have enough buying power to complete this purchase.');
+          } else {
+            setDisableButton(false);
+            setErrorMsg('');
+          }
+  
+        }
+        if (stateForm.toString() == "sell"){
+          const newBuyingPower = (parseFloat(account.buying_power) + parsedQuantity*stockInfo.stockPrice).toFixed(2)
+          setBuyingPower(newBuyingPower);
+  
+          if (!objectWithTicker || objectWithTicker.quantity < parsedQuantity){
+            setDisableButton(true);
+            setErrorMsg('You do not have enough of this stock to sell this amount.');
+          } else {
+            setErrorMsg('');
+          }
+        }
+      }else{
+        setSubmission(false);
+        setBuyingPower(account.buying_power);
+        setTotalPrice(0);
+        setDisableButton(true);
+        setErrorMsg('');
+      }
     }
   };
-
+  
+  
   // updates the stock price on the page as you open it
   useEffect(() => {
     updateStockPrice(tickers);
+    getAccount()
+    getPortfolio()
+
   }, []);
 
   const addTransaction = async (
@@ -89,7 +141,8 @@ export default function StockCard({
   return (
     <Flex w={'full'}
       position={'absolute'}
-      bgColor={'#171923'} 
+      bgColor={'#ecf2f3'} 
+      textColor={'#03314b'}
     >
       <Grid
         templateAreas={`
@@ -110,33 +163,34 @@ export default function StockCard({
 
             <Image src={stockInfo.logo} w={100} h={100} borderRadius={'full'} bgColor={'white'} />
             <Text fontSize={70} color={'white'} fontWeight={'light'}>
-              <Popover word ="Ticker" display ={stockInfo.stockName} color = "white"  description={"A ticker is just a nickname for a companies stock. Every stock has a different ticker."} />
+              <Popover word ="Ticker" display ={stockInfo.stockName} color={'#03314b'}  description={"A ticker is just a nickname for a companies stock. Every stock has a different ticker."} />
             </Text>
-            <Text fontSize={20} mt={'10'} color={'white'} fontWeight={'light'}>{stockInfo.company}</Text>
+            <Text fontSize={20} mt={'10'} color={'#03314b'} fontWeight={'light'}>{stockInfo.company}</Text>
 
 
           </Stack>
           <Stack direction={'row'} mt={5} ml={20}>
-            <Text fontSize={45} color={'white'} fontWeight={'light'}><Popover word = "Current Price" display = {stockInfo.stockPrice.toFixed(2)} color ='white'  description = {`This is the current price of a stock. This price can change every second from people buying and selling the stock. Check the price again in a few minutes and the price will likely have changed`}/>  USD</Text>
+            <Text fontSize={45}  color={'#03314b'} fontWeight={'light'}>Price: $<Popover word = "Current Price" display = {stockInfo.stockPrice.toFixed(2)} color ='#03314b'  description = {`This is the current price of a stock. This price can change every second from people buying and selling the stock. Check the price again in a few minutes and the price will likely have changed`}/>  USD</Text>
             {stockInfo.stockPercentage > 0 ? (
               <Stack direction={'row'} ml={5} mt={5}>
+                <Text fontSize={25} color={'#03314b'} fontWeight={'light'}>Percent Change: </Text>
                 <ArrowUpIcon color={'#00f008'} w={10} h={10} />
-                <Text fontSize={25} color={'#00f008'} fontWeight={'light'} > {<Popover word = "Percent Change" display = {stockInfo.stockPercentage.toFixed(1)} color = {'#00f008'} description = {`The percent change is how much the price has gone up or down compared to the previous day. In this case the price has gone up by ${stockInfo.stockPercentage.toFixed(1)}% since yesterday`}/>} % </Text>
+                <Text fontSize={25} color={'#00f008'} fontWeight={'light'}> <Popover word = "Percent Change" display = {stockInfo.stockPercentage.toFixed(1)} color = {'#00f008'} description = {`The percent change is how much the price has gone up or down compared to the previous day. In this case the price has gone up by ${stockInfo.stockPercentage.toFixed(1)}% since yesterday`}/> % </Text>
 
               </Stack>
 
             ) : (
               <Stack direction={'row'} ml={5} mt={5}>
+                <Text fontSize={25} color={'#03314b'} fontWeight={'light'}>Percent Change: </Text>
                 <ArrowDownIcon color={'red'} w={10} h={10} />
                 <Text fontSize={25} color={'red'} > {<Popover word = "Percent Change" display = {stockInfo.stockPercentage.toFixed(1)} color ='red'  description = {`The percent change is how much the price has gone up or down compared to the previous day. In this case the price has gone down by ${stockInfo.stockPercentage.toFixed(1)}% since yesterday`}/>} % </Text>
               </Stack>
-
             )}
 
           </Stack>
         </GridItem>
         <GridItem pl='2' area={'main'} h={'100vh'}>
-          <SingleStockGraph data={historicalData} dataName={stockInfo.stockName} aspect={2} color={'white'}/>
+          <SingleStockGraph data={historicalData} dataName={stockInfo.stockName} aspect={2} color={'#03314b'}/>
         </GridItem>
 
         <GridItem pl='2' area={'nav'} position={'relative'}>
@@ -145,34 +199,49 @@ export default function StockCard({
                                quantity={quantity} price={stockInfo.stockPrice} 
                                trans_type={stateForm.toString()}/>
            )} 
-          <Center h={'100vh'} w={'full'}>
+          
+            <Flex direction={'column'} h={'100vh'} w={'full'} justify={'center'}>
+            <Box >
+              <Text fontSize={'xl'} fontWeight={'bold'} color='white'>
+                <Popover word = "Portfolio" display = {"Portfolio"} color = "white" description = {"Your portfolio is how much of each stock you own. It looks like you currently"}/>
+              </Text>
+              {
+                portfolio && portfolio.map((item, index) => (
+                  <Box key={index} p={2} bg='gray.700' borderRadius='md' my={2}>
+                    <Text color='white'>Ticker: {item.ticker}</Text>
+                    <Text color='white'>Quantity: {item.quantity}</Text>
+                  </Box>
+                ))
+              }
+            </Box>
             <Box
               w={'full'}
               borderRadius={10}
               display={'flex'}
               flexDirection={'column'}
-              bgColor={'#A3C4BC'}
-              textColor={'black'}
+              bgColor={'#03314b'}
+              textColor={'white'}
              
             >
+              
              
               <Flex textColor='black'>
-                <Square flex='1' _hover={{ bg: 'green.400'}} borderRadius={5} bgColor={stateForm === "buy" ? ("green.400") : ('transparent')}>
+                <Square flex='1' _hover={{ bg: '#1ecc97'}} borderRadius={5} bgColor={stateForm === "buy" ? ('transparent') : ('#1ecc97')}>
                   <Link
 
                     fontWeight={'light'}
                     onClick={(event) => { setStateForm("buy") }}
-                    _hover={{ bg: 'green.400' }}
                     fontSize={'60px'}
-                    color={'black'} > Buy </Link>
+                    color={'black'} 
+                    > Buy </Link>
                 </Square>
                 
-                <Square flex='1' _hover={{ bg: 'green.400' }} borderRadius={3} bgColor={stateForm === "sell" ? ("green.400") : ('transparent')}>
+                <Square flex='1' _hover={{ bg: '#1ecc97' }} borderRadius={3} bgColor={stateForm === "sell" ? ('transparent') : ('#1ecc97')}>
                   <Link
                     fontWeight={'light'}
                     onClick={(event) => { setStateForm("sell") }}
-                    _hover={{ bg: 'green.400' }}
                     fontSize={'60px'}
+                    
                     > Sell </Link>
                 </Square>
               </Flex>
@@ -197,12 +266,23 @@ export default function StockCard({
                     />
                   </Flex>
                   <Flex direction={'row'} justify={'space-between'}>
-                    <Text fontSize={'30px'}  fontWeight={'light'}>Total Amount: </Text>
-                    <Text fontSize={'30px'} fontWeight={'light'}>{totalPrice}</Text>
+                    <Text fontSize={'30px'}  fontWeight={'light'}>Total Price: </Text>
+                    <Text fontSize={'30px'} fontWeight={'light'}>${totalPrice}</Text>
+    
 
                   </Flex>
+                  <Flex direction={'row'} justify={'space-between'}>
+                    <Text fontSize={'30px'}  fontWeight={'light'}>New Buying Power: </Text>
+                    <Text fontSize={'30px'} fontWeight={'light'} color={buyingPower < 0 ? 'red' : '#1ecc97'}>
+                      ${buyingPower}
+                    </Text>
+                  </Flex>
+                  <Flex color = "red">
+                    {errorMsg && <div className="error">{errorMsg}</div>}
+                  </Flex>
+
                   <Flex justify={'center'} mt={5}>
-                    <Button
+                    <Button isDisabled = {disableButton}
                       _hover={{ bg: 'green.500', color: "white" }}
                       w={20}
                       onClick={(event) =>
@@ -227,7 +307,9 @@ export default function StockCard({
 
 
             </Box>
-          </Center>
+
+            </Flex>
+          
 
 
         </GridItem>

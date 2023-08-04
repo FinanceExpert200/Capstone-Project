@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useEffect } from 'react';
 import { Box, Text } from '@chakra-ui/react'
 import { format, parseISO } from "date-fns"
-import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
+import { AreaChart, Area, XAxis, YAxis, Label,CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
 
 export default function StockGraph({ priceList }) {
 
@@ -37,7 +37,7 @@ export default function StockGraph({ priceList }) {
 
         </defs>
 
-        <XAxis stroke={'white'}
+        <XAxis stroke={'#03314b'}
           dataKey={'date'}
           tickLine={false}
           tickFormatter={string => {
@@ -46,13 +46,28 @@ export default function StockGraph({ priceList }) {
               return format(date, "MMM,d")
             }
             return "";
-          }} />
-        <YAxis stroke={'white'}
+          }} >
+            <Label stroke={'#03314b'} value="Date" offset={0} position="insideBottom" />
+          </XAxis>
+        <YAxis 
+          fontSize={15}
+          stroke={'#03314b'}
           domain={['auto', 'auto']}
           tickCount={5}
-          tickFormatter={number => `$${number.toFixed(2)}`} />
+          tickFormatter={number => `$${number.toFixed(2)}`}>
+            <Label style={{
+              textAnchor: "middle",
+              fontSize: "100%",
+              fill: "white",
+            }}
+            position={'left'}
+            angle={270}stroke={'#03314b'} 
+            marginRight={5}
+            value="Opening Price" 
+            offset={13} />
+          </YAxis>
         <Tooltip />
-        <Legend />
+        <Legend verticalAlign="top" height={36}/>
         <CartesianGrid opacity={.3} vertical={false}/>
         <Area
           type="monotone"
