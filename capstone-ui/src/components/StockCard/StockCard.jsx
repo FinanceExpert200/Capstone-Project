@@ -204,7 +204,7 @@ export default function StockCard({
             <Flex direction={'column'} h={'100vh'} w={'full'} justify={'center'}>
             <Box >
               <Text fontSize={'xl'} fontWeight={'bold'} color='white'>
-                <Popover word = "Portfolio" display = {"Portfolio"} color = "white" description = {"The user Portfolio is "}/>
+                <Popover word = "Portfolio" display = {"Portfolio"} color = "white" description = {"Your portfolio is how much of each stock you own. It looks like you currently"}/>
               </Text>
               {
                 portfolio && portfolio.map((item, index) => (
