@@ -8,7 +8,7 @@ import { LineChart,Line } from 'recharts';
 export default function PairsTradeGraph({data, historical , aspect , color, priceRatio}) {
     console.log("THE ARRAY CALLED ", data)
     return (
-        <ResponsiveContainer  width={'100%'}  aspect={'auto'}>
+        <ResponsiveContainer  width={'100%'}  aspect={aspect}>
             <LineChart
              data={data}
              margin={{

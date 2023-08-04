@@ -9,8 +9,11 @@ import {
   Flex,
   Center,
   Box,
+  Heading,
   GridItem,
   Stack,
+  Square,
+  Divider,
   Container,
   Button,
 } from "@chakra-ui/react";
@@ -163,7 +166,8 @@ const Home = ({
     <Box
       position={"absolute"}
       w={"full"}
-      bgColor={"#171923"}
+      bgColor={'#ecf2f3'}
+      textColor={'#03314b'}
       fontWeight={"light"}
     >
       {profile && account && portfolio && historicalData ? (
@@ -171,40 +175,45 @@ const Home = ({
           <Stack direction={"column"} p={1}>
             {portfolio.length ? (
               <Box>
-                <Text as={"h1"} color={"whitesmoke"}>
+                <Text as={"h1"} >
                   {" "}
                   Stocks Owned
                 </Text>
                 {portfolio.map((item, key) => (
                   <Link to={`/trade`} key={item.ticker}>
-                    <Box borderRadius={25} bgColor={"#111214"} p={3} mb={5}>
+                    <Box borderRadius={10} borderWidth={3} borderColor={'#90abad'} p={3} mb={5}>
                       <Text
                         align={"center"}
-                        color="#04e168"
+                        bgColor={'#ecf2f3'}
                         fontWeight={"bold"}
                         fontSize={"50px"}
                       >
                         {item.ticker}
                       </Text>
-                      <Text color={"white"} fontSize={"20px"}>
-                        Purchased on: {fixedDate(item.created_at)}
-                      </Text>
+                      <Flex direction={'row'} justify={'space-between'}>
                       <Text
-                        mr={3}
-                        align={"right"}
                         fontSize={"25px"}
-                        color={"green.300"}
                       >
-                        Quantity: {item.quantity}
+                        Quantity: 
                       </Text>
+                      <Text fontSize={"25px"}>
+                      {item.quantity}
+                      </Text>
+
+
+                      </Flex>
+                      <Flex direction={'row'} justify={'space-between'}>
                       <Text
-                        mr={3}
-                        align={"right"}
-                        fontSize={"25px"}
-                        color={"green.300"}
+                        fontSize={"20px"}
                       >
-                       Average Buy Price: {parseFloat(item.avgBuyPrice).toFixed(2)}
+                       Average Buy Price: 
                       </Text>
+                      {/* <Divider orientation="horizontal" h={4} borderColor="gray.300" /> */}
+                      <Text fontSize={"25px"}>
+                      {parseFloat(item.avgBuyPrice).toFixed(2)}
+                      </Text>
+
+                      </Flex>
                     </Box>
                   </Link>
                 ))}
@@ -229,61 +238,80 @@ const Home = ({
             )}
           </Stack>
           <Stack direction={"column"} w={"full"} ml={10}>
-            <Box>
-              <Stack direction={"row"} color={"#cccbcc"}>
-                <Text fontSize={"60px"} color={"white"}>
+          <Box bgColor={'#03314b'} minH={'30vh'} w={'full'} p={7}>
+        <Flex direction={'row'} w={'full'} justify={'space-between'} textColor={'white'}>
+        <Box>
+              <Stack direction={"row"} >
+                <Text fontSize={"60px"} >
                   Welcome back,{" "}
                   {profile.firstName.charAt(0).toUpperCase() +
                     profile.firstName.slice(1)}{" "}
                   !
                 </Text>
               </Stack>
-              <Text fontSize={"30px"} color={"white"}>
+              <Text fontSize={"30px"} >
                 Here are your stats for today:
               </Text>
             </Box>
-            <Stack direction={"row"}>
-              <Container
-                width={"30%"}
-                fontSize={"18"}
-                borderRadius={15}
-                bgColor={"#111214"}
-              >
-                <Text fontWeight={"medium"} color={"white"}>
-                  <ClickPopover word="Account Value" display = "Account Value" color ={"white"} description= "The account value is your buying power and the current price of all your stocks added together. If you had $20 in your pocket and owned a salesforce stock, your account value would be $20 plus the current price of the stock"/>{" "}
-                </Text>
-                <Stack
+          
+
+
+        </Flex>
+
+      </Box>
+      <Container color='#edf0f5' p={4} w={'full'} mt={'-120px'}  h={300} boxShadow={'0,2px,5px,rgba(0,0,0,0.2)'}>
+        <Flex direction={'row'} justify={'space-between'} 
+              bgColor={'#edf0f5'} borderRadius={'5'} 
+              boxShadow={'20px 20px 30px grey'}>
+          <Square w={'auto'} h={'200px'} 
+            display={'flex'} flexDirection={'column'}
+            
+            alignItems="center"
+          >
+            <Text color={'gray.500'} fontSize={25} fontWeight={'light'}>
+            <ClickPopover word="Account Value" display = "Account Value" color ={'grey.500'} description= "The account value is your buying power and the current price of all your stocks added together. If you had $20 in your pocket and owned a salesforce stock, your account value would be $20 plus the current price of the stock"/>{" "}
+            </Text>
+            <Stack
                   direction={"row"}
                   justifyContent={"center"}
                   fontSize={"40"}
                   fontWeight={"medium"}
+                  textColor={'#1ecc97'}
                 >
-                  <Text color={"#00f008"}>$</Text>
-                  <Text color={"#00f008"}>{account.acc_value}</Text>
+                  <Text >$</Text>
+                  <Text >{account.acc_value}</Text>
                 </Stack>
-              </Container>
+          </Square>
 
-              <Container
-                width={"30%"}
-                fontSize={"18"}
-                borderRadius={15}
-                bgColor={"#111214"}
-              >
-                <Text fontWeight={"medium"} fontSize={"18"} color={"white"}>
-                <ClickPopover word="Buying Power" display = "Buying Power" color ={"white"} description= "Buying power is the amount of money you have to buy stocks. If you had $20 and owned a salesforce stock, your buying power would be $20"/>{" "}
-{" "}
-                </Text>
-                <Stack
+          <Box display="flex" alignItems="center">
+            <Divider orientation="vertical" h="100px" borderColor="gray.300" />
+          </Box>
+
+          <Square w={'auto'} h={'200px'}
+            display={'flex'} flexDirection={'column'}
+            justifySelf={'center'}
+          >
+            
+            <Text color={'gray.500'} fontSize={25}>
+            <ClickPopover word="Buying Power" display = "Buying Power" 
+                          color ={"grey.500"} 
+                          description= "Buying power is the amount of money you have to buy stocks. If you had $20 and owned a salesforce stock, your buying power would be $20"/>{" "}{" "}
+            </Text>
+            <Stack
                   direction={"row"}
                   justifyContent={"center"}
-                  fontSize={"40px"}
+                  fontSize={"40"}
                   fontWeight={"medium"}
+                  textColor={'#1ecc97'}
                 >
-                  <Text color={"#00f008"}>$</Text>
-                  <Text color={"#00f008"}>{account.buying_power}</Text>
+                  <Text >$</Text>
+                  <Text >{account.acc_value}</Text>
                 </Stack>
-              </Container>
-            </Stack>
+
+          </Square>
+
+        </Flex>
+      </Container>
 
             <Stack direction={"row"}>
             {strategy && (
@@ -357,7 +385,7 @@ const Home = ({
           </Stack>
         </Stack>
       ) : (
-        <Center w={"full"} h={"100vh"} color={"white"}>
+        <Center w={"full"} h={"100vh"} color={"white"} bgColor={"#171923"}>
           <Button
             isLoading
             loadingText="Loading"

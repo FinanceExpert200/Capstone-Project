@@ -66,12 +66,15 @@ const TransactionTable = ({ transactionHistory, stockData, fixedDate}) => {
       <Box p={20} w={'full'}
       h={'100vh'}
       position={'absolute'}
-      bgColor={'#171923'} >
-        <Center w={'full'} as={'h1'} fontWeight={'bold'} justifyContent={'center'} color={'#14AE5C'} >Transactions</Center>
+      bgColor={'#ecf2f3'} >
+        <Center w={'full'} as={'h1'} fontWeight={'bold'} justifyContent={'center'} color={'#1ecc97'} >Transactions</Center>
         <Stack direction={'column'} w={'full'}>
           {mergeChecker &&
             array.map((transaction) => (
-              <Stack borderRadius={10} position={'relative'} bgColor={'#757575'} m={1} color={'#E6E6E6'} key={transaction.id} display={'flex'} flexDirection={'column'} p={5}>
+              <Stack borderRadius={10} position={'relative'} 
+                     m={1} color={'#03314b'} key={transaction.id} 
+                     display={'flex'} flexDirection={'column'} 
+                     p={5}  borderWidth={3} borderColor={'#90abad'}>
 
                 <Stack justify={'space-between'} direction={'row'} w={'full'}>
                   {transaction.trans_type === "buy" ? (
@@ -94,7 +97,7 @@ const TransactionTable = ({ transactionHistory, stockData, fixedDate}) => {
                 <Stack direction={'row'} spacing={5} justify={'space-between'}>
 
                   <Stack direction={'row'} spacing={5}>
-                    <Image src={transaction.logo} w={100} h={100} borderRadius={'full'} bgColor={'#b0aeb8'} />
+                    <Image src={transaction.logo} w={100} h={100} borderRadius={'full'}  />
 
                     <Stack direction={'column'} spacing={0} mt={3}>
 
