@@ -213,9 +213,7 @@ const StrategyPage = ({userId,strategyBuyingPower,setStrategyBuyingPower,strateg
           break;
 
         case "movingaveragecrossover":
-          if (selectedTickers.length >= 1) {
             runMovingAverageCrossoverStrategy(selectedTickers);
-          }
           break;
 
         case "divergence":
