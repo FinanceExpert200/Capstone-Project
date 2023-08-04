@@ -506,6 +506,10 @@ getTickerViaUser('AMZN');
                   stockData={stockData}
                   currentUserId={currentUserId}
                   historicalData={mergeArrays(historicalAmzn,historicalCrm,historicalGoogle,historicalMeta)}
+                  account = {account}
+                  getAccount = {getAccount}
+                  getPortfolio={getPortfolio}
+                  portfolio = {portfolio}
                 />
               ):(
                 <Center position={'fixed'} w={'full'} h={'100vh'} bgColor={'#000409'}>
