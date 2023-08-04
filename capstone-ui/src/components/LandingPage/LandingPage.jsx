@@ -66,7 +66,7 @@ const LandingPage = () => {
       </Text>
       
     <Flex direction={'row'} mt ={4} >
-      <Button  bg="green.400" rounded="full" color="white" _hover={{ bg: 'green.500' }}>
+      <Button  bg='#1ecc97' rounded="full" color="white" _hover={{ bg: 'green.500' }}>
         <Link href="/login">Sign In</Link>
       </Button>
       <Button bg="whiteAlpha.600" rounded="full" color="black" _hover={{ bg: 'green.100' }}>

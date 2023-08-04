@@ -1,6 +1,7 @@
 import { React, useState, useEffect } from "react";
 import {
-  Box, Button, Flex, Heading, Text,
+  Box, Button, Flex, Heading,Container,Divider,Square,
+  Tag, Text,
   Tabs, TabList, TabPanels, Tab, TabPanel,
   Table, Thead, Tbody, Tfoot, Tr, Th, Td, TableCaption, TableContainer
 } from '@chakra-ui/react'
@@ -9,7 +10,7 @@ import MeanReversionGraph from "../Graph/MeanReversionGraph";
 import { format, parseISO } from "date-fns"
 
 
-export default function ResultMeanReversion({ accountValue, transactionHistory, averageArray, companies }) {
+export default function ResultMeanReversion({ accountValues, transactionHistory, averageArray, companies, buyingPower }) {
 
   const [checker, setChecker] = useState(0);
   const [meanReversionArray, setMeanReversionArray] = useState([])
@@ -41,24 +42,71 @@ export default function ResultMeanReversion({ accountValue, transactionHistory, 
 
   }
   return (
-    <Flex direction={'column'} w={'full'} h={'80vh'} mt={10} p={10} textColor={'white'}>
-      <Heading>Mean Reversion</Heading>
+    <Flex direction={'column'} w={'full'} h={'80vh'} mt={10} p={10} textColor={'#03314b'}>
+      <Box bgColor={'#03314b'} minH={'30vh'} w={'full'} p={7}>
+        <Flex direction={'row'} w={'full'} justify={'space-between'} textColor={'white'}>
+          <Heading fontWeight={'light'}>Mean Reversion Strategy</Heading>
+          <Tag fontSize={'23'} bg="whiteAlpha.600">Buying Power : ${buyingPower}</Tag>
+          
+
+        </Flex>
+
+      </Box>
+      
+      <Container color='#edf0f5' p={4} w={'full'} mt={'-120px'}  h={300} boxShadow={'0,2px,5px,rgba(0,0,0,0.2)'}>
+        <Flex direction={'row'} justify={'space-between'} 
+              bgColor={'#edf0f5'} borderRadius={'5'} 
+              pl={3} pr={3} boxShadow={'20px 20px 30px grey'}>
+          <Square w={'auto'} h={'200px'} 
+            display={'flex'} flexDirection={'column'}
+            justify={'center'}
+          >
+            <Text color={Number(accountValues[0]) < 0 ? 'red.600' : '#1ecc97'} fontSize={30}>${Number(accountValues[0]).toFixed(2)}</Text>
+            <Text color={'gray.500'} fontSize={25}>3 Month Profit</Text>
+          </Square>
+
+          <Box display="flex" alignItems="center">
+            <Divider orientation="vertical" h="100px" borderColor="gray.300" />
+          </Box>
+
+          <Square w={'auto'} h={'200px'}
+            display={'flex'} flexDirection={'column'}
+          >
+            <Text color={Number(accountValues[1]) < 0 ? 'red.600' : '#1ecc97'} fontSize={30}>${Number(accountValues[1]).toFixed(2)}</Text>
+            <Text color={'gray.500'} fontSize={25}>6 Month Profit</Text>
+          </Square>
+
+          <Box display="flex" alignItems="center">
+            <Divider orientation="vertical" h="100px" borderColor="gray.300" />
+          </Box>
+
+          <Square w={'auto'} h={'200px'} 
+            display={'flex'} flexDirection={'column'}>
+            <Text color={Number(accountValues[2]) < 0 ? 'red.600' : '#1ecc97'} fontSize={30}>${Number(accountValues[2]).toFixed(2)}</Text>
+            <Text color={'gray.500'} fontSize={25}>1 Year Profit</Text>
+          </Square>
+
+        </Flex>
+
+
+      </Container>
+
       <Tabs variant='enclosed' borderColor={'black'} w={'full'} p={5} >
-        <TabList p={1} >
+        <TabList >
           {companies.map((company) => (
-            <Tab >{company}</Tab>
+            <Tab _selected={{ color: 'white', bg: '#03314b' }} borderTopRadius={5} borderBottomRadius={0}>{company}</Tab>
           ))
           }
         </TabList>
-        <TabPanels>
+        <TabPanels bgColor={'#03314b'}>
           {meanReversionArray.length === companies.length ? (
             meanReversionArray.map((array, index) => (
-              <TabPanel key={index} w={'full'} h={'25vh'}>
+              <TabPanel key={index} w={'full'} >
                 <MeanReversionGraph
                   data={array[companies[index]]}
                   dataName="close"
-                  aspect={6}
-                  color="white"
+                  aspect={4}
+                  color="#b4abaf"
                   thirty="thirtyDayAverage"
                   twenty="twentyOneAverage"
                   key={index}
@@ -73,9 +121,12 @@ export default function ResultMeanReversion({ accountValue, transactionHistory, 
       </Tabs>
       <Flex direction={'row'} justify={'space-between'} >
         <Tabs variant='enclosed' borderColor={'black'} w={'full'} p={5} >
-          <TabList p={1} >
+          <TabList >
             {companies.map((company) => (
-              <Tab >{company}</Tab>
+              <Tab _selected={{ color: 'white', bg: '#03314b' }} 
+                   _hover={{ bg: "green.500", color: "white" }}>
+                    {company}
+              </Tab>
             ))
             }
 
@@ -100,7 +151,7 @@ export default function ResultMeanReversion({ accountValue, transactionHistory, 
                           <Tr >
                             <Td>{c.Ticker}</Td>
                             <Td>{format(parseISO(c.Date), "MMM, d, yyyy")}</Td>
-                            <Td>{c.Type.slice(0, 1).toUpperCase() + c.Type.slice(1, c.Type.length)}</Td>
+                            <Td><Tag bg="whiteAlpha.600">{c.Type.slice(0, 1).toUpperCase() + c.Type.slice(1, c.Type.length)}</Tag></Td>
                             <Td isNumeric>${c.Price.toFixed(2)}</Td>
                           </Tr>
                         ))}
