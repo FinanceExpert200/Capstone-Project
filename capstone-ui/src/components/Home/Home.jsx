@@ -41,6 +41,11 @@ const Home = ({
   strategy,
   getStrategy,
   removeStrategy,
+  metaAVGBuyPrice,
+  crmAVGBuyPrice,
+  nflxAVGBuyPrice,
+  amznAVGBuyPrice,
+  googlAVGBuyPrice
 }) => {
   const [metaData, setMetaData] = useState([]);
   const [amznData, setAmznData] = useState([]);
@@ -48,7 +53,40 @@ const Home = ({
   const [crmData, setCrmData] = useState([]);
   let formattedStrategyName = "";
 
-  // const theme = useContext(ThemeContext);
+
+  useEffect(() => {
+    tickers.forEach(async (ticker) => {
+      if (portfolio) {
+        // Find the dictionary with the given ticker in the portfolio list
+        const tickerIndex = portfolio.findIndex(
+          (item) => item.ticker === ticker
+        );
+        console.log("tickerIndex", tickerIndex);
+
+        // If the ticker exists in the list, add the get_avg_buy_price value to the dictionary
+        if (tickerIndex !== -1) {
+          console.log("specific ticker", portfolio[tickerIndex]);
+          console.log("tryna add", portfolio[tickerIndex].avgBuyPrice);
+          if (ticker === "CRM")
+            portfolio[tickerIndex].avgBuyPrice = crmAVGBuyPrice;
+          else if (ticker === "AMZN")
+            portfolio[tickerIndex].avgBuyPrice = amznAVGBuyPrice;
+          else if (ticker === "GOOGL")
+            portfolio[tickerIndex].avgBuyPrice = googlAVGBuyPrice;
+          else if (ticker === "META")
+            portfolio[tickerIndex].avgBuyPrice = metaAVGBuyPrice;
+          else if (ticker === "NFLX")
+            portfolio[tickerIndex].avgBuyPrice = nflxAVGBuyPrice;
+
+        }
+
+      } else {
+        console.log("Portfolio is null or empty.");
+      }
+    });
+  }, [portfolio, metaAVGBuyPrice]);
+
+  // portfolio["AMZN"].get_avg_buy_price = amznAVGBuyPrice;
 
   const [test, setTest] = useState();
   useEffect(() => {
@@ -98,19 +136,19 @@ const Home = ({
     switch (name) {
       case "meanreversion":
         formattedStrategyName = "Mean Reversion";
-        break
+        break;
       case "movingaveragecrossover":
         formattedStrategyName = "Moving Average Crossover";
-        break
+        break;
       case "divergence":
         formattedStrategyName = "Relative Strength Divergence";
         break
       case "pairstrading":
         formattedStrategyName = "Pairs Trading";
-        break
+        break;
       case "exponentialmovingaverage":
         formattedStrategyName = "Exponential Moving Average";
-        break
+        break;
 
       default:
         break;
@@ -136,7 +174,6 @@ const Home = ({
                 <Text as={"h1"} color={"whitesmoke"}>
                   {" "}
                   Stocks Owned
-                  Stocks Owned
                 </Text>
                 {portfolio.map((item, key) => (
                   <Link to={`/trade`} key={item.ticker}>
@@ -155,15 +192,21 @@ const Home = ({
                       <Text
                         mr={3}
                         align={"right"}
-                        fontSize={"35px"}
+                        fontSize={"25px"}
                         color={"green.300"}
                       >
-                        {item.quantity}
+                        Quantity: {item.quantity}
+                      </Text>
+                      <Text
+                        mr={3}
+                        align={"right"}
+                        fontSize={"25px"}
+                        color={"green.300"}
+                      >
+                       Average Buy Price: {parseFloat(item.avgBuyPrice).toFixed(2)}
                       </Text>
                     </Box>
                   </Link>
-
-                  
                 ))}
               </Box>
             ) : (
@@ -243,63 +286,71 @@ const Home = ({
             </Stack>
 
             <Stack direction={"row"}>
-              {strategy && (
-                <Container>
-                  <Container
-                    width={"30%"}
-                    fontSize={"18"}
-                    borderRadius={15}
-                    bgColor={"#111214"}
-                  >
-                    <Text
-                      fontWeight={"medium"}
-                      textDecoration={"underline"}
-                      color={"white"}
-                    >
-                      Strategy:{" "}
-                    </Text>
-                    <Button
-                      bgColor={"green.400"}
-                      onClick={(event) => {
-                        removeStrategy();
-                      }}
-                    >
-                      Remove Strategy
-                    </Button>
-                    <Stack
-                      direction={"row"}
-                      justifyContent={"center"}
-                      fontSize={"40"}
-                    >
-                      <Text color={"#00f008"}>{formattedStrategyName}</Text>
-                    </Stack>
-                  </Container>
+            {strategy && (
+    <Container
+      display={"flex"}
+      flexDirection={"column"}
+      alignItems={"center"}
+      justifyContent={"center"}
+      width={"30%"}
+      fontSize={"18"}
+      borderRadius={15}
+      bgColor={"#111214"}
+      mb={4}
+    >
+      <Text
+        fontWeight={"medium"}
+        textDecoration={"underline"}
+        color={"white"}
+      >
+        Strategy:{" "}
+      </Text>
+      <Button
+        bgColor={"green.400"}
+        onClick={(event) => {
+          removeStrategy();
+        }}
+        mt={2}
+      >
+        Remove Strategy
+      </Button>
+      <Stack
+        direction={"row"}
+        justifyContent={"center"}
+        fontSize={"40"}
+        mt={2}
+      >
+        <Text color={"#00f008"}>{formattedStrategyName}</Text>
+      </Stack>
 
-                <Container
-                  width={"30%"}
-                  fontSize={"18"}
-                  borderRadius={15}
-                  bgColor={"#111214"}
-                >
-                  <Text
-                    fontWeight={"medium"}
-                    fontSize={"18"}
-                    color={"white"}
-                    textDecoration={"underline"}
-                  >
-                    Strategy Buying Power:{" "}
-                  </Text>
-                  <Stack
-                    direction={"row"}
-                    justifyContent={"center"}
-                    fontSize={"40px"}
-                  >
-                    <Text color={"#00f008"}>$</Text>
-                    <Text color={"#00f008"}>{strategy.buying_power}</Text>
-                  </Stack>
-                </Container>
-              </Container>
-              )}
+      <Container
+        width={"100%"}
+        fontSize={"18"}
+        borderRadius={15}
+        bgColor={"#111214"}
+        mt={4}
+      >
+        <Text
+          fontWeight={"medium"}
+          fontSize={"18"}
+          color={"white"}
+          textDecoration={"underline"}
+        >
+          Strategy Buying Power:{" "}
+        </Text>
+        <Stack
+          direction={"row"}
+          justifyContent={"center"}
+          fontSize={"40px"}
+          mt={2}
+        >
+          <Text color={"#00f008"}>$</Text>
+          <Text color={"#00f008"}>{strategy.buying_power}</Text>
+        </Stack>
+      </Container>
+    </Container>
+)}
+
             </Stack>
 
             <StockGraph priceList={historicalData} />

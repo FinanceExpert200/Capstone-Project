@@ -16,6 +16,7 @@ export default class Trading {
   static botTransactionHistory = []
   static movingAveragePercentageArray = []
   static unfilteredHistoricalData = []
+  
 
 
   // Function to get the current buying power
@@ -175,6 +176,7 @@ export default class Trading {
   }
 
   static async calculateDisplayedProfit(budget, tickerArray) {
+
     const totalBudget = budget; // Total budget to allocate among all stocks
     const budgetPerStock = totalBudget / tickerArray.length; // $1000 for each stock
 
@@ -207,8 +209,10 @@ export default class Trading {
   static getAccountValue(){
     // console.log("ACCOUNT VALUE CALLED")
     // console.log(`${this.totalThreeMonthProfit}, ${this.totalSixMonthProfit}, ${this.totalAccountValue}`)
+
     return [this.totalThreeMonthProfit, this.totalSixMonthProfit, this.totalAccountValue]; 
   }
+  
   static getMovingAverages(){
    return this.movingAveragePercentageArray;
   }

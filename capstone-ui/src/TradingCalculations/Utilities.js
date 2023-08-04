@@ -42,7 +42,7 @@ export default class Utilities {
 
 
     static async runCurrentStrategy(strategy){
-      console.log("STRATEGY IN BACKEND ", strategy)
+      // console.log("STRATEGY IN BACKEND ", strategy)
       // First we need to determine if the user even has a strategy and if the last active != todays date.  If Both conditions are not met then we are finished with our function
       let today = new Date() 
       let lastActive = new Date(strategy.last_active)

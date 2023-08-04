@@ -41,7 +41,8 @@ router.get("/avgbuyprice/:ticker/:user_id", async (req, res, next) => {
   const user_id = req.params.user_id;
   console.log(ticker, user_id);
   try {
-    const data = await Portfolio.getTickerByUser(user_id, ticker);
+    const data = await Transaction.getAvgBuyPrice(user_id, ticker);
+    
     console.log("DATA: ", data);
     return res.status(200).json({ data });
   } catch (err) {
