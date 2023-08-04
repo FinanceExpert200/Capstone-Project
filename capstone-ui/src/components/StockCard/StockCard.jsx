@@ -122,6 +122,8 @@ export default function StockCard({
       }
     } catch (err) {
       console.log(err);
+
+      
       //must update the error message
       //setSubmission(<Text color={'red.400'}>Your submission failed</Text>);
     }

@@ -14,10 +14,41 @@ class Transaction {
     return exercise;
   }
 
-
-
-
-
+  static async getAvgBuyPrice(user_id, ticker) {
+    const query = `
+    WITH cte AS (
+      SELECT
+        id,
+        ticker,
+        quantity,
+        curr_price,
+        user_id,
+        trans_type,
+        created_at,
+        purchased_by,
+        SUM(CASE WHEN trans_type = 'buy' THEN curr_price * quantity ELSE -curr_price * quantity END) OVER (PARTITION BY ticker ORDER BY created_at) AS totalSum,
+        SUM(CASE WHEN trans_type = 'buy' THEN quantity ELSE -quantity END) OVER (PARTITION BY ticker ORDER BY created_at) AS totalStock
+      FROM
+        transactions
+      WHERE
+        user_id = $1 -- Use placeholder for user_id
+        AND ticker = $2 -- Use placeholder for ticker
+    )
+    SELECT
+      *,
+      totalSum / totalStock AS avg_buy_price -- Calculate the average buy price for each row
+    FROM
+      cte
+    ORDER BY
+      ticker, created_at;
+    
+    `;
+  
+    const result = await db.query(query, [user_id, ticker]); // Pass both user_id and ticker as parameters in the array
+    const exercise = result.rows;
+    return exercise;
+  }
+  
 
   // Adds a transaction to the transaction table. Every transaction should be added here
   static async addTransactionHistory(
@@ -30,7 +61,7 @@ class Transaction {
     transaction_date
   ) {
     //if no transaction date is given, we simply dont put anythong which will automatically set date to today
-    console.log("TRANSACTION DATE",transaction_date)
+    console.log("TRANSACTION DATE", transaction_date);
     if (!transaction_date) {
       try {
         console.log(

@@ -18,18 +18,18 @@ class Portfolio {
     return result.rows;
   }
 
-    // gets all the stock of a particular ticker of a certain user
-    static async getTickerByUser(userId, ticker) {
-      const query = `
-            SELECT *
-            FROM portfolio
-            WHERE user_id = $1 AND ticker = $2
-          `;
+    // // gets all the stock of a particular ticker of a certain user
+    // static async getTickerByUser(userId, ticker) {
+    //   const query = `
+    //         SELECT *
+    //         FROM portfolio
+    //         WHERE user_id = $1 AND ticker = $2
+    //       `;
   
-        const result = await db.query(query, [userId, ticker]);
-        const res = result.rows;
-        return res;
-    }
+    //     const result = await db.query(query, [userId, ticker]);
+    //     const res = result.rows;
+    //     return res;
+    // }
 
 
 
