@@ -142,13 +142,13 @@ const TradingStrategies = ({ userId , setFormattedStrategyName}) => {
                 justify={"space-between"}
                 align={"center"}
               >
-                <Text fontSize={30}>
+                {/* <Text fontSize={30}>
                   It watches the RSI and daily price changes. When the price
                   goes down but RSI goes up, it tells us to buy the stock,
                   thinking it might go up later. When the price goes up but RSI
                   goes down, it tells us to sell, thinking the price might go
                   down.
-                </Text>
+                </Text> */}
                
                   <Button
                     as={'a'}
@@ -170,12 +170,12 @@ const TradingStrategies = ({ userId , setFormattedStrategyName}) => {
                 justify={"space-between"}
                 align={"center"}
               >
-                <Text fontSize={30}>
+                {/* <Text fontSize={30}>
                   Pairs trading is a strategy that trades two correlated stocks
                   based on their price ratio, which is the price of one stock
                   divided by the price of the other. It calculates the
                   historical average and standard deviation of this ratio.
-                </Text>
+                </Text> */}
                 
                   <Button
                     as={'a'}
