@@ -51,6 +51,22 @@ export default function StockCard({
   const [buyingPower, setBuyingPower] = useState(0)
   const [disableButton, setDisableButton] = useState(true)
   const [errorMsg, setErrorMsg] = useState(null)
+  const [currTickerQuantity, setCurrTickerQuantity] = useState(0)
+
+
+
+  const getCurrentQuantity = () =>{
+    if(portfolio){
+      let objectWithTicker = portfolio.find(item => item.ticker === stockInfo.stockName);
+      if(!objectWithTicker.quantity ||objectWithTicker.quantity == 0  ){
+        setCurrTickerQuantity(0)
+      }
+      else{
+        setCurrTickerQuantity(objectWithTicker.quantity)
+      }
+    }
+
+  }
 
   const handleQuantityChange = (quantity) => {
     if (account && portfolio && stockInfo) {
@@ -112,13 +128,19 @@ export default function StockCard({
       }
     }
   };
+
+  console.log("NETFLIX DATA ")
+  console.log(historicalData)
+  console.group(stockInfo.stockName)
   
   
   // updates the stock price on the page as you open it
   useEffect(() => {
     updateStockPrice(tickers);
-    getAccount();
-    getPortfolio();
+    getAccount()
+    getPortfolio()
+    getCurrentQuantity()
+
   }, []);
 
   const addTransaction = async (
@@ -152,13 +174,16 @@ export default function StockCard({
     } catch (err) {
       console.log(err);
 
+
       //must update the error message
       //setSubmission(<Text color={'red.400'}>Your submission failed</Text>);
     }
   };
 
-  //UNDO THIS
-  // console.log("transaction was : ", submission);
+  
+
+  
+
 
   // here will be some sort of function that displays the stock graph, and just overall infromation based on the stock id that is passed
   return (
@@ -196,7 +221,7 @@ export default function StockCard({
                 display={stockInfo.stockName}
                 color={"#03314b"}
                 description={
-                  "A ticker is just a nickname for a companies stock. Every stock has a different ticker."
+                  "A ticker is just a nickname for a companies stock. Every stock has a unique ticker."
                 }
               />
             </Text>
@@ -214,14 +239,14 @@ export default function StockCard({
           </Stack>
           <Stack direction={"row"} mt={5} ml={20}>
             <Text fontSize={45} color={"#03314b"} fontWeight={"light"}>
-              Price: $
+              
               <Popover
                 word="Current Price"
-                display={stockInfo.stockPrice.toFixed(2)}
-                color="#03314b"
+                display={` Price $${stockInfo.stockPrice.toFixed(2)}
+               `} color="#03314b"
                 description={`This is the current price of a stock. This price can change every second from people buying and selling the stock. Check the price again in a few minutes and the price will likely have changed`}
               />{" "}
-              USD
+             
             </Text>
             {stockInfo.stockPercentage > 0 ? (
               <Stack direction={"row"} ml={5} mt={5}>
@@ -233,13 +258,13 @@ export default function StockCard({
                   {" "}
                   <Popover
                     word="Percent Change"
-                    display={stockInfo.stockPercentage.toFixed(1)}
+                    display={`${stockInfo.stockPercentage.toFixed(1)}%`}
                     color={"#00f008"}
                     description={`The percent change is how much the price has gone up or down compared to the previous day. In this case the price has gone up by ${stockInfo.stockPercentage.toFixed(
                       1
-                    )}% since yesterday`}
+                    )}%since yesterday`}
                   />{" "}
-                  %{" "}
+                  {" "}
                 </Text>
               </Stack>
             ) : (
@@ -253,14 +278,14 @@ export default function StockCard({
                   {
                     <Popover
                       word="Percent Change"
-                      display={stockInfo.stockPercentage.toFixed(1)}
+                      display={`${stockInfo.stockPercentage.toFixed(1)}$`}
                       color="red"
                       description={`The percent change is how much the price has gone up or down compared to the previous day. In this case the price has gone down by ${stockInfo.stockPercentage.toFixed(
                         1
                       )}% since yesterday`}
                     />
                   }{" "}
-                  %{" "}
+                  {" "}
                 </Text>
               </Stack>
             )}
@@ -275,28 +300,17 @@ export default function StockCard({
           />
         </GridItem>
 
-        <GridItem pl="2" area={"nav"} position={"relative"}>
-          {submission && (
-            <PopupConfirmation
-              submission={submission}
-              name={stockInfo.stockName}
-              quantity={quantity}
-              price={stockInfo.stockPrice}
-              trans_type={stateForm.toString()}
-            />
-          )}
-
-          <Flex direction={"column"} h={"100vh"} w={"full"} justify={"center"}>
-            <Box>
-              <Text fontSize={"xl"} fontWeight={"bold"} color="white">
-                <Popover
-                  word="Portfolio"
-                  display={"Portfolio"}
-                  color="white"
-                  description={
-                    "Your portfolio is how much of each stock you own. It looks like you currently"
-                  }
-                />
+        <GridItem pl='2' area={'nav'} position={'relative'}>
+           {submission && ( 
+            <PopupConfirmation submission={submission} name={stockInfo.stockName} 
+                               quantity={quantity} price={stockInfo.stockPrice} 
+                               trans_type={stateForm.toString()}/>
+           )} 
+          
+            <Flex direction={'column'} h={'100vh'} w={'full'} justify={'center'}>
+            <Box >
+              <Text fontSize={'35px'} fontWeight={'bold'} color='white'>
+                <Popover word = "Portfolio" display = {"Portfolio"} color = "#03314b" description = {`Your portfolio is how much of each stock you own. It looks like you currently own ${currTickerQuantity} share(s) of ${stockInfo.stockName} `}/>
               </Text>
               {portfolio &&
                 portfolio.map((item, index) => (

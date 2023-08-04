@@ -175,9 +175,9 @@ const Home = ({
           <Stack direction={"column"} p={1}>
             {portfolio.length ? (
               <Box>
-                <Text as={"h1"} >
+                <Text fontSize={"25px"} >
                   {" "}
-                  Stocks Owned
+                  <ClickPopover word = "Stocks Owned Section" display = "Stocks Owned" color = "#03314b" description={"Here you can see the stocks you currently own (Also known as your portfolio). Click on the Trade page to buy and sell stocks"}  />
                 </Text>
                 {portfolio.map((item, key) => (
                   <Link to={`/trade`} key={item.ticker}>
@@ -202,18 +202,7 @@ const Home = ({
 
 
                       </Flex>
-                      <Flex direction={'row'} justify={'space-between'}>
-                        <Text
-                          fontSize={"20px"}
-                        >
-                          Average Buy Price:
-                        </Text>
-                        {/* <Divider orientation="horizontal" h={4} borderColor="gray.300" /> */}
-                        <Text fontSize={"25px"}>
-                          {parseFloat(item.avgBuyPrice).toFixed(2)}
-                        </Text>
 
-                      </Flex>
                     </Box>
                   </Link>
                 ))}

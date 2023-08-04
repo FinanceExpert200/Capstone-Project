@@ -138,7 +138,8 @@ export default class Utilities {
       let today = new Date()
       //After running the funciton, we need to update our last active date to today
       await this.updateLastActive(today.toISOString(), strategy.user_id)
-      this.updateAccountValue(strategy.user_id)
+      await this.updateAccountValue(strategy.user_id)
+      window.location.reload();
   }
 
     static async updateLastActive(date, userId){

@@ -71,6 +71,7 @@ function App() {
   const [historicalAmzn, setHistoricalAmzn] = useState([]);
   const [historicalGoogle, setHistoricalGoogle] = useState([]);
   const [historicalCrm, setHistoricalCrm] = useState([]);
+  const [historicalNflx, setHistoricalNflx] = useState([]);
   const [historicalChecker, setHistoricalChecker] = useState(false);
 
   // login functiionaility
@@ -95,28 +96,37 @@ function App() {
   const rangeDate = new Date();
   rangeDate.setDate(rangeDate.getDate() - 30);
 
-  const mergeArrays = (arr1, arr2, arr3, arr4) => {
+  const mergeArrays = (arr1, arr2, arr3, arr4, arr5) => {
     const mergedArray = [];
     // Create an object to keep track of merged data
     const dataMap = {};
+    
     arr1.forEach(({ date, ...rest }) => {
       dataMap[date] = { ...dataMap[date], ...rest };
     });
+    
     arr2.forEach(({ date, ...rest }) => {
       dataMap[date] = { ...dataMap[date], ...rest };
     });
+    
     arr3.forEach(({ date, ...rest }) => {
       dataMap[date] = { ...dataMap[date], ...rest };
     });
+    
     arr4.forEach(({ date, ...rest }) => {
       dataMap[date] = { ...dataMap[date], ...rest };
     });
-
+  
+    // For the fifth array
+    arr5.forEach(({ date, ...rest }) => {
+      dataMap[date] = { ...dataMap[date], ...rest };
+    });
+  
     // Convert the data in the dataMap back to an array
     Object.keys(dataMap).forEach((date) => {
       mergedArray.push({ date, ...dataMap[date] });
     });
-
+  
     return mergedArray;
   };
 
@@ -157,44 +167,44 @@ function App() {
   const [googlAVGBuyPrice, setGooglAVGBuyPrice] = useState(0);
   const [crmAVGBuyPrice, setCrmAVGBuyPrice] = useState(0);
 
-  const getTickerViaUser = async (ticker) => {
-    try {
-      const res = await axios.get(
-        `http://localhost:3001/trans/avgbuyprice/${ticker}/${localStorage.getItem(
-          "currentUserId"
-        )}`
-      );
-      // console.log("Response Data: ", res.data); // Log the response data to see its structure
-      const length = res.data.data.length;
+  // const getTickerViaUser = async (ticker) => {
+  //   try {
+  //     const res = await axios.get(
+  //       `http://localhost:3001/trans/avgbuyprice/${ticker}/${localStorage.getItem(
+  //         "currentUserId"
+  //       )}`
+  //     );
+  //     // console.log("Response Data: ", res.data); // Log the response data to see its structure
+  //     const length = res.data.data.length;
 
-      if (length != 0) {
-        // console.log("here is it" ,res.data.data)
-        tickerAvgBuyPrice[ticker] = res.data.data[length - 1].avg_buy_price;
-      }
-    } catch (error) {
-      console.log("Error:", error.response.data.error.message);
-    }
-  };
+  //     if (length != 0) {
+  //       // console.log("here is it" ,res.data.data)
+  //       tickerAvgBuyPrice[ticker] = res.data.data[length - 1].avg_buy_price;
+  //     }
+  //   } catch (error) {
+  //     console.log("Error:", error.response.data.error.message);
+  //   }
+  // };
 
   // getTickerViaUser("CRM");
 
   // reason this is in asyn is for the way that js works that the dictionary is not saved in its state
-  const processTickers = async () => {
-    // Execute all API calls in parallel and wait for all of them to complete
-    await Promise.all(tickers.map((ticker) => getTickerViaUser(ticker)));
-    // Now that all API calls are completed, log the fully populated dictionary
-    // console.log("the dict, ", tickerAvgBuyPrice);
+  // const processTickers = async () => {
+  //   // Execute all API calls in parallel and wait for all of them to complete
+  //   await Promise.all(tickers.map((ticker) => getTickerViaUser(ticker)));
+  //   // Now that all API calls are completed, log the fully populated dictionary
+  //   // console.log("the dict, ", tickerAvgBuyPrice);
 
-    // console.log("the dict", tickerAvgBuyPrice)
+  //   // console.log("the dict", tickerAvgBuyPrice)
 
-    setMetaAVGBuyPrice(tickerAvgBuyPrice["META"]);
-    setAmznAVGBuyPrice(tickerAvgBuyPrice["AMZN"]);
-    setNflxAVGBuyPrice(tickerAvgBuyPrice["NFLX"]);
-    setGooglAVGBuyPrice(tickerAvgBuyPrice["GOOGL"]);
-    setCrmAVGBuyPrice(tickerAvgBuyPrice["CRM"]);
-  };
+  //   setMetaAVGBuyPrice(tickerAvgBuyPrice["META"]);
+  //   setAmznAVGBuyPrice(tickerAvgBuyPrice["AMZN"]);
+  //   setNflxAVGBuyPrice(tickerAvgBuyPrice["NFLX"]);
+  //   setGooglAVGBuyPrice(tickerAvgBuyPrice["GOOGL"]);
+  //   setCrmAVGBuyPrice(tickerAvgBuyPrice["CRM"]);
+  // };
 
-  processTickers();
+  // processTickers();
 
   
   // console.log("META PRICE INN AS ETF", nflxAVGBuyPrice)
@@ -268,7 +278,6 @@ function App() {
       logo: "https://cdn.cookielaw.org/logos/dd6b162f-1a32-456a-9cfe-897231c7763c/4345ea78-053c-46d2-b11e-09adaef973dc/Netflix_Logo_PMS.png",
       stockName: "NFLX",
       stockPrice: nflxPrice,
-      
       stockPercentage: nflxPercent,
     },
     5: {
@@ -435,6 +444,7 @@ function App() {
       const amzn = await pastStockPrice(tickers[1], rangeDate);
       const google = await pastStockPrice(tickers[3], rangeDate);
       const crm = await pastStockPrice(tickers[4], rangeDate);
+      const nflx = await pastStockPrice(tickers[2], rangeDate)
 
       // const mPercentage = await getPercentChange(tickers[0]);
       // const aPercentage = await getPercentChange(tickers[1]);
@@ -442,13 +452,13 @@ function App() {
       // //netflix here
       // const cPercentage = await getPercentChange(tickers[4]);
 
-      const [historicalMeta, historicalAmzn, historicalCrm, historicalGoogle] =
-        await Promise.all([meta, amzn, crm, google]);
+      const [historicalMeta, historicalAmzn, historicalCrm, historicalGoogle, historicalNflx] =
+        await Promise.all([meta, amzn, crm, google, nflx]);
       setHistoricalAmzn(historicalAmzn);
       setHistoricalCrm(historicalCrm);
       setHistoricalGoogle(historicalGoogle);
       setHistoricalMeta(historicalMeta);
-
+      setHistoricalNflx(historicalNflx)
       // setMetaPercent(metaPercent);
       // setAmznPercent(amznPercent);
       // setGooglPercent(googlPercent);
@@ -496,7 +506,8 @@ function App() {
                     historicalAmzn,
                     historicalCrm,
                     historicalGoogle,
-                    historicalMeta
+                    historicalMeta,
+                    historicalNflx
                   )}
                   strategyBuyingPower={strategyBuyingPower}
                   setStrategyBuyingPower={setStrategyBuyingPower}
@@ -525,7 +536,8 @@ function App() {
                     historicalAmzn,
                     historicalCrm,
                     historicalGoogle,
-                    historicalMeta
+                    historicalMeta,
+                    historicalNflx
                   )}
                 />
               }
@@ -567,7 +579,8 @@ function App() {
                       historicalAmzn,
                       historicalCrm,
                       historicalGoogle,
-                      historicalMeta
+                      historicalMeta,
+                      historicalNflx
                     )}
                   account = {account}
                   getAccount = {getAccount}

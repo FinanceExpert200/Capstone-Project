@@ -24,7 +24,7 @@ import {
   TabPanel,
 } from "@chakra-ui/react";
 import { color } from "framer-motion";
- 
+import ClickPopover from "../Popover/Popover";
 
 
 
@@ -46,8 +46,8 @@ const TradingStrategies = ({ userId , setFormattedStrategyName}) => {
     >
       <Flex flexDirection={"column"} ml={"400px"} mr={"400px"} w={"full"}>
         <Square>
-          <Heading fontSize={"5rem"}>Trading Strategies</Heading>
-          <Text ml={1}>Learn More</Text>
+          <Heading fontSize={"5rem"}><ClickPopover display = "Trading Strategies" word = "What is a trading strategy?" description = {"A trading strategy is like a gameplan for buying and selling stocks. It helps decide when you should buy and sell stocks based on things like current events, stock price changes, and your own financial goals. It's a way of making decisions in a more thought out way instead of trading based on gut instinct."} /></Heading>
+          
         </Square>
 
         <Tabs variant="enclosed" borderColor={'#03314b'} w={"full"} p={5}>
