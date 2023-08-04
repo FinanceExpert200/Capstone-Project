@@ -65,12 +65,12 @@ export default function ResultMeanReversion({
               Buying Power: ${buyingPower}
             </Tag>
           </Flex>
-          <Text fontSize={30} mt={4}>
+          {/* <Text fontSize={30} mt={4}>
             Pairs trading is a strategy that trades two correlated stocks based
             on their price ratio, which is the price of one stock divided by the
             price of the other. It calculates the historical average and
             standard deviation of this ratio.
-          </Text>
+          </Text> */}
         </Flex>
       </Box>
 

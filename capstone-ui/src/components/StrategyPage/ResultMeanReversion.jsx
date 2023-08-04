@@ -82,13 +82,13 @@ export default function ResultMeanReversion({
               Buying Power: ${buyingPower}
             </Tag>
           </Flex>
-          <Text fontSize={25} mt={4}>
+          {/* <Text fontSize={25} mt={4}>
             We utilize the dynamic Mean Reversion Strategy to spot compelling
             trading opportunities. When there are instances where a stock's
             30-day moving average falls 10 percent below its 120-day moving
             average, we BUY. Once the stock price rebounds and aligns with its
             120-day moving average, we execute a SELL order to secure profits.
-          </Text>
+          </Text> */}
         </Flex>
       </Box>
 
