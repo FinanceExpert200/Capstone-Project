@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useEffect } from 'react';
 import {Box,Center,Text} from '@chakra-ui/react'
 import {format, parseISO} from "date-fns"
-import { AreaChart, Area,XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
+import { AreaChart, Area,XAxis, YAxis, CartesianGrid, Tooltip, Legend, Label,ResponsiveContainer } from 'recharts';
 
 export default function StrategyGraph({data, dataName, aspect , color}) {
     return (
@@ -33,13 +33,26 @@ export default function StrategyGraph({data, dataName, aspect , color}) {
                             return format(date,"MMM,d")
                         }
                         return "";
-                       }}/>
+                       }}>
+                         <Label stroke={color} value="Date" offset={0} position="insideBottom" />
+                       </XAxis>
                 <YAxis stroke={color} 
                        domain={['auto', 'auto']} 
                        tickCount={5}
-                       tickFormatter={number => `${number}%`}/>
+                       tickFormatter={number => `${number}%`}>
+                    <Label style={{
+              textAnchor: "middle",
+              fontSize: "100%",
+              fill: "white",
+            }}
+            position={'left'}
+            angle={270}stroke={color} 
+            marginRight={5}
+            value="Average Price (%)" 
+            offset={13} />
+                </YAxis>
                 <Tooltip />
-                <Legend></Legend>
+                <Legend verticalAlign="top" height={36}></Legend>
                 <CartesianGrid opacity={.3} vertical={false}/>
                 <Area
                   type="monotone"  

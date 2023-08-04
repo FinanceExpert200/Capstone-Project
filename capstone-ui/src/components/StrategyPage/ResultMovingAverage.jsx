@@ -103,9 +103,9 @@ export default function MovingAverageResult({ maArray, transactionHistory, accou
       <Flex direction={'row'} justify={'space-between'}>
 
         <Tabs variant='enclosed' borderColor={'black'} w={'full'} p={5} >
-          <TabList p={1} >
+          <TabList >
             {companies.map((company) => (
-              <Tab >{company}</Tab>
+              <Tab _selected={{ color: 'white', bg: '#03314b' }} borderTopRadius={5} borderBottomRadius={0}>{company}</Tab>
             ))
             }
 
@@ -129,7 +129,7 @@ export default function MovingAverageResult({ maArray, transactionHistory, accou
                         <Tr >
                           <Td>{c.ticker}</Td>
                           <Td>{format(parseISO(c.date), "MMM, d, yyyy")}</Td>
-                          <Td>{c.type.slice(0, 1).toUpperCase() + c.type.slice(1, c.type.length)}</Td>
+                          <Td><Tag bg="whiteAlpha.600">{c.type.slice(0, 1).toUpperCase() + c.type.slice(1, c.type.length)}</Tag></Td>
                           <Td isNumeric>${c.price.toFixed(2)}</Td>
                         </Tr>
                       ))}

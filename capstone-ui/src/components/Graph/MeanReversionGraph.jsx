@@ -1,9 +1,10 @@
 import React, { useState } from 'react';
 import { useEffect } from 'react';
-import { Box, Center, Text } from '@chakra-ui/react'
+import { Box, Center, Text,Tag } from '@chakra-ui/react'
 import { format, parseISO } from "date-fns"
 import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
 import { LineChart, Line,Label } from 'recharts';
+import{MinusIcon} from '@chakra-ui/icons'
 
 export default function MeanReversionGraph({ data, dataName, aspect, color, thirty, twenty }) {
   //console.log("THE ARRAY CALLED ", data)
@@ -29,15 +30,7 @@ export default function MeanReversionGraph({ data, dataName, aspect, color, thir
             }
             return "";
           }}>
-            <Label
-            style={{
-              textAnchor: "middle",
-              fontSize: "100%",
-              fill: "white",
-            }}
-            offset={1} 
-            position="Bottom" 
-            value={"Dates"} />
+            <Label fontSize="100%" fill="white" stroke={'white'} value="Date" offset={0} position="insideBottom" />
           </XAxis>
         
         <YAxis stroke={color}
@@ -54,8 +47,8 @@ export default function MeanReversionGraph({ data, dataName, aspect, color, thir
             position={'left'}
             angle={270}
             value={"Averages"} /></YAxis>
-        <Tooltip />
-        <Legend verticalAlign="top" height={36}></Legend>
+        <Tooltip content = {<CustomizeLabel color={color}/>}/>
+        <Legend verticalAlign="top" height={36} content={renderLegend}></Legend>
         <CartesianGrid opacity={.3} vertical={false} />
         <Line
           type="monotone"
@@ -92,15 +85,32 @@ export default function MeanReversionGraph({ data, dataName, aspect, color, thir
 function CustomizeLabel({ active, payload, label, color }) {
   if (active) {
     return (
-      <Box bgColor={'black'} justify={'center'}>
+      <Box bgColor={'black'} justify={'center'} p={3}>
         <Text color={'white'}>
           {format(parseISO(label), "eeee,d MMM, yyyy")}
         </Text>
 
-        <Text color={color}>{payload[0].value.toFixed(2)}</Text>
+        <Text color={color}>Closing Price : ${payload[0].value.toFixed(2)}</Text>
+        <Text color={color}>30 Day Average : ${payload[1].value.toFixed(2)}</Text>
+        <Text color={color}>120 Day Average : ${payload[2].value.toFixed(2)}</Text>
       </Box>
     )
   }
 
+}
+const renderLegend = (props) => {
+  const { payload } = props;
+
+  return (
+    <>
+      {
+        payload.map((entry, index) => (
+          <Tag key={`item-${index}`} mr={3} bg="whiteAlpha.600">
+            <MinusIcon color={'white'}/>{entry.value}</Tag>
+        ))
+      }
+    </>
+ 
+  );
 }
 // content = {<CustomizeLabel color={color}/>}

@@ -213,23 +213,16 @@ const StrategyPage = ({ userId, strategyBuyingPower, setStrategyBuyingPower, str
           break;
 
         case "movingaveragecrossover":
-          if (selectedTickers.length >= 1) {
             runMovingAverageCrossoverStrategy(selectedTickers);
-          }
           break;
 
         case "divergence":
-
-
           runDivergenceStrategy(selectedTickers);
           break;
         case "pairstrading":
-
-
           runPairsTradingStrategy(selectedTickers);
           break;
         case "exponentialmovingaverage":
-
           runEMAStrategy(selectedTickers);
           break;
 

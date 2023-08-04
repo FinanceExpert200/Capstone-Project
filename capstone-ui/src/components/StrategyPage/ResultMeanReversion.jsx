@@ -45,7 +45,7 @@ export default function ResultMeanReversion({ accountValues, transactionHistory,
     <Flex direction={'column'} w={'full'} h={'80vh'} mt={10} p={10} textColor={'#03314b'}>
       <Box bgColor={'#03314b'} minH={'30vh'} w={'full'} p={7}>
         <Flex direction={'row'} w={'full'} justify={'space-between'} textColor={'white'}>
-          <Heading fontWeight={'light'}>Moving Average Strategy</Heading>
+          <Heading fontWeight={'light'}>Mean Reversion Strategy</Heading>
           <Tag fontSize={'23'} bg="whiteAlpha.600">Buying Power : ${buyingPower}</Tag>
           
 
@@ -106,7 +106,7 @@ export default function ResultMeanReversion({ accountValues, transactionHistory,
                   data={array[companies[index]]}
                   dataName="close"
                   aspect={4}
-                  color="white"
+                  color="#b4abaf"
                   thirty="thirtyDayAverage"
                   twenty="twentyOneAverage"
                   key={index}
@@ -121,9 +121,12 @@ export default function ResultMeanReversion({ accountValues, transactionHistory,
       </Tabs>
       <Flex direction={'row'} justify={'space-between'} >
         <Tabs variant='enclosed' borderColor={'black'} w={'full'} p={5} >
-          <TabList p={1} >
+          <TabList >
             {companies.map((company) => (
-              <Tab >{company}</Tab>
+              <Tab _selected={{ color: 'white', bg: '#03314b' }} 
+                   _hover={{ bg: "green.500", color: "white" }}>
+                    {company}
+              </Tab>
             ))
             }
 
@@ -148,7 +151,7 @@ export default function ResultMeanReversion({ accountValues, transactionHistory,
                           <Tr >
                             <Td>{c.Ticker}</Td>
                             <Td>{format(parseISO(c.Date), "MMM, d, yyyy")}</Td>
-                            <Td>{c.Type.slice(0, 1).toUpperCase() + c.Type.slice(1, c.Type.length)}</Td>
+                            <Td><Tag bg="whiteAlpha.600">{c.Type.slice(0, 1).toUpperCase() + c.Type.slice(1, c.Type.length)}</Tag></Td>
                             <Td isNumeric>${c.Price.toFixed(2)}</Td>
                           </Tr>
                         ))}
