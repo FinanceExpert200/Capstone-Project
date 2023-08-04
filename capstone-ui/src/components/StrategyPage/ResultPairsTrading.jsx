@@ -111,7 +111,12 @@ export default function ResultMeanReversion({ accountValues, transactionHistory,
                         <Tr >
                           <Td>{c.ticker}</Td>
                           <Td>{format(parseISO(c.date), "MMM, d, yyyy")}</Td>
-                          <Td><Tag bg="whiteAlpha.600">{c.type.slice(0, 1).toUpperCase() + c.type.slice(1, c.type.length)}</Tag></Td>
+                          {c.type === 'buy' ? (
+                              <Tag colorScheme='green'>{c.type.slice(0, 1).toUpperCase() + c.type.slice(1, c.type.length)}</Tag>
+
+                            ):(
+                              <Tag colorScheme='red'>{c.type.slice(0, 1).toUpperCase() + c.type.slice(1, c.type.length)}</Tag>
+                            )}
                           <Td isNumeric>${c.price.toFixed(2)}</Td>
                         </Tr>
                       ))}

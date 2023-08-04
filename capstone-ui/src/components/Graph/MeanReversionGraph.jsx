@@ -106,7 +106,9 @@ const renderLegend = (props) => {
       {
         payload.map((entry, index) => (
           <Tag key={`item-${index}`} mr={3} bg="whiteAlpha.600">
-            <MinusIcon color={'white'}/>{entry.value}</Tag>
+            <MinusIcon color={index === 0 ? ('red') : index === 1 ? 'green' : 'brown'}
+            
+          />{entry.value}</Tag>
         ))
       }
     </>

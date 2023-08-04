@@ -83,7 +83,7 @@ export default function Trade({
         <Heading fontWeight={'bold'} fontSize={'80px'} >
           Start Trading!
         </Heading>
-        <Text  fontSize={{base:'medium', sm:'medium'}}>
+        <Text  fontSize={'25'}>
          Choose from one of the following companies...
         </Text>
 
