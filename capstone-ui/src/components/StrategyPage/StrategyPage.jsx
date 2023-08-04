@@ -37,6 +37,7 @@ const StrategyPage = ({userId,strategyBuyingPower,setStrategyBuyingPower,strateg
   const [ranStrategy, setRanStrategy] = useState(false);
   const [selectedTickers, setselectedTickers] = useState([]);
   const [error, seterror] = useState(false);
+  const [error2,setError2] = useState(false)
   const [errorMessage, setErrorMessage] = useState('');
 
   const [rsi, setRsi] = useState(null);
@@ -62,6 +63,7 @@ const StrategyPage = ({userId,strategyBuyingPower,setStrategyBuyingPower,strateg
       case "meanreversion":
 
         formattedName =  "Mean Reversion"
+        break;
       case "movingaveragecrossover":
         formattedName = "Moving Average Crossover"
         break
@@ -194,7 +196,7 @@ const StrategyPage = ({userId,strategyBuyingPower,setStrategyBuyingPower,strateg
     setCurrentTransactionHsitory([]);
     //console.log();
 
-    if (selectedTickers.length >= 1 && simulatedBuyingPower > 0) {
+    if (selectedTickers.length >= 1 && simulatedBuyingPower > 500) {
       console.log('GOT ACCEPTED')
       setRanStrategy(true);
       switch (name) {
@@ -228,11 +230,28 @@ const StrategyPage = ({userId,strategyBuyingPower,setStrategyBuyingPower,strateg
           break;
       }
       setRanStrategy(true);
-    }else if(simulatedBuyingPower < 0 && selectedTickers.length >= 1){
+    }else if(selectedTickers.length === 0 && simulatedBuyingPower < 500 && simulatedBuyingPower > 0){
+      setErrorMessage("You must select a ticker and input a minimum of $500 to start");
+      setError2(true)
+      console.log("ERRORS" , {errorMessage})
+    }
+    else if(simulatedBuyingPower < 500 && simulatedBuyingPower > 0 ){
       console.log("BEING USED HERE ")
-      setErrorMessage("WRONG TYPE")
-      seterror(true)
-
+      setErrorMessage("The minimum account allowed is $500");
+      setError2(true)
+      console.log("ERRORS" , {errorMessage})
+    }
+    else if(selectedTickers.length === 0){
+      console.log("You must select at least one ticker")
+      setErrorMessage("You must select at least one ticker");
+      setError2(true)
+      console.log("ERRORS" , {errorMessage})
+    }
+    else if(simulatedBuyingPower < 0){
+      console.log("length error here ")
+      setErrorMessage("Quantity cannot be a negative number");
+      setError2(true)
+      console.log("ERRORS" , {errorMessage})
     }
     
 
@@ -264,6 +283,9 @@ const StrategyPage = ({userId,strategyBuyingPower,setStrategyBuyingPower,strateg
         "Pairs trading only works with two stocks, select two in ordet to submit"
       );
       seterror(true);
+    }else if(name != "pairstrading" && selectedTickers.length === 0){
+      setErrorMessage("you must select a ticker")
+      seterror(true);
     }
     if (selectedTickers.includes(buttonNumber)) {
       setselectedTickers(selectedTickers.filter((num) => num !== buttonNumber));
@@ -272,6 +294,7 @@ const StrategyPage = ({userId,strategyBuyingPower,setStrategyBuyingPower,strateg
       setselectedTickers([...selectedTickers, buttonNumber]);
       seterror(false);
     } else {
+      setErrorMessage("you must select a ticker")
       seterror(true);
     }
   };
@@ -418,6 +441,7 @@ const StrategyPage = ({userId,strategyBuyingPower,setStrategyBuyingPower,strateg
                         <Box fontSize={'20px'}>Selected buttons:</Box>
                         <Text m={'10px'} fontSize={'20px'}> {selectedTickers.join(', ')}</Text>
                         {error && <Text>Pairs Trading can only have 2 options selected</Text>}
+
                         <Flex direction={'row'} justify={'space-between'}>
 
                         <Input type="number" id="quantity" name="quantity" placeholder='Amount' onChange={handleInputChangeForSimulatedBuyingPower} w={'30'}/>
@@ -425,6 +449,7 @@ const StrategyPage = ({userId,strategyBuyingPower,setStrategyBuyingPower,strateg
                             Simulate {formattedName} Strategy
                         </Button>
                         </Flex>
+                        {error2 && <Text> {errorMessage}</Text>}
 
                 
                     </Box>
