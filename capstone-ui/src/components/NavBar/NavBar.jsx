@@ -57,6 +57,7 @@ export default function NavBar({ isLogged, setIsLogged }) {
   return (
     <>
     {isLogged && (
+      
       <Box bg={'#03314b'} px={4} 
            zIndex={1} position = {'absolute'} 
            width = {'full'} pl={'80px'} pr={'80px'} 
@@ -89,6 +90,8 @@ export default function NavBar({ isLogged, setIsLogged }) {
           </Flex>
         </Flex>
 
+        
+
         {isOpen &&(
           <Box pb={4} display={{ md: 'none' }}>
             <Stack as={'nav'} spacing={4}>
@@ -113,6 +116,8 @@ export default function NavBar({ isLogged, setIsLogged }) {
           <Box as='a' href="/" fontWeight={'bold'}>StockSwap</Box>
           <Flex alignItems={'center'}>
           <Button
+              
+          
               bg={'#1ecc97'}
               rounded={'full'}
               color={'white'}

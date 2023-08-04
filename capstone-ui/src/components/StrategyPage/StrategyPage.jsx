@@ -465,7 +465,7 @@ const StrategyPage = ({ userId, strategyBuyingPower, setStrategyBuyingPower, str
 
                 <Input type="number" id="quantity" name="quantity" placeholder='Amount' onChange={handleInputChangeForSimulatedBuyingPower} w={'30'} />
                 <Button type="submit" bg={'blackAlpha.200'} _hover={{ bg: "green.500", color: "white" }}>
-                  Run Strategy
+                  Simulate Strategy over Past Year
                 </Button>
               </Flex>
               
