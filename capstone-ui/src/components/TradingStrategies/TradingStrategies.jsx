@@ -1,8 +1,9 @@
-import React from "react";
+import {React,useState} from "react";
 import "./TradingStrategies.css";
 import MeanReversionStrat from "../../TradingCalculations/MeanReversionStrat.js";
 import EMAStrat from "../../TradingCalculations/EMAStrat.js";
-
+import StrategyPage from "../StrategyPage/StrategyPage";
+import { useParams } from "react-router";
 import { Link as RouterLink } from "react-router-dom";
 import {
   Link,
@@ -29,6 +30,9 @@ import { color } from "framer-motion";
 
 
 const TradingStrategies = ({ userId , setFormattedStrategyName}) => {
+  const { name } = useParams();
+  const [formDisplay,setFormDisplay] = useState(false)
+  const [submission,setSubmission] = useState(false);
   return (
     <Center
       position={"absolute"}
@@ -56,7 +60,8 @@ const TradingStrategies = ({ userId , setFormattedStrategyName}) => {
           </TabList>
 
           <TabPanels>
-            <TabPanel>
+            {/* overflow="scroll" h={'60vh'} */}
+            <TabPanel >
               <Flex
                 direction={"column"}
                 justify={"space-between"}
@@ -72,11 +77,13 @@ const TradingStrategies = ({ userId , setFormattedStrategyName}) => {
                   sell, as recent prices are lower, indicating the stock may be
                   on a downward trend.
                 </Text>
+                {/* <StrategyPage strategyName={'movingaveragecrossover'}/> */}
                 <Link as={RouterLink} to="/strategies/movingaveragecrossover">
                   <Button
                     fontSize={"20px"}
                     _hover={{ bg: "green.500", color: "white" }}
                   >
+
                     Moving Average Crossover
                   </Button>
                 </Link>
