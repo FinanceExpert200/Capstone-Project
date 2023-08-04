@@ -112,20 +112,20 @@ export default function NavBar({ isLogged, setIsLogged }) {
           
           <Box as='a' href="/" fontWeight={'bold'}>StockSwap</Box>
           <Flex alignItems={'center'}>
-          <Button
+          {/* <Button
               bg={'green.400'}
               rounded={'full'}
               color={'white'}
               _hover={{ bg: 'green.500' }}>
               <Link href="/login">Sign In</Link>
-            </Button>
-            <Button
+            </Button> */}
+            {/* <Button
               bg={'whiteAlpha.600'}
               rounded={'full'}
               color={'black'}
               _hover={{ bg: 'green.100' }}>
               <Link href="/register"> Register</Link>
-            </Button>
+            </Button> */}
           </Flex>
         </Flex>
 

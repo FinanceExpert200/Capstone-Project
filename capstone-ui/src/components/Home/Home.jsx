@@ -174,7 +174,6 @@ const Home = ({
                 <Text as={"h1"} color={"whitesmoke"}>
                   {" "}
                   Stocks Owned
-                  Stocks Owned
                 </Text>
                 {portfolio.map((item, key) => (
                   <Link to={`/trade`} key={item.ticker}>

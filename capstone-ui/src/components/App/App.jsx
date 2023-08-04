@@ -196,7 +196,7 @@ function App() {
 
   processTickers();
 
-  console.log("GOOGLE PRICE INN AS ETF", googlAVGBuyPrice);
+  
   // console.log("META PRICE INN AS ETF", nflxAVGBuyPrice)
 
   //The following 3 getter: gets the list of all stocks and account used by the user
@@ -247,7 +247,7 @@ function App() {
 
   
 
-
+  // console.log("is it pop here", nflxPercent )
   const stockData = {
     2: {
       company: "Meta Platforms Inc",
@@ -268,7 +268,8 @@ function App() {
       logo: "https://cdn.cookielaw.org/logos/dd6b162f-1a32-456a-9cfe-897231c7763c/4345ea78-053c-46d2-b11e-09adaef973dc/Netflix_Logo_PMS.png",
       stockName: "NFLX",
       stockPrice: nflxPrice,
-      //stockPercentage: metaPercent,
+      
+      stockPercentage: nflxPercent,
     },
     5: {
       company: "Alphabet Inc Class A",
@@ -316,7 +317,8 @@ function App() {
       switch (ticker) {
         case "META":
           setMetaPrice(price);
-          setMetaPercent(percentChange);
+          
+          setMetaPercent(percentChange);          
           break;
         case "AMZN":
           setAmznPrice(price);
@@ -325,6 +327,7 @@ function App() {
         case "NFLX":
           setNflxPrice(price);
           setNflxPercent(percentChange);
+          // console.log("NFLX percentChange", percentChange)
           break;
         case "GOOGL":
           setGooglPrice(price);
@@ -457,7 +460,7 @@ function App() {
       axios
         .get(`http://localhost:3001/trans/history/${userID}`)
         .then((response) => {
-          console.log("HISTORY in APP: ", response);
+          // console.log("HISTORY in APP: ", response);
           setTransactionHistory(response.data.userTransactionHistory);
         })
         .catch((error) => {

@@ -20,10 +20,15 @@ export default function StockCard({
   historicalData,
   acc_value
 }) {
+
   const [stateForm, setStateForm] = useState("reg");
   const [submission, setSubmission] = useState(false);
   const { stockId } = useParams();
   const stockInfo = stockData[stockId];
+  
+  console.log("stockInfo: ", stockInfo);
+
+
   const [quantity, setQuantity] = useState(0);
   const [totalPrice,setTotalPrice] = useState(0);
   const handleQuantityChange = (quantity) => {
@@ -71,14 +76,14 @@ export default function StockCard({
     } catch (err) {
       console.log(err);
 
-      
+
       //must update the error message
       //setSubmission(<Text color={'red.400'}>Your submission failed</Text>);
     }
   };
 
   //UNDO THIS
-  console.log("transaction was : ", submission);
+  // console.log("transaction was : ", submission);
 
   // here will be some sort of function that displays the stock graph, and just overall infromation based on the stock id that is passed
   return (
