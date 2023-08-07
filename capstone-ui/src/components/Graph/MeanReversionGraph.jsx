@@ -1,14 +1,18 @@
 import React, { useState } from 'react';
 import { useEffect } from 'react';
-import { Box, Center, Text,Tag } from '@chakra-ui/react'
+import { Box, Text, IconButton, Modal, ModalOverlay, ModalContent, ModalHeader, ModalCloseButton, ModalBody, useDisclosure, Tag } from '@chakra-ui/react';
 import { format, parseISO } from "date-fns"
 import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
 import { LineChart, Line,Label } from 'recharts';
 import{MinusIcon} from '@chakra-ui/icons'
+import { InfoIcon } from '@chakra-ui/icons'
+
 
 export default function MeanReversionGraph({ data, dataName, aspect, color, thirty, twenty }) {
+  const { isOpen, onOpen, onClose } = useDisclosure();
   //console.log("THE ARRAY CALLED ", data)
   return (
+    <Box position={"relative"}>
     <ResponsiveContainer width={'100%'} aspect={aspect}>
       <LineChart
         data={data}
@@ -80,6 +84,27 @@ export default function MeanReversionGraph({ data, dataName, aspect, color, thir
           activeDot={1} />
       </LineChart>
     </ResponsiveContainer>
+    <IconButton
+        aria-label="info"
+        icon={<InfoIcon boxSize={5} cursor="pointer" color={"white"}/>}
+        background = "transparent"
+        position="absolute"
+        top="5px"
+        right="5px"
+        onClick={onOpen}
+      />
+
+      <Modal isOpen={isOpen} onClose={onClose}>
+          <ModalOverlay />
+          <ModalContent>
+              <ModalHeader>Chart Information</ModalHeader>
+              <ModalCloseButton />
+              <ModalBody>
+                  This graph represents the strategy data for...
+              </ModalBody>
+          </ModalContent>
+      </Modal>
+    </Box>
   )
 }
 function CustomizeLabel({ active, payload, label, color }) {

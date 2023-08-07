@@ -116,6 +116,7 @@ export default function StockCard({
               "You do not have enough of this stock to sell this amount."
             );
           } else {
+            setDisableButton(false)
             setErrorMsg("");
           }
         }
@@ -341,7 +342,7 @@ export default function StockCard({
                       setStateForm("buy");
                     }}
                     fontSize={"60px"}
-                    color={"black"}
+                    color={"white"}
                   >
                     {" "}
                     Buy{" "}
@@ -360,6 +361,7 @@ export default function StockCard({
                       setStateForm("sell");
                     }}
                     fontSize={"60px"}
+                    color = "white"
                   >
                     {" "}
                     Sell{" "}
@@ -378,7 +380,7 @@ export default function StockCard({
                       Quantity
                     </Text>
                     <Input
-                      color={"black"}
+                      color={"white"}
                       w={20}
                       h={"40px"}
                       type="number"
@@ -397,7 +399,13 @@ export default function StockCard({
                   </Flex>
                   <Flex direction={"row"} justify={"space-between"}>
                     <Text fontSize={"30px"} fontWeight={"light"}>
-                      New Buying Power:{" "}
+                    <Popover
+                      word="New Buying Power"
+                      display={`New Buying Power`}
+                      color="white"
+                      description={`The new buying power is how much money you will have after trading the stock.`}
+                      icon = {"white"}
+                    />{" "}
                     </Text>
                     <Text
                       fontSize={"30px"}

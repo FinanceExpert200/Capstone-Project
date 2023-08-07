@@ -29,7 +29,8 @@ import {
   TableContainer,
 } from "@chakra-ui/react";
 import { format, parseISO } from "date-fns";
-import StrategyGraph from "../Graph/StrategyGraph";
+import StrategyGraph from "../Graph/MovingAverageCrossover";
+
 //maArray, transactionHistory, accountValues
 
 export default function MovingAverageResult({
@@ -74,7 +75,7 @@ export default function MovingAverageResult({
               Buying Power: ${buyingPower}
             </Tag>
           </Flex>
-          <Text fontSize={25} mt={4}>
+          {/* <Text fontSize={25} mt={4}>
             Involves using two different moving averages, one for a shorter
             period and the other for a longer period. When the short-term
             average crosses above the long-term average, it's a signal to buy,
@@ -82,7 +83,7 @@ export default function MovingAverageResult({
             rise. Conversely, when the short-term average crosses below the
             long-term average, it's a signal to sell, as recent prices are
             lower, indicating the stock may be on a downward trend.
-          </Text>
+          </Text> */}
         </Flex>
       </Box>
       <Container color='#edf0f5' p={4} w={'full'} mt={'-120px'}  h={300} boxShadow={'0,2px,5px,rgba(0,0,0,0.2)'}>

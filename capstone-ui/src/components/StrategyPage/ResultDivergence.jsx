@@ -66,12 +66,12 @@ export default function ResultDisplay({
               Buying Power : ${buyingPower}
             </Tag>
           </Flex>
-          <Text fontSize={30} mt={4}>
+          {/* <Text fontSize={30} mt={4}>
             It watches the RSI and daily price changes. When the price goes down
             but RSI goes up, it tells us to buy the stock, thinking it might go
             up later. When the price goes up but RSI goes down, it tells us to
             sell, thinking the price might go down.
-          </Text>
+          </Text> */}
         </Flex>
       </Box>
 
