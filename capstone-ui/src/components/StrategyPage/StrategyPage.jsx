@@ -411,6 +411,10 @@ const StrategyPage = ({
             ></Button>
           )}
           <Button
+            position="absolute" 
+            top={'150vh'} 
+            alignContent={'center'}
+            w={'full'}
             onClick={() => {
               setRanStrategy(false);
               setselectedTickers([]);
