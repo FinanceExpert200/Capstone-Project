@@ -10,6 +10,7 @@ import {
   Grid,
   useBreakpointValue,
 } from '@chakra-ui/react';
+import { Link as RouterLink } from "react-router-dom"; 
 //'url(https://www.nasdaq.com/sites/acquia.prod/files/image/29525db076bcc42505a356e55dbe94f38b28530b_getty-stock-market-data.jpg?1170962425)'
 //https://images.unsplash.com/photo-1642790403805-a3835434499e?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=3590&q=80
 //https://images.unsplash.com/photo-1642790261487-5b7e444c0dce?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2858&q=80
@@ -67,7 +68,7 @@ const LandingPage = () => {
       
     <Flex direction={'row'} mt ={4} >
       <Button  bg='#1ecc97' rounded="full" color="white" _hover={{ bg: 'green.500' }}>
-        <Link href="/login">Sign In</Link>
+        <Link as={RouterLink} to="/login">Sign In</Link>
       </Button>
       <Button bg="whiteAlpha.600" rounded="full" color="black" _hover={{ bg: 'green.100' }}>
         <Link href="/register">Register</Link>
