@@ -173,7 +173,7 @@ export default function StockCard({
       updateStockPrice(tickers);
 
       const res = await axios.post(
-        `http://localhost:3001/trans/${trans_type}`,
+        `https://stock-swap.onrender.com/trans/${trans_type}`,
         {
           ticker: ticker,
           quantity: quantity,
@@ -259,8 +259,8 @@ export default function StockCard({
             {stockInfo.stockPercentage > 0 ? (
               <Stack direction={"row"} ml={5} mt={5}>
                 <Text fontSize={25} color={"#03314b"} fontWeight={"light"}>
-  Percent Change:{" "}
-</Text>
+                  Percent Change:{" "}
+                </Text>
 
                 <ArrowUpIcon color={"#15a191"} w={10} h={10} />
                 <Text fontSize={25} color={"#00f008"} fontWeight={"light"}>
@@ -321,26 +321,22 @@ export default function StockCard({
 
           <Flex direction={"column"} h={"100vh"} w={"full"} justify={"center"}>
             <Box>
-<Flex justify={"space-between"}>
+              <Flex justify={"space-between"}>
+                <Text fontSize={"35px"} fontWeight={"bold"} color="white">
+                  <Popover
+                    word="Portfolio"
+                    display={"Portfolio"}
+                    color="#03314b"
+                    description={`Your portfolio is how much of each stock you own. It looks like you currently own ${currTickerQuantity} share(s) of ${stockInfo.stockName} `}
+                  />
+                </Text>
 
-
-
-              <Text fontSize={"35px"} fontWeight={"bold"} color="white" >
-                <Popover
-                  word="Portfolio"
-                  display={"Portfolio"}
-                  color="#03314b"
-                  description={`Your portfolio is how much of each stock you own. It looks like you currently own ${currTickerQuantity} share(s) of ${stockInfo.stockName} `}
-                />
-              </Text>
-
-
-              {account && <Text color="#03314b" fontSize={"30px"}>
-                Buying Power: ${addCommasToNumber(account.buying_power)}
-              </Text>}
-
-</Flex>
-
+                {account && (
+                  <Text color="#03314b" fontSize={"30px"}>
+                    Buying Power: ${addCommasToNumber(account.buying_power)}
+                  </Text>
+                )}
+              </Flex>
 
               {portfolio &&
                 portfolio.map((item, index) => (

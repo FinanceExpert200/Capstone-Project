@@ -6,6 +6,7 @@ Pod Members: Matthew Ibrahim, Lake Bradford, Joselyne Malan
 
 Our project addresses the lack of understanding and the perception of trading as gambling by providing a user-friendly platform that educates users about investment strategies. We aim to emphasize the quantitative and profit-oriented aspects of trading to empower individuals to make informed investment decisions. Our target audience consists of individuals seeking to learn about responsible investing, including beginners and those interested in quantitative trading approaches.
 Our project's primary objective is to provide a secure and risk-free platform that educates users about diverse investment strategies, while dispelling the misconception that trading is synonymous with glorified gambling. Key features include descriptions of multiple trading strategies and their profitibality, and using the current market data to show how effective these strategies are in todays market.
+
 ## User Roles and Personas
 
 User Persona #1: Olivia Martinez: a high school student from New York City, USA.
@@ -49,55 +50,46 @@ List all the pages and screens in the app. Include wireframes for at least 3 of 
 
 <img width="1092" alt="Screenshot 2023-07-10 at 1 58 00 PM" src="https://github.com/FinanceExpert200/Capstone-Project/assets/89942749/9726799a-0c27-4bc3-ae87-f3c2ebede169">
 
-
-
-
 ## Endpoints
 
 List the API endpoints you will need to implement.
 POST REQUEST:
 Adding a transaction using Postman
-Link: http://localhost:3001/trans/add
+Link: https://stock-swap.onrender.com/trans/add
 {
-    "ticker": "APPL", 
-    "quantity": 2,
-    "curr_price": 240,
-    "user_id": 1,
-    "trans_type": "sell"
+"ticker": "APPL",
+"quantity": 2,
+"curr_price": 240,
+"user_id": 1,
+"trans_type": "sell"
 }
 Buy Transaction
-Link: http://localhost:3001/trans/buy
+Link: https://stock-swap.onrender.com/trans/buy
 {
-    "ticker": "APPL", 
-    "quantity": 2,
-    "curr_price": 240,
-    "user_id": 1,
-    "trans_type": "sell"
+"ticker": "APPL",
+"quantity": 2,
+"curr_price": 240,
+"user_id": 1,
+"trans_type": "sell"
 }
-
-
 
 Create a new User
-Link: http://localhost:3001/auth/register
+Link: https://stock-swap.onrender.com/auth/register
 {
- "email": "test@gmail.com",
- "firstName": "test",
- "lastName": "test2",
- "password": "1234"
+"email": "test@gmail.com",
+"firstName": "test",
+"lastName": "test2",
+"password": "1234"
 }
-
-
 
 GET REQUESTS
 
 gets the account information for a user
-http://localhost:3001/trans/account/:id
+https://stock-swap.onrender.com/trans/account/:id
 
 LIST OF REQUEST:
 Create - POST - Adding a transaction to a table
 Update - PUT - Update user's profile data
 Read - GET - Fetch the stocks from the Yahoo Finance API
 
-
-
-***Don't forget to set up your Issues, Milestones, and Project Board!***
+**_Don't forget to set up your Issues, Milestones, and Project Board!_**

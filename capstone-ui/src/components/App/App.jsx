@@ -85,8 +85,7 @@ function App() {
   const [buying_power, setBuyingPower] = useState(10000);
   const [acc_value, setAccValue] = useState(10000);
   const [transactionHistory, setTransactionHistory] = useState(null);
-  const [buyingPow, setBuyingPow] = useState(null)
-
+  const [buyingPow, setBuyingPow] = useState(null);
 
   // -------------------- Strategy Usestate Variables ------------------\\\
   const [strategyBuyingPower, setStrategyBuyingPower] = useState(0);
@@ -105,11 +104,9 @@ function App() {
     // Create an object to keep track of merged data
     const dataMap = {};
 
-
     arr1.forEach(({ date, ...rest }) => {
       dataMap[date] = { ...dataMap[date], ...rest };
     });
-
 
     arr2.forEach(({ date, ...rest }) => {
       dataMap[date] = { ...dataMap[date], ...rest };
@@ -173,10 +170,14 @@ function App() {
   const [googlAVGBuyPrice, setGooglAVGBuyPrice] = useState(0);
   const [crmAVGBuyPrice, setCrmAVGBuyPrice] = useState(0);
 
+  // https://stock-swap.onrender.com
+
+  // https://stock-swap.onrender.com/
+
   const getTickerViaUser = async (ticker) => {
     try {
       const res = await axios.get(
-        `http://localhost:3001/trans/avgbuyprice/${ticker}/${localStorage.getItem(
+        `https://stock-swap.onrender.com/trans/avgbuyprice/${ticker}/${localStorage.getItem(
           "currentUserId"
         )}`
       );
@@ -219,7 +220,7 @@ function App() {
   const getProfile = async () => {
     try {
       const res = await axios.get(
-        `http://localhost:3001/auth/profile/${localStorage.getItem(
+        `https://stock-swap.onrender.com/auth/profile/${localStorage.getItem(
           "currentUserId"
         )}`
       );
@@ -235,7 +236,7 @@ function App() {
   const getAccount = async () => {
     try {
       const res = await axios.get(
-        `http://localhost:3001/trans/account/${localStorage.getItem(
+        `https://stock-swap.onrender.com/trans/account/${localStorage.getItem(
           "currentUserId"
         )}`
       );
@@ -250,7 +251,7 @@ function App() {
   const getPortfolio = async () => {
     try {
       const res = await axios.get(
-        `http://localhost:3001/trans/portfolio/${localStorage.getItem(
+        `https://stock-swap.onrender.com/trans/portfolio/${localStorage.getItem(
           "currentUserId"
         )}`
       );
@@ -263,7 +264,7 @@ function App() {
   const getPortfolioforTradePage = async () => {
     try {
       const res = await axios.get(
-        `http://localhost:3001/trans/portfolio/${localStorage.getItem(
+        `https://stock-swap.onrender.com/trans/portfolio/${localStorage.getItem(
           "currentUserId"
         )}`
       );
@@ -272,11 +273,8 @@ function App() {
     } catch (error) {
       console.log(error);
     }
-    return res.data.user
-
-  }
-
-
+    return res.data.user;
+  };
 
   // console.log("is it pop here", nflxPercent )
   const stockData = {
@@ -318,31 +316,31 @@ function App() {
   };
   const stockPrice = [
     {
-      name: 'Netflix',
-      ticker: 'NFLX',
-      stockPrice: nflxPrice
+      name: "Netflix",
+      ticker: "NFLX",
+      stockPrice: nflxPrice,
     },
     {
-      name: 'Meta',
-      ticker: 'META',
-      stockPrice: metaPrice
+      name: "Meta",
+      ticker: "META",
+      stockPrice: metaPrice,
     },
     {
-      name: 'Crm',
-      ticker: 'CRM',
-      stockPrice: crmPrice
+      name: "Crm",
+      ticker: "CRM",
+      stockPrice: crmPrice,
     },
     {
-      name: 'Amazon',
-      ticker: 'AMZN',
-      stockPrice: amznPrice
+      name: "Amazon",
+      ticker: "AMZN",
+      stockPrice: amznPrice,
     },
     {
-      name: 'Google',
-      ticker: 'GOOGL',
-      stockPrice: googlPrice
-    }
-  ]
+      name: "Google",
+      ticker: "GOOGL",
+      stockPrice: googlPrice,
+    },
+  ];
 
   // --------------------------------------------------------------------------------------------------------------
   // this function gets the current price of the stocks
@@ -350,7 +348,7 @@ function App() {
   //   console.log("PERCENT CHANGE-------------")
   //   try {
   //     const response = await axios.get(
-  //       `http://localhost:3001/trans/stock/${ticker}`
+  //       `https://stock-swap.onrender.com/trans/stock/${ticker}`
   //     );
 
   //     const percentChange = response.data.data.dp; // this is the current price of the stock
@@ -366,7 +364,7 @@ function App() {
   const getStockPrice = async (ticker) => {
     try {
       const response = await axios.get(
-        `http://localhost:3001/trans/stock/${ticker}`
+        `https://stock-swap.onrender.com/trans/stock/${ticker}`
       );
 
       const price = response.data.data.c; // this is the current price of the stock
@@ -411,7 +409,6 @@ function App() {
     tickers.forEach(async (ticker) => {
       await getStockPrice(ticker);
     });
-
   };
 
   // --------------------------------------------------------------------------------------------------------------
@@ -436,7 +433,7 @@ function App() {
   const getStrategy = async () => {
     try {
       const res = await axios.get(
-        `http://localhost:3001/strategy/${localStorage.getItem(
+        `https://stock-swap.onrender.com/strategy/${localStorage.getItem(
           "currentUserId"
         )}`
       );
@@ -450,7 +447,7 @@ function App() {
   const removeStrategy = async () => {
     try {
       const res = await axios.delete(
-        `http://localhost:3001/strategy/remove/${localStorage.getItem(
+        `https://stock-swap.onrender.com/strategy/remove/${localStorage.getItem(
           "currentUserId"
         )}`
       );
@@ -474,13 +471,16 @@ function App() {
     transactionType
   ) => {
     try {
-      const res = await axios.post(`http://localhost:3001/trans/add`, {
-        ticker: ticker,
-        quantity: quantity,
-        curr_price: currentPrice,
-        user_id: userId,
-        trans_type: transactionType,
-      });
+      const res = await axios.post(
+        `https://stock-swap.onrender.com/trans/add`,
+        {
+          ticker: ticker,
+          quantity: quantity,
+          curr_price: currentPrice,
+          user_id: userId,
+          trans_type: transactionType,
+        }
+      );
       console.log(res.data);
     } catch (err) {
       console.log(err);
@@ -524,7 +524,7 @@ function App() {
 
     const getTransactions = async (userID) => {
       axios
-        .get(`http://localhost:3001/trans/history/${userID}`)
+        .get(`https://stock-swap.onrender.com/trans/history/${userID}`)
         .then((response) => {
           // console.log("HISTORY in APP: ", response);
           setTransactionHistory(response.data.userTransactionHistory);
@@ -537,7 +537,6 @@ function App() {
     getTransactions(localStorage.getItem("currentUserId"));
     updateStockPrice(tickers);
     getPortfolio();
-
   }, []);
 
   console.log("currentUser id", currentUserId);
@@ -570,7 +569,6 @@ function App() {
                     historicalMeta,
                     historicalNflx
                   )}
-
                   pieChartData={stockPrice}
                   bo={buyingPow}
                   strategyBuyingPower={strategyBuyingPower}
@@ -591,36 +589,36 @@ function App() {
             />
             <Route
               path="/trade"
-              element={portfolio ? (
-                <Trade
-                  updateStockPrice={updateStockPrice}
-                  tickers={tickers}
-                  stockData={stockData}
-                  historicalData={mergeArrays(
-                    historicalAmzn,
-                    historicalCrm,
-                    historicalGoogle,
-                    historicalMeta,
-                    historicalNflx,
-                    account
-                  )}
-                />
-
-              ) : (
-                <Center
-                  position={"fixed"}
-                  w={"full"}
-                  h={"100vh"}
-                  bgColor={"#000409"}
-                >
-                  <Button
-                    isLoading
-                    loadingText="Loading"
-                    color="white"
-                    variant="outline"
-                  ></Button>
-                </Center>
-              )
+              element={
+                portfolio ? (
+                  <Trade
+                    updateStockPrice={updateStockPrice}
+                    tickers={tickers}
+                    stockData={stockData}
+                    historicalData={mergeArrays(
+                      historicalAmzn,
+                      historicalCrm,
+                      historicalGoogle,
+                      historicalMeta,
+                      historicalNflx,
+                      account
+                    )}
+                  />
+                ) : (
+                  <Center
+                    position={"fixed"}
+                    w={"full"}
+                    h={"100vh"}
+                    bgColor={"#000409"}
+                  >
+                    <Button
+                      isLoading
+                      loadingText="Loading"
+                      color="white"
+                      variant="outline"
+                    ></Button>
+                  </Center>
+                )
               }
             />
             <Route
@@ -735,13 +733,17 @@ function App() {
               }
             />
             <Route
-              path='/tester'
-              element={stockData && (
-                <UserPieChart stockData={stockPrice} updateStockPrice={updateStockPrice}
-                  tickers={tickers} />
-
-              )
-              } />
+              path="/tester"
+              element={
+                stockData && (
+                  <UserPieChart
+                    stockData={stockPrice}
+                    updateStockPrice={updateStockPrice}
+                    tickers={tickers}
+                  />
+                )
+              }
+            />
             <Route path="/*" element={<NotFound />} />
           </Routes>
         </main>

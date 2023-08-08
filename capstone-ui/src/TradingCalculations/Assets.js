@@ -1,16 +1,16 @@
 import axios from "axios";
 
 export default class Assets {
-
-
   static async fetchHistoricalData(ticker, startDate, endDate) {
-    
     try {
-      const res = await axios.post(`http://localhost:3001/trans/historical`, {
-        ticker: ticker,
-        startDate: startDate,
-        endDate: endDate,
-      });
+      const res = await axios.post(
+        `https://stock-swap.onrender.com/trans/historical`,
+        {
+          ticker: ticker,
+          startDate: startDate,
+          endDate: endDate,
+        }
+      );
 
       // console.log(res.data);
       return res.data.result;
@@ -25,13 +25,10 @@ export default class Assets {
     return this.formatDate(targetDate);
   }
 
-
   static getCurrDate() {
     let currDate = this.formatDate(new Date());
     return currDate;
   }
-
-
 
   static formatDate(date) {
     const year = date.getFullYear();
@@ -43,16 +40,9 @@ export default class Assets {
 
   static async getStockPrice(ticker) {}
 
-
   static setBuyingPower(amount) {
     botBuyingPower = amount;
   }
-
-
-
-
-
-
 
   static getAvgBuyPrice(botTransactions) {
     let avg_price = 0;
@@ -80,7 +70,6 @@ export default class Assets {
       }
     }
 
-
     if (botBuy != 0) {
       avg_price = avg_price / botBuy;
       // console.log(avg_price);
@@ -89,9 +78,4 @@ export default class Assets {
 
     // return avg_price;
   }
-
-
-
-
-
 }

@@ -4,13 +4,10 @@ let stockCount = 0;
 
 let botTransactions = [];
 
-
 let thirtyDayMovingAvgArray = [];
 let oneTwentyDayMovingAvgArray = [];
 let transactionsHistory = [];
 let profitArray = [];
-
-
 
 let profit = 0;
 let botBuyingPower = 0;
@@ -27,13 +24,12 @@ let profitThreeMonths = 0;
 
 export default class MeanReversionStrat {
   static async mainFunc(budget, selectedTickers) {
-    
-    this.setBuyingPower((budget/selectedTickers.length));
+    this.setBuyingPower(budget / selectedTickers.length);
 
     for (const ticker of selectedTickers) {
       await this.calcPrevProfit(ticker, budget, selectedTickers);
     }
-  //console.log("THE TRADE HISTORY : ", transactionsHistory)
+    //console.log("THE TRADE HISTORY : ", transactionsHistory)
     // selectedTickers.forEach((ticker) => {
     //   this.calcPrevProfit(ticker, budget, selectedTickers);
     // });
@@ -42,7 +38,7 @@ export default class MeanReversionStrat {
   static setBuyingPower(amount) {
     botBuyingPower = amount;
   }
- 
+
   // the purpose of this function to calculate the profit that you would have made if you had used this strategy in the past
   static async calcPrevProfit(ticker, budget, selectedTickers) {
     const oneYearAgo = this.getDateOffset(-365);
@@ -65,13 +61,19 @@ export default class MeanReversionStrat {
       let thirtyDayMovingAvg = this.getMovingAverage(thirtyDayWindow);
       let oneTwentyDayMovingAvg = this.getMovingAverage(oneTwentyDayWindow);
 
-      
+      thirtyDayMovingAvgArray.push({
+        ticker: ticker,
+        date: thirtyDayWindow[0].date,
+        thirtyDayAverage: thirtyDayMovingAvg,
+        close: thirtyDayWindow[0].close,
+        twentyOneAverage: oneTwentyDayMovingAvg,
+      });
 
-      thirtyDayMovingAvgArray.push({ticker:ticker, date:thirtyDayWindow[0].date, thirtyDayAverage:thirtyDayMovingAvg, close:thirtyDayWindow[0].close, twentyOneAverage:oneTwentyDayMovingAvg});
-
-      oneTwentyDayMovingAvgArray.push({ticker:ticker, date:oneTwentyDayWindow[0].date, twentyOneAverage:oneTwentyDayMovingAvg});
-
-
+      oneTwentyDayMovingAvgArray.push({
+        ticker: ticker,
+        date: oneTwentyDayWindow[0].date,
+        twentyOneAverage: oneTwentyDayMovingAvg,
+      });
 
       if (thirtyDayWindow[thirtyDayWindow.length - 1].close > botBuyingPower) {
         // console.log("NOT ENOUGH MONEY TO BUY");
@@ -88,8 +90,6 @@ export default class MeanReversionStrat {
           this.getAvgBuyPrice(botTransactions, 0) &&
         stockCount > 0
       ) {
-        
-        
         const currentProfit =
           thirtyDayWindow[thirtyDayWindow.length - 1].close -
           this.getAvgBuyPrice(botTransactions, 0);
@@ -97,15 +97,14 @@ export default class MeanReversionStrat {
         profitYear += currentProfit;
         // }
 
-        if (i >= (yearHistoricalData.length - 123)) {
+        if (i >= yearHistoricalData.length - 123) {
           profitSixMonths += currentProfit;
         }
 
-        if (i >= (yearHistoricalData.length - 62)) {
+        if (i >= yearHistoricalData.length - 62) {
           profitThreeMonths += currentProfit;
         }
 
-        
         botTransactions.push({
           Type: "Sell",
           Price: thirtyDayWindow[thirtyDayWindow.length - 1].close,
@@ -132,23 +131,21 @@ export default class MeanReversionStrat {
 
     // console.log("this is AT", thirtyDayMovingAvgArray)
 
-     
-
-    botTransactions.map((bot)=>{
+    botTransactions.map((bot) => {
       //console.log('being called here!', bot)
       transactionsHistory.push(bot);
-    })
+    });
     //console.log('the instance of this trade: ', transactionsHistory)
-    profitArray.push({[ticker]: {profitThreeMonths,profitSixMonths,profitYear}})
-    console.log("profit YEAR",profitArray);
+    profitArray.push({
+      [ticker]: { profitThreeMonths, profitSixMonths, profitYear },
+    });
+    console.log("profit YEAR", profitArray);
     // reseting the state for each stock
-    this.setBuyingPower((budget/selectedTickers.length));
+    this.setBuyingPower(budget / selectedTickers.length);
     botAccValue = 5000;
     stockCount = 0;
-    
 
     await this.resetState();
-    
   }
 
   static async resetState() {
@@ -158,7 +155,6 @@ export default class MeanReversionStrat {
     //botTransactions = []
     botTransactions.length = 0;
   }
-
 
   static executeBuy(ticker, thirtyDayWindow) {
     botTransactions.push({
@@ -253,7 +249,7 @@ export default class MeanReversionStrat {
   // static async getStockPrice(ticker) {
   //     try {
   //       const response = await axios.get(
-  //         `http://localhost:3001/trans/stock/${ticker}`
+  //         `https://stock-swap.onrender.com/trans/stock/${ticker}`
   //       );
   //       // console.log(response.data.data)
   //       return response.data.data.c
@@ -267,11 +263,14 @@ export default class MeanReversionStrat {
     //if endDate is left undefined, it defaults to today
     // console.log("FETCHING THE API")
     try {
-      const res = await axios.post(`http://localhost:3001/trans/historical`, {
-        ticker: ticker,
-        startDate: startDate,
-        endDate: endDate,
-      });
+      const res = await axios.post(
+        `https://stock-swap.onrender.com/trans/historical`,
+        {
+          ticker: ticker,
+          startDate: startDate,
+          endDate: endDate,
+        }
+      );
 
       // console.log(res.data);
       return res.data.result;
@@ -279,20 +278,20 @@ export default class MeanReversionStrat {
       console.log(err);
     }
   }
-  static async getTransactionHistory(){
+  static async getTransactionHistory() {
     const placeholder = transactionsHistory;
-    transactionsHistory= []
-    return placeholder
+    transactionsHistory = [];
+    return placeholder;
   }
-  static async getProfitArray(){
+  static async getProfitArray() {
     const placeholder = profitArray;
-    profitArray =[]
-    return placeholder
+    profitArray = [];
+    return placeholder;
   }
-  static async getThirtyDayAvgArray(){
-    return thirtyDayMovingAvgArray
+  static async getThirtyDayAvgArray() {
+    return thirtyDayMovingAvgArray;
   }
-  static async getOneTwentyDayAvgArray(){
-    return oneTwentyDayMovingAvgArray
+  static async getOneTwentyDayAvgArray() {
+    return oneTwentyDayMovingAvgArray;
   }
 }
