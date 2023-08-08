@@ -82,7 +82,7 @@ export default function StrategyGraph({ data, dataName, aspect, color }) {
             <Modal isOpen={isOpen} onClose={onClose}>
                 <ModalOverlay />
                 <ModalContent>
-                    <ModalHeader>Chart Information</ModalHeader>
+                    <ModalHeader>Moving Average Crossover</ModalHeader>
                     <ModalCloseButton />
                     <ModalBody>
                         

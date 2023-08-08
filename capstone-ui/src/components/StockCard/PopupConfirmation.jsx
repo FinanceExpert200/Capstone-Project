@@ -14,6 +14,7 @@ import {
   } from '@chakra-ui/react'
 
 export default function PopupConfirmation ({submission,name,quantity,price,trans_type}){
+  console.log(trans_type)
     const type = trans_type === "buy" ? ('bought'):('sold')
    
     return (

@@ -173,7 +173,7 @@ export default function ResultMeanReversion({
                     <Divider
                       orientation="vertical"
                       h="100px"
-                      borderColor="gray.300"
+                      // borderColor="gray.300"
                     />
                   </Box>
 
@@ -181,7 +181,11 @@ export default function ResultMeanReversion({
                     w={"auto"}
                     h={"200px"}
                     display={"flex"}
+                    justifyContent={"center"} // Center horizontally
+                    alignItems={"center"} // Center vertically
                     flexDirection={"column"}
+                    mr={"auto"}
+                    ml={"auto"}
                   >
                     <Text
                       color={
@@ -192,10 +196,13 @@ export default function ResultMeanReversion({
                       fontSize={30}
                     >
                       $
-                      {addCommasToNumber(Number(accountValues[index][company].profitYear).toFixed(
-                        2
-                      ))}
+                      {addCommasToNumber(
+                        Number(
+                          accountValues[index][company].profitYear
+                        ).toFixed(2)
+                      )}
                     </Text>
+
                     <Text color={"gray.500"} fontSize={25}>
                       1 Year Profit
                     </Text>
@@ -277,14 +284,19 @@ export default function ResultMeanReversion({
                             <Td>{c.Ticker}</Td>
                             <Td>{format(parseISO(c.Date), "MMM, d, yyyy")}</Td>
                             <Td>
-                            {c.type === 'buy' ? (
-                              <Tag colorScheme='green'>{c.Type.slice(0, 1).toUpperCase() + c.Type.slice(1, c.Type.length)}</Tag>
-
-                            ):(
-                              <Tag colorScheme='red'>{c.Type.slice(0, 1).toUpperCase() + c.Type.slice(1, c.Type.length)}</Tag>
-                            )}
-                            
-                          </Td>
+                              {c.Type == "Buy" ? (
+                                <Tag colorScheme="green">
+                                  
+                                  {c.Type.slice(0, 1).toUpperCase() +
+                                    c.Type.slice(1, c.Type.length)}
+                                </Tag>
+                              ) : (
+                                <Tag colorScheme="red">
+                                  {c.Type.slice(0, 1).toUpperCase() +
+                                    c.Type.slice(1, c.Type.length)}
+                                </Tag>
+                              )}
+                            </Td>
                             <Td isNumeric>${c.Price.toFixed(2)}</Td>
                           </Tr>
                         ))}
@@ -310,8 +322,6 @@ export default function ResultMeanReversion({
               ></Button>
             )}
           </TabPanels>
-
-
         </Tabs>
       </Flex>
     </Flex>

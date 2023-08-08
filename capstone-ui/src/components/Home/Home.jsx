@@ -24,7 +24,7 @@ import {
   ModalContent,
   ModalHeader,
   ModalCloseButton,
-  ModalBody
+  ModalBody,
 } from "@chakra-ui/react";
 import axios, { all } from "axios";
 import StockGraph from "../Graph/StockGraph";
@@ -115,6 +115,7 @@ const Home = ({
       await getAccount();
       await getPortfolio();
       await getStrategy();
+
     };
 
     fetchDataAndRunStrategy();
@@ -142,6 +143,7 @@ const Home = ({
         await Utilities.runCurrentStrategy(strategy);
         // Below calls will wait until runCurrentStrategy has finished
         await getAccount();
+        await getPortfolio()
         setIsLoading(false);
       }
     };
@@ -210,8 +212,6 @@ const Home = ({
       textColor={"#03314b"}
       fontWeight={"light"}
     >
-
-
       {profile && account && portfolio && historicalData ? (
         <Stack direction={"row"} padding={20} w={"full"}>
 

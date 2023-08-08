@@ -5,7 +5,7 @@ const { PORT } = require("./config");
 const security = require("./middleware/security");
 const authRoutes = require("./Routes/auth");
 const transactionRoutes = require("./Routes/transaction")
-const strategyRoutes = require("./routes/strategies");
+const strategyRoutes = require("./Routes/strategies");
 
 const { BadRequestError, NotFoundError } = require("./utils/errors"); // Import custom error handlers
 

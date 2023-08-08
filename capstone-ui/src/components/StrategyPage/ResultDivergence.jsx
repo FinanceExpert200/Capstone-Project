@@ -28,7 +28,7 @@ import {
   Tab,
   TabPanel,
 } from "@chakra-ui/react";
-import SingleStockGraph from "../Graph/SingleStockGraph";
+import SingleStockGraph from "../Graph/DivergenceGraph";
 import { format, parseISO } from "date-fns";
 
 export default function ResultDisplay({
