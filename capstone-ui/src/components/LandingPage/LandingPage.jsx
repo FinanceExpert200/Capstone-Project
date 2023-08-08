@@ -71,7 +71,7 @@ const LandingPage = () => {
         <Link as={RouterLink} to="/login">Sign In</Link>
       </Button>
       <Button bg="whiteAlpha.600" rounded="full" color="black" _hover={{ bg: 'green.100' }}>
-        <Link href="/register">Register</Link>
+        <Link as={RouterLink} to="/register">Register</Link>
       </Button>
     </Flex>
     </Flex>

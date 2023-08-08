@@ -15,6 +15,8 @@ import {
   Heading,
 } from "@chakra-ui/react";
 //import bcrypt from "bcryptjs";
+import { useNavigate } from "react-router-dom";
+
 
 const handleAddData = async (
   event,
@@ -26,6 +28,10 @@ const handleAddData = async (
   password,
   setErrorMessage
 ) => {
+
+  const navigate = useNavigate();
+
+
   try {
     event.preventDefault();
 
@@ -45,7 +51,7 @@ const handleAddData = async (
 
     console.log(res.data);
 
-    window.location.href = "/login";
+    navigate("/login")
   } catch (err) {
     // console.log(err.response.data.error.message);
 

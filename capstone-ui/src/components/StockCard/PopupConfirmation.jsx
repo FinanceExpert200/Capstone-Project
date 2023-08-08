@@ -2,6 +2,8 @@ import React from "react";
 import { useState } from "react";
 //import {Box,Button,Heading,Text} from '@chakra-ui/react'
 import { CheckCircleIcon } from "@chakra-ui/icons";
+
+
 import {
     Modal,
     ModalOverlay,
@@ -33,8 +35,8 @@ export default function PopupConfirmation ({submission,name,quantity,price,trans
             <Text fontWeight={'light'}>Click below to return to your profile</Text>
           </ModalBody>
           
-          <Button mb={5} onClick={()=>{window.location.href = "/trade";}}> Trade More</Button>
-          <Button mb={5} onClick={()=>{window.location.href = "/home";}}> Back to home</Button>
+          <Button mb={5} onClick={()=>{navigate("/trade")}}> Trade More</Button>
+          <Button mb={5} onClick={()=>{navigate("/home")}}> Back to home</Button>
          
           </Box>
         </ModalContent>

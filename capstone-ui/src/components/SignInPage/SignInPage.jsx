@@ -15,6 +15,8 @@ import {
   Heading,
 } from "@chakra-ui/react";
 // import { useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+
 
 // this post request over here verifies if the user email and password combo is valid
 const handleLogin = async (
@@ -26,6 +28,8 @@ const handleLogin = async (
   setErrorMessage,
   errorMessage
 ) => {
+  const navigate = useNavigate();
+
   console.log("trying to log in...");
 
   try {
@@ -44,7 +48,7 @@ const handleLogin = async (
     //sets the id and token in localstorage
 
     // this will take you to the
-    window.location.href = "/home";
+    navigate("/home")
   } catch (err) {
     // console.log(err.response.data.error.message)
     setErrorMessage(err.response.data.error.message);

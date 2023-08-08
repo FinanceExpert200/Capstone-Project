@@ -37,6 +37,9 @@ import UserPieChart from "../Graph/UsersPieChart";
 import { useEffect } from "react";
 import { Button, Center } from "@chakra-ui/react";
 
+
+import { Link as RouterLink } from "react-router-dom"; 
+
 // import MeanReversionStrat from "../../TradingCalculations/MeanReversionStrat.js"
 
 // export const ThemeContext = createContext();

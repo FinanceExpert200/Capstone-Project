@@ -2,6 +2,7 @@
 import * as React from 'react';
 //import { Link } from "react-router-dom"
 import "./NavBar.css";
+import { useNavigate } from "react-router-dom";
 
 import {
   Box,
@@ -19,7 +20,10 @@ import { HamburgerIcon, CloseIcon } from '@chakra-ui/icons'
 const Links = ['Profile', 'Trade', 'Transaction', 'Strategies']
 const Routes = ['home', 'trade', 'transaction', 'strategies']
 
+
 const NavLink = ({link, route}) => {
+  const navigate = useNavigate();
+
 
   return (
     <Box
@@ -50,7 +54,8 @@ export default function NavBar({ isLogged, setIsLogged }) {
         console.log(isLogged);
         localStorage.removeItem("currentUserId");
         localStorage.removeItem("token");
-        window.location.href = "/";
+        navigate("/")
+
     
   };
 

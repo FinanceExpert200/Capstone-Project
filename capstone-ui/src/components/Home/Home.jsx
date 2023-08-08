@@ -2,7 +2,7 @@ import React from "react";
 import "./Home.css";
 import { useEffect, useState, useContext } from "react";
 import { Link } from "react-router-dom";
-
+import { useNavigate } from "react-router-dom";
 import {
   Grid,
   Text,
@@ -62,6 +62,7 @@ const Home = ({
   googlAVGBuyPrice,
 }) => {
   const currDate = new Date();
+  const navigate = useNavigate(); 
   console.log('Historical Data ', pieChartData)
 
   const [stockValues, setStockValues] = useState(null);
@@ -276,7 +277,7 @@ const Home = ({
                 <Button
                   bgColor={"green.400"}
                   onClick={(event) => {
-                    window.location.href = "/trade";
+                    navigate("/trade")
                   }}
                 >
                   Start Trading!
