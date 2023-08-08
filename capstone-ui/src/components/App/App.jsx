@@ -542,7 +542,7 @@ function App() {
     getPortfolio();
   }, []);
 
-  console.log("currentUser id", currentUserId);
+  console.log("currentUser id", localStorage.getItem("currentUserId"));
 
   return (
     <div className="App">
