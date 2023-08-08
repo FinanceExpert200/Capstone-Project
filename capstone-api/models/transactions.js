@@ -1,7 +1,7 @@
 const { use } = require("../Routes/auth");
 const db = require("../db");
 const { BadRequestError, UnauthorizedError } = require("../utils/errors");
-const fetch = require("node-fetch");
+// const fetch = require("node-fetch");
 
 
 class Transaction {
