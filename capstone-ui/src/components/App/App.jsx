@@ -32,6 +32,8 @@ import Utilities from "../../TradingCalculations/Utilities.js";
 
 import StockCard from "../StockCard/StockCard";
 
+import UserPieChart from "../Graph/UsersPieChart";
+
 import { useEffect } from "react";
 import { Button, Center } from "@chakra-ui/react";
 
@@ -83,6 +85,8 @@ function App() {
   const [buying_power, setBuyingPower] = useState(10000);
   const [acc_value, setAccValue] = useState(10000);
   const [transactionHistory, setTransactionHistory] = useState(null);
+  const [buyingPow, setBuyingPow] = useState(null)
+
 
   // -------------------- Strategy Usestate Variables ------------------\\\
   const [strategyBuyingPower, setStrategyBuyingPower] = useState(0);
@@ -101,9 +105,11 @@ function App() {
     // Create an object to keep track of merged data
     const dataMap = {};
 
+
     arr1.forEach(({ date, ...rest }) => {
       dataMap[date] = { ...dataMap[date], ...rest };
     });
+
 
     arr2.forEach(({ date, ...rest }) => {
       dataMap[date] = { ...dataMap[date], ...rest };
@@ -237,6 +243,7 @@ function App() {
         )}`
       );
       setAccount(res.data.account);
+      setBuyingPow(res.data.account.buying_power);
       // console.log("ACCOUNT ", res.data.account)
     } catch (error) {
       console.log(error);
@@ -256,7 +263,6 @@ function App() {
       console.log(error);
     }
   };
-
   const getPortfolioforTradePage = async () => {
     try {
       const res = await axios.get(
@@ -273,7 +279,7 @@ function App() {
 
   }
 
-  
+
 
   // console.log("is it pop here", nflxPercent )
   const stockData = {
@@ -313,6 +319,33 @@ function App() {
       stockPercentage: crmPercent,
     },
   };
+  const stockPrice = [
+    {
+      name: 'Netflix',
+      ticker: 'NFLX',
+      stockPrice: nflxPrice
+    },
+    {
+      name: 'Meta',
+      ticker: 'META',
+      stockPrice: metaPrice
+    },
+    {
+      name: 'Crm',
+      ticker: 'CRM',
+      stockPrice: crmPrice
+    },
+    {
+      name: 'Amazon',
+      ticker: 'AMZN',
+      stockPrice: amznPrice
+    },
+    {
+      name: 'Google',
+      ticker: 'GOOGL',
+      stockPrice: googlPrice
+    }
+  ]
 
   // --------------------------------------------------------------------------------------------------------------
   // this function gets the current price of the stocks
@@ -341,10 +374,10 @@ function App() {
 
       const price = response.data.data.c; // this is the current price of the stock
       const percentChange = response.data.data.dp;
+
       switch (ticker) {
         case "META":
           setMetaPrice(price);
-
           setMetaPercent(percentChange);
           break;
         case "AMZN":
@@ -367,6 +400,7 @@ function App() {
         default:
           break;
       }
+
       // console.log(price);
     } catch (error) {
       console.error(error);
@@ -380,6 +414,7 @@ function App() {
     tickers.forEach(async (ticker) => {
       await getStockPrice(ticker);
     });
+
   };
 
   // --------------------------------------------------------------------------------------------------------------
@@ -485,9 +520,11 @@ function App() {
       // setAmznPercent(amznPercent);
       // setGooglPercent(googlPercent);
       // setCrmPercent(crmPercent);
+      await getAccount();
 
       setHistoricalChecker(true);
     };
+
     const getTransactions = async (userID) => {
       axios
         .get(`http://localhost:3001/trans/history/${userID}`)
@@ -501,6 +538,9 @@ function App() {
     };
     fetchData();
     getTransactions(localStorage.getItem("currentUserId"));
+    updateStockPrice(tickers);
+    getPortfolio();
+
   }, []);
 
 
@@ -534,6 +574,9 @@ console.log("currentUser id", currentUserId)
                     historicalMeta,
                     historicalNflx
                   )}
+
+                  pieChartData={stockPrice}
+                  bo={buyingPow}
                   strategyBuyingPower={strategyBuyingPower}
                   setStrategyBuyingPower={setStrategyBuyingPower}
                   strategy={strategyType}
@@ -552,7 +595,7 @@ console.log("currentUser id", currentUserId)
             />
             <Route
               path="/trade"
-              element={
+              element={portfolio ? (
                 <Trade
                   updateStockPrice={updateStockPrice}
                   tickers={tickers}
@@ -565,6 +608,22 @@ console.log("currentUser id", currentUserId)
                     historicalNflx
                   )}
                 />
+
+              ) : (
+                <Center
+                  position={"fixed"}
+                  w={"full"}
+                  h={"100vh"}
+                  bgColor={"#000409"}
+                >
+                  <Button
+                    isLoading
+                    loadingText="Loading"
+                    color="white"
+                    variant="outline"
+                  ></Button>
+                </Center>
+              )
               }
             />
             <Route
@@ -679,6 +738,14 @@ console.log("currentUser id", currentUserId)
                 />
               }
             />
+            <Route
+              path='/tester'
+              element={stockData && (
+                <UserPieChart stockData={stockPrice} updateStockPrice={updateStockPrice}
+                  tickers={tickers} />
+
+              )
+              } />
             <Route path="/*" element={<NotFound />} />
           </Routes>
         </main>

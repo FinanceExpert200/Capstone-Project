@@ -32,7 +32,8 @@ import MeanReversionStrat from "../../TradingCalculations/MeanReversionStrat.js"
 import MovingAverageCrossover from "../../TradingCalculations/MovingAverageCrossover.js";
 import Divergence from "../../TradingCalculations/Divergence.js";
 import Utilities from "../../TradingCalculations/Utilities.js";
-import ClickPopover from "../Popover/Popover";
+import ClickPopover from "../Popover/Popover"
+import UserPieChart from "../Graph/UsersPieChart";
 // import { ThemeContext } from "../App/App";
 // importy history
 
@@ -47,6 +48,8 @@ const Home = ({
   historicalData,
   tickers,
   fixedDate,
+  pieChartData,
+  bo,
   strategyBuyingPower,
   setStrategyBuyingPower,
   strategy,
@@ -58,12 +61,23 @@ const Home = ({
   amznAVGBuyPrice,
   googlAVGBuyPrice,
 }) => {
-  const [metaData, setMetaData] = useState([]);
-  const [amznData, setAmznData] = useState([]);
-  const [googleData, setGoogleData] = useState([]);
-  const [crmData, setCrmData] = useState([]);
+  const currDate = new Date();
+  console.log('Historical Data ', pieChartData)
+
+  const [stockValues, setStockValues] = useState(null);
+  const [pieChart,setPieChart] = useState([]);
+
   const [isLoading, setIsLoading] = useState(false)
   const { isOpen, onOpen, onClose } = useDisclosure();
+  // const stockValue = () => {
+  //   historicalData.filter(stock)
+
+
+  // }
+  // const [metaData, setMetaData] = useState([]);
+  // const [amznData, setAmznData] = useState([]);
+  // const [googleData, setGoogleData] = useState([]);
+  // const [crmData, setCrmData] = useState([]);
   let formattedStrategyName = "";
 
   useEffect(() => {
@@ -100,6 +114,8 @@ const Home = ({
 
   // console.log("tgs", account.acc_value.toLocaleString('en-US'));
 
+  console.log("THE HISTORICAL DATA", historicalData)
+
   const [test, setTest] = useState();
   useEffect(() => {
     const fetchDataAndRunStrategy = async () => {
@@ -110,7 +126,22 @@ const Home = ({
     };
 
     fetchDataAndRunStrategy();
+
+    
+    
+    
   }, []);
+  useEffect (()=>{
+    if(portfolio !== null){
+      console.log('I am here: ',portfolio)
+      const stockValuesArray = portfolio.map((item) => ({
+        ticker: item.ticker,
+        quantity: item.quantity
+      }));
+      setStockValues(stockValuesArray);
+    }
+    console.log('portfoliooo',stockValues)
+  },[portfolio])
 
   useEffect(() => {
     const runCurrentStrategy = async () => {
@@ -127,29 +158,9 @@ const Home = ({
  
 
   //gathers the individual stocks together as sets
+ 
+  //console.log('portfoliooo: ', stockValues)
 
-  useEffect(() => {
-    if (portfolio != null) {
-      const stockCard = portfolio.map((item) => (
-        <Box borderRadius={30} borderWidth={3} borderColor={"green.500"} p={3}>
-          <Text color="green.500" fontWeight={"bold"} fontSize={"40px"}>
-            {item.ticker}
-          </Text>
-          <Text color={"grey"} fontSize={15}>
-            Purchased on: {fixedDate(item.created_at)}
-          </Text>
-          <Text fontSize={25} color={"green.100"}>
-            {item.quantity}
-          </Text>
-        </Box>
-      ));
-      setTest(stockCard);
-    }
-  }, [test]);
-
-  
-  
-  //console.log("THE POPULATED: ", test)
   const formatStrategyName = (name) => {
     switch (name) {
       case "meanreversion":
@@ -176,12 +187,29 @@ const Home = ({
   if (typeof strategy !== "undefined" && strategy) {
     formatStrategyName(strategy.strategy_name);
   }
-  // console.log("THE STRATEGY IS ADDED HERE: ", strategy)
-
   function addCommasToNumber(number) {
     return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
   }
+  
+  useEffect(()=>{
+    if(stockValues){
+      console.log('checker here: ', stockValues)
+      const updatedPieChart = stockValues.map((stock) => {
+        const tick = stock.ticker;
+        const info = pieChartData.find((data) => data.ticker === stock.ticker);
+        return { ticker: tick, name: info.name, quantity:stock.quantity, stockPrice: info.stockPrice * stock.quantity};
+      });
+      const buyingPower = {name: 'Buying Power', stockPrice: Number(bo)}
+      console.log('THE ARRAY INDEX',buyingPower)
+      setPieChart([buyingPower, ...updatedPieChart]);
 
+    }else{
+      const buyingPower = {name: 'Buying Power', stockPrice: Number(bo)}
+      setPieChart([buyingPower])
+    }
+
+  },[stockValues])
+  console.log('check here: ', pieChart)
   return (
     <Box
       position={"absolute"}
@@ -242,7 +270,7 @@ const Home = ({
                 direction="column"
                 alignItems={"center"}
                 p={10}
-                color={"white"}
+               
               >
                 <Text>No stocks owned</Text>
                 <Button
@@ -417,7 +445,20 @@ const Home = ({
               </Flex>
             </Container>
 
-            <StockGraph priceList={historicalData} />
+            
+            
+            {pieChart ? (
+              <UserPieChart stockData={pieChart} />
+              
+            ):(
+            <Button
+            isLoading
+            loadingText="Loading"
+            colorScheme="teal"
+            variant="outline"
+            spinnerPlacement="start"
+          ></Button>
+            )}
           </Stack>
         </Stack>
       ) : (

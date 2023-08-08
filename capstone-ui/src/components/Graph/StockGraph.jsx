@@ -132,3 +132,20 @@ export default function StockGraph({ priceList }) {
   )
 
 } 
+function CustomizeLabel({ active, payload, label, color }) {
+  if (active) {
+    return (
+      <Box bgColor={'black'} justify={'center'} p={3}>
+        <Text color={'white'}>
+          {format(parseISO(label), "eeee,d MMM, yyyy")}
+        </Text>
+        <Text color={'white'}>{payload[0].name} : ${payload[0].value.toFixed(2)}</Text>
+        <Text color={'white'}>{payload[1].name} : ${payload[1].value.toFixed(2)}</Text>
+        <Text color={'white'}>{payload[2].name} : ${payload[2].value.toFixed(2)}</Text>
+        <Text color={'white'}>{payload[3].name} : ${payload[3].value.toFixed(2)}</Text>
+        <Text color={'white'}>{payload[4].name} : ${payload[4].value.toFixed(2)}</Text>
+      </Box>
+    )
+  }
+
+}
