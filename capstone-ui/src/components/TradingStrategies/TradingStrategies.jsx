@@ -156,6 +156,7 @@ const TradingStrategies = ({ userId, setFormattedStrategyName }) => {
                 align={"center"}
               >
                
+                
                 <Text fontSize={30}>
                   It watches the RSI and daily price changes. When the price
                   goes down but RSI goes up, it tells us to buy the stock,
