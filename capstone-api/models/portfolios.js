@@ -169,6 +169,7 @@ class Portfolio {
       );
       await this.addToUserPortfolio(ticker, quantity, curr_price, user_id);
       await this.calculateTotalShareValue(user_id);
+      
     }
   }
 

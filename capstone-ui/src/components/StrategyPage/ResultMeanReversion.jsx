@@ -48,6 +48,10 @@ export default function ResultMeanReversion({
   console.log("accvals", accountValues);
   // console.log("should be number", Number(accountValues[0]["AMZN"].profitThreeMonths))
 
+  function addCommasToNumber(number) {
+    return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+  }
+
   function fetchMeanReversionData() {
     if (averageArray) {
       //console.log("the array length is greater than zero.")
@@ -140,7 +144,7 @@ export default function ResultMeanReversion({
                   {/* <Divider orientation="vertical" h="100px" borderColor="gray.300" /> */}
                   {/* </Box> */}
 
-                  <Square
+                  {/* <Square
                     w={"auto"}
                     h={"200px"}
                     display={"flex"}
@@ -156,14 +160,14 @@ export default function ResultMeanReversion({
                       fontSize={30}
                     >
                       $
-                      {Number(
+                      {addCommasToNumber(Number(
                         accountValues[index][company].profitSixMonths
-                      ).toFixed(2)}
+                      ).toFixed(2))}
                     </Text>
                     <Text color={"gray.500"} fontSize={25}>
                       6 Month Profit
                     </Text>
-                  </Square>
+                  </Square> */}
 
                   <Box display="flex" alignItems="center">
                     <Divider
@@ -188,9 +192,9 @@ export default function ResultMeanReversion({
                       fontSize={30}
                     >
                       $
-                      {Number(accountValues[index][company].profitYear).toFixed(
+                      {addCommasToNumber(Number(accountValues[index][company].profitYear).toFixed(
                         2
-                      )}
+                      ))}
                     </Text>
                     <Text color={"gray.500"} fontSize={25}>
                       1 Year Profit

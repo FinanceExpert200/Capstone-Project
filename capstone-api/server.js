@@ -25,9 +25,7 @@ app.use("/auth", authRoutes);
 app.use("/trans", transactionRoutes)
 app.use("/strategy", strategyRoutes)
 
-// app.get("/stock")
-// await yahoo("AAPL")
-// res.send(result)
+
 
 app.use((req, res, next) => {
   return next(new NotFoundError());

@@ -92,7 +92,7 @@ export default function SignInPage({ setIsLogged, setCurrentUserId}) {
               <Text textAlign='center' color={'gray.500'}
                 fontSize={{ base: 'sm', sm: 'md' }}
                 marginBottom={5}>
-                Start your journey here! Blah Blah blah BLAH Blah blah blah blah
+                Start your journey with StockSwap here!        
 
               </Text>
             </Stack >

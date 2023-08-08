@@ -95,7 +95,7 @@ const RegisterPage = ({ buying_power, acc_value }) => {
                 fontSize={{ base: "sm", sm: "md" }}
                 marginBottom={5}
               >
-                Blah Blah blah BLAH Blah blah blah blah Will increase
+                Empowering You for a Better Future - StockSwap
               </Text>
             </Stack>
             <Box

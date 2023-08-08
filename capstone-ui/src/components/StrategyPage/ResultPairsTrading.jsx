@@ -35,10 +35,7 @@ export default function ResultMeanReversion({
   pairsData,
   buyingPower,
 }) {
-  // console.log("account:___", accountValue)
-  // console.log("history:___", transactionHistory)
-  // console.log("companies:___", companies)
-  // console.log("PAIRs data: __ ", pairsData)
+
 
   const [history, setHistory] = useState([]);
   useEffect(() => {
@@ -47,6 +44,11 @@ export default function ResultMeanReversion({
     });
     setHistory(updatedHistory);
   }, [companies, transactionHistory]);
+
+
+    function addCommasToNumber(number) {
+    return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+  }
 
   return (
     <Flex
@@ -102,7 +104,7 @@ export default function ResultMeanReversion({
               color={Number(accountValues[0]) < 0 ? "red.600" : "#1ecc97"}
               fontSize={30}
             >
-              ${Number(accountValues[0]).toFixed(2)}
+              ${addCommasToNumber(Number(accountValues[0]).toFixed(2))}
             </Text>
             <Text color={"gray.500"} fontSize={25}>
               3 Month Profit
@@ -123,7 +125,7 @@ export default function ResultMeanReversion({
               color={Number(accountValues[1]) < 0 ? "red.600" : "#1ecc97"}
               fontSize={30}
             >
-              ${Number(accountValues[1]).toFixed(2)}
+              ${addCommasToNumber(Number(accountValues[1]).toFixed(2))}
             </Text>
             <Text color={"gray.500"} fontSize={25}>
               6 Month Profit
@@ -144,7 +146,7 @@ export default function ResultMeanReversion({
               color={Number(accountValues[2]) < 0 ? "red.600" : "#1ecc97"}
               fontSize={30}
             >
-              ${Number(accountValues[2]).toFixed(2)}
+              ${addCommasToNumber(Number(accountValues[2]).toFixed(2))}
             </Text>
             <Text color={"gray.500"} fontSize={25}>
               1 Year Profit

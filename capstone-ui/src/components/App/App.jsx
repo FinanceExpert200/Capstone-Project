@@ -100,33 +100,33 @@ function App() {
     const mergedArray = [];
     // Create an object to keep track of merged data
     const dataMap = {};
-    
+
     arr1.forEach(({ date, ...rest }) => {
       dataMap[date] = { ...dataMap[date], ...rest };
     });
-    
+
     arr2.forEach(({ date, ...rest }) => {
       dataMap[date] = { ...dataMap[date], ...rest };
     });
-    
+
     arr3.forEach(({ date, ...rest }) => {
       dataMap[date] = { ...dataMap[date], ...rest };
     });
-    
+
     arr4.forEach(({ date, ...rest }) => {
       dataMap[date] = { ...dataMap[date], ...rest };
     });
-  
+
     // For the fifth array
     arr5.forEach(({ date, ...rest }) => {
       dataMap[date] = { ...dataMap[date], ...rest };
     });
-  
+
     // Convert the data in the dataMap back to an array
     Object.keys(dataMap).forEach((date) => {
       mergedArray.push({ date, ...dataMap[date] });
     });
-  
+
     return mergedArray;
   };
 
@@ -167,47 +167,49 @@ function App() {
   const [googlAVGBuyPrice, setGooglAVGBuyPrice] = useState(0);
   const [crmAVGBuyPrice, setCrmAVGBuyPrice] = useState(0);
 
-  // const getTickerViaUser = async (ticker) => {
-  //   try {
-  //     const res = await axios.get(
-  //       `http://localhost:3001/trans/avgbuyprice/${ticker}/${localStorage.getItem(
-  //         "currentUserId"
-  //       )}`
-  //     );
-  //     // console.log("Response Data: ", res.data); // Log the response data to see its structure
-  //     const length = res.data.data.length;
+  const getTickerViaUser = async (ticker) => {
+    try {
+      const res = await axios.get(
+        `http://localhost:3001/trans/avgbuyprice/${ticker}/${localStorage.getItem(
+          "currentUserId"
+        )}`
+      );
+      console.log("Response Data: ", res.data); // Log the response data to see its structure
+      const length = res.data.data.length;
 
-  //     if (length != 0) {
-  //       // console.log("here is it" ,res.data.data)
-  //       tickerAvgBuyPrice[ticker] = res.data.data[length - 1].avg_buy_price;
-  //     }
-  //   } catch (error) {
-  //     console.log("Error:", error.response.data.error.message);
-  //   }
-  // };
+      if (length != 0) {
+        // console.log("here is it" ,res.data.data)
+        tickerAvgBuyPrice[ticker] = res.data.data[length - 1].avg_buy_price;
+      }
+    } catch (error) {
+      console.log("Error:", error.response.data.error.message);
+    }
+  };
 
-  // getTickerViaUser("CRM");
+  // console.log("user id", currentUserId);
 
   // reason this is in asyn is for the way that js works that the dictionary is not saved in its state
-  // const processTickers = async () => {
-  //   // Execute all API calls in parallel and wait for all of them to complete
-  //   await Promise.all(tickers.map((ticker) => getTickerViaUser(ticker)));
-  //   // Now that all API calls are completed, log the fully populated dictionary
-  //   // console.log("the dict, ", tickerAvgBuyPrice);
+  const processTickers = async () => {
+    // Execute all API calls in parallel and wait for all of them to complete
+    await Promise.all(tickers.map((ticker) => getTickerViaUser(ticker)));
+    // Now that all API calls are completed, log the fully populated dictionary
+    // console.log("the dict, ", tickerAvgBuyPrice);
 
-  //   // console.log("the dict", tickerAvgBuyPrice)
+    // console.log("the dict", tickerAvgBuyPrice)
 
-  //   setMetaAVGBuyPrice(tickerAvgBuyPrice["META"]);
-  //   setAmznAVGBuyPrice(tickerAvgBuyPrice["AMZN"]);
-  //   setNflxAVGBuyPrice(tickerAvgBuyPrice["NFLX"]);
-  //   setGooglAVGBuyPrice(tickerAvgBuyPrice["GOOGL"]);
-  //   setCrmAVGBuyPrice(tickerAvgBuyPrice["CRM"]);
-  // };
+    setMetaAVGBuyPrice(tickerAvgBuyPrice["META"]);
+    setAmznAVGBuyPrice(tickerAvgBuyPrice["AMZN"]);
+    setNflxAVGBuyPrice(tickerAvgBuyPrice["NFLX"]);
+    setGooglAVGBuyPrice(tickerAvgBuyPrice["GOOGL"]);
+    setCrmAVGBuyPrice(tickerAvgBuyPrice["CRM"]);
+  };
 
   // processTickers();
 
-  
-  // console.log("META PRICE INN AS ETF", nflxAVGBuyPrice)
+  // console.log("META PRICE INN AS ETF", metaAVGBuyPrice)
+
+
+
 
   //The following 3 getter: gets the list of all stocks and account used by the user
 
@@ -342,8 +344,8 @@ function App() {
       switch (ticker) {
         case "META":
           setMetaPrice(price);
-          
-          setMetaPercent(percentChange);          
+
+          setMetaPercent(percentChange);
           break;
         case "AMZN":
           setAmznPrice(price);
@@ -370,7 +372,6 @@ function App() {
       console.error(error);
     }
   };
-
 
   // Trading.calculateMovingAverage('AAPL', "2022-02-01");
 
@@ -460,7 +461,7 @@ function App() {
       const amzn = await pastStockPrice(tickers[1], rangeDate);
       const google = await pastStockPrice(tickers[3], rangeDate);
       const crm = await pastStockPrice(tickers[4], rangeDate);
-      const nflx = await pastStockPrice(tickers[2], rangeDate)
+      const nflx = await pastStockPrice(tickers[2], rangeDate);
 
       // const mPercentage = await getPercentChange(tickers[0]);
       // const aPercentage = await getPercentChange(tickers[1]);
@@ -468,13 +469,18 @@ function App() {
       // //netflix here
       // const cPercentage = await getPercentChange(tickers[4]);
 
-      const [historicalMeta, historicalAmzn, historicalCrm, historicalGoogle, historicalNflx] =
-        await Promise.all([meta, amzn, crm, google, nflx]);
+      const [
+        historicalMeta,
+        historicalAmzn,
+        historicalCrm,
+        historicalGoogle,
+        historicalNflx,
+      ] = await Promise.all([meta, amzn, crm, google, nflx]);
       setHistoricalAmzn(historicalAmzn);
       setHistoricalCrm(historicalCrm);
       setHistoricalGoogle(historicalGoogle);
       setHistoricalMeta(historicalMeta);
-      setHistoricalNflx(historicalNflx)
+      setHistoricalNflx(historicalNflx);
       // setMetaPercent(metaPercent);
       // setAmznPercent(amznPercent);
       // setGooglPercent(googlPercent);
@@ -496,6 +502,9 @@ function App() {
     fetchData();
     getTransactions(localStorage.getItem("currentUserId"));
   }, []);
+
+
+console.log("currentUser id", currentUserId)
 
   return (
     <div className="App">
@@ -560,9 +569,18 @@ function App() {
             />
             <Route
               path="/transaction"
-              element={isLogged?(<TransactionTable transactionHistory={transactionHistory} stockData={stockData} fixedDate={fixedDate} username = {profile} />):(<LandingPage />)}
-                
-              
+              element={
+                isLogged ? (
+                  <TransactionTable
+                    transactionHistory={transactionHistory}
+                    stockData={stockData}
+                    fixedDate={fixedDate}
+                    username={profile}
+                  />
+                ) : (
+                  <LandingPage />
+                )
+              }
             />
             <Route
               path="/register"
@@ -633,7 +651,14 @@ function App() {
                   getStrategy={getStrategy}
                   userId={currentUserId}
                   removeStrategy={removeStrategy}
+                  setBuyingPower={setBuyingPower}
+                  buyingPower={buying_power}
                 />
+                // these need to be passed down to the page above
+                // buyingPower={buying_power}
+                // setBuyingPower={setBuyingPower}
+                // getStrategy={getStrategy}
+                // setFormattedStrategyName={setFormattedStrategyName}
               }
             />
 

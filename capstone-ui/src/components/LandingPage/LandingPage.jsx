@@ -62,7 +62,7 @@ const LandingPage = () => {
         color={'#cccbcc'}
         mt={3}
         mb={3}>
-        With us you can make better choices.
+        Empowering you for a better future - That's StockSwap
       </Text>
       
     <Flex direction={'row'} mt ={4} >

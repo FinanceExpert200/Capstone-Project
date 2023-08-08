@@ -49,6 +49,10 @@ export default function ResultDisplay({
   //const meta = transactionHistory.filter(company => company.ticker === companies[0])
   console.log("THE RSI : ", history);
 
+  function addCommasToNumber(number) {
+    return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+  }
+
   return (
     <Flex
       direction={"column"}
@@ -145,7 +149,7 @@ export default function ResultDisplay({
               color={Number(accountValues[2]) < 0 ? "red.600" : "#1ecc97"}
               fontSize={30}
             >
-              ${Number(accountValues[2]).toFixed(2)}
+              ${addCommasToNumber(Number(accountValues[2]).toFixed(2))}
             </Text>
             <Text color={"gray.500"} fontSize={25}>
               1 Year Profit

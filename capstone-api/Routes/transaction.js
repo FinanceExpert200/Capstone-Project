@@ -11,7 +11,7 @@ router.get("/account/:id", async (req, res, next) => {
   try {
     const userId = req.params.id;
     const account = await Portfolio.fetchUserAccountById(userId); // Pass the exercise ID and user ID to the method
-    
+
     return res.status(200).json({ account }); // Use 200 OK status code for a successful response
   } catch (err) {
     console.error("Error is: ", err);
@@ -32,17 +32,14 @@ router.get("/stock/:ticker", async (req, res, next) => {
   }
 });
 
-
-
 // get the avgbuyprice of a stock for a user
 router.get("/avgbuyprice/:ticker/:user_id", async (req, res, next) => {
-
   const ticker = req.params.ticker;
   const user_id = req.params.user_id;
   console.log(ticker, user_id);
   try {
     const data = await Transaction.getAvgBuyPrice(user_id, ticker);
-    
+
     console.log("DATA: ", data);
     return res.status(200).json({ data });
   } catch (err) {
@@ -50,11 +47,6 @@ router.get("/avgbuyprice/:ticker/:user_id", async (req, res, next) => {
     next(err);
   }
 });
-
-
-
-
-
 
 // Access the Portfolio information for a specified user (Each stock they own and quantity)
 router.get("/portfolio/:id", async (req, res, next) => {
@@ -71,7 +63,7 @@ router.get("/portfolio/:id", async (req, res, next) => {
 router.get("/history/:id", async (req, res, next) => {
   try {
     const userId = req.params.id;
-    console.log("THE ID",userId)
+    console.log("THE ID", userId);
     const userTransactionHistory = await Transaction.getTransactionHistory(
       userId
     ); // Pass the exercise ID and user ID to the method
@@ -194,7 +186,7 @@ router.post("/sell", async (req, res, next) => {
     let portfolio = await Portfolio.getUserPortfolio(user_id);
     return res.status(201).json({ portfolio });
   } catch (err) {
-    console.log(err)
+    console.log(err);
     next(err);
   }
 });
