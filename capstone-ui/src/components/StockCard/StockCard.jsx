@@ -219,7 +219,7 @@ useEffect(() => {
         color="blackAlpha.700"
         fontWeight="bold"
       >
-        <GridItem h={"20vh"} pl="5" area={"header"} borderBottom={"1px"}>
+        <GridItem h={"20vh"} pl="5" area={"header"} >
           <Stack direction={"row"}>
             <Image
               src={stockInfo.logo}

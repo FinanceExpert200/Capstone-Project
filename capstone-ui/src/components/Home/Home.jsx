@@ -18,10 +18,11 @@ import {
   Button,
   Spinner,
   useDisclosure,
-  Modal, 
+  Wrap, WrapItem,
+  Modal,
   ModalOverlay,
   ModalContent,
-  ModalHeader, 
+  ModalHeader,
   ModalCloseButton,
   ModalBody
 } from "@chakra-ui/react";
@@ -65,19 +66,10 @@ const Home = ({
   console.log('Historical Data ', pieChartData)
 
   const [stockValues, setStockValues] = useState(null);
-  const [pieChart,setPieChart] = useState([]);
+  const [pieChart, setPieChart] = useState([]);
 
   const [isLoading, setIsLoading] = useState(false)
   const { isOpen, onOpen, onClose } = useDisclosure();
-  // const stockValue = () => {
-  //   historicalData.filter(stock)
-
-
-  // }
-  // const [metaData, setMetaData] = useState([]);
-  // const [amznData, setAmznData] = useState([]);
-  // const [googleData, setGoogleData] = useState([]);
-  // const [crmData, setCrmData] = useState([]);
   let formattedStrategyName = "";
 
   useEffect(() => {
@@ -127,21 +119,21 @@ const Home = ({
 
     fetchDataAndRunStrategy();
 
-    
-    
-    
+
+
+
   }, []);
-  useEffect (()=>{
-    if(portfolio !== null){
-      console.log('I am here: ',portfolio)
+  useEffect(() => {
+    if (portfolio !== null) {
+      console.log('I am here: ', portfolio)
       const stockValuesArray = portfolio.map((item) => ({
         ticker: item.ticker,
         quantity: item.quantity
       }));
       setStockValues(stockValuesArray);
     }
-    console.log('portfoliooo',stockValues)
-  },[portfolio])
+    console.log('portfoliooo', stockValues)
+  }, [portfolio])
 
   useEffect(() => {
     const runCurrentStrategy = async () => {
@@ -155,10 +147,10 @@ const Home = ({
     };
     runCurrentStrategy();
   }, [strategy]);
- 
+
 
   //gathers the individual stocks together as sets
- 
+
   //console.log('portfoliooo: ', stockValues)
 
   const formatStrategyName = (name) => {
@@ -190,25 +182,25 @@ const Home = ({
   function addCommasToNumber(number) {
     return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
   }
-  
-  useEffect(()=>{
-    if(stockValues){
+
+  useEffect(() => {
+    if (stockValues) {
       console.log('checker here: ', stockValues)
       const updatedPieChart = stockValues.map((stock) => {
         const tick = stock.ticker;
         const info = pieChartData.find((data) => data.ticker === stock.ticker);
-        return { ticker: tick, name: info.name, quantity:stock.quantity, stockPrice: info.stockPrice * stock.quantity};
+        return { ticker: tick, name: info.name, quantity: stock.quantity, stockPrice: info.stockPrice * stock.quantity };
       });
-      const buyingPower = {name: 'Buying Power', stockPrice: Number(bo)}
-      console.log('THE ARRAY INDEX',buyingPower)
+      const buyingPower = { name: 'Buying Power', stockPrice: Number(bo) }
+      console.log('THE ARRAY INDEX', buyingPower)
       setPieChart([buyingPower, ...updatedPieChart]);
 
-    }else{
-      const buyingPower = {name: 'Buying Power', stockPrice: Number(bo)}
+    } else {
+      const buyingPower = { name: 'Buying Power', stockPrice: Number(bo) }
       setPieChart([buyingPower])
     }
 
-  },[stockValues])
+  }, [stockValues])
   console.log('check here: ', pieChart)
   return (
     <Box
@@ -222,68 +214,7 @@ const Home = ({
 
       {profile && account && portfolio && historicalData ? (
         <Stack direction={"row"} padding={20} w={"full"}>
-          <Stack direction={"column"} p={1}>
-            {portfolio.length ? (
-              <Box>
-                <Text fontSize={"25px"}>
-                  {" "}
-                  <ClickPopover
-                    word="Stocks Owned Section"
-                    display="Stocks Owned"
-                    color="#03314b"
-                    description={
-                      "Here you can see the stocks you currently own (Also known as your portfolio). Click on the Trade page to buy and sell stocks"
-                    }
-                  />
-                </Text>
-                {portfolio.map((item, key) => (
-                  <Link to={`/trade`} key={item.ticker}>
-                    <Box
-                      borderRadius={10}
-                      borderWidth={3}
-                      borderColor={"#90abad"}
-                      p={3}
-                      mb={5}
-                    >
-                      <Text
-                        align={"center"}
-                        bgColor={"#ecf2f3"}
-                        fontWeight={"bold"}
-                        fontSize={"50px"}
-                      >
-                        {item.ticker}
-                      </Text>
 
-                      <Flex direction={"row"} justify={"space-between"}>
-                        <Text fontSize={"25px"}>Quantity: {item.quantity}</Text>
-                        {/* <Text fontSize={"25px"}>
-                          Average Buy Price:{" "}
-                          {Number(item.avgBuyPrice).toFixed(2)}
-                        </Text> */}
-                      </Flex>
-                    </Box>
-                  </Link>
-                ))}
-              </Box>
-            ) : (
-              <Stack
-                direction="column"
-                alignItems={"center"}
-                p={10}
-               
-              >
-                <Text>No stocks owned</Text>
-                <Button
-                  bgColor={"green.400"}
-                  onClick={(event) => {
-                    window.location.href = "/trade";
-                  }}
-                >
-                  Start Trading!
-                </Button>
-              </Stack>
-            )}
-          </Stack>
           <Stack direction={"column"} w={"full"} ml={10}>
             <Box bgColor={"#03314b"} minH={"30vh"} w={"full"} p={7}>
               <Flex
@@ -304,6 +235,7 @@ const Home = ({
                   <Text fontSize={"30px"}>Here are your stats for today:</Text>
                 </Box>
                 {/* <Text>tester</Text> */}
+
                 <Stack direction={"row"}>
                   {strategy && (
                     <Box
@@ -326,43 +258,43 @@ const Home = ({
                         </Text>
                       </Stack>
 
-                  <Box
-                    width={"full"}
-                    borderRadius={15}
-                    mt={4}
-                    align={'center'}
+                      <Box
+                        width={"full"}
+                        borderRadius={15}
+                        mt={4}
+                        align={'center'}
 
-                  >
-                    <Text
-                      textDecoration={"underline"}
-                    >
-                      Strategy Buying Power:{" "}
-                    </Text>
-                    <Stack direction={"row"} justifyContent={"center"} mt={2} fontWeight={'medium'}>
-                      
-                      {isLoading ? (
-                        <Text> Checking for trades <Spinner /></Text> // replace this with your actual loading spinner
-                      ) : (
-                        <Text color={"#1ecc97"}>${strategy.buying_power}</Text>
-                      )}
-                    </Stack>
-                  </Box>
-                  <Button
-                    bgColor={"green.400"}
-                    onClick={(event) => {
-                      removeStrategy();
-                    }}
-                    mt={2}
-                    p={0}
-                    mb={1}
-                    
-                  >
-                    Remove Strategy
-                  </Button>
-                </Box>
-              )}
+                      >
+                        <Text
+                          textDecoration={"underline"}
+                        >
+                          Strategy Buying Power:{" "}
+                        </Text>
+                        <Stack direction={"row"} justifyContent={"center"} mt={2} fontWeight={'medium'}>
 
-            </Stack>
+                          {isLoading ? (
+                            <Text> Checking for trades <Spinner /></Text> // replace this with your actual loading spinner
+                          ) : (
+                            <Text color={"#1ecc97"}>${strategy.buying_power}</Text>
+                          )}
+                        </Stack>
+                      </Box>
+                      <Button
+                        bgColor={"green.400"}
+                        onClick={(event) => {
+                          removeStrategy();
+                        }}
+                        mt={2}
+                        p={0}
+                        mb={1}
+
+                      >
+                        Remove Strategy
+                      </Button>
+                    </Box>
+                  )}
+
+                </Stack>
 
 
 
@@ -370,95 +302,227 @@ const Home = ({
             </Box>
             <Container
               color="#edf0f5"
-              p={4}
+              p={5}
               w={"full"}
               mt={"-120px"}
               h={300}
-              boxShadow={"0,2px,5px,rgba(0,0,0,0.2)"}
             >
-              <Flex
-                direction={"row"}
-                justify={"space-between"}
+              <Flex direction={"column"}
                 bgColor={"#edf0f5"}
                 borderRadius={"5"}
+                textColor={'black'}
                 boxShadow={"20px 20px 90px grey"}
+                p={3}
               >
-                <Square
-                  w={"auto"}
-                  h={"200px"}
-                  display={"flex"}
-                  flexDirection={"column"}
-                  alignItems="center"
-                >
-                  (<Text color={'gray.500'} fontSize={25} fontWeight={'light'}>
-                     <ClickPopover word="Account Value" display="Account Value" color={'grey.500'} description="The account value is your buying power and the current price of all your stocks added together. If you had $20 in your pocket and owned a salesforce stock, your account value would be $20 plus the current price of the stock" />{" "}
-                  </Text>)
-                  <Stack
-                    direction={"row"}
-                    justifyContent={"center"}
-                    fontSize={"40"}
-                    fontWeight={"medium"}
-                    textColor={"#1ecc97"}
-                  >
-                    
-                    {isLoading ? (<Text>Calculating <Spinner /></Text> ): 
-              
-                    <Text>${addCommasToNumber(account.acc_value)}</Text>
+                <Text fontSize={"25px"}>
+                  {" "}
+                  <ClickPopover
+                    word="Stocks Owned Section"
+                    display="Stocks Owned"
+                    color="#03314b"
+                    description={
+                      "Here you can see the stocks you currently own (Also known as your portfolio). Click on the Trade page to buy and sell stocks"
                     }
-                  </Stack>
-                </Square>
-
-                <Box display="flex" alignItems="center">
-                  <Divider
-                    orientation="vertical"
-                    h="100px"
-                    borderColor="gray.300"
                   />
-                </Box>
+                </Text>
+                <Flex
+                  direction={"row"}
+                  justify={"space-evenly"}
 
-                <Square
-                  w={"auto"}
-                  h={"200px"}
-                  display={"flex"}
-                  flexDirection={"column"}
-                  justifySelf={"center"}
                 >
-                  <Text color={"gray.500"} fontSize={25}>
-                    <ClickPopover
-                      word="Buying Power"
-                      display="Buying Power"
-                      color={"grey.500"}
-                      description="Buying power is the amount of money you have to buy stocks. If you had $20 and owned a salesforce stock, your buying power would be $20"
-                    />{" "}
-                  </Text>
-                  <Stack
-                    direction={"row"}
-                    justifyContent={"center"}
-                    fontSize={"40"}
-                    fontWeight={"medium"}
-                    textColor={"#1ecc97"}
-                  >
-                    <Text>$</Text>
-                    <Text>{addCommasToNumber(account.buying_power)}</Text>
-                  </Stack>
-                </Square>
+
+                  {portfolio.map((item, key) => (
+                    <Link to={`/trade`} key={item.ticker}>
+                      <Box
+                        p={3}
+                        mb={5}
+                      >
+                        <Text
+
+                          fontWeight={'light'}
+                          align={"center"}
+                          bgColor={"#ecf2f3"}
+                          fontSize={"50px"}
+                        >
+                          {item.ticker}
+                        </Text>
+
+                        <Flex direction={"row"} justify={"space-between"}>
+                          <Text fontSize={"25px"} color={'gray.600'}
+                            fontWeight={'light'}>Quantity: {item.quantity}</Text>
+                          {/* <Text fontSize={"25px"}>
+                          Average Buy Price:{" "}
+                          {Number(item.avgBuyPrice).toFixed(2)}
+                        </Text> */}
+                        </Flex>
+                      </Box>
+                    </Link>
+
+
+                  ))}
+
+
+
+                </Flex>
               </Flex>
             </Container>
 
-            
-            
+
+
             {pieChart ? (
-              <UserPieChart stockData={pieChart} />
-              
-            ):(
-            <Button
-            isLoading
-            loadingText="Loading"
-            colorScheme="teal"
-            variant="outline"
-            spinnerPlacement="start"
-          ></Button>
+              <Box w={'100%'} >
+                <Heading>Breakdown of Account Value</Heading>
+                <Box display={'flex'} direction={'row'} w={'full'} >
+                  <UserPieChart stockData={pieChart} />
+                  <Flex
+                    direction={"row"}
+                    justify={"space-evenly"}
+                    bgColor={"#edf0f5"}
+                    borderRadius={"5"}
+
+                    w={'full'}
+
+                  >
+                    <Square
+
+                      h={"200px"}
+                      display={"flex"}
+                      flexDirection={"column"}
+                      alignItems="center"
+                    >
+                      <Text color={'gray.500'} fontSize={25} fontWeight={'light'}>
+                        <ClickPopover word="Account Value" display="Account Value" color={'grey.500'} description="The account value is your buying power and the current price of all your stocks added together. If you had $20 in your pocket and owned a salesforce stock, your account value would be $20 plus the current price of the stock" />{" "}
+                      </Text>
+                      <Stack
+                        direction={"row"}
+                        justifyContent={"center"}
+                        fontSize={"40"}
+                        fontWeight={"medium"}
+                        textColor={"#1ecc97"}
+                      >
+
+                        {isLoading ? (<Text>Calculating <Spinner /></Text>) :
+
+                          <Text>${addCommasToNumber(account.acc_value)}</Text>
+                        }
+                      </Stack>
+                    </Square>
+
+                    <Box display="flex" alignItems="center">
+                      <Divider
+                        orientation="vertical"
+                        h="100px"
+                        borderColor="gray.300"
+                      />
+                    </Box>
+
+                    <Square
+                      w={"auto"}
+                      h={"200px"}
+                      display={"flex"}
+                      flexDirection={"column"}
+                      justifySelf={"center"}
+                    >
+                      <Text color={"gray.500"} fontSize={25}>
+                        <ClickPopover
+                          word="Buying Power"
+                          display="Buying Power"
+                          color={"grey.500"}
+                          description="Buying power is the amount of money you have to buy stocks. If you had $20 and owned a salesforce stock, your buying power would be $20"
+                        />{" "}
+                      </Text>
+                      <Stack
+                        direction={"row"}
+                        justifyContent={"center"}
+                        fontSize={"40"}
+                        fontWeight={"medium"}
+                        textColor={"#1ecc97"}
+                      >
+                        <Text>$</Text>
+                        <Text>{addCommasToNumber(account.buying_power)}</Text>
+                      </Stack>
+                    </Square>
+                  </Flex>
+
+                </Box>
+
+              </Box>
+
+            ) : (
+              <Button
+                isLoading
+                loadingText="Loading"
+                colorScheme="teal"
+                variant="outline"
+                spinnerPlacement="start"
+              ></Button>
             )}
+            {/* <Stack direction={"row"} p={1} w={'full'}>
+            {portfolio.length ? (
+              <Box>
+                <Text fontSize={"25px"}>
+                  {" "}
+                  <ClickPopover
+                    word="Stocks Owned Section"
+                    display="Stocks Owned"
+                    color="#03314b"
+                    description={
+                      "Here you can see the stocks you currently own (Also known as your portfolio). Click on the Trade page to buy and sell stocks"
+                    }
+                  />
+                </Text>
+                <Flex direction={'row'}>
+                {portfolio.map((item, key) => (
+                  <Link to={`/trade`} key={item.ticker}>
+                    <Box
+                      borderRadius={10}
+                      borderWidth={3}
+                      borderColor={"#90abad"}
+                      p={3}
+                      mb={5}
+                     
+                    >
+                      <Text
+                        align={"center"}
+                        bgColor={"#ecf2f3"}
+                        fontWeight={"bold"}
+                        fontSize={"50px"}
+                      >
+                        {item.ticker}
+                      </Text>
+
+                      <Flex direction={"row"} justify={"space-between"}>
+                        <Text fontSize={"25px"}>Quantity: {item.quantity}</Text>
+                        {/* <Text fontSize={"25px"}>
+                          Average Buy Price:{" "}
+                          {Number(item.avgBuyPrice).toFixed(2)}
+                        </Text> 
+                      </Flex>
+                    </Box>
+                  </Link>
+
+))}
+</Flex>
+              </Box>
+            ) : (
+              <Stack
+                direction="column"
+                alignItems={"center"}
+                p={10}
+               
+              >
+                <Text>No stocks owned</Text>
+                <Button
+                  bgColor={"green.400"}
+                  onClick={(event) => {
+                    window.location.href = "/trade";
+                  }}
+                >
+                  Start Trading!
+                </Button>
+              </Stack>
+            )}
+          </Stack> */}
           </Stack>
         </Stack>
       ) : (

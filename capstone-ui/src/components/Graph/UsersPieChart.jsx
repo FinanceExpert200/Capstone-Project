@@ -70,7 +70,7 @@ export default function UserPieChart({ stockData, tickers, updateStockPrice, }) 
 
 
     return (
-            <ResponsiveContainer width="50%" aspect={2.5} margin={3} >
+            <ResponsiveContainer width="100%" aspect={3}  >
                 <PieChart >
                     <Pie
                         activeIndex={state.activeIndex}
@@ -80,7 +80,7 @@ export default function UserPieChart({ stockData, tickers, updateStockPrice, }) 
                         cy="50%"
                         labelLine={false}
 
-                        outerRadius={80}
+                        outerRadius={120}
                         fill="#8884d8"
                         dataKey="stockPrice"
                         onMouseEnter={onPieEnter}

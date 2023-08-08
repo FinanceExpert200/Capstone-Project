@@ -12,7 +12,7 @@ export default function StockGraph({ priceList }) {
   console.log(priceList)
 
   return (
-    <Box width="100%" h={'80vh'}>
+    <Box width="100%" h={'80vh'} position={'relative'}>
       <ResponsiveContainer  >
         <AreaChart
           data={priceList}
@@ -68,7 +68,7 @@ export default function StockGraph({ priceList }) {
               <Label style={{
                 textAnchor: "middle",
                 fontSize: "100%",
-                fill: "white",
+                fill: "black",
               }}
               position={'left'}
               angle={270}stroke={'#03314b'} 

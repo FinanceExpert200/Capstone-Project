@@ -9,14 +9,14 @@ export default function SingleStockGraph({ data, dataName, aspect, color }) {
     const { isOpen, onOpen, onClose } = useDisclosure();
 
     return (
-        <Box position="relative">
+        <Box position="relative" >
             <ResponsiveContainer width={'100%'} aspect={aspect}>
                 <AreaChart
                     data={data}
                     margin={{
                         top: 5,
                         right: 30,
-                        left: 20,
+                        left: 25,
                         bottom: 0,
                     }}>
                     <defs>
@@ -26,32 +26,35 @@ export default function SingleStockGraph({ data, dataName, aspect, color }) {
                         </linearGradient>
                     </defs>
 
-                    <XAxis stroke={color}
+                    <XAxis 
+                        stroke={color}
                         dataKey={'date'}
                         tickLine={false}
                         tickFormatter={string => {
                             const date = parseISO(string);
-                            if (date.getDate() % 1 === 0) {
+                            if (date.getDate() % 2 === 0) {
                                 return format(date, "MMM,d")
                             }
                             return "";
                         }}>
-                        <Label fontSize="100%" fill="white" stroke={'white'} value="Date" offset={0} position="insideBottom" />
+                        <Label fontSize="100%" fill="black"  value="Date" offset={0} position="insideBottom" />
                     </XAxis>
 
                     <YAxis stroke={color}
                         domain={['auto', 'auto']}
                         tickCount={5}
-                        tickFormatter={number => `${number.toFixed(2)}`}>
+                        tickFormatter={number => `$${number.toFixed(2)}`}>
                         <Label
                             style={{
                                 textAnchor: "middle",
                                 fontSize: "100%",
-                                fill: "white",
+                                fill: "black",
                             }}
                             position={'left'}
                             angle={270}
-                            value={"Index"} />
+                            marginRight={5}
+                            value={"Index"}
+                            offset={20} />
                     </YAxis>
                     
                     <Tooltip content={<CustomizeLabel color={color} />} />
@@ -100,7 +103,7 @@ function CustomizeLabel({ active, payload, label, color }) {
                     {format(parseISO(label), "eeee,d MMM, yyyy")}
                 </Text>
 
-                <Text color={color}>Closing Price : ${payload[0].value.toFixed(2)}</Text>
+                <Text color={'white'}>Closing Price : ${payload[0].value.toFixed(2)}</Text>
 
             </Box>
         )

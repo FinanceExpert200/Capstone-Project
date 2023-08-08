@@ -79,7 +79,7 @@ export default function Trade({
     h={'100vh'}
     textColor={'#03314b'}
     >
-      {stockData && historicalData ? (
+      {stockData && historicalData.length ? (
       <Flex direction={'row'} >
       <Stack as={Container} mt={20} ml={10}
              maxW={'full'} maxH={'80vh'}>
