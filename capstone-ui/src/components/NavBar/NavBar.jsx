@@ -1,8 +1,8 @@
 // import codePathLogo from "/src/assets/codepath.svg";
 import * as React from 'react';
-//import { Link } from "react-router-dom"
+import {useLocation } from "react-router-dom"
 import "./NavBar.css";
-
+import { useState } from 'react';
 import {
   Box,
   Flex,
@@ -16,10 +16,13 @@ import {
 } from '@chakra-ui/react'
 import { HamburgerIcon, CloseIcon } from '@chakra-ui/icons'
 
+
+let status;
 const Links = ['Profile', 'Trade', 'Transaction', 'Strategies']
 const Routes = ['home', 'trade', 'transaction', 'strategies']
 
 const NavLink = ({link, route}) => {
+  const location = useLocation();
 
   return (
     <Box
@@ -30,12 +33,14 @@ const NavLink = ({link, route}) => {
       rounded={'md'}
       paddingLeft={'80px'}
       pr={'80px'}
-      
       _hover={{
         textDecoration: 'none',
         bg: useColorModeValue('green.200', 'green.700'),
         color:'black'
       }}
+      bgColor={location.pathname === `/${route}` ? 'green.200' : 'transparent'}
+      color={location.pathname === `/${route}` ? 'black' : 'white'}
+      
       href={`/${route}`}>
         {link}
     </Box>
@@ -44,6 +49,8 @@ const NavLink = ({link, route}) => {
 
 export default function NavBar({ isLogged, setIsLogged }) {
   const { isOpen, onOpen, onClose } = useDisclosure()
+  const [onPage,setOnPage] = useState(false)
+  status  = onPage;
   const handleLogout = (event) => {
         event.preventDefault(); // Prevents the default form submission behavior
         setIsLogged(false);
@@ -132,7 +139,7 @@ export default function NavBar({ isLogged, setIsLogged }) {
           <Box pb={4} display={{ md: 'none' }}>
             <Stack as={'nav'} spacing={4}>
             {Links.map((link, index) => (
-                <NavLink key={link} link={link} route={Routes[index]} />
+                <NavLink key={link} link={link} route={Routes[index]} onClick={() => setOnPage(!onPage)}/>
               ))}
             </Stack>
           </Box>

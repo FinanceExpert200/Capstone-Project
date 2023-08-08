@@ -1,8 +1,8 @@
 import React from 'react';
 import { format, parseISO } from "date-fns";
-import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, Legend, Label, ResponsiveContainer } from 'recharts';
+import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, Legend, Label, ResponsiveContainer, ReferenceLine } from 'recharts';
 import { MinusIcon } from '@chakra-ui/icons';
-import { Box, Center, Text, Tag, IconButton, Modal, ModalOverlay, ModalContent, ModalHeader, ModalCloseButton, ModalBody, useDisclosure } from '@chakra-ui/react';
+import { Box,Text, Tag, IconButton, Modal, ModalOverlay, ModalContent, ModalHeader, ModalCloseButton, ModalBody, useDisclosure } from '@chakra-ui/react';
 import { InfoIcon } from '@chakra-ui/icons'
 
 export default function SingleStockGraph({ data, dataName, aspect, color }) {
@@ -32,12 +32,13 @@ export default function SingleStockGraph({ data, dataName, aspect, color }) {
                         tickLine={false}
                         tickFormatter={string => {
                             const date = parseISO(string);
-                            if (date.getDate() % 2 === 0) {
+                            console.log('THE DATE',date)
+                            if (date.getDate() % 5 === 0) {
                                 return format(date, "MMM,d")
                             }
                             return "";
                         }}>
-                        <Label fontSize="100%" fill="black"  value="Date" offset={0} position="insideBottom" />
+                        <Label fontSize="100%" fill="white"  value="Date" offset={0} position="insideBottom" />
                     </XAxis>
 
                     <YAxis stroke={color}
@@ -48,7 +49,7 @@ export default function SingleStockGraph({ data, dataName, aspect, color }) {
                             style={{
                                 textAnchor: "middle",
                                 fontSize: "100%",
-                                fill: "black",
+                                fill: "white",
                             }}
                             position={'left'}
                             angle={270}
@@ -60,7 +61,9 @@ export default function SingleStockGraph({ data, dataName, aspect, color }) {
                     <Tooltip content={<CustomizeLabel color={color} />} />
                     <Legend verticalAlign="top" height={36} content={renderLegend} />
                     <CartesianGrid opacity={.3} vertical={false} />
-
+                    <ReferenceLine y={70} label="Over Bought" stroke="red" />
+                    <ReferenceLine y={30} label="Over Sold" stroke="red" />
+ 
                     <Area
                         type="monotone"
                         dataKey={dataName}
@@ -103,7 +106,7 @@ function CustomizeLabel({ active, payload, label, color }) {
                     {format(parseISO(label), "eeee,d MMM, yyyy")}
                 </Text>
 
-                <Text color={'white'}>Closing Price : ${payload[0].value.toFixed(2)}</Text>
+                <Text color={'white'}>{payload[0].name} : {payload[0].value.toFixed(2)}</Text>
 
             </Box>
         )

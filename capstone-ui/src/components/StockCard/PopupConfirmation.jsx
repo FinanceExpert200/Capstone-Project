@@ -32,7 +32,7 @@ export default function PopupConfirmation ({submission,name,quantity,price,trans
             <Text fontWeight={'light'}>Click below to return to your profile</Text>
           </ModalBody>
           
-          <Button mb={5} onClick={()=>{window.location.href = "/trade";}}> Trade More</Button>
+          <Button  mr={5} mb={5} onClick={()=>{window.location.href = "/trade";}}> Trade More</Button>
           <Button mb={5} onClick={()=>{window.location.href = "/home";}}> Back to home</Button>
          
           </Box>

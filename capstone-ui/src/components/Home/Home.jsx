@@ -300,19 +300,29 @@ const Home = ({
 
               </Flex>
             </Box>
-            <Container
+            {/* <Container
               color="#edf0f5"
               p={5}
               w={"full"}
               mt={"-120px"}
               h={300}
-            >
+              
+            > */}
+            {portfolio.length ? (
               <Flex direction={"column"}
                 bgColor={"#edf0f5"}
                 borderRadius={"5"}
                 textColor={'black'}
-                boxShadow={"20px 20px 90px grey"}
-                p={3}
+                boxShadow={"20px 20px 50px grey"}
+                
+                pt={1}
+                pl={3}
+                mt={"-90px"}
+                ml={10}
+                mr={10}
+                mb={10}
+                
+
               >
                 <Text fontSize={"25px"}>
                   {" "}
@@ -336,6 +346,7 @@ const Home = ({
                       <Box
                         p={3}
                         mb={5}
+                        bgColor={"#edf0f5"}
                       >
                         <Text
 
@@ -364,13 +375,32 @@ const Home = ({
 
 
                 </Flex>
+
               </Flex>
-            </Container>
+            ) : (
+              <Stack
+                alignItems={"center"}
+                direction={"column"}
+              >
+                <Text>No stocks owned</Text>
+                <Button
+                  bgColor={"green.400"}
+                  onClick={(event) => {
+                    window.location.href = "/trade";
+                  }}
+                >
+                  Start Trading!
+                </Button>
+              </Stack>
+            )}
+
+
+            {/* </Container> */}
 
 
 
             {pieChart ? (
-              <Box w={'100%'} >
+              <Box w={'100%'} h={'80vh'}>
                 <Heading>Breakdown of Account Value</Heading>
                 <Box display={'flex'} direction={'row'} w={'full'} >
                   <UserPieChart stockData={pieChart} />
