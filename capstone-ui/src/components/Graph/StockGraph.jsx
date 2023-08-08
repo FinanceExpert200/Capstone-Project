@@ -4,27 +4,29 @@ import { Box, Text, IconButton, Modal, ModalOverlay, ModalContent, ModalHeader, 
 import { format, parseISO } from "date-fns"
 import { AreaChart, Area, XAxis, YAxis, Label,CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
 import { InfoIcon } from '@chakra-ui/icons'
+// import { relative } from 'path';
 
 
 export default function StockGraph({ priceList }) {
   const { isOpen, onOpen, onClose } = useDisclosure();
+  console.log(priceList)
 
   return (
-    <Box position = {"relative"}>
-      <ResponsiveContainer width="100%" aspect={2.5}>
+    <Box width="100%" h={'80vh'}>
+      <ResponsiveContainer  >
         <AreaChart
           data={priceList}
           margin={{
             top: 5,
-            right: 30,
+          
             left: 20,
             bottom: 5,
           }}
         >
           <defs>
           <linearGradient id='meta' x1="0" y1="0" x2="0" y2="1">
-            <stop offset="5%" stopColor="#8884d8" stopOpacity={0.8} />
-            <stop offset="95%" stopColor="#8884d8" stopOpacity={0} />
+            <stop offset="5%" stopColor="#03314b" stopOpacity={0.8} />
+            <stop offset="60%" stopColor="white" stopOpacity={0} />
           </linearGradient>
           <linearGradient id='amzn' x1="0" y1="0" x2="0" y2="1">
             <stop offset="5%" stopColor="red" stopOpacity={0.8} />
@@ -35,8 +37,12 @@ export default function StockGraph({ priceList }) {
             <stop offset="95%" stopColor="#47ff2e" stopOpacity={0} />
           </linearGradient>
           <linearGradient id='crm' x1="0" y1="0" x2="0" y2="1">
-            <stop offset="5%" stopColor="purple" stopOpacity={0.8} />
-            <stop offset="95%" stopColor="#6d51dc" stopOpacity={0} />
+            <stop offset="10%" stopColor="#0331b" stopOpacity={0.8} />
+            <stop offset="95%" stopColor="white" stopOpacity={0} />
+          </linearGradient>
+          <linearGradient id='nflx' x1="0" y1="0" x2="0" y2="1">
+            <stop offset="5%" stopColor="#1ecc97" stopOpacity={0.8} />
+            <stop offset="95%" stopColor="white" stopOpacity={0} />
           </linearGradient>
 
           </defs>
@@ -70,14 +76,13 @@ export default function StockGraph({ priceList }) {
               value="Opening Price" 
               offset={13} />
             </YAxis>
-          <Tooltip />
+          <Tooltip content={<CustomizeLabel color={'black'} />}/>
           <Legend verticalAlign="top" height={36}/>
           <CartesianGrid opacity={.3} vertical={false}/>
           <Area
             type="monotone"
             dataKey="META"
-            stroke="blue"
-            dot="none"
+            stroke="#03314b"
             fillOpacity={.7}
             fill="url(#meta)"
             activeDot={{ r: 4 }} />
@@ -98,10 +103,18 @@ export default function StockGraph({ priceList }) {
           <Area
             type="monotone"
             dataKey="CRM"
-            stroke="#6d51dc"
+            stroke="#0331b"
             fillOpacity={.5}
             fill="url(#crm)"
             activeDot={{ r: 4 }} />
+          <Area
+            type="monotone"
+            dataKey="NFLX"
+            stroke="#1ecc97"
+            fillOpacity={.5}
+            fill="url(#nflx)"
+            activeDot={{ r: 4 }} />
+          
           </AreaChart>
         </ResponsiveContainer>
         <IconButton
