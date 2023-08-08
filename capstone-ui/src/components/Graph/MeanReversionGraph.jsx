@@ -97,7 +97,7 @@ export default function MeanReversionGraph({ data, dataName, aspect, color, thir
       <Modal isOpen={isOpen} onClose={onClose}>
             <ModalOverlay />
             <ModalContent>
-                <ModalHeader fontSize="2xl" fontWeight="bold" textAlign="center">Chart Information</ModalHeader>
+                <ModalHeader fontSize="2xl" fontWeight="bold" textAlign="center">Mean Reversion</ModalHeader>
                 <ModalCloseButton />
                 <ModalBody>
                 <Text fontSize="md" my={3}>

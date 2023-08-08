@@ -180,7 +180,7 @@ useEffect(() => {
         }
       );
       if (res.status === 201) {
-        setStateForm("reg");
+        setStateForm(trans_type);
         setSubmission(true);
         //setSubmission(<Text color={'green.400'}>Your submission was placed successfully!</Text>);
       }
