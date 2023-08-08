@@ -57,6 +57,8 @@ export default function SingleStockGraph({ data, dataName, aspect, color }) {
                     <Tooltip content={<CustomizeLabel color={color} />} />
                     <Legend verticalAlign="top" height={36} content={renderLegend} />
                     <CartesianGrid opacity={.3} vertical={false} />
+                    <ReferenceLine y={70} label="Over Bought" stroke="red" />
+                    <ReferenceLine y={30} label="Over Sold" stroke="red" />
 
                     <Area
                         type="monotone"
