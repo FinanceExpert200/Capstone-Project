@@ -255,6 +255,22 @@ function App() {
     }
   };
 
+  const getPortfolioforTradePage = async () => {
+    try {
+      const res = await axios.get(
+        `http://localhost:3001/trans/portfolio/${localStorage.getItem(
+          "currentUserId"
+        )}`
+      );
+
+      // console.log("PORTFOLIO ", res.data.user)
+    } catch (error) {
+      console.log(error);
+    }
+    return res.data.user
+
+  }
+
   
 
   // console.log("is it pop here", nflxPercent )
@@ -581,7 +597,9 @@ function App() {
                       historicalGoogle,
                       historicalMeta,
                       historicalNflx
+
                     )}
+                  getPortfolioforTradePage = {getPortfolioforTradePage}
                   account = {account}
                   getAccount = {getAccount}
                   getPortfolio={getPortfolio}

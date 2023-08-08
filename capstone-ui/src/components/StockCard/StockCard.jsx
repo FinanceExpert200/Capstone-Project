@@ -17,7 +17,7 @@ import {
   Container,
   useBoolean,
 } from "@chakra-ui/react";
-import { ArrowUpIcon, ArrowDownIcon } from "@chakra-ui/icons";
+import { ArrowUpIcon, ArrowDownIcon} from "@chakra-ui/icons";
 
 import { useState, useEffect } from "react";
 import axios from "axios";
@@ -25,6 +25,7 @@ import { useParams } from "react-router-dom";
 import SingleStockGraph from "../Graph/SingleStockGraph";
 import PopupConfirmation from "./PopupConfirmation";
 import Popover from "../Popover/Popover"
+import { object } from "prop-types";
 
 
 
@@ -44,7 +45,7 @@ export default function StockCard({
   const { stockId } = useParams();
   const stockInfo = stockData[stockId];
 
-  console.log("stockInfo: ", stockInfo);
+  
 
   const [quantity, setQuantity] = useState(0);
   const [totalPrice,setTotalPrice] = useState(0);
@@ -54,18 +55,21 @@ export default function StockCard({
   const [currTickerQuantity, setCurrTickerQuantity] = useState(0)
 
 
-
   const getCurrentQuantity = () =>{
+    console.log("Show")
+    console.log(portfolio)
     if(portfolio){
       let objectWithTicker = portfolio.find(item => item.ticker === stockInfo.stockName);
-      if(!objectWithTicker.quantity ||objectWithTicker.quantity == 0  ){
+      console.log("NFLX S")
+      console.log(stockInfo.stockName)
+      console.log(objectWithTicker)
+      if(objectWithTicker && objectWithTicker.quantity > 0){
+        console.log("quantity set")
+        setCurrTickerQuantity(objectWithTicker.quantity)
+      } else{
         setCurrTickerQuantity(0)
       }
-      else{
-        setCurrTickerQuantity(objectWithTicker.quantity)
-      }
     }
-
   }
 
   const handleQuantityChange = (quantity) => {
@@ -131,18 +135,26 @@ export default function StockCard({
   };
 
   console.log("NETFLIX DATA ")
-  console.log(historicalData)
   console.group(stockInfo.stockName)
   
   
   // updates the stock price on the page as you open it
   useEffect(() => {
-    updateStockPrice(tickers);
-    getAccount()
-    getPortfolio()
-    getCurrentQuantity()
+    const fetchData = async () => {
+        updateStockPrice(tickers);
+        await getAccount();
+        await getPortfolio();
+    };
 
-  }, []);
+    // Call fetchData
+    fetchData();
+}, []);
+useEffect(() => {
+  if(portfolio !== null){
+      getCurrentQuantity();
+  }
+}, [portfolio]);
+
 
   const addTransaction = async (
     event,
@@ -349,7 +361,7 @@ export default function StockCard({
                   </Link>
                 </Square>
 
-                <Square
+                 {currTickerQuantity > 0 && <Square
                   flex="1"
                   _hover={{ bg: "#1ecc97" }}
                   borderRadius={3}
@@ -366,7 +378,7 @@ export default function StockCard({
                     {" "}
                     Sell{" "}
                   </Link>
-                </Square>
+                </Square>}
               </Flex>
 
               {stateForm === "reg" ? (

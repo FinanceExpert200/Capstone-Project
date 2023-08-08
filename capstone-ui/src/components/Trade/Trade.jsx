@@ -92,7 +92,7 @@ export default function Trade({
           {Object.keys(stockData).map((stockId) => (
             
           
-            <Card route={stockId} name={stockData[stockId].stockName} price={stockData[stockId].stockPrice}/>
+            <Card route={stockId} name={stockData[stockId].stockName} price={stockData[stockId].stockPrice} />
             
            
        

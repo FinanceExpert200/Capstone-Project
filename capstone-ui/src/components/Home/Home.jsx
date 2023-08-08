@@ -16,6 +16,14 @@ import {
   Divider,
   Container,
   Button,
+  Spinner,
+  useDisclosure,
+  Modal, 
+  ModalOverlay,
+  ModalContent,
+  ModalHeader, 
+  ModalCloseButton,
+  ModalBody
 } from "@chakra-ui/react";
 import axios, { all } from "axios";
 import StockGraph from "../Graph/StockGraph";
@@ -54,6 +62,8 @@ const Home = ({
   const [amznData, setAmznData] = useState([]);
   const [googleData, setGoogleData] = useState([]);
   const [crmData, setCrmData] = useState([]);
+  const [isLoading, setIsLoading] = useState(false)
+  const { isOpen, onOpen, onClose } = useDisclosure();
   let formattedStrategyName = "";
 
 
@@ -106,13 +116,16 @@ const Home = ({
   useEffect(() => {
     const runCurrentStrategy = async () => {
       if (strategy) {
-        // console.log("Strategy in home,", strategy);
+        setIsLoading(true);
         await Utilities.runCurrentStrategy(strategy);
-        await getAccount()
+        // Below calls will wait until runCurrentStrategy has finished
+        await getAccount();
+        setIsLoading(false);
       }
     };
     runCurrentStrategy();
   }, [strategy]);
+ 
 
   //gathers the individual stocks together as sets
 
@@ -134,6 +147,9 @@ const Home = ({
       setTest(stockCard);
     }
   }, [test]);
+
+  
+  
   //console.log("THE POPULATED: ", test)
   const formatStrategyName = (name) => {
     switch (name) {
@@ -170,6 +186,8 @@ const Home = ({
       textColor={'#03314b'}
       fontWeight={"light"}
     >
+
+
       {profile && account && portfolio && historicalData ? (
         <Stack direction={"row"} padding={20} w={"full"}>
           <Stack direction={"column"} p={1}>
@@ -285,14 +303,13 @@ const Home = ({
                     >
                       Strategy Buying Power:{" "}
                     </Text>
-                    <Stack
-                      direction={"row"}
-                      justifyContent={"center"}
-                      mt={2}
-                      fontWeight={'medium'}
-                    >
-                      <Text color={"#1ecc97"}>$</Text>
-                      <Text color={"#1ecc97"}>{strategy.buying_power}</Text>
+                    <Stack direction={"row"} justifyContent={"center"} mt={2} fontWeight={'medium'}>
+                      
+                      {isLoading ? (
+                        <Text> Checking for trades <Spinner /></Text> // replace this with your actual loading spinner
+                      ) : (
+                        <Text color={"#1ecc97"}>${strategy.buying_power}</Text>
+                      )}
                     </Stack>
                   </Box>
                   <Button
@@ -326,9 +343,9 @@ const Home = ({
 
                   alignItems="center"
                 >
-                  <Text color={'gray.500'} fontSize={25} fontWeight={'light'}>
-                    <ClickPopover word="Account Value" display="Account Value" color={'grey.500'} description="The account value is your buying power and the current price of all your stocks added together. If you had $20 in your pocket and owned a salesforce stock, your account value would be $20 plus the current price of the stock" />{" "}
-                  </Text>
+                  (<Text color={'gray.500'} fontSize={25} fontWeight={'light'}>
+                     <ClickPopover word="Account Value" display="Account Value" color={'grey.500'} description="The account value is your buying power and the current price of all your stocks added together. If you had $20 in your pocket and owned a salesforce stock, your account value would be $20 plus the current price of the stock" />{" "}
+                  </Text>)
                   <Stack
                     direction={"row"}
                     justifyContent={"center"}
@@ -336,8 +353,9 @@ const Home = ({
                     fontWeight={"medium"}
                     textColor={'#1ecc97'}
                   >
-                    <Text >$</Text>
-                    <Text >{account.acc_value}</Text>
+                    
+                    {isLoading ? (<Text>Calculating <Spinner /></Text> ): 
+                    <Text >${account.acc_value}</Text>}
                   </Stack>
                 </Square>
 
