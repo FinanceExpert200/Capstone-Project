@@ -16,7 +16,7 @@ const app = express();
 
 app.use(function(req, res, next) {
   // res.header("Access-Control-Allow-Origin", "*");
-  const allowedOrigins = ['http://localhost:3001', 'https://stock-swap.onrender.com/'];
+  const allowedOrigins = ['http://localhost:3001', 'https://stock-swap.onrender.com', "https://capstone-project-6ssi.onrender.com"];
   const origin = req.headers.origin;
   if (allowedOrigins.includes(origin)) {
        res.setHeader('Access-Control-Allow-Origin', origin);
