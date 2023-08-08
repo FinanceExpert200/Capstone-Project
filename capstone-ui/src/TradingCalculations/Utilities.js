@@ -12,6 +12,7 @@ export default class Utilities {
   static selectedStrategy = ''
   static numberOfDBCalls = 0 
   static strategyTrades = []
+  static finishedExecutingStrategy = false
 
   static async fetchHistoricalData (ticker,startDate,endDate = new Date().toISOString().split("T")[0]) {
     this.numberOfDBCalls = this.numberOfDBCalls + 1;
@@ -41,41 +42,34 @@ export default class Utilities {
   }
 
 
-    static async runCurrentStrategy(strategy){
-      // console.log("STRATEGY IN BACKEND ", strategy)
-      // First we need to determine if the user even has a strategy and if the last active != todays date.  If Both conditions are not met then we are finished with our function
-      let today = new Date() 
-      let lastActive = new Date(strategy.last_active)
-
-      console.log(`Last active ${lastActive}, today ${today.toLocaleDateString()}`)
-      if(lastActive.toLocaleDateString() != today.toLocaleDateString()){
-        console.log("user has a strategy that has not been ran today, running said strategy")
-        // now we need a switch statement to figure our our strategy using a switch case
-        switch (strategy.strategy_name) {
-          case "meanreversion":
-              console.log("meanreversion");
-              this.runMeanReversionStrategy();
-              break;
-          case "movingaveragecrossover":
-                this.getMovingAverageCrossoverTransactionHistory(this.selectedStocks,strategy);
-              break;
-          case "divergence":
-              console.log("divergence");
-              this.getDivergenceTransactionHistory(this.selectedStocks,strategy)
-              break;
-          case "pairstrading":
-              console.log("pairstrading");
-              this.getPairsTradingTransactionHistory(this.selectedStocks,strategy);
-              break;
-          default:
-              console.log("Invalid strategy type.");
-              break;
-        }
+  static async runCurrentStrategy(strategy){
+    let today = new Date() 
+    let lastActive = new Date(strategy.last_active)
+    if(lastActive.toLocaleDateString() != today.toLocaleDateString()){
+      const strategyPromises = [];
+      switch (strategy.strategy_name) {
+        case "meanreversion":
+            strategyPromises.push(this.runMeanReversionStrategy());
+            break;
+        case "movingaveragecrossover":
+            strategyPromises.push(this.getMovingAverageCrossoverTransactionHistory(this.selectedStocks,strategy));
+            break;
+        case "divergence":
+            strategyPromises.push(this.getDivergenceTransactionHistory(this.selectedStocks,strategy));
+            break;
+        case "pairstrading":
+            strategyPromises.push(this.getPairsTradingTransactionHistory(this.selectedStocks,strategy));
+            break;
+        default:
+            console.log("Invalid strategy type.");
+            break;
       }
-      else{
-        console.log("User either has no strategy or their strategy is up to date")
-      }
+  
+      await Promise.all(strategyPromises);
+    } else{
+      console.log("User either has no strategy or their strategy is up to date")
     }
+  }
 
     static async getPairsTradingTransactionHistory(selectedStocks,strategy){
 
@@ -139,7 +133,6 @@ export default class Utilities {
       //After running the funciton, we need to update our last active date to today
       await this.updateLastActive(today.toISOString(), strategy.user_id)
       await this.updateAccountValue(strategy.user_id)
-      window.location.reload();
   }
 
     static async updateLastActive(date, userId){
@@ -163,10 +156,20 @@ export default class Utilities {
       try {
         const res = await axios.get(`http://localhost:3001/strategy/update/${userId}`);
         console.log("Total share value updated")
+
+        
+        
         console.log(this.strategyTrades)
+    
       } catch(error){
-        console.log(error.response.data)
+        console.log(error)
       } 
+    }
+    static async getFinishedStrategy(){
+      return finishedExecutingStrategy
+    }
+    static async getStrategyTrades(){
+      return this.strategyTrades
     }
 
 

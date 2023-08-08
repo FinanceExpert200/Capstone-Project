@@ -82,10 +82,11 @@ export default function StrategyGraph({ data, dataName, aspect, color }) {
             <Modal isOpen={isOpen} onClose={onClose}>
                 <ModalOverlay />
                 <ModalContent>
-                    <ModalHeader>Chart Information</ModalHeader>
+                    <ModalHeader>Moving Average Crossover</ModalHeader>
                     <ModalCloseButton />
                     <ModalBody>
-                        
+                        This graph shows how the <Text as="b" color="green.500">average price</Text> of a certain stock has changed from a year ago until now. When the average price <Text as="b" color="red.500">drops below a certain point</Text>, it's a good time to <Text as="b" color="green.500">buy</Text> the stock. On the other hand, when the average price <Text as="b" color="red.500">goes up past a certain point</Text>, it's a good time to <Text as="b" color="red.500">sell</Text> the stock.
+  
                     </ModalBody>
                 </ModalContent>
             </Modal>

@@ -11,7 +11,7 @@ router.get("/account/:id", async (req, res, next) => {
   try {
     const userId = req.params.id;
     const account = await Portfolio.fetchUserAccountById(userId); // Pass the exercise ID and user ID to the method
-    
+
     return res.status(200).json({ account }); // Use 200 OK status code for a successful response
   } catch (err) {
     console.error("Error is: ", err);
@@ -32,17 +32,14 @@ router.get("/stock/:ticker", async (req, res, next) => {
   }
 });
 
-
-
 // get the avgbuyprice of a stock for a user
 router.get("/avgbuyprice/:ticker/:user_id", async (req, res, next) => {
-
   const ticker = req.params.ticker;
   const user_id = req.params.user_id;
   console.log(ticker, user_id);
   try {
     const data = await Transaction.getAvgBuyPrice(user_id, ticker);
-    
+
     console.log("DATA: ", data);
     return res.status(200).json({ data });
   } catch (err) {
@@ -50,11 +47,6 @@ router.get("/avgbuyprice/:ticker/:user_id", async (req, res, next) => {
     next(err);
   }
 });
-
-
-
-
-
 
 // Access the Portfolio information for a specified user (Each stock they own and quantity)
 router.get("/portfolio/:id", async (req, res, next) => {
@@ -71,7 +63,7 @@ router.get("/portfolio/:id", async (req, res, next) => {
 router.get("/history/:id", async (req, res, next) => {
   try {
     const userId = req.params.id;
-    console.log("THE ID",userId)
+    console.log("THE ID", userId);
     const userTransactionHistory = await Transaction.getTransactionHistory(
       userId
     ); // Pass the exercise ID and user ID to the method
@@ -103,7 +95,6 @@ router.post("/add", async (req, res, next) => {
 // Used to buy a stock (updates users portfolio, account info and transaction history with the purchased stock)
 router.post("/buy", async (req, res, next) => {
   try {
-    //Access information from the req.body
     const {
       ticker,
       quantity,
@@ -113,7 +104,7 @@ router.post("/buy", async (req, res, next) => {
       purchased_by,
       transaction_date,
     } = req.body;
-    //if trans_type is NOT USER, we weed to execute Strategy.buyShare instead of Portfolio.buyShare
+
     console.log(
       ticker,
       quantity,
@@ -122,35 +113,42 @@ router.post("/buy", async (req, res, next) => {
       trans_type,
       purchased_by
     );
-    if (purchased_by != "user") {
-      await Strategy.buyShare(ticker, quantity, curr_price, user_id);
-      console.log(`${purchased_by} made the purchase`);
-    } else {
-      console.log("User made the purchase");
-      //adding purchase to our user Portfolio
-      await Portfolio.buyShare(ticker, quantity, curr_price, user_id);
+
+    try {
+      if (purchased_by != "user") {
+        await Strategy.buyShare(ticker, quantity, curr_price, user_id);
+        console.log(`${purchased_by} made the purchase`);
+      } else {
+        console.log("User made the purchase");
+        await Portfolio.buyShare(ticker, quantity, curr_price, user_id);
+      }
+      
+      // This will only run if buyShare does not throw an error
+      await Transaction.addTransactionHistory(
+        ticker,
+        quantity,
+        curr_price,
+        user_id,
+        trans_type,
+        purchased_by,
+        transaction_date
+      );
+    } catch (buyError) {
+      console.log(buyError);
+      return res.status(500).json({ error: 'There was an error buying the share' });
     }
-    await Transaction.addTransactionHistory(
-      ticker,
-      quantity,
-      curr_price,
-      user_id,
-      trans_type,
-      purchased_by,
-      transaction_date
-    );
+    
     let portfolio = await Portfolio.getUserPortfolio(user_id);
-    //checking that portfolio works
     return res.status(201).json({ portfolio });
   } catch (err) {
     console.error(err);
     next(err);
   }
 });
+
 // used to sell a stock (updates portfolio, account info, and transaction history of a user when a stock is sold)
 router.post("/sell", async (req, res, next) => {
   try {
-    //Access information from the req.body
     const {
       ticker,
       quantity,
@@ -160,32 +158,39 @@ router.post("/sell", async (req, res, next) => {
       purchased_by,
       transaction_date,
     } = req.body;
+
     console.log(`RESULTS (sell)(${ticker},${quantity}, ${curr_price}, ${user_id})`);
-    //CHecking if the strategy or the user made the trade
-    if (purchased_by != "user") {
-      await Strategy.sellShare(ticker, quantity, curr_price, user_id);
-    } else {
-      //adding purchase to our user Portfolio
-      await Portfolio.sellShare(ticker, quantity, curr_price, user_id);
+
+    try {
+      if (purchased_by != "user") {
+        await Strategy.sellShare(ticker, quantity, curr_price, user_id);
+      } else {
+        await Portfolio.sellShare(ticker, quantity, curr_price, user_id);
+      }
+      
+      // This will only run if sellShare does not throw an error
+      await Transaction.addTransactionHistory(
+        ticker,
+        quantity,
+        curr_price,
+        user_id,
+        trans_type,
+        purchased_by,
+        transaction_date
+      );
+    } catch (sellError) {
+      console.log(sellError);
+      return res.status(500).json({ error: 'There was an error selling the share' });
     }
-    //Add the transaction to our transaction history table
-    await Transaction.addTransactionHistory(
-      ticker,
-      quantity,
-      curr_price,
-      user_id,
-      trans_type,
-      purchased_by,
-      transaction_date
-    );
+    
     let portfolio = await Portfolio.getUserPortfolio(user_id);
-    //checking that portfolio works
     return res.status(201).json({ portfolio });
   } catch (err) {
-    console.log(err)
+    console.log(err);
     next(err);
   }
 });
+
 router.post("/historical", async (req, res, next) => {
   try {
     const { ticker, startDate, endDate } = req.body;

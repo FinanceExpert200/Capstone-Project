@@ -29,7 +29,8 @@ import {
   TableContainer,
 } from "@chakra-ui/react";
 import { format, parseISO } from "date-fns";
-import StrategyGraph from "../Graph/StrategyGraph";
+import StrategyGraph from "../Graph/MovingAverageCrossover";
+
 //maArray, transactionHistory, accountValues
 
 export default function MovingAverageResult({
@@ -55,7 +56,9 @@ export default function MovingAverageResult({
     setTransHistory(updatedTransaction);
   }, [companies, transactionHistory]);
 
-  console.log("BO", buyingPower);
+  function addCommasToNumber(number) {
+    return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+  }
 
   return (
     <Flex
@@ -85,13 +88,29 @@ export default function MovingAverageResult({
           </Text> */}
         </Flex>
       </Box>
-      <Container color='#edf0f5' p={4} w={'full'} mt={'-120px'}  h={300} boxShadow={'0,2px,5px,rgba(0,0,0,0.2)'}>
-        <Flex direction={'row'} justify={'space-between'} 
-              bgColor={'#edf0f5'} borderRadius={'5'} 
-              pl={3} pr={3} boxShadow={'20px 20px 30px grey'}>
-          <Square w={'auto'} h={'200px'} 
-            display={'flex'} flexDirection={'column'}
-            justify={'center'}
+      <Container
+        color="#edf0f5"
+        p={4}
+        w={"full"}
+        mt={"-120px"}
+        h={300}
+        boxShadow={"0,2px,5px,rgba(0,0,0,0.2)"}
+      >
+        <Flex
+          direction={"row"}
+          justify={"space-between"}
+          bgColor={"#edf0f5"}
+          borderRadius={"5"}
+          pl={3}
+          pr={3}
+          boxShadow={"20px 20px 30px grey"}
+        >
+          <Square
+            w={"auto"}
+            h={"200px"}
+            display={"flex"}
+            flexDirection={"column"}
+            justify={"center"}
           >
             <Text
               color={Number(accountValues[0]) < 0 ? "red.600" : "#1ecc97"}
@@ -118,7 +137,7 @@ export default function MovingAverageResult({
               color={Number(accountValues[1]) < 0 ? "red.600" : "#1ecc97"}
               fontSize={30}
             >
-              ${Number(accountValues[1]).toFixed(2)}
+              ${addCommasToNumber(Number(accountValues[1]).toFixed(2))}
             </Text>
             <Text color={"gray.500"} fontSize={25}>
               6 Month Profit
@@ -139,7 +158,7 @@ export default function MovingAverageResult({
               color={Number(accountValues[2]) < 0 ? "red.600" : "#1ecc97"}
               fontSize={30}
             >
-              ${Number(accountValues[2]).toFixed(2)}
+              ${addCommasToNumber(Number(accountValues[2]).toFixed(2))}
             </Text>
             <Text color={"gray.500"} fontSize={25}>
               1 Year Profit
@@ -207,13 +226,17 @@ export default function MovingAverageResult({
                           <Td>{c.ticker}</Td>
                           <Td>{format(parseISO(c.date), "MMM, d, yyyy")}</Td>
                           <Td>
-                            {c.type === 'buy' ? (
-                              <Tag colorScheme='green'>{c.type.slice(0, 1).toUpperCase() + c.type.slice(1, c.type.length)}</Tag>
-
-                            ):(
-                              <Tag colorScheme='red'>{c.type.slice(0, 1).toUpperCase() + c.type.slice(1, c.type.length)}</Tag>
+                            {c.type === "buy" ? (
+                              <Tag colorScheme="green">
+                                {c.type.slice(0, 1).toUpperCase() +
+                                  c.type.slice(1, c.type.length)}
+                              </Tag>
+                            ) : (
+                              <Tag colorScheme="red">
+                                {c.type.slice(0, 1).toUpperCase() +
+                                  c.type.slice(1, c.type.length)}
+                              </Tag>
                             )}
-                            
                           </Td>
                           <Td isNumeric>${c.price.toFixed(2)}</Td>
                         </Tr>
