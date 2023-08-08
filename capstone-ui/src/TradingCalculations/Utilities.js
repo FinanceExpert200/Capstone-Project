@@ -108,8 +108,10 @@ export default class Utilities {
 
         });
         if (res.status === 201) {
+
           this.strategyTrades.push({ticker: transaction.ticker,quantity: 1,curr_price: transaction.price,user_id: strategy.user_id,trans_type: transaction.type,purchased_by: strategy.strategy_name,transaction_date: transaction.date})
           console.log(chalk.green("Transaction successfully executed from the strategy"))
+          console.log(res)
         }
       } catch (err) {
         console.log(err);
@@ -133,6 +135,7 @@ export default class Utilities {
       //After running the funciton, we need to update our last active date to today
       await this.updateLastActive(today.toISOString(), strategy.user_id)
       await this.updateAccountValue(strategy.user_id)
+      
   }
 
     static async updateLastActive(date, userId){
@@ -160,7 +163,7 @@ export default class Utilities {
         
         
         console.log(this.strategyTrades)
-    
+        resolve()
       } catch(error){
         console.log(error)
       } 

@@ -214,9 +214,6 @@ function App() {
 
   // console.log("META PRICE INN AS ETF", metaAVGBuyPrice)
 
-
-
-
   //The following 3 getter: gets the list of all stocks and account used by the user
 
   const getProfile = async () => {
@@ -543,8 +540,7 @@ function App() {
 
   }, []);
 
-
-console.log("currentUser id", currentUserId)
+  console.log("currentUser id", currentUserId);
 
   return (
     <div className="App">
@@ -605,7 +601,8 @@ console.log("currentUser id", currentUserId)
                     historicalCrm,
                     historicalGoogle,
                     historicalMeta,
-                    historicalNflx
+                    historicalNflx,
+                    account
                   )}
                 />
 
@@ -674,13 +671,12 @@ console.log("currentUser id", currentUserId)
                       historicalGoogle,
                       historicalMeta,
                       historicalNflx
-
                     )}
-                  getPortfolioforTradePage = {getPortfolioforTradePage}
-                  account = {account}
-                  getAccount = {getAccount}
-                  getPortfolio={getPortfolio}
-                  portfolio = {portfolio}
+                    getPortfolioforTradePage={getPortfolioforTradePage}
+                    account={account}
+                    getAccount={getAccount}
+                    getPortfolio={getPortfolio}
+                    portfolio={portfolio}
                   />
                 ) : (
                   <Center

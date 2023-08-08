@@ -155,6 +155,7 @@ const TradingStrategies = ({ userId, setFormattedStrategyName }) => {
                 justify={"space-between"}
                 align={"center"}
               >
+               
                 
                 <Text fontSize={30}>
                   It watches the RSI and daily price changes. When the price
