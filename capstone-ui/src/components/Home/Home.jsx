@@ -18,12 +18,12 @@ import {
   Button,
   Spinner,
   useDisclosure,
-  Modal, 
+  Modal,
   ModalOverlay,
   ModalContent,
-  ModalHeader, 
+  ModalHeader,
   ModalCloseButton,
-  ModalBody
+  ModalBody,
 } from "@chakra-ui/react";
 import axios, { all } from "axios";
 import StockGraph from "../Graph/StockGraph";
@@ -123,6 +123,7 @@ const Home = ({
       await getAccount();
       await getPortfolio();
       await getStrategy();
+
     };
 
     fetchDataAndRunStrategy();
@@ -150,12 +151,12 @@ const Home = ({
         await Utilities.runCurrentStrategy(strategy);
         // Below calls will wait until runCurrentStrategy has finished
         await getAccount();
+        await getPortfolio()
         setIsLoading(false);
       }
     };
     runCurrentStrategy();
   }, [strategy]);
- 
 
   //gathers the individual stocks together as sets
  
@@ -218,8 +219,6 @@ const Home = ({
       textColor={"#03314b"}
       fontWeight={"light"}
     >
-
-
       {profile && account && portfolio && historicalData ? (
         <Stack direction={"row"} padding={20} w={"full"}>
           <Stack direction={"column"} p={1}>
@@ -272,7 +271,8 @@ const Home = ({
                 p={10}
                
               >
-                <Text>No stocks owned</Text>
+                <Text color="#03314b">No stocks owned</Text>
+
                 <Button
                   bgColor={"green.400"}
                   onClick={(event) => {
@@ -326,46 +326,47 @@ const Home = ({
                         </Text>
                       </Stack>
 
-                  <Box
-                    width={"full"}
-                    borderRadius={15}
-                    mt={4}
-                    align={'center'}
-
-                  >
-                    <Text
-                      textDecoration={"underline"}
-                    >
-                      Strategy Buying Power:{" "}
-                    </Text>
-                    <Stack direction={"row"} justifyContent={"center"} mt={2} fontWeight={'medium'}>
-                      
-                      {isLoading ? (
-                        <Text> Checking for trades <Spinner /></Text> // replace this with your actual loading spinner
-                      ) : (
-                        <Text color={"#1ecc97"}>${strategy.buying_power}</Text>
-                      )}
-                    </Stack>
-                  </Box>
-                  <Button
-                    bgColor={"green.400"}
-                    onClick={(event) => {
-                      removeStrategy();
-                    }}
-                    mt={2}
-                    p={0}
-                    mb={1}
-                    
-                  >
-                    Remove Strategy
-                  </Button>
-                </Box>
-              )}
-
-            </Stack>
-
-
-
+                      <Box
+                        width={"full"}
+                        borderRadius={15}
+                        mt={4}
+                        align={"center"}
+                      >
+                        <Text textDecoration={"underline"}>
+                          Strategy Buying Power:{" "}
+                        </Text>
+                        <Stack
+                          direction={"row"}
+                          justifyContent={"center"}
+                          mt={2}
+                          fontWeight={"medium"}
+                        >
+                          {isLoading ? (
+                            <Text>
+                              {" "}
+                              Checking for trades <Spinner />
+                            </Text> // replace this with your actual loading spinner
+                          ) : (
+                            <Text color={"#1ecc97"}>
+                              ${strategy.buying_power}
+                            </Text>
+                          )}
+                        </Stack>
+                      </Box>
+                      <Button
+                        bgColor={"green.400"}
+                        onClick={(event) => {
+                          removeStrategy();
+                        }}
+                        mt={2}
+                        p={0}
+                        mb={1}
+                      >
+                        Remove Strategy
+                      </Button>
+                    </Box>
+                  )}
+                </Stack>
               </Flex>
             </Box>
             <Container
@@ -384,27 +385,37 @@ const Home = ({
                 boxShadow={"20px 20px 90px grey"}
               >
                 <Square
-                  w={"auto"}
-                  h={"200px"}
+                  
+                  h={"150px"}
                   display={"flex"}
                   flexDirection={"column"}
                   alignItems="center"
                 >
-                  (<Text color={'gray.500'} fontSize={25} fontWeight={'light'}>
-                     <ClickPopover word="Account Value" display="Account Value" color={'grey.500'} description="The account value is your buying power and the current price of all your stocks added together. If you had $20 in your pocket and owned a salesforce stock, your account value would be $20 plus the current price of the stock" />{" "}
-                  </Text>)
+                  (
+                  <Text color={"gray.500"} fontSize={25} fontWeight={"light"}>
+                    <ClickPopover
+                      word="Account Value"
+                      display="Account Value"
+                      color={"grey.500"}
+                      description="The account value is your buying power and the current price of all your stocks added together. If you had $20 in your pocket and owned a salesforce stock, your account value would be $20 plus the current price of the stock"
+                    />{" "}
+                  </Text>
+                  )
                   <Stack
                     direction={"row"}
-                    justifyContent={"center"}
+                    justifyContent={"flex-start"}
                     fontSize={"40"}
                     fontWeight={"medium"}
                     textColor={"#1ecc97"}
+                    ml={4}
                   >
-                    
-                    {isLoading ? (<Text>Calculating <Spinner /></Text> ): 
-              
-                    <Text>${addCommasToNumber(account.acc_value)}</Text>
-                    }
+                    {isLoading ? (
+                      <Text>
+                        Calculating <Spinner />
+                      </Text>
+                    ) : (
+                      <Text>${addCommasToNumber(account.acc_value)}</Text>
+                    )}
                   </Stack>
                 </Square>
 
@@ -423,12 +434,12 @@ const Home = ({
                   flexDirection={"column"}
                   justifySelf={"center"}
                 >
-                  <Text color={"gray.500"} fontSize={25}>
+                  <Text color={"gray.500"} fontSize={25} fontWeight={"light"}>
                     <ClickPopover
                       word="Buying Power"
                       display="Buying Power"
                       color={"grey.500"}
-                      description="Buying power is the amount of money you have to buy stocks. If you had $20 and owned a salesforce stock, your buying power would be $20"
+                      description="Buying power is the amount of money you have to buy stocks. If you had $20 and owned a salesforce stock, your buying power would be $20"                    
                     />{" "}
                   </Text>
                   <Stack
@@ -437,9 +448,11 @@ const Home = ({
                     fontSize={"40"}
                     fontWeight={"medium"}
                     textColor={"#1ecc97"}
+                    mr={21}
                   >
-                    <Text>$</Text>
-                    <Text>{addCommasToNumber(account.buying_power)}</Text>
+                    
+                    {isLoading ? (<Text>Calculating <Spinner /></Text> ): 
+                    <Text >${addCommasToNumber(account.buying_power)}</Text>}
                   </Stack>
                 </Square>
               </Flex>

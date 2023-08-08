@@ -22,23 +22,23 @@ export default function PairsTradeGraph({data, historical , aspect , color, pric
 
             }}>
 
-                <XAxis stroke={color} 
-                       dataKey={'date'}
-                       tickLine={false}
-                       tickFormatter={string => {
-                        const date = parseISO(string);
-                        if(date.getDate() % 1 === 0){
-                            return format(date,"MMM,d")
-                        }
-                        return "";
-                       }}>
-                         <Label fontSize="100%" fill="white" stroke={'white'} value="Date" offset={0} position="insideBottom" />
-                       </XAxis>
-                <YAxis stroke={color} 
-                       domain={['auto', 'auto']} 
-                       tickCount={5}
-                       tickFormatter={number => `${number.toFixed(2)}`}>
-                        <Label
+          <XAxis stroke={color} 
+                  dataKey={'date'}
+                  tickLine={false}
+                  tickFormatter={string => {
+                  const date = parseISO(string);
+                  if(date.getDate() % 1 === 0){
+                      return format(date,"MMM,d")
+                  }
+                  return "";
+                  }}>
+                    <Label fontSize="100%" fill="white" stroke={'white'} value="Date" offset={0} position="insideBottom" />
+                  </XAxis>
+          <YAxis stroke={color} 
+                  domain={['auto', 'auto']} 
+                  tickCount={5}
+                  tickFormatter={number => `${number.toFixed(2)}`}>
+                  <Label
             style={{
               textAnchor: "middle",
               fontSize: "100%",

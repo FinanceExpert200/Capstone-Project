@@ -27,6 +27,13 @@ import {
   AlertIcon,
   AlertTitle,
   AlertDescription,
+  Popover,
+  PopoverTrigger,
+  PopoverContent,
+  PopoverArrow,
+  PopoverBody,
+  PopoverCloseButton,
+  PopoverHeader
 } from "@chakra-ui/react";
 
 const StrategyPage = ({
@@ -51,7 +58,7 @@ const StrategyPage = ({
   const [errorMessage, setErrorMessage] = useState("");
   const [success, setSuccess] = useState(false);
   const requirement = ["minimum: 500", "maxiumum: 10000"];
-
+  const [strategyError, setStrategyError] = useState(null)
   const [rsi, setRsi] = useState(null);
   const [movAverage, setMovingAverage] = useState(null);
   const [arrayAvr, setArrayAvr] = useState(null);
@@ -266,7 +273,7 @@ const StrategyPage = ({
 
     //setselectedTickers([]);
     seterror(false);
-    setBuyingPower(0);
+  
     setSimulatedBuyingPower(0);
     const quantityInput = document.getElementById("quantity");
     if (quantityInput) {
@@ -339,7 +346,9 @@ const StrategyPage = ({
       `StrategyName ${strategyName} Buying Power ${strategyBuyingPower}, UserID: ${currentUserId} user buying power ${buyingPower}`
     );
     //Check if the user has enough money to gve to the bot
-    if (buyingPower > strategyBuyingPower) {
+
+    if (buyingPower > strategyBuyingPower && strategyBuyingPower > 0 ) {
+
       try {
         const res = await axios.post(`http://localhost:3001/strategy/add`, {
           strategy_type: strategyName,
@@ -348,10 +357,13 @@ const StrategyPage = ({
         });
         console.log(res.data);
         console.log("Formatted name ", formattedName);
+        setSuccess(true);
       } catch (err) {
-        console.log(err);
+        console.log(err.response.data.error.message);
+        setStrategyError(err.response.data.error.message)
       }
-      setSuccess(true);
+
+      
     } else {
       console.error("INSUFFICIENT FUNDS");
     }
@@ -418,6 +430,73 @@ const StrategyPage = ({
           >
             Run Again
           </Button>
+          <Box position="absolute" top={300} left={150}>
+          <Flex mt={3} mb={3} justify="space-between">
+  <Popover>
+    <PopoverTrigger>
+      <Button>Add Strategy To Account</Button>
+    </PopoverTrigger>
+    <PopoverContent>
+      <PopoverArrow />
+      <PopoverCloseButton />
+      <PopoverHeader>
+        What does this mean?
+      </PopoverHeader>
+      <PopoverBody>
+        If you add this strategy to your account, the strategy will run daily and make trades for you in the current market. Give your strategy an amount of money to trade with. (The amount is taken out of your buying power)
+        <Input
+          type="number"
+          id="quantity"
+          name="quantity"
+          placeholder="Amount"
+          onChange={handleInputChangeForstrategyBuyingPower}
+        />
+        <Button
+          mt={2}
+          bg="blackAlpha.200"
+          _hover={{ bg: "green.500", color: "white" }}
+          onClick={(event) => {
+            event.preventDefault();
+            addStrategyToUser(name, strategyBuyingPower, userId);
+          }}
+          w="100%"
+        >
+          Add
+        </Button>
+        {success && (
+          <Alert status="success" w={"auto"} fontSize={"sm"} mt={3} mb={3}>
+            <AlertIcon />
+            <AlertDescription>
+              {formattedName} has been successfully added!
+            </AlertDescription>
+          </Alert>
+        )}
+        {success && (
+          <Center w={"full"}>
+            <Button
+              as="a"
+              href="/home"
+              bg={"blackAlpha.200"}
+              _hover={{ bg: "green.500", color: "white" }}
+            >
+              Back to Home
+            </Button>
+          </Center>
+        )}
+        {strategyError && (
+                <Alert status="warning">
+                  <AlertIcon />
+                  <AlertDescription>
+                    {strategyError}
+                  </AlertDescription>
+                </Alert>
+              )}
+      </PopoverBody>
+    </PopoverContent>
+  </Popover>
+</Flex>
+
+        </Box>
         </div>
       ) : (
         <Center
@@ -514,26 +593,7 @@ const StrategyPage = ({
             </Box>
             {/* think this is the box of the content inside of the box */}
 
-            <Flex mt={3} mb={3} justify={"space-between"}>
-              <Input
-                type="number"
-                id="quantity"
-                name="quantity"
-                placeholder="Amount"
-                onChange={handleInputChangeForstrategyBuyingPower}
-                w={"30"}
-              />
-              <Button
-                bg={"blackAlpha.200"}
-                _hover={{ bg: "green.500", color: "white" }}
-                onClick={(event) => {
-                  event.preventDefault();
-                  addStrategyToUser(name, strategyBuyingPower, userId);
-                }}
-              >
-                Add Strategy To Account
-              </Button>
-            </Flex>
+
 
             {success && (
               <Alert status="success" w={"auto"} fontSize={"sm"} mt={3} mb={3}>
