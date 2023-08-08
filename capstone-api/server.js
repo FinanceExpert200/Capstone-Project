@@ -11,6 +11,7 @@ const { BadRequestError, NotFoundError } = require("./utils/errors"); // Import 
 
 const app = express();
 
+
 app.use(cors());
 
 app.use(express.json());
