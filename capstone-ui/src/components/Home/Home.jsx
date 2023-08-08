@@ -123,6 +123,7 @@ const Home = ({
       await getAccount();
       await getPortfolio();
       await getStrategy();
+
     };
 
     fetchDataAndRunStrategy();
@@ -150,6 +151,7 @@ const Home = ({
         await Utilities.runCurrentStrategy(strategy);
         // Below calls will wait until runCurrentStrategy has finished
         await getAccount();
+        await getPortfolio()
         setIsLoading(false);
       }
     };
@@ -438,8 +440,9 @@ const Home = ({
                     fontWeight={"medium"}
                     textColor={"#1ecc97"}
                   >
-                    <Text>$</Text>
-                    <Text>{addCommasToNumber(account.buying_power)}</Text>
+                    
+                    {isLoading ? (<Text>Calculating <Spinner /></Text> ): 
+                    <Text >${addCommasToNumber(account.buying_power)}</Text>}
                   </Stack>
                 </Square>
               </Flex>

@@ -95,14 +95,25 @@ export default function MeanReversionGraph({ data, dataName, aspect, color, thir
       />
 
       <Modal isOpen={isOpen} onClose={onClose}>
-          <ModalOverlay />
-          <ModalContent>
-              <ModalHeader>Chart Information</ModalHeader>
-              <ModalCloseButton />
-              <ModalBody>
-                  This graph represents the strategy data for...
-              </ModalBody>
-          </ModalContent>
+            <ModalOverlay />
+            <ModalContent>
+                <ModalHeader fontSize="2xl" fontWeight="bold" textAlign="center">Chart Information</ModalHeader>
+                <ModalCloseButton />
+                <ModalBody>
+                <Text fontSize="md" my={3}>
+                    <Box as="span" fontWeight="semibold">Closing Price:</Box> This represents the stock's value at the end of each trading day. It acts as the final snapshot of the day's trading activity.
+                </Text>
+                <Text fontSize="md" my={3}>
+                    <Box as="span" fontWeight="semibold">Thirty-Day Average:</Box> This is a calculation of the average closing prices over the past 30 days. It provides us with a sense of the stock's short-term trend.
+                </Text>
+                <Text fontSize="md" my={3}>
+                    <Box as="span" fontWeight="semibold">One Hundred Twenty-Day Average:</Box> Offering a view of the stock's longer-term trend, this value is derived by calculating the average closing prices over the previous 120 days.
+                </Text>
+                <Text fontSize="md" my={3}>
+                    By comparing these components, we get a comprehensive overview of the stock's performance. For instance, if the stock's closing price falls below these averages, it might be an opportune moment to buy. Conversely, if the closing price rises above these averages, it might indicate that it's a good time to sell.
+                </Text>
+                </ModalBody>
+            </ModalContent>
       </Modal>
     </Box>
   )
