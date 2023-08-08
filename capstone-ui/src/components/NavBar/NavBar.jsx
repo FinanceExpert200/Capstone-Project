@@ -2,7 +2,10 @@
 import * as React from 'react';
 //import { Link } from "react-router-dom"
 import "./NavBar.css";
-import { useNavigate } from "react-router-dom";
+import { Route, useNavigate } from "react-router-dom";
+import { Link as RouterLink } from "react-router-dom"; 
+
+
 
 import {
   Box,
@@ -27,7 +30,8 @@ const NavLink = ({link, route}) => {
 
   return (
     <Box
-      as="a"
+      as={RouterLink}
+      to={`/${route}`}
       px={2}
       py={1}
       zIndex={1}
@@ -40,7 +44,7 @@ const NavLink = ({link, route}) => {
         bg: useColorModeValue('green.200', 'green.700'),
         color:'black'
       }}
-      href={`/${route}`}>
+    >
         {link}
     </Box>
   )
@@ -75,7 +79,7 @@ export default function NavBar({ isLogged, setIsLogged }) {
             display={{ md: 'none' }}
             onClick={isOpen ? onClose : onOpen}
           />
-          <Box as='a' href="/home" fontWeight={'bold'}>StockSwap</Box>
+          <Box as={RouterLink} to="/home" fontWeight={'bold'}>StockSwap</Box>
           <HStack spacing={8} alignItems={'center'}>
             <HStack as={'nav'} spacing={4} display={{ base: 'none', md: 'flex' }}>
             {Links.map((link, index) => (
@@ -90,7 +94,7 @@ export default function NavBar({ isLogged, setIsLogged }) {
               color={'white'}
              _hover={{ bg: 'green.500' }}
               onClick={handleLogout}>
-             <Link href="/register"> Logout</Link>
+             <Link as={RouterLink} to="/register"> Logout</Link>
             </Button>
           </Flex>
         </Flex>
@@ -118,7 +122,7 @@ export default function NavBar({ isLogged, setIsLogged }) {
              >
         <Flex h={16} alignItems={'center'} justifyContent={'space-between'}>
           
-          <Box as='a' href="/" fontWeight={'bold'}>StockSwap</Box>
+          <Box as={RouterLink} to="/" fontWeight={'bold'}>StockSwap</Box>
           <Flex alignItems={'center'}>
           <Button
               
@@ -127,7 +131,7 @@ export default function NavBar({ isLogged, setIsLogged }) {
               rounded={'full'}
               color={'white'}
               _hover={{ bg: 'green.500' }}>
-              <Link href="/login">Sign In</Link>
+              <Link as={RouterLink} to="/login">Sign In</Link>
             </Button> 
            
           </Flex>
