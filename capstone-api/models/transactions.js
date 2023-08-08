@@ -1,6 +1,9 @@
 const { use } = require("../Routes/auth");
 const db = require("../db");
 const { BadRequestError, UnauthorizedError } = require("../utils/errors");
+const fetch = require("node-fetch");
+
+
 class Transaction {
   //Function that gets the transaction history for a particular user
   static async getTransactionHistory(userId) {
