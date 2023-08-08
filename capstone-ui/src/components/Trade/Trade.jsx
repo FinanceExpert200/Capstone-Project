@@ -5,15 +5,18 @@ import "./Trade.css";
 //import Trade from "../../TradingCalculations/Trade.js"
 //import Trading from "../../TradingCalculations/Trade.js";
 import { Text, Box, Button,Center,Container,Flex, Heading,Stack, useColorMode, useColorModeValue } from '@chakra-ui/react'
+import StockGraph from "../Graph/StockGraph";
 
 export default function Trade({
   updateStockPrice,
   tickers,
-  stockData
+  stockData,
+  historicalData,
 }) {
-  useEffect(() => {
-    updateStockPrice(tickers);
-  }, []);
+  console.log('DATAAAAA: ', historicalData)
+  // useEffect(() => {
+  //   updateStockPrice(tickers);
+  // }, []);
   //UNDO THIS
   const handleRefresh = async () => {
     updateStockPrice(tickers);
@@ -47,7 +50,7 @@ export default function Trade({
         borderWidth={3}
         borderColor={'#90abad'}
         overflow={'hidden'}
-        p={5}
+        p={1}
         href={`/trade/${route}`} 
           
         >
@@ -76,7 +79,16 @@ export default function Trade({
     h={'100vh'}
     textColor={'#03314b'}
     >
-      {stockData ? (
+      {stockData && historicalData ? (
+      <Flex direction={'row'} >
+      <Stack as={Container} mt={20} ml={10}
+             maxW={'full'} maxH={'80vh'}>
+      <Heading>
+        Historical Overview
+      </Heading>
+      <Text>Displays the opening prices from the past 30 days </Text>
+      <StockGraph priceList={historicalData} />
+      </Stack>
 
       <Stack spacing={4} as={Container} mt={20}
              maxW={'5xl'} textAlign={'center'} >
@@ -103,6 +115,8 @@ export default function Trade({
         </Container>
 
       </Stack>
+      </Flex>
+
       ):(
         <Button
     isLoading

@@ -25,6 +25,7 @@ import MovingAverageCrossover from "../../TradingCalculations/MovingAverageCross
 import Divergence from "../../TradingCalculations/Divergence.js";
 import Utilities from "../../TradingCalculations/Utilities.js";
 import ClickPopover from "../Popover/Popover"
+import UserPieChart from "../Graph/UsersPieChart";
 // import { ThemeContext } from "../App/App";
 // importy history
 
@@ -39,6 +40,8 @@ const Home = ({
   historicalData,
   tickers,
   fixedDate,
+  pieChartData,
+  bo,
   strategyBuyingPower,
   setStrategyBuyingPower,
   strategy,
@@ -50,10 +53,20 @@ const Home = ({
   amznAVGBuyPrice,
   googlAVGBuyPrice
 }) => {
-  const [metaData, setMetaData] = useState([]);
-  const [amznData, setAmznData] = useState([]);
-  const [googleData, setGoogleData] = useState([]);
-  const [crmData, setCrmData] = useState([]);
+  const currDate = new Date();
+  console.log('Historical Data ', pieChartData)
+
+  const [stockValues, setStockValues] = useState(null);
+  const [pieChart,setPieChart] = useState([]);
+  // const stockValue = () => {
+  //   historicalData.filter(stock)
+
+
+  // }
+  // const [metaData, setMetaData] = useState([]);
+  // const [amznData, setAmznData] = useState([]);
+  // const [googleData, setGoogleData] = useState([]);
+  // const [crmData, setCrmData] = useState([]);
   let formattedStrategyName = "";
 
 
@@ -91,6 +104,8 @@ const Home = ({
 
   // portfolio["AMZN"].get_avg_buy_price = amznAVGBuyPrice;
 
+  console.log("THE HISTORICAL DATA", historicalData)
+
   const [test, setTest] = useState();
   useEffect(() => {
     const fetchDataAndRunStrategy = async () => {
@@ -101,7 +116,22 @@ const Home = ({
     };
 
     fetchDataAndRunStrategy();
+
+    
+    
+    
   }, []);
+  useEffect (()=>{
+    if(portfolio !== null){
+      console.log('I am here: ',portfolio)
+      const stockValuesArray = portfolio.map((item) => ({
+        ticker: item.ticker,
+        quantity: item.quantity
+      }));
+      setStockValues(stockValuesArray);
+    }
+    console.log('portfoliooo',stockValues)
+  },[portfolio])
 
   useEffect(() => {
     const runCurrentStrategy = async () => {
@@ -113,28 +143,10 @@ const Home = ({
     };
     runCurrentStrategy();
   }, [strategy]);
-
   //gathers the individual stocks together as sets
+ 
+  //console.log('portfoliooo: ', stockValues)
 
-  useEffect(() => {
-    if (portfolio != null) {
-      const stockCard = portfolio.map((item) => (
-        <Box borderRadius={30} borderWidth={3} borderColor={"green.500"} p={3}>
-          <Text color="green.500" fontWeight={"bold"} fontSize={"40px"}>
-            {item.ticker}
-          </Text>
-          <Text color={"grey"} fontSize={15}>
-            Purchased on: {fixedDate(item.created_at)}
-          </Text>
-          <Text fontSize={25} color={"green.100"}>
-            {item.quantity}
-          </Text>
-        </Box>
-      ));
-      setTest(stockCard);
-    }
-  }, [test]);
-  //console.log("THE POPULATED: ", test)
   const formatStrategyName = (name) => {
     switch (name) {
       case "meanreversion":
@@ -161,7 +173,25 @@ const Home = ({
   if (typeof strategy !== "undefined" && strategy) {
     formatStrategyName(strategy.strategy_name);
   }
-  console.log("THE STRATEGY IS ADDED HERE: ", strategy)
+  useEffect(()=>{
+    if(stockValues){
+      console.log('checker here: ', stockValues)
+      const updatedPieChart = stockValues.map((stock) => {
+        const tick = stock.ticker;
+        const info = pieChartData.find((data) => data.ticker === stock.ticker);
+        return { ticker: tick, name: info.name, quantity:stock.quantity, stockPrice: info.stockPrice * stock.quantity};
+      });
+      const buyingPower = {name: 'Buying Power', stockPrice: Number(bo)}
+      console.log('THE ARRAY INDEX',buyingPower)
+      setPieChart([buyingPower, ...updatedPieChart]);
+
+    }else{
+      const buyingPower = {name: 'Buying Power', stockPrice: Number(bo)}
+      setPieChart([buyingPower])
+    }
+
+  },[stockValues])
+  console.log('check here: ', pieChart)
   return (
     <Box
       position={"absolute"}
@@ -175,9 +205,9 @@ const Home = ({
           <Stack direction={"column"} p={1}>
             {portfolio.length ? (
               <Box>
-                <Text as={"h1"} >
+                <Text fontSize={"25px"} >
                   {" "}
-                  Stocks Owned
+                  <ClickPopover word = "Stocks Owned Section" display = "Stocks Owned" color = "#03314b" description={"Here you can see the stocks you currently own (Also known as your portfolio). Click on the Trade page to buy and sell stocks"}  />
                 </Text>
                 {portfolio.map((item, key) => (
                   <Link to={`/trade`} key={item.ticker}>
@@ -202,18 +232,7 @@ const Home = ({
 
 
                       </Flex>
-                      <Flex direction={'row'} justify={'space-between'}>
-                        <Text
-                          fontSize={"20px"}
-                        >
-                          Average Buy Price:
-                        </Text>
-                        {/* <Divider orientation="horizontal" h={4} borderColor="gray.300" /> */}
-                        <Text fontSize={"25px"}>
-                          {parseFloat(item.avgBuyPrice).toFixed(2)}
-                        </Text>
 
-                      </Flex>
                     </Box>
                   </Link>
                 ))}
@@ -223,7 +242,7 @@ const Home = ({
                 direction="column"
                 alignItems={"center"}
                 p={10}
-                color={"white"}
+               
               >
                 <Text>No stocks owned</Text>
                 <Button
@@ -328,10 +347,10 @@ const Home = ({
               </Flex>
 
             </Box>
-            <Container color='#edf0f5' p={4} w={'full'} mt={'-120px'} h={300} boxShadow={'0,2px,5px,rgba(0,0,0,0.2)'}>
+            <Container color='#edf0f5' p={4} w={'full'} mt={'-120px'} h={300} >
               <Flex direction={'row'} justify={'space-between'}
                 bgColor={'#edf0f5'} borderRadius={'5'}
-                boxShadow={'20px 20px 90px grey'}>
+                boxShadow={'10px 15px 100px grey'}>
                 <Square w={'auto'} h={'200px'}
                   display={'flex'} flexDirection={'column'}
 
@@ -348,7 +367,7 @@ const Home = ({
                     textColor={'#1ecc97'}
                   >
                     <Text >$</Text>
-                    <Text >{account.acc_value}</Text>
+                    <Text >{account.acc_value.toLocaleString('en-US')}</Text>
                   </Stack>
                 </Square>
 
@@ -374,7 +393,7 @@ const Home = ({
                     textColor={'#1ecc97'}
                   >
                     <Text >$</Text>
-                    <Text >{account.buying_power}</Text>
+                    <Text >{account.buying_power.toLocaleString('en-US')}</Text>
                   </Stack>
 
                 </Square>
@@ -383,8 +402,19 @@ const Home = ({
             </Container>
 
             
-
-            <StockGraph priceList={historicalData} />
+            
+            {pieChart ? (
+              <UserPieChart stockData={pieChart} />
+              
+            ):(
+            <Button
+            isLoading
+            loadingText="Loading"
+            colorScheme="teal"
+            variant="outline"
+            spinnerPlacement="start"
+          ></Button>
+            )}
           </Stack>
         </Stack>
       ) : (

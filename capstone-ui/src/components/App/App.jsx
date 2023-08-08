@@ -32,6 +32,8 @@ import Utilities from "../../TradingCalculations/Utilities.js";
 
 import StockCard from "../StockCard/StockCard";
 
+import UserPieChart from "../Graph/UsersPieChart";
+
 import { useEffect } from "react";
 import { Button, Center } from "@chakra-ui/react";
 
@@ -71,6 +73,7 @@ function App() {
   const [historicalAmzn, setHistoricalAmzn] = useState([]);
   const [historicalGoogle, setHistoricalGoogle] = useState([]);
   const [historicalCrm, setHistoricalCrm] = useState([]);
+  const [historicalNflx, setHistoricalNflx] = useState([]);
   const [historicalChecker, setHistoricalChecker] = useState(false);
 
   // login functiionaility
@@ -82,6 +85,8 @@ function App() {
   const [buying_power, setBuyingPower] = useState(10000);
   const [acc_value, setAccValue] = useState(10000);
   const [transactionHistory, setTransactionHistory] = useState(null);
+  const [buyingPow, setBuyingPow] = useState(null)
+
 
   // -------------------- Strategy Usestate Variables ------------------\\\
   const [strategyBuyingPower, setStrategyBuyingPower] = useState(0);
@@ -95,20 +100,29 @@ function App() {
   const rangeDate = new Date();
   rangeDate.setDate(rangeDate.getDate() - 30);
 
-  const mergeArrays = (arr1, arr2, arr3, arr4) => {
+  const mergeArrays = (arr1, arr2, arr3, arr4, arr5) => {
     const mergedArray = [];
     // Create an object to keep track of merged data
     const dataMap = {};
+
     arr1.forEach(({ date, ...rest }) => {
       dataMap[date] = { ...dataMap[date], ...rest };
     });
+
     arr2.forEach(({ date, ...rest }) => {
       dataMap[date] = { ...dataMap[date], ...rest };
     });
+
     arr3.forEach(({ date, ...rest }) => {
       dataMap[date] = { ...dataMap[date], ...rest };
     });
+
     arr4.forEach(({ date, ...rest }) => {
+      dataMap[date] = { ...dataMap[date], ...rest };
+    });
+
+    // For the fifth array
+    arr5.forEach(({ date, ...rest }) => {
       dataMap[date] = { ...dataMap[date], ...rest };
     });
 
@@ -157,46 +171,46 @@ function App() {
   const [googlAVGBuyPrice, setGooglAVGBuyPrice] = useState(0);
   const [crmAVGBuyPrice, setCrmAVGBuyPrice] = useState(0);
 
-  const getTickerViaUser = async (ticker) => {
-    try {
-      const res = await axios.get(
-        `http://localhost:3001/trans/avgbuyprice/${ticker}/${localStorage.getItem(
-          "currentUserId"
-        )}`
-      );
-      // console.log("Response Data: ", res.data); // Log the response data to see its structure
-      const length = res.data.data.length;
+  // const getTickerViaUser = async (ticker) => {
+  //   try {
+  //     const res = await axios.get(
+  //       `http://localhost:3001/trans/avgbuyprice/${ticker}/${localStorage.getItem(
+  //         "currentUserId"
+  //       )}`
+  //     );
+  //     // console.log("Response Data: ", res.data); // Log the response data to see its structure
+  //     const length = res.data.data.length;
 
-      if (length != 0) {
-        // console.log("here is it" ,res.data.data)
-        tickerAvgBuyPrice[ticker] = res.data.data[length - 1].avg_buy_price;
-      }
-    } catch (error) {
-      console.log("Error:", error.response.data.error.message);
-    }
-  };
+  //     if (length != 0) {
+  //       // console.log("here is it" ,res.data.data)
+  //       tickerAvgBuyPrice[ticker] = res.data.data[length - 1].avg_buy_price;
+  //     }
+  //   } catch (error) {
+  //     console.log("Error:", error.response.data.error.message);
+  //   }
+  // };
 
   // getTickerViaUser("CRM");
 
   // reason this is in asyn is for the way that js works that the dictionary is not saved in its state
-  const processTickers = async () => {
-    // Execute all API calls in parallel and wait for all of them to complete
-    await Promise.all(tickers.map((ticker) => getTickerViaUser(ticker)));
-    // Now that all API calls are completed, log the fully populated dictionary
-    // console.log("the dict, ", tickerAvgBuyPrice);
+  // const processTickers = async () => {
+  //   // Execute all API calls in parallel and wait for all of them to complete
+  //   await Promise.all(tickers.map((ticker) => getTickerViaUser(ticker)));
+  //   // Now that all API calls are completed, log the fully populated dictionary
+  //   // console.log("the dict, ", tickerAvgBuyPrice);
 
-    // console.log("the dict", tickerAvgBuyPrice)
+  //   // console.log("the dict", tickerAvgBuyPrice)
 
-    setMetaAVGBuyPrice(tickerAvgBuyPrice["META"]);
-    setAmznAVGBuyPrice(tickerAvgBuyPrice["AMZN"]);
-    setNflxAVGBuyPrice(tickerAvgBuyPrice["NFLX"]);
-    setGooglAVGBuyPrice(tickerAvgBuyPrice["GOOGL"]);
-    setCrmAVGBuyPrice(tickerAvgBuyPrice["CRM"]);
-  };
+  //   setMetaAVGBuyPrice(tickerAvgBuyPrice["META"]);
+  //   setAmznAVGBuyPrice(tickerAvgBuyPrice["AMZN"]);
+  //   setNflxAVGBuyPrice(tickerAvgBuyPrice["NFLX"]);
+  //   setGooglAVGBuyPrice(tickerAvgBuyPrice["GOOGL"]);
+  //   setCrmAVGBuyPrice(tickerAvgBuyPrice["CRM"]);
+  // };
 
-  processTickers();
+  // processTickers();
 
-  
+
   // console.log("META PRICE INN AS ETF", nflxAVGBuyPrice)
 
   //The following 3 getter: gets the list of all stocks and account used by the user
@@ -225,6 +239,7 @@ function App() {
         )}`
       );
       setAccount(res.data.account);
+      setBuyingPow(res.data.account.buying_power);
       // console.log("ACCOUNT ", res.data.account)
     } catch (error) {
       console.log(error);
@@ -245,7 +260,7 @@ function App() {
     }
   };
 
-  
+
 
   // console.log("is it pop here", nflxPercent )
   const stockData = {
@@ -268,7 +283,6 @@ function App() {
       logo: "https://cdn.cookielaw.org/logos/dd6b162f-1a32-456a-9cfe-897231c7763c/4345ea78-053c-46d2-b11e-09adaef973dc/Netflix_Logo_PMS.png",
       stockName: "NFLX",
       stockPrice: nflxPrice,
-      
       stockPercentage: nflxPercent,
     },
     5: {
@@ -286,6 +300,33 @@ function App() {
       stockPercentage: crmPercent,
     },
   };
+  const stockPrice = [
+    {
+      name: 'Netflix',
+      ticker: 'NFLX',
+      stockPrice: nflxPrice
+    },
+    {
+      name: 'Meta',
+      ticker: 'META',
+      stockPrice: metaPrice
+    },
+    {
+      name: 'Crm',
+      ticker: 'CRM',
+      stockPrice: crmPrice
+    },
+    {
+      name: 'Amazon',
+      ticker: 'AMZN',
+      stockPrice: amznPrice
+    },
+    {
+      name: 'Google',
+      ticker: 'GOOGL',
+      stockPrice: googlPrice
+    }
+  ]
 
   // --------------------------------------------------------------------------------------------------------------
   // this function gets the current price of the stocks
@@ -314,11 +355,11 @@ function App() {
 
       const price = response.data.data.c; // this is the current price of the stock
       const percentChange = response.data.data.dp;
+
       switch (ticker) {
         case "META":
           setMetaPrice(price);
-          
-          setMetaPercent(percentChange);          
+          setMetaPercent(percentChange);
           break;
         case "AMZN":
           setAmznPrice(price);
@@ -340,6 +381,7 @@ function App() {
         default:
           break;
       }
+
       // console.log(price);
     } catch (error) {
       console.error(error);
@@ -354,6 +396,7 @@ function App() {
     tickers.forEach(async (ticker) => {
       await getStockPrice(ticker);
     });
+
   };
 
   // --------------------------------------------------------------------------------------------------------------
@@ -435,6 +478,8 @@ function App() {
       const amzn = await pastStockPrice(tickers[1], rangeDate);
       const google = await pastStockPrice(tickers[3], rangeDate);
       const crm = await pastStockPrice(tickers[4], rangeDate);
+      const nflx = await pastStockPrice(tickers[2], rangeDate)
+
 
       // const mPercentage = await getPercentChange(tickers[0]);
       // const aPercentage = await getPercentChange(tickers[1]);
@@ -442,20 +487,22 @@ function App() {
       // //netflix here
       // const cPercentage = await getPercentChange(tickers[4]);
 
-      const [historicalMeta, historicalAmzn, historicalCrm, historicalGoogle] =
-        await Promise.all([meta, amzn, crm, google]);
+      const [historicalMeta, historicalAmzn, historicalCrm, historicalGoogle, historicalNflx] =
+        await Promise.all([meta, amzn, crm, google, nflx]);
       setHistoricalAmzn(historicalAmzn);
       setHistoricalCrm(historicalCrm);
       setHistoricalGoogle(historicalGoogle);
       setHistoricalMeta(historicalMeta);
-
+      setHistoricalNflx(historicalNflx)
       // setMetaPercent(metaPercent);
       // setAmznPercent(amznPercent);
       // setGooglPercent(googlPercent);
       // setCrmPercent(crmPercent);
+      await getAccount();
 
       setHistoricalChecker(true);
     };
+
     const getTransactions = async (userID) => {
       axios
         .get(`http://localhost:3001/trans/history/${userID}`)
@@ -469,6 +516,9 @@ function App() {
     };
     fetchData();
     getTransactions(localStorage.getItem("currentUserId"));
+    updateStockPrice(tickers);
+    getPortfolio();
+
   }, []);
 
   return (
@@ -496,8 +546,12 @@ function App() {
                     historicalAmzn,
                     historicalCrm,
                     historicalGoogle,
-                    historicalMeta
+                    historicalMeta,
+                    historicalNflx
                   )}
+
+                  pieChartData={stockPrice}
+                  bo={buyingPow}
                   strategyBuyingPower={strategyBuyingPower}
                   setStrategyBuyingPower={setStrategyBuyingPower}
                   strategy={strategyType}
@@ -516,7 +570,7 @@ function App() {
             />
             <Route
               path="/trade"
-              element={
+              element={portfolio ? (
                 <Trade
                   updateStockPrice={updateStockPrice}
                   tickers={tickers}
@@ -525,16 +579,33 @@ function App() {
                     historicalAmzn,
                     historicalCrm,
                     historicalGoogle,
-                    historicalMeta
+                    historicalMeta,
+                    historicalNflx
                   )}
                 />
+
+              ) : (
+                <Center
+                  position={"fixed"}
+                  w={"full"}
+                  h={"100vh"}
+                  bgColor={"#000409"}
+                >
+                  <Button
+                    isLoading
+                    loadingText="Loading"
+                    color="white"
+                    variant="outline"
+                  ></Button>
+                </Center>
+              )
               }
             />
             <Route
               path="/transaction"
-              element={isLogged?(<TransactionTable transactionHistory={transactionHistory} stockData={stockData} fixedDate={fixedDate} username = {profile} />):(<LandingPage />)}
-                
-              
+              element={isLogged ? (<TransactionTable transactionHistory={transactionHistory} stockData={stockData} fixedDate={fixedDate} username={profile} />) : (<LandingPage />)}
+
+
             />
             <Route
               path="/register"
@@ -567,12 +638,13 @@ function App() {
                       historicalAmzn,
                       historicalCrm,
                       historicalGoogle,
-                      historicalMeta
+                      historicalMeta,
+                      historicalNflx
                     )}
-                  account = {account}
-                  getAccount = {getAccount}
-                  getPortfolio={getPortfolio}
-                  portfolio = {portfolio}
+                    account={account}
+                    getAccount={getAccount}
+                    getPortfolio={getPortfolio}
+                    portfolio={portfolio}
                   />
                 ) : (
                   <Center
@@ -623,6 +695,14 @@ function App() {
                 />
               }
             />
+            <Route
+              path='/tester'
+              element={stockData && (
+                <UserPieChart stockData={stockPrice} updateStockPrice={updateStockPrice}
+                  tickers={tickers} />
+
+              )
+              } />
             <Route path="/*" element={<NotFound />} />
           </Routes>
         </main>
