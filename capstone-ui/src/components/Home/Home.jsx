@@ -32,7 +32,7 @@ import MeanReversionStrat from "../../TradingCalculations/MeanReversionStrat.js"
 import MovingAverageCrossover from "../../TradingCalculations/MovingAverageCrossover.js";
 import Divergence from "../../TradingCalculations/Divergence.js";
 import Utilities from "../../TradingCalculations/Utilities.js";
-import ClickPopover from "../Popover/Popover"
+import ClickPopover from "../Popover/Popover";
 import UserPieChart from "../Graph/UsersPieChart";
 // import { ThemeContext } from "../App/App";
 // importy history
@@ -62,17 +62,16 @@ const Home = ({
   googlAVGBuyPrice,
 }) => {
   const currDate = new Date();
-  const navigate = useNavigate(); 
-  console.log('Historical Data ', pieChartData)
+  const navigate = useNavigate();
+  console.log("Historical Data ", pieChartData);
 
   const [stockValues, setStockValues] = useState(null);
-  const [pieChart,setPieChart] = useState([]);
+  const [pieChart, setPieChart] = useState([]);
 
-  const [isLoading, setIsLoading] = useState(false)
+  const [isLoading, setIsLoading] = useState(false);
   const { isOpen, onOpen, onClose } = useDisclosure();
   // const stockValue = () => {
   //   historicalData.filter(stock)
-
 
   // }
   // const [metaData, setMetaData] = useState([]);
@@ -115,7 +114,7 @@ const Home = ({
 
   // console.log("tgs", account.acc_value.toLocaleString('en-US'));
 
-  console.log("THE HISTORICAL DATA", historicalData)
+  console.log("THE HISTORICAL DATA", historicalData);
 
   const [test, setTest] = useState();
   useEffect(() => {
@@ -124,26 +123,21 @@ const Home = ({
       await getAccount();
       await getPortfolio();
       await getStrategy();
-
     };
 
     fetchDataAndRunStrategy();
-
-    
-    
-    
   }, []);
-  useEffect (()=>{
-    if(portfolio !== null){
-      console.log('I am here: ',portfolio)
+  useEffect(() => {
+    if (portfolio !== null) {
+      console.log("I am here: ", portfolio);
       const stockValuesArray = portfolio.map((item) => ({
         ticker: item.ticker,
-        quantity: item.quantity
+        quantity: item.quantity,
       }));
       setStockValues(stockValuesArray);
     }
-    console.log('portfoliooo',stockValues)
-  },[portfolio])
+    console.log("portfoliooo", stockValues);
+  }, [portfolio]);
 
   useEffect(() => {
     const runCurrentStrategy = async () => {
@@ -152,7 +146,7 @@ const Home = ({
         await Utilities.runCurrentStrategy(strategy);
         // Below calls will wait until runCurrentStrategy has finished
         await getAccount();
-        await getPortfolio()
+        await getPortfolio();
         setIsLoading(false);
       }
     };
@@ -160,7 +154,7 @@ const Home = ({
   }, [strategy]);
 
   //gathers the individual stocks together as sets
- 
+
   //console.log('portfoliooo: ', stockValues)
 
   const formatStrategyName = (name) => {
@@ -192,26 +186,29 @@ const Home = ({
   function addCommasToNumber(number) {
     return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
   }
-  
-  useEffect(()=>{
-    if(stockValues){
-      console.log('checker here: ', stockValues)
+
+  useEffect(() => {
+    if (stockValues) {
+      console.log("checker here: ", stockValues);
       const updatedPieChart = stockValues.map((stock) => {
         const tick = stock.ticker;
         const info = pieChartData.find((data) => data.ticker === stock.ticker);
-        return { ticker: tick, name: info.name, quantity:stock.quantity, stockPrice: info.stockPrice * stock.quantity};
+        return {
+          ticker: tick,
+          name: info.name,
+          quantity: stock.quantity,
+          stockPrice: info.stockPrice * stock.quantity,
+        };
       });
-      const buyingPower = {name: 'Buying Power', stockPrice: Number(bo)}
-      console.log('THE ARRAY INDEX',buyingPower)
+      const buyingPower = { name: "Buying Power", stockPrice: Number(bo) };
+      console.log("THE ARRAY INDEX", buyingPower);
       setPieChart([buyingPower, ...updatedPieChart]);
-
-    }else{
-      const buyingPower = {name: 'Buying Power', stockPrice: Number(bo)}
-      setPieChart([buyingPower])
+    } else {
+      const buyingPower = { name: "Buying Power", stockPrice: Number(bo) };
+      setPieChart([buyingPower]);
     }
-
-  },[stockValues])
-  console.log('check here: ', pieChart)
+  }, [stockValues]);
+  console.log("check here: ", pieChart);
   return (
     <Box
       position={"absolute"}
@@ -266,18 +263,13 @@ const Home = ({
                 ))}
               </Box>
             ) : (
-              <Stack
-                direction="column"
-                alignItems={"center"}
-                p={10}
-               
-              >
+              <Stack direction="column" alignItems={"center"} p={10}>
                 <Text color="#03314b">No stocks owned</Text>
 
                 <Button
                   bgColor={"green.400"}
-                  onClick={(event) => {
-                    navigate("/trade")
+                  onClick={() => {
+                    navigate("/trade");
                   }}
                 >
                   Start Trading!
@@ -386,7 +378,6 @@ const Home = ({
                 boxShadow={"20px 20px 90px grey"}
               >
                 <Square
-                  
                   h={"150px"}
                   display={"flex"}
                   flexDirection={"column"}
@@ -440,7 +431,7 @@ const Home = ({
                       word="Buying Power"
                       display="Buying Power"
                       color={"grey.500"}
-                      description="Buying power is the amount of money you have to buy stocks. If you had $20 and owned a salesforce stock, your buying power would be $20"                    
+                      description="Buying power is the amount of money you have to buy stocks. If you had $20 and owned a salesforce stock, your buying power would be $20"
                     />{" "}
                   </Text>
                   <Stack
@@ -451,27 +442,28 @@ const Home = ({
                     textColor={"#1ecc97"}
                     mr={21}
                   >
-                    
-                    {isLoading ? (<Text>Calculating <Spinner /></Text> ): 
-                    <Text >${addCommasToNumber(account.buying_power)}</Text>}
+                    {isLoading ? (
+                      <Text>
+                        Calculating <Spinner />
+                      </Text>
+                    ) : (
+                      <Text>${addCommasToNumber(account.buying_power)}</Text>
+                    )}
                   </Stack>
                 </Square>
               </Flex>
             </Container>
 
-            
-            
             {pieChart ? (
               <UserPieChart stockData={pieChart} />
-              
-            ):(
-            <Button
-            isLoading
-            loadingText="Loading"
-            colorScheme="teal"
-            variant="outline"
-            spinnerPlacement="start"
-          ></Button>
+            ) : (
+              <Button
+                isLoading
+                loadingText="Loading"
+                colorScheme="teal"
+                variant="outline"
+                spinnerPlacement="start"
+              ></Button>
             )}
           </Stack>
         </Stack>
