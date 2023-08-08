@@ -11,7 +11,8 @@ export default function Trade({
   updateStockPrice,
   tickers,
   stockData,
-  historicalData,
+  account,
+  historicalData
 }) {
   console.log('DATAAAAA: ', historicalData)
   // useEffect(() => {

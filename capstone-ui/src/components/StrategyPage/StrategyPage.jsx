@@ -443,7 +443,7 @@ const StrategyPage = ({
         What does this mean?
       </PopoverHeader>
       <PopoverBody>
-        If you add This strategy to your account, the strategy will run daily and make trades for you in the current market. Give your strategy an amount of money to trade with. (The amount is taken out of your buying power)
+        If you add this strategy to your account, the strategy will run daily and make trades for you in the current market. Give your strategy an amount of money to trade with. (The amount is taken out of your buying power)
         <Input
           type="number"
           id="quantity"
