@@ -1,8 +1,7 @@
 const { use } = require("../Routes/auth");
 const db = require("../db");
 const { BadRequestError, UnauthorizedError } = require("../utils/errors");
-// const fetch = require("node-fetch");
-
+const fetch = require("node-fetch");
 
 class Transaction {
   //Function that gets the transaction history for a particular user
@@ -46,12 +45,11 @@ class Transaction {
       ticker, created_at;
     
     `;
-  
+
     const result = await db.query(query, [user_id, ticker]); // Pass both user_id and ticker as parameters in the array
     const exercise = result.rows;
     return exercise;
   }
-  
 
   // Adds a transaction to the transaction table. Every transaction should be added here
   static async addTransactionHistory(
