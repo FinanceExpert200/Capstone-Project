@@ -4,8 +4,12 @@ const morgan = require("morgan");
 const { PORT } = require("./config");
 const security = require("./middleware/security");
 const authRoutes = require("./Routes/auth");
-const transactionRoutes = require("./Routes/transaction")
-const strategyRoutes = require("./Routes/strategies");
+const transactionRoutes = require("./routes/transaction")
+const strategyRoutes = require("./routes/strategies");
+
+// const transactionRoutes = require("./Routes/transaction")
+
+
 
 const { BadRequestError, NotFoundError } = require("./utils/errors"); // Import custom error handlers
 
@@ -14,18 +18,20 @@ const app = express();
 
 
 
-app.use(function(req, res, next) {
-  // res.header("Access-Control-Allow-Origin", "*");
-  const allowedOrigins = ['http://localhost:3001', 'https://stock-swap.onrender.com', "https://capstone-project-6ssi.onrender.com"];
-  const origin = req.headers.origin;
-  if (allowedOrigins.includes(origin)) {
-       res.setHeader('Access-Control-Allow-Origin', origin);
-  }
-  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept, Authorization");
-  res.header("Access-Control-Allow-credentials", true);
-  res.header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, UPDATE");
-  next();
-});
+// app.use(function(req, res, next) {
+//   // res.header("Access-Control-Allow-Origin", "*");
+//   const allowedOrigins = ['http://localhost:3001', 'http://localhost:3001', "https://capstone-project-6ssi.onrender.com"];
+//   const origin = req.headers.origin;
+//   if (allowedOrigins.includes(origin)) {
+//        res.setHeader('Access-Control-Allow-Origin', origin);
+//   }
+//   res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept, Authorization");
+//   res.header("Access-Control-Allow-credentials", true);
+//   res.header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, UPDATE");
+//   next();
+// });
+
+app.use(cors());
 
 
 

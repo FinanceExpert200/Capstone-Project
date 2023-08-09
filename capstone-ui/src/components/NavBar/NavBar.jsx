@@ -1,12 +1,8 @@
 // import codePathLogo from "/src/assets/codepath.svg";
 import * as React from 'react';
-//import { Link } from "react-router-dom"
+import {useLocation } from "react-router-dom"
 import "./NavBar.css";
-import { Route, useNavigate } from "react-router-dom";
-import { Link as RouterLink } from "react-router-dom"; 
-
-
-
+import { useState } from 'react';
 import {
   Box,
   Flex,
@@ -20,31 +16,32 @@ import {
 } from '@chakra-ui/react'
 import { HamburgerIcon, CloseIcon } from '@chakra-ui/icons'
 
+
+let status;
 const Links = ['Profile', 'Trade', 'Transaction', 'Strategies']
 const Routes = ['home', 'trade', 'transaction', 'strategies']
 
-
 const NavLink = ({link, route}) => {
-  const navigate = useNavigate();
-
+  const location = useLocation();
 
   return (
     <Box
-      as={RouterLink}
-      to={`/${route}`}
+      as="a"
       px={2}
       py={1}
       zIndex={1}
       rounded={'md'}
       paddingLeft={'80px'}
       pr={'80px'}
-      
       _hover={{
         textDecoration: 'none',
         bg: useColorModeValue('green.200', 'green.700'),
         color:'black'
       }}
-    >
+      bgColor={location.pathname === `/${route}` ? 'green.200' : 'transparent'}
+      color={location.pathname === `/${route}` ? 'black' : 'white'}
+      
+      href={`/${route}`}>
         {link}
     </Box>
   )
@@ -52,14 +49,15 @@ const NavLink = ({link, route}) => {
 
 export default function NavBar({ isLogged, setIsLogged }) {
   const { isOpen, onOpen, onClose } = useDisclosure()
+  const [onPage,setOnPage] = useState(false)
+  status  = onPage;
   const handleLogout = (event) => {
         event.preventDefault(); // Prevents the default form submission behavior
         setIsLogged(false);
         console.log(isLogged);
         localStorage.removeItem("currentUserId");
         localStorage.removeItem("token");
-        navigate("/")
-
+        window.location.href = "/";
     
   };
 
@@ -79,7 +77,7 @@ export default function NavBar({ isLogged, setIsLogged }) {
             display={{ md: 'none' }}
             onClick={isOpen ? onClose : onOpen}
           />
-          <Box as={RouterLink} to="/home" fontWeight={'bold'}>StockSwap</Box>
+          <Box as='a' href="/home" fontWeight={'bold'}>StockSwap</Box>
           <HStack spacing={8} alignItems={'center'}>
             <HStack as={'nav'} spacing={4} display={{ base: 'none', md: 'flex' }}>
             {Links.map((link, index) => (
@@ -94,7 +92,7 @@ export default function NavBar({ isLogged, setIsLogged }) {
               color={'white'}
              _hover={{ bg: 'green.500' }}
               onClick={handleLogout}>
-             <Link as={RouterLink} to="/register"> Logout</Link>
+             <Link href="/register"> Logout</Link>
             </Button>
           </Flex>
         </Flex>
@@ -122,7 +120,7 @@ export default function NavBar({ isLogged, setIsLogged }) {
              >
         <Flex h={16} alignItems={'center'} justifyContent={'space-between'}>
           
-          <Box as={RouterLink} to="/" fontWeight={'bold'}>StockSwap</Box>
+          <Box as='a' href="/" fontWeight={'bold'}>StockSwap</Box>
           <Flex alignItems={'center'}>
           <Button
               
@@ -131,7 +129,7 @@ export default function NavBar({ isLogged, setIsLogged }) {
               rounded={'full'}
               color={'white'}
               _hover={{ bg: 'green.500' }}>
-              <Link as={RouterLink} to="/login">Sign In</Link>
+              <Link href="/login">Sign In</Link>
             </Button> 
            
           </Flex>
@@ -141,7 +139,7 @@ export default function NavBar({ isLogged, setIsLogged }) {
           <Box pb={4} display={{ md: 'none' }}>
             <Stack as={'nav'} spacing={4}>
             {Links.map((link, index) => (
-                <NavLink key={link} link={link} route={Routes[index]} />
+                <NavLink key={link} link={link} route={Routes[index]} onClick={() => setOnPage(!onPage)}/>
               ))}
             </Stack>
           </Box>
@@ -151,4 +149,3 @@ export default function NavBar({ isLogged, setIsLogged }) {
     </>
   )
 }
-

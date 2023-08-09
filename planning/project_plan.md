@@ -55,7 +55,7 @@ List all the pages and screens in the app. Include wireframes for at least 3 of 
 List the API endpoints you will need to implement.
 POST REQUEST:
 Adding a transaction using Postman
-Link: https://stock-swap.onrender.com/trans/add
+Link: http://localhost:3001/trans/add
 {
 "ticker": "APPL",
 "quantity": 2,
@@ -64,7 +64,7 @@ Link: https://stock-swap.onrender.com/trans/add
 "trans_type": "sell"
 }
 Buy Transaction
-Link: https://stock-swap.onrender.com/trans/buy
+Link: http://localhost:3001/trans/buy
 {
 "ticker": "APPL",
 "quantity": 2,
@@ -74,7 +74,7 @@ Link: https://stock-swap.onrender.com/trans/buy
 }
 
 Create a new User
-Link: https://stock-swap.onrender.com/auth/register
+Link: http://localhost:3001/auth/register
 {
 "email": "test@gmail.com",
 "firstName": "test",
@@ -85,7 +85,7 @@ Link: https://stock-swap.onrender.com/auth/register
 GET REQUESTS
 
 gets the account information for a user
-https://stock-swap.onrender.com/trans/account/:id
+http://localhost:3001/trans/account/:id
 
 LIST OF REQUEST:
 Create - POST - Adding a transaction to a table

@@ -2,8 +2,6 @@ import React from "react";
 import { useState } from "react";
 //import {Box,Button,Heading,Text} from '@chakra-ui/react'
 import { CheckCircleIcon } from "@chakra-ui/icons";
-
-
 import {
     Modal,
     ModalOverlay,
@@ -35,8 +33,8 @@ export default function PopupConfirmation ({submission,name,quantity,price,trans
             <Text fontWeight={'light'}>Click below to return to your profile</Text>
           </ModalBody>
           
-          <Button mb={5} onClick={()=>{navigate("/trade")}}> Trade More</Button>
-          <Button mb={5} onClick={()=>{navigate("/home")}}> Back to home</Button>
+          <Button  mr={5} mb={5} onClick={()=>{window.location.href = "/trade";}}> Trade More</Button>
+          <Button mb={5} onClick={()=>{window.location.href = "/home";}}> Back to home</Button>
          
           </Box>
         </ModalContent>
@@ -48,8 +46,3 @@ export default function PopupConfirmation ({submission,name,quantity,price,trans
        
     )
 }
-{/* <CheckCircleIcon color={'green'} w={'100px'} mt={'-50px'} borderRadius={'50%'} h={100} boxShadow={'0,2px,5px,rgba(0,0,0,0.2)'}/>
-            <Heading as={'h2'}>Transaction Success!</Heading>
-            <Text>Here is an over view of your transaction</Text>
-            <Text>Close this tab to return to homepage</Text>
-            <Button mb={5} onClick={()=>{window.location.href = "/home";}}> close</Button> */}

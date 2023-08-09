@@ -15,8 +15,6 @@ import {
   Heading,
 } from "@chakra-ui/react";
 //import bcrypt from "bcryptjs";
-import { useNavigate } from "react-router-dom";
-
 
 const handleAddData = async (
   event,
@@ -28,30 +26,23 @@ const handleAddData = async (
   password,
   setErrorMessage
 ) => {
-
-  const navigate = useNavigate();
-
-
   try {
     event.preventDefault();
 
     console.log(acc_value);
 
-    const res = await axios.post(
-      `https://stock-swap.onrender.com/auth/register`,
-      {
-        acc_value: acc_value,
-        buying_power: buying_power,
-        email: email,
-        firstName: first_name,
-        lastName: last_name,
-        password: password,
-      }
-    );
+    const res = await axios.post(`http://localhost:3001/auth/register`, {
+      acc_value: acc_value,
+      buying_power: buying_power,
+      email: email,
+      firstName: first_name,
+      lastName: last_name,
+      password: password,
+    });
 
     console.log(res.data);
 
-    navigate("/login")
+    window.location.href = "/login";
   } catch (err) {
     // console.log(err.response.data.error.message);
 
