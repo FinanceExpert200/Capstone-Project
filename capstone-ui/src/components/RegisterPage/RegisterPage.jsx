@@ -7,6 +7,7 @@ import {
   Button,
   Center,
   Flex,
+  Link,
   Stack,
   Container,
   SimpleGrid,
@@ -15,49 +16,15 @@ import {
   Heading,
 } from "@chakra-ui/react";
 //import bcrypt from "bcryptjs";
-import { useNavigate } from "react-router-dom";
+// import {Link as RouterLink} from 'react-router-dom'
+import { Link as RouterLink} from "react-router-dom";
+import { useNavigate } from "react-router-dom"; // Import useNavigate from React Router
 
 
-const handleAddData = async (
-  event,
-  buying_power,
-  acc_value,
-  email,
-  first_name,
-  last_name,
-  password,
-  setErrorMessage
-) => {
-
-  const navigate = useNavigate();
 
 
-  try {
-    event.preventDefault();
 
-    console.log(acc_value);
 
-    const res = await axios.post(
-      `https://stock-swap.onrender.com/auth/register`,
-      {
-        acc_value: acc_value,
-        buying_power: buying_power,
-        email: email,
-        firstName: first_name,
-        lastName: last_name,
-        password: password,
-      }
-    );
-
-    console.log(res.data);
-
-    navigate("/login")
-  } catch (err) {
-    // console.log(err.response.data.error.message);
-
-    setErrorMessage(err.response.data.error.message);
-  }
-};
 
 const RegisterPage = ({ buying_power, acc_value }) => {
   const [email, setEmail] = useState("");
@@ -66,6 +33,49 @@ const RegisterPage = ({ buying_power, acc_value }) => {
   const [password, setPassword] = useState("");
   const [hashedPassword, setHashedPassword] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
+  const navigate = useNavigate();
+
+  const handleAddData = async (
+    event,
+    buying_power,
+    acc_value,
+    email,
+    first_name,
+    last_name,
+    password,
+    setErrorMessage
+  ) => {
+  
+    
+    
+  
+    try {
+      
+      event.preventDefault();
+  
+      console.log(acc_value);
+  
+      const res = await axios.post(`http://localhost:3001/auth/register`, {
+        acc_value: acc_value,
+        buying_power: buying_power,
+        email: email,
+        firstName: first_name,
+        lastName: last_name,
+        password: password,
+      });
+  
+      console.log(res.data);
+     
+      
+      navigate("/login");
+  
+  
+    } catch (err) {
+      // console.log(err.response.data.error.message);
+  
+      setErrorMessage(err.response.data.error.message);
+    }
+  };
 
   return (
     <Box
@@ -177,7 +187,8 @@ const RegisterPage = ({ buying_power, acc_value }) => {
                   _hover={{ bg: "green.100" }}
                 >
                   {/* add a hover action for the button */}
-                  Sign Up
+
+                  <Link as={RouterLink} to="/login">Sign Up</Link>
                 </Button>
 
                 <div>

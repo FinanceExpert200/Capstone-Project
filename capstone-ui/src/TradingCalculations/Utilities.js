@@ -20,7 +20,7 @@ export default class Utilities {
     this.numberOfDBCalls = this.numberOfDBCalls + 1;
     try {
       const res = await axios.post(
-        "https://stock-swap.onrender.com/trans/historical",
+        "http://localhost:3001/trans/historical",
         {
           ticker: ticker,
           startDate: startDate,
@@ -89,53 +89,40 @@ export default class Utilities {
     }
   }
 
-  static async getPairsTradingTransactionHistory(selectedStocks, strategy) {
-    await PairsTrading.calculateProfit(selectedStocks, strategy.buying_power);
-    const transactionHistory =
-      await PairsTrading.getUnfilteredTransactionHistory();
-    console.log(transactionHistory);
-    this.compareTransactionHistory(transactionHistory, strategy);
+  static getPairsTradingTransactionHistory(selectedStocks,strategy){
+    return new Promise(async (resolve, reject) => {
+      await PairsTrading.calculateProfit(selectedStocks,strategy.buying_power);
+      const transactionHistory = await PairsTrading.getUnfilteredTransactionHistory();
+      console.log(transactionHistory);
+      await this.compareTransactionHistory(transactionHistory,strategy);
+      resolve();
+    });
   }
 
-  static async getMovingAverageCrossoverTransactionHistory(
-    selectedStocks,
-    strategy
-  ) {
-    await MovingAverageCrossover.calculateDisplayedProfit(
-      strategy.buying_power,
-      selectedStocks
-    );
-    let transactionHistory = await MovingAverageCrossover.getUnfilteredData();
-    console.log(transactionHistory);
-    this.compareTransactionHistory(transactionHistory, strategy);
+
+  static getMovingAverageCrossoverTransactionHistory(selectedStocks, strategy) {
+    return new Promise(async (resolve, reject) => {
+      await MovingAverageCrossover.calculateDisplayedProfit(strategy.buying_power, selectedStocks);
+      let transactionHistory = await MovingAverageCrossover.getUnfilteredData();
+      console.log(transactionHistory);
+      await this.compareTransactionHistory(transactionHistory, strategy);
+      resolve();
+    });
+  }
+  
+  static getDivergenceTransactionHistory(selectedStocks, strategy) {
+    return new Promise(async (resolve, reject) => {
+      console.log(selectedStocks);
+      await Divergence.calculateDisplayedProfit(strategy.buying_power, selectedStocks);
+      const transactionHistory = await Divergence.getUnfilteredData();
+      await this.compareTransactionHistory(transactionHistory, strategy);
+      resolve();
+    });
   }
 
-  static async getDivergenceTransactionHistory(selectedStocks, strategy) {
-    console.log(selectedStocks);
-    await Divergence.calculateDisplayedProfit(
-      strategy.buying_power,
-      selectedStocks
-    );
-    const transactionHistory = await Divergence.getUnfilteredData();
-    this.compareTransactionHistory(transactionHistory, strategy);
-  }
-
-  static async addTransaction(transaction, strategy) {
-    try {
-      const res = await axios.post(
-        `https://stock-swap.onrender.com/trans/${transaction.type}`,
-        {
-          ticker: transaction.ticker,
-          quantity: 1,
-          curr_price: transaction.price,
-          user_id: strategy.user_id,
-          trans_type: transaction.type,
-          purchased_by: strategy.strategy_name,
-          transaction_date: transaction.date,
-        }
-      );
-      if (res.status === 201) {
-        this.strategyTrades.push({
+    static async addTransaction(transaction,strategy){
+      try {
+        const res = await axios.post(`http://localhost:3001/trans/${transaction.type}`, {
           ticker: transaction.ticker,
           quantity: 1,
           curr_price: transaction.price,
@@ -144,40 +131,39 @@ export default class Utilities {
           purchased_by: strategy.strategy_name,
           transaction_date: transaction.date,
         });
-        console.log(
-          chalk.green("Transaction successfully executed from the strategy")
-        );
-        console.log(res);
+        if (res.status === 201) {
+
+          this.strategyTrades.push({ticker: transaction.ticker,quantity: 1,curr_price: transaction.price,user_id: strategy.user_id,trans_type: transaction.type,purchased_by: strategy.strategy_name,transaction_date: transaction.date})
+          console.log(chalk.green("Transaction successfully executed from the strategy"))
+          console.log(res)
+        }
+      } catch (err) {
+        console.log(err);
       }
-    } catch (err) {
-      console.log(err);
+    };
+  
+    static compareTransactionHistory(transactionHistory,strategy){
+      return new Promise(async (resolve, reject) => {
+        const lastActive  = await this.toStartDay(strategy.last_active);
+        for (const transaction of transactionHistory) {
+          if(transaction.date>=lastActive){
+            console.log("date", transaction.date , "last ran ", lastActive);
+            await this.addTransaction(transaction, strategy);
+          }
+        }
+        let today = new Date();
+        await this.updateLastActive(today.toISOString(), strategy.user_id);
+        await this.updateAccountValue(strategy.user_id);
+    
+        resolve(); // resolve the promise when everything is done
+      });
     }
-  }
-
-  static async compareTransactionHistory(transactionHistory, strategy) {
-    const lastActive = await this.toStartDay(strategy.last_active);
-
-    // Since map function doesn't wait for promises, it's better to use a for loop
-    for (const transaction of transactionHistory) {
-      //console.log(`last active ${lastActive} transaction date ${transaction.date}`)
-      if (transaction.date >= lastActive) {
-        console.log("date", transaction.date, "last ran ", lastActive);
-        //we want to perform the transaction
-        await this.addTransaction(transaction, strategy); // await added here
-      }
-    }
-
-    let today = new Date();
-    //After running the funciton, we need to update our last active date to today
-    await this.updateLastActive(today.toISOString(), strategy.user_id);
-    await this.updateAccountValue(strategy.user_id);
-  }
 
   static async updateLastActive(date, userId) {
     //Updates the date of the current strategy
     try {
       const res = await axios.post(
-        "https://stock-swap.onrender.com/strategy/active",
+        "http://localhost:3001/strategy/active",
         {
           date: date,
           user_id: userId,
@@ -188,28 +174,29 @@ export default class Utilities {
     }
   }
 
-  static async toStartDay(isoString) {
-    let date = new Date(isoString);
-    date.setHours(0, 0, 0, 0); // Set hours, minutes, seconds and milliseconds to 0
-    return date.toISOString();
-  }
-  static updateAccountValue = async (userId) => {
-    try {
-      const res = await axios.get(
-        `https://stock-swap.onrender.com/strategy/update/${userId}`
-      );
-      console.log("Total share value updated");
-
-      console.log(this.strategyTrades);
-      resolve();
-    } catch (error) {
-      console.log(error);
+    static async toStartDay(isoString) {
+      let date = new Date(isoString);
+      date.setHours(0, 0, 0, 0); // Set hours, minutes, seconds and milliseconds to 0
+      return date.toISOString();
+    } 
+    static updateAccountValue(userId) {
+      return new Promise(async (resolve, reject) => {
+        try {
+          const res = await axios.get(`http://localhost:3001/strategy/update/${userId}`);
+          console.log("Total share value updated");
+          console.log(this.strategyTrades);
+          resolve();  // Move this inside the try block
+        } catch (error) {
+          console.log(error);
+          reject(error);  // Add this to reject the Promise when there's an error
+        }
+      });
     }
-  };
-  static async getFinishedStrategy() {
-    return finishedExecutingStrategy;
-  }
+
+
   static async getStrategyTrades() {
     return this.strategyTrades;
   }
+
+
 }

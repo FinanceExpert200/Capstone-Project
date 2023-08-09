@@ -1,6 +1,6 @@
 import React from 'react';
 import { format, parseISO } from "date-fns";
-import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, Legend, Label, ResponsiveContainer } from 'recharts';
+import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, Legend, Label, ResponsiveContainer, ReferenceLine} from 'recharts';
 import { MinusIcon } from '@chakra-ui/icons';
 import { Box, Center, Text, Tag, IconButton, Modal, ModalOverlay, ModalContent, ModalHeader, ModalCloseButton, ModalBody, useDisclosure } from '@chakra-ui/react';
 import { InfoIcon } from '@chakra-ui/icons'
@@ -57,6 +57,8 @@ export default function SingleStockGraph({ data, dataName, aspect, color }) {
                     <Tooltip content={<CustomizeLabel color={color} />} />
                     <Legend verticalAlign="top" height={36} content={renderLegend} />
                     <CartesianGrid opacity={.3} vertical={false} />
+                    <ReferenceLine y={70} label="Over Bought" stroke="red" />
+                    <ReferenceLine y={30} label="Over Sold" stroke="red" />
 
                     <Area
                         type="monotone"

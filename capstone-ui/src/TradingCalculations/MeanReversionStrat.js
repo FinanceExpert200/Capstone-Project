@@ -249,7 +249,7 @@ export default class MeanReversionStrat {
   // static async getStockPrice(ticker) {
   //     try {
   //       const response = await axios.get(
-  //         `https://stock-swap.onrender.com/trans/stock/${ticker}`
+  //         `http://localhost:3001/trans/stock/${ticker}`
   //       );
   //       // console.log(response.data.data)
   //       return response.data.data.c
@@ -264,7 +264,7 @@ export default class MeanReversionStrat {
     // console.log("FETCHING THE API")
     try {
       const res = await axios.post(
-        `https://stock-swap.onrender.com/trans/historical`,
+        `http://localhost:3001/trans/historical`,
         {
           ticker: ticker,
           startDate: startDate,

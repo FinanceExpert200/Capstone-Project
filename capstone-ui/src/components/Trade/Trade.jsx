@@ -6,6 +6,8 @@ import "./Trade.css";
 //import Trading from "../../TradingCalculations/Trade.js";
 import { Text, Box, Button,Center,Container,Flex, Heading,Stack, useColorMode, useColorModeValue } from '@chakra-ui/react'
 import StockGraph from "../Graph/StockGraph";
+import {Link as RouterLink} from "react-router-dom"
+
 
 export default function Trade({
   updateStockPrice,
@@ -44,15 +46,16 @@ export default function Trade({
   const Card = ({route,price,name}) => {
     return (
       <Box
-        as='a'
+        
         maxW={{base:'full',md:'275px'}}
         w={'full'}
         borderRadius={'lg'}
         borderWidth={3}
         borderColor={'#90abad'}
         overflow={'hidden'}
-        p={1}
-        href={`/trade/${route}`} 
+        p={1}        
+        as={RouterLink} 
+        to={`/trade/${route}` }
           
         >
           <Stack align={'center'} spacing={2}>
