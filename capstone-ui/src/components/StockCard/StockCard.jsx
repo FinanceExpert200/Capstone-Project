@@ -173,7 +173,7 @@ export default function StockCard({
       updateStockPrice(tickers);
 
       const res = await axios.post(
-        `http://localhost:3001/trans/${trans_type}`,
+        `https://stock-swap.onrender.com/trans/${trans_type}`,
         {
           ticker: ticker,
           quantity: quantity,

@@ -48,7 +48,7 @@ export default class Trading {
   static async getStockPrice(ticker) {
     try {
       const response = await axios.get(
-        `http://localhost:3001/trans/stock/${ticker}`
+        `https://stock-swap.onrender.com/trans/stock/${ticker}`
       );
       //UNDO THIS
       console.log("TICKER RESPONSE DATA ", response.data.data);
@@ -63,7 +63,7 @@ export default class Trading {
     //console.log("FETCHING THE API")
     try {
       const res = await axios.post(
-        `http://localhost:3001/trans/historical`,
+        `https://stock-swap.onrender.com/trans/historical`,
         {
           ticker: ticker,
           startDate: startDate,

@@ -4,23 +4,18 @@ const morgan = require("morgan");
 const { PORT } = require("./config");
 const security = require("./middleware/security");
 const authRoutes = require("./Routes/auth");
-const transactionRoutes = require("./routes/transaction")
+const transactionRoutes = require("./routes/transaction");
 const strategyRoutes = require("./routes/strategies");
 
 // const transactionRoutes = require("./Routes/transaction")
-
-
 
 const { BadRequestError, NotFoundError } = require("./utils/errors"); // Import custom error handlers
 
 const app = express();
 
-
-
-
 // app.use(function(req, res, next) {
 //   // res.header("Access-Control-Allow-Origin", "*");
-//   const allowedOrigins = ['http://localhost:3001', 'http://localhost:3001', "https://capstone-project-6ssi.onrender.com"];
+//   const allowedOrigins = ['https://stock-swap.onrender.com', 'https://stock-swap.onrender.com', "https://capstone-project-6ssi.onrender.com"];
 //   const origin = req.headers.origin;
 //   if (allowedOrigins.includes(origin)) {
 //        res.setHeader('Access-Control-Allow-Origin', origin);
@@ -33,10 +28,6 @@ const app = express();
 
 app.use(cors());
 
-
-
-
-
 app.use(express.json());
 
 app.use(morgan("tiny"));
@@ -46,10 +37,8 @@ app.use(morgan("tiny"));
 app.use(security.extractUserFromJwt);
 
 app.use("/auth", authRoutes);
-app.use("/trans", transactionRoutes)
-app.use("/strategy", strategyRoutes)
-
-
+app.use("/trans", transactionRoutes);
+app.use("/strategy", strategyRoutes);
 
 app.use((req, res, next) => {
   return next(new NotFoundError());
@@ -69,4 +58,3 @@ app.use((err, req, res, next) => {
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
 });
-

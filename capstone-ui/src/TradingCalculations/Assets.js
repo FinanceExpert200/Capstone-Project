@@ -4,7 +4,7 @@ export default class Assets {
   static async fetchHistoricalData(ticker, startDate, endDate) {
     try {
       const res = await axios.post(
-        `http://localhost:3001/trans/historical`,
+        `https://stock-swap.onrender.com/trans/historical`,
         {
           ticker: ticker,
           startDate: startDate,

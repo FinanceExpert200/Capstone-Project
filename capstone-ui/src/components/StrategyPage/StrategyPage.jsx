@@ -12,7 +12,7 @@ import ResultMovingAverage from "./ResultMovingAverage";
 import ResultMeanReversion from "./ResultMeanReversion";
 import ResultPairsTrading from "./ResultPairsTrading";
 import EMAStrat from "../../TradingCalculations/EMAStrat";
-import {Link as RouterLink} from "react-router-dom"
+import { Link as RouterLink } from "react-router-dom";
 import {
   Button,
   Box,
@@ -350,7 +350,7 @@ const StrategyPage = ({
     if (buyingPower > strategyBuyingPower && strategyBuyingPower > 0) {
       try {
         const res = await axios.post(
-          `http://localhost:3001/strategy/add`,
+          `https://stock-swap.onrender.com/strategy/add`,
           {
             strategy_type: strategyName,
             buying_power: strategyBuyingPower,
@@ -422,15 +422,20 @@ const StrategyPage = ({
               variant="outline"
             ></Button>
           )}
-          <Box position="absolute" bottom={`-35vh`} align={"center"} width = "full" >
-          <Button
-            onClick={() => {
-              setRanStrategy(false);
-              setselectedTickers([]);
-            }}
+          <Box
+            position="absolute"
+            bottom={`-35vh`}
+            align={"center"}
+            width="full"
           >
-            Run Again
-          </Button>
+            <Button
+              onClick={() => {
+                setRanStrategy(false);
+                setselectedTickers([]);
+              }}
+            >
+              Run Again
+            </Button>
           </Box>
           <Box position="absolute" top={300} left={150}>
             <Flex mt={3} mb={3} justify="space-between">
@@ -483,8 +488,8 @@ const StrategyPage = ({
                     {success && (
                       <Center w={"full"}>
                         <Button
-                          as={RouterLink} 
-                          to="/home"                      
+                          as={RouterLink}
+                          to="/home"
                           bg={"blackAlpha.200"}
                           _hover={{ bg: "green.500", color: "white" }}
                         >
@@ -610,8 +615,8 @@ const StrategyPage = ({
             {success && (
               <Center w={"full"}>
                 <Button
-                  as={RouterLink} 
-                  to="/home" 
+                  as={RouterLink}
+                  to="/home"
                   bg={"blackAlpha.200"}
                   _hover={{ bg: "green.500", color: "white" }}
                 >
