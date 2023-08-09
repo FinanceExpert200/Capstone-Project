@@ -143,9 +143,6 @@ const Home = ({
 
   //console.log('portfoliooo: ', stockValues)
 
-  console.log(`account data is:`);
-  console.log(account);
-
   const formatStrategyName = (name) => {
     switch (name) {
       case "meanreversion":
