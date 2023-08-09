@@ -18,7 +18,8 @@ import {
   Button,
   Spinner,
   useDisclosure,
-  Wrap, WrapItem,
+  Wrap,
+  WrapItem,
   Modal,
   ModalOverlay,
   ModalContent,
@@ -33,12 +34,12 @@ import MeanReversionStrat from "../../TradingCalculations/MeanReversionStrat.js"
 import MovingAverageCrossover from "../../TradingCalculations/MovingAverageCrossover.js";
 import Divergence from "../../TradingCalculations/Divergence.js";
 import Utilities from "../../TradingCalculations/Utilities.js";
-import ClickPopover from "../Popover/Popover"
+import ClickPopover from "../Popover/Popover";
 import UserPieChart from "../Graph/UsersPieChart";
 // import { ThemeContext } from "../App/App";
 // importy history
 
-import {Link as RouterLink} from "react-router-dom"
+import { Link as RouterLink } from "react-router-dom";
 
 const Home = ({
   getProfile,
@@ -68,7 +69,7 @@ const Home = ({
   const [stockValues, setStockValues] = useState(null);
   const [pieChart, setPieChart] = useState([]);
 
-  const [isLoading, setIsLoading] = useState(false)
+  const [isLoading, setIsLoading] = useState(false);
   const { isOpen, onOpen, onClose } = useDisclosure();
   let formattedStrategyName = "";
 
@@ -109,21 +110,20 @@ const Home = ({
       await getAccount();
       await getPortfolio();
       await getStrategy();
-
     };
     fetchDataAndRunStrategy();
   }, []);
   useEffect(() => {
     if (portfolio !== null) {
-      console.log('I am here: ', portfolio)
+      console.log("I am here: ", portfolio);
       const stockValuesArray = portfolio.map((item) => ({
         ticker: item.ticker,
-        quantity: item.quantity
+        quantity: item.quantity,
       }));
       setStockValues(stockValuesArray);
     }
     //console.log('portfoliooo', stockValues)
-  }, [portfolio])
+  }, [portfolio]);
 
   useEffect(() => {
     const runCurrentStrategy = async () => {
@@ -132,17 +132,19 @@ const Home = ({
         await Utilities.runCurrentStrategy(strategy);
         // Below calls will wait until runCurrentStrategy has finished
         await getAccount();
-        await getPortfolio()
+        await getPortfolio();
         setIsLoading(false);
       }
     };
     runCurrentStrategy();
   }, [strategy]);
 
-
   //gathers the individual stocks together as sets
 
   //console.log('portfoliooo: ', stockValues)
+
+  console.log(`account data is:`);
+  console.log(account);
 
   const formatStrategyName = (name) => {
     switch (name) {
@@ -176,23 +178,26 @@ const Home = ({
 
   useEffect(() => {
     if (stockValues) {
-      console.log('checker here: ', stockValues)
+      console.log("checker here: ", stockValues);
       const updatedPieChart = stockValues.map((stock) => {
         const tick = stock.ticker;
         const info = pieChartData.find((data) => data.ticker === stock.ticker);
-        return { ticker: tick, name: info.name, quantity: stock.quantity, stockPrice: info.stockPrice * stock.quantity };
+        return {
+          ticker: tick,
+          name: info.name,
+          quantity: stock.quantity,
+          stockPrice: info.stockPrice * stock.quantity,
+        };
       });
-      const buyingPower = { name: 'Buying Power', stockPrice: Number(bo) }
-      console.log('THE ARRAY INDEX', buyingPower)
+      const buyingPower = { name: "Buying Power", stockPrice: Number(bo) };
+      console.log("THE ARRAY INDEX", buyingPower);
       setPieChart([buyingPower, ...updatedPieChart]);
-
     } else {
-      const buyingPower = { name: 'Buying Power', stockPrice: Number(bo) }
-      setPieChart([buyingPower])
+      const buyingPower = { name: "Buying Power", stockPrice: Number(bo) };
+      setPieChart([buyingPower]);
     }
-
-  }, [stockValues])
-  console.log('check here: ', pieChart)
+  }, [stockValues]);
+  console.log("check here: ", pieChart);
   return (
     <Box
       position={"absolute"}
@@ -203,7 +208,6 @@ const Home = ({
     >
       {profile && account && portfolio && historicalData ? (
         <Stack direction={"row"} padding={20} w={"full"}>
-
           <Stack direction={"column"} w={"full"} ml={10}>
             <Box bgColor={"#03314b"} minH={"30vh"} w={"full"} p={7}>
               <Flex
@@ -223,7 +227,6 @@ const Home = ({
                   </Stack>
                   <Text fontSize={"30px"}>Here are your stats for today:</Text>
                 </Box>
-                
 
                 <Stack direction={"row"}>
                   {strategy && (
@@ -252,20 +255,26 @@ const Home = ({
                         width={"full"}
                         borderRadius={15}
                         mt={4}
-                        align={'center'}
-
+                        align={"center"}
                       >
-                        <Text
-                          textDecoration={"underline"}
-                        >
+                        <Text textDecoration={"underline"}>
                           Strategy Buying Power:{" "}
                         </Text>
-                        <Stack direction={"row"} justifyContent={"center"} mt={2} fontWeight={'medium'}>
-
+                        <Stack
+                          direction={"row"}
+                          justifyContent={"center"}
+                          mt={2}
+                          fontWeight={"medium"}
+                        >
                           {isLoading ? (
-                            <Text> Checking for trades <Spinner /></Text> // replace this with your actual loading spinner
+                            <Text>
+                              {" "}
+                              Checking for trades <Spinner />
+                            </Text> // replace this with your actual loading spinner
                           ) : (
-                            <Text color={"#1ecc97"}>${strategy.buying_power}</Text>
+                            <Text color={"#1ecc97"}>
+                              ${strategy.buying_power}
+                            </Text>
                           )}
                         </Stack>
                       </Box>
@@ -277,25 +286,20 @@ const Home = ({
                         mt={2}
                         p={0}
                         mb={1}
-
                       >
                         Remove Strategy
                       </Button>
                     </Box>
                   )}
-
                 </Stack>
-
-
-
               </Flex>
             </Box>
             {portfolio.length ? (
-              <Flex 
+              <Flex
                 direction={"column"}
                 bgColor={"#edf0f5"}
                 borderRadius={"5"}
-                textColor={'black'}
+                textColor={"black"}
                 boxShadow={"20px 20px 50px grey"}
                 pt={1}
                 pl={3}
@@ -303,8 +307,6 @@ const Home = ({
                 ml={10}
                 mr={10}
                 mb={10}
-                
-
               >
                 <Text fontSize={"25px"}>
                   {" "}
@@ -317,22 +319,12 @@ const Home = ({
                     }
                   />
                 </Text>
-                <Flex
-                  direction={"row"}
-                  justify={"space-evenly"}
-
-                >
-
+                <Flex direction={"row"} justify={"space-evenly"}>
                   {portfolio.map((item, key) => (
                     <Link to={`/trade`} key={item.ticker}>
-                      <Box
-                        p={3}
-                        mb={5}
-                        bgColor={"#edf0f5"}
-                      >
+                      <Box p={3} mb={5} bgColor={"#edf0f5"}>
                         <Text
-
-                          fontWeight={'light'}
+                          fontWeight={"light"}
                           align={"center"}
                           bgColor={"#ecf2f3"}
                           fontSize={"50px"}
@@ -341,8 +333,13 @@ const Home = ({
                         </Text>
 
                         <Flex direction={"row"} justify={"space-between"}>
-                          <Text fontSize={"25px"} color={'gray.600'}
-                            fontWeight={'light'}>Quantity: {item.quantity}</Text>
+                          <Text
+                            fontSize={"25px"}
+                            color={"gray.600"}
+                            fontWeight={"light"}
+                          >
+                            Quantity: {item.quantity}
+                          </Text>
                           {/* <Text fontSize={"25px"}>
                           Average Buy Price:{" "}
                           {Number(item.avgBuyPrice).toFixed(2)}
@@ -350,59 +347,54 @@ const Home = ({
                         </Flex>
                       </Box>
                     </Link>
-
-
                   ))}
-
-
-
                 </Flex>
-
               </Flex>
             ) : (
-              <Stack
-                alignItems={"center"}
-                direction={"column"}
-              >
+              <Stack alignItems={"center"} direction={"column"}>
                 <Text>No stocks owned</Text>
                 <Button
                   bgColor={"green.400"}
-                  
                   as={Link}
-                  to='/trade'
+                  to="/trade"
 
                   // onClick={(event) => {
                   //   window.location.href = "/trade";
                   // }}
-
                 >
                   Start Trading!
                 </Button>
               </Stack>
             )}
             {pieChart ? (
-              <Box w={'100%'} h={'80vh'}>
+              <Box w={"100%"} h={"80vh"}>
                 <Heading>Breakdown of Account Value</Heading>
-                <Box display={'flex'} direction={'row'} w={'full'} >
+                <Box display={"flex"} direction={"row"} w={"full"}>
                   <UserPieChart stockData={pieChart} />
                   <Flex
                     direction={"row"}
                     justify={"space-evenly"}
                     bgColor={"#edf0f5"}
                     borderRadius={"5"}
-
-                    w={'full'}
-
+                    w={"full"}
                   >
                     <Square
-
                       h={"200px"}
                       display={"flex"}
                       flexDirection={"column"}
                       alignItems="center"
                     >
-                      <Text color={'gray.500'} fontSize={25} fontWeight={'light'}>
-                        <ClickPopover word="Account Value" display="Account Value" color={'grey.500'} description="The account value is your buying power and the current price of all your stocks added together. If you had $20 in your pocket and owned a salesforce stock, your account value would be $20 plus the current price of the stock" />{" "}
+                      <Text
+                        color={"gray.500"}
+                        fontSize={25}
+                        fontWeight={"light"}
+                      >
+                        <ClickPopover
+                          word="Account Value"
+                          display="Account Value"
+                          color={"grey.500"}
+                          description="The account value is your buying power and the current price of all your stocks added together. If you had $20 in your pocket and owned a salesforce stock, your account value would be $20 plus the current price of the stock"
+                        />{" "}
                       </Text>
                       <Stack
                         direction={"row"}
@@ -411,11 +403,13 @@ const Home = ({
                         fontWeight={"medium"}
                         textColor={"#1ecc97"}
                       >
-
-                        {isLoading ? (<Text>Calculating <Spinner /></Text>) :
-
+                        {isLoading ? (
+                          <Text>
+                            Calculating <Spinner />
+                          </Text>
+                        ) : (
                           <Text>${addCommasToNumber(account.acc_value)}</Text>
-                        }
+                        )}
                       </Stack>
                     </Square>
 
@@ -454,11 +448,8 @@ const Home = ({
                       </Stack>
                     </Square>
                   </Flex>
-
                 </Box>
-
               </Box>
-
             ) : (
               <Button
                 isLoading
