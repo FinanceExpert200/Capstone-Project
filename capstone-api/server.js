@@ -13,27 +13,32 @@ const { BadRequestError, NotFoundError } = require("./utils/errors"); // Import 
 
 const app = express();
 
-app.use(function (req, res, next) {
-  res.header("Access-Control-Allow-Origin", "*");
-  const allowedOrigins = [
-    "https://stock-swap.onrender.com",
-    "https://stock-swap.onrender.com",
-    "https://capstone-project-6ssi.onrender.com",
-  ];
-  const origin = req.headers.origin;
-  if (allowedOrigins.indexOf(origin) !== -1) {
-    res.setHeader("Access-Control-Allow-Origin", origin);
-  }
-  res.header(
-    "Access-Control-Allow-Headers",
-    "Origin, X-Requested-With, Content-Type, Accept, Authorization"
-  );
-  res.header("Access-Control-Allow-credentials", true);
-  res.header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, UPDATE");
-  next();
-});
+// app.use(function (req, res, next) {
+//   res.header("Access-Control-Allow-Origin", "*");
+//   const allowedOrigins = [
+//     "https://stock-swap.onrender.com",
+//     "https://stock-swap.onrender.com",
+//     "https://capstone-project-6ssi.onrender.com",
+//   ];
+//   const origin = req.headers.origin;
+//   if (allowedOrigins.indexOf(origin) !== -1) {
+//     res.setHeader("Access-Control-Allow-Origin", origin);
+//   }
+//   res.header(
+//     "Access-Control-Allow-Headers",
+//     "Origin, X-Requested-With, Content-Type, Accept, Authorization"
+//   );
+//   res.header("Access-Control-Allow-credentials", true);
+//   res.header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, UPDATE");
+//   next();
+// });
 
-// app.use(cors());
+app.use(
+  cors({
+    origin: "https://stock-swap.onrender.com",
+    allowedHeaders: ["Origin", "X-Requested-With", "Content-Type", "Accept"],
+  })
+);
 
 app.use(express.json());
 
