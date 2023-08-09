@@ -27,7 +27,10 @@ const app = express();
 // });
 
 app.use(
-  cors({ origin: "https://stock-swap.onrender.com", withCredentials: true })
+  cors({
+    origin: "https://capstone-project-6ssi.onrender.com",
+    withCredentials: true,
+  })
 );
 
 app.use(express.json());
