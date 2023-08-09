@@ -33,12 +33,7 @@ const app = express();
 //   next();
 // });
 
-app.use(
-  cors({
-    origin: "https://stock-swap.onrender.com",
-    allowedHeaders: ["Origin", "X-Requested-With", "Content-Type", "Accept"],
-  })
-);
+app.use(cors());
 
 app.use(express.json());
 
