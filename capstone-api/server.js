@@ -4,8 +4,8 @@ const morgan = require("morgan");
 const { PORT } = require("./config");
 const security = require("./middleware/security");
 const authRoutes = require("./Routes/auth");
-const transactionRoutes = require("./routes/transaction");
-const strategyRoutes = require("./routes/strategies");
+const transactionRoutes = require("./Routes/transaction");
+const strategyRoutes = require("./Routes/strategies");
 
 // const transactionRoutes = require("./Routes/transaction")
 
