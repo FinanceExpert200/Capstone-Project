@@ -26,7 +26,7 @@ const app = express();
 //   next();
 // });
 
-app.use(cors());
+app.use(cors({ origin: "https://stock-swap.onrender.com" }));
 
 app.use(express.json());
 
