@@ -109,8 +109,13 @@ const TradingStrategies = ({ userId, setFormattedStrategyName }) => {
                 </Text>
 
                 <Button
-                  as={"a"}
-                  href="/strategies/movingaveragecrossover"
+                  
+
+
+                  as={RouterLink} 
+                  to="/strategies/movingaveragecrossover"
+
+                  
                   fontSize={"20px"}
                   bg="#bbdbcb"
                   color={"#03314b"}
@@ -137,8 +142,10 @@ const TradingStrategies = ({ userId, setFormattedStrategyName }) => {
                 </Text>
 
                 <Button
-                  as={"a"}
-                  href="/strategies/meanreversion"
+                 as={RouterLink} 
+                 to="/strategies/meanreversion"
+
+                 
                   fontSize={"20px"}
                   bg="#bbdbcb"
                   color={"#03314b"}
@@ -166,8 +173,9 @@ const TradingStrategies = ({ userId, setFormattedStrategyName }) => {
                 </Text>
 
                 <Button
-                  as={"a"}
-                  href="/strategies/divergence"
+                as={RouterLink} 
+                to="/strategies/divergence"
+                  
                   fontSize={"20px"}
                   bg="#bbdbcb"
                   color={"#03314b"}
@@ -192,8 +200,11 @@ const TradingStrategies = ({ userId, setFormattedStrategyName }) => {
                 </Text>
 
                 <Button
-                  as={"a"}
-                  href="/strategies/pairstrading"
+                as={RouterLink} 
+                to="/strategies/pairstrading"
+                  
+                
+                 
                   fontSize={"20px"}
                   bg="#bbdbcb"
                   color={"#03314b"}

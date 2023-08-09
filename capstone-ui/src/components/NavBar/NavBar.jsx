@@ -1,6 +1,6 @@
 // import codePathLogo from "/src/assets/codepath.svg";
 import * as React from 'react';
-import {useLocation } from "react-router-dom"
+import {useLocation, Link as RouterLink } from "react-router-dom"
 import "./NavBar.css";
 import { useState } from 'react';
 import {
@@ -26,7 +26,7 @@ const NavLink = ({link, route}) => {
 
   return (
     <Box
-      as="a"
+      as={RouterLink}
       px={2}
       py={1}
       zIndex={1}
@@ -41,7 +41,7 @@ const NavLink = ({link, route}) => {
       bgColor={location.pathname === `/${route}` ? 'green.200' : 'transparent'}
       color={location.pathname === `/${route}` ? 'black' : 'white'}
       
-      href={`/${route}`}>
+      to={`/${route}`}>
         {link}
     </Box>
   )
@@ -57,7 +57,6 @@ export default function NavBar({ isLogged, setIsLogged }) {
         console.log(isLogged);
         localStorage.removeItem("currentUserId");
         localStorage.removeItem("token");
-        window.location.href = "/";
     
   };
 
@@ -77,7 +76,7 @@ export default function NavBar({ isLogged, setIsLogged }) {
             display={{ md: 'none' }}
             onClick={isOpen ? onClose : onOpen}
           />
-          <Box as='a' href="/home" fontWeight={'bold'}>StockSwap</Box>
+          <Box as={RouterLink} to="/home" fontWeight={'bold'}>StockSwap</Box>
           <HStack spacing={8} alignItems={'center'}>
             <HStack as={'nav'} spacing={4} display={{ base: 'none', md: 'flex' }}>
             {Links.map((link, index) => (
@@ -92,7 +91,7 @@ export default function NavBar({ isLogged, setIsLogged }) {
               color={'white'}
              _hover={{ bg: 'green.500' }}
               onClick={handleLogout}>
-             <Link href="/register"> Logout</Link>
+             <Link as={RouterLink} to="/"> Logout</Link>
             </Button>
           </Flex>
         </Flex>
@@ -120,16 +119,17 @@ export default function NavBar({ isLogged, setIsLogged }) {
              >
         <Flex h={16} alignItems={'center'} justifyContent={'space-between'}>
           
-          <Box as='a' href="/" fontWeight={'bold'}>StockSwap</Box>
+          <Box as={RouterLink} to="/" fontWeight={'bold'}>StockSwap</Box>
           <Flex alignItems={'center'}>
           <Button
               
-          
+              as={RouterLink}
               bg={'#1ecc97'}
               rounded={'full'}
               color={'white'}
-              _hover={{ bg: 'green.500' }}>
-              <Link href="/login">Sign In</Link>
+              _hover={{ bg: 'green.500' }}
+              to={'/login'}>
+             Sign In
             </Button> 
            
           </Flex>

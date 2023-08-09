@@ -12,7 +12,7 @@ import ResultMovingAverage from "./ResultMovingAverage";
 import ResultMeanReversion from "./ResultMeanReversion";
 import ResultPairsTrading from "./ResultPairsTrading";
 import EMAStrat from "../../TradingCalculations/EMAStrat";
-
+import {Link as RouterLink} from "react-router-dom"
 import {
   Button,
   Box,
@@ -483,8 +483,8 @@ const StrategyPage = ({
                     {success && (
                       <Center w={"full"}>
                         <Button
-                          as="a"
-                          href="/home"
+                          as={RouterLink} 
+                          to="/home"                      
                           bg={"blackAlpha.200"}
                           _hover={{ bg: "green.500", color: "white" }}
                         >
@@ -610,8 +610,8 @@ const StrategyPage = ({
             {success && (
               <Center w={"full"}>
                 <Button
-                  as="a"
-                  href="/home"
+                  as={RouterLink} 
+                  to="/home" 
                   bg={"blackAlpha.200"}
                   _hover={{ bg: "green.500", color: "white" }}
                 >

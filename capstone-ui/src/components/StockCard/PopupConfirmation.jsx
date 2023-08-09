@@ -13,6 +13,10 @@ import {
     Box,Button,Heading,Text
   } from '@chakra-ui/react'
 
+  import {Link as RouterLink} from "react-router-dom"
+
+
+
 export default function PopupConfirmation ({submission,name,quantity,price,trans_type}){
   console.log(trans_type)
     const type = trans_type === "buy" ? ('bought'):('sold')
@@ -33,8 +37,8 @@ export default function PopupConfirmation ({submission,name,quantity,price,trans
             <Text fontWeight={'light'}>Click below to return to your profile</Text>
           </ModalBody>
           
-          <Button  mr={5} mb={5} onClick={()=>{window.location.href = "/trade";}}> Trade More</Button>
-          <Button mb={5} onClick={()=>{window.location.href = "/home";}}> Back to home</Button>
+          <Button  mr={5} mb={5} as={RouterLink} to="/trade"> Trade More</Button>
+          <Button mb={5} as={RouterLink} to="/home"> Back to home</Button>
          
           </Box>
         </ModalContent>

@@ -5,8 +5,27 @@ import axios from "axios";
 import { Box, Button, Center, Flex, Stack, Container, SimpleGrid, Input, Text, Heading } from '@chakra-ui/react'
 // import { useEffect } from "react";
 
+import { useNavigate } from "react-router-dom"; // Import useNavigate from React Router
 
-// this post request over here verifies if the user email and password combo is valid
+
+
+
+
+
+
+
+
+export default function SignInPage({ setIsLogged, setCurrentUserId}) {
+  const navigate = useNavigate();
+  const [email, setEmail] = useState("");
+
+  const [password, setPassword] = useState("");
+  //https://g.foolcdn.com/image/?url=https%3A%2F%2Fg.foolcdn.com%2Feditorial%2Fimages%2F548475%2Fgettyimages-1035991674.jpg&op=resize&w=1200&h=630
+  // https://business.fiu.edu/graduate/insights/img/artificial-intelligence-in-the-stock-market.jpg
+
+  const [errorMessage, setErrorMessage] = useState("");
+
+  // this post request over here verifies if the user email and password combo is valid
 const handleLogin = async (event, email, password, setIsLogged, setCurrentUserId, setErrorMessage, errorMessage) => {
   console.log("trying to log in...")
   
@@ -32,7 +51,8 @@ const handleLogin = async (event, email, password, setIsLogged, setCurrentUserId
 
 
     // this will take you to the 
-    window.location.href = "/home";
+    // window.location.href = "/home";
+    navigate("/home");
   } catch (err) {
     
     
@@ -42,19 +62,6 @@ const handleLogin = async (event, email, password, setIsLogged, setCurrentUserId
     // console.log(errorMessage)
   }
 };
-
-
-
-
-
-export default function SignInPage({ setIsLogged, setCurrentUserId}) {
-  const [email, setEmail] = useState("");
-
-  const [password, setPassword] = useState("");
-  //https://g.foolcdn.com/image/?url=https%3A%2F%2Fg.foolcdn.com%2Feditorial%2Fimages%2F548475%2Fgettyimages-1035991674.jpg&op=resize&w=1200&h=630
-  // https://business.fiu.edu/graduate/insights/img/artificial-intelligence-in-the-stock-market.jpg
-
-  const [errorMessage, setErrorMessage] = useState("");
   
   return (
     <Box 

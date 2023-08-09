@@ -38,6 +38,8 @@ import UserPieChart from "../Graph/UsersPieChart";
 // import { ThemeContext } from "../App/App";
 // importy history
 
+import {Link as RouterLink} from "react-router-dom"
+
 const Home = ({
   getProfile,
   getAccount,
@@ -365,9 +367,14 @@ const Home = ({
                 <Text>No stocks owned</Text>
                 <Button
                   bgColor={"green.400"}
-                  onClick={(event) => {
-                    window.location.href = "/trade";
-                  }}
+                  
+                  as={Link}
+                  to='/trade'
+
+                  // onClick={(event) => {
+                  //   window.location.href = "/trade";
+                  // }}
+
                 >
                   Start Trading!
                 </Button>
