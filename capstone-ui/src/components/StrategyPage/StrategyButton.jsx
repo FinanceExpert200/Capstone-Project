@@ -21,7 +21,7 @@ export const StrategyButton = () => {
     if (buyingPower > strategyBuyingPower) {
       try {
         const res = await axios.post(
-          `http://localhost:3001/strategy/add`,
+          `https://stock-swap.onrender.com/strategy/add`,
           {
             strategy_type: strategyName,
             buying_power: strategyBuyingPower,

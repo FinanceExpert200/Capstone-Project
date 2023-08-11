@@ -20,7 +20,7 @@ export default class Utilities {
     this.numberOfDBCalls = this.numberOfDBCalls + 1;
     try {
       const res = await axios.post(
-        "http://localhost:3001/trans/historical",
+        "https://stock-swap.onrender.com/trans/historical",
         {
           ticker: ticker,
           startDate: startDate,
@@ -89,40 +89,59 @@ export default class Utilities {
     }
   }
 
-  static getPairsTradingTransactionHistory(selectedStocks,strategy){
+  static getPairsTradingTransactionHistory(selectedStocks, strategy) {
     return new Promise(async (resolve, reject) => {
-      await PairsTrading.calculateProfit(selectedStocks,strategy.buying_power);
-      const transactionHistory = await PairsTrading.getUnfilteredTransactionHistory();
+      await PairsTrading.calculateProfit(selectedStocks, strategy.buying_power);
+      const transactionHistory =
+        await PairsTrading.getUnfilteredTransactionHistory();
       console.log(transactionHistory);
-      await this.compareTransactionHistory(transactionHistory,strategy);
+      await this.compareTransactionHistory(transactionHistory, strategy);
       resolve();
     });
   }
 
-
   static getMovingAverageCrossoverTransactionHistory(selectedStocks, strategy) {
     return new Promise(async (resolve, reject) => {
-      await MovingAverageCrossover.calculateDisplayedProfit(strategy.buying_power, selectedStocks);
+      await MovingAverageCrossover.calculateDisplayedProfit(
+        strategy.buying_power,
+        selectedStocks
+      );
       let transactionHistory = await MovingAverageCrossover.getUnfilteredData();
       console.log(transactionHistory);
       await this.compareTransactionHistory(transactionHistory, strategy);
       resolve();
     });
   }
-  
+
   static getDivergenceTransactionHistory(selectedStocks, strategy) {
     return new Promise(async (resolve, reject) => {
       console.log(selectedStocks);
-      await Divergence.calculateDisplayedProfit(strategy.buying_power, selectedStocks);
+      await Divergence.calculateDisplayedProfit(
+        strategy.buying_power,
+        selectedStocks
+      );
       const transactionHistory = await Divergence.getUnfilteredData();
       await this.compareTransactionHistory(transactionHistory, strategy);
       resolve();
     });
   }
 
-    static async addTransaction(transaction,strategy){
-      try {
-        const res = await axios.post(`http://localhost:3001/trans/${transaction.type}`, {
+  static async addTransaction(transaction, strategy) {
+    try {
+      const res = await axios.post(
+        `https://stock-swap.onrender.com/trans/${transaction.type}`,
+        {
+          ticker: transaction.ticker,
+          quantity: 1,
+          curr_price: transaction.price,
+          user_id: strategy.user_id,
+          trans_type: transaction.type,
+          purchased_by: strategy.strategy_name,
+          transaction_date: transaction.date,
+        }
+      );
+      if (res.status === 201) {
+        this.strategyTrades.push({
           ticker: transaction.ticker,
           quantity: 1,
           curr_price: transaction.price,
@@ -131,39 +150,38 @@ export default class Utilities {
           purchased_by: strategy.strategy_name,
           transaction_date: transaction.date,
         });
-        if (res.status === 201) {
-
-          this.strategyTrades.push({ticker: transaction.ticker,quantity: 1,curr_price: transaction.price,user_id: strategy.user_id,trans_type: transaction.type,purchased_by: strategy.strategy_name,transaction_date: transaction.date})
-          console.log(chalk.green("Transaction successfully executed from the strategy"))
-          console.log(res)
-        }
-      } catch (err) {
-        console.log(err);
+        console.log(
+          chalk.green("Transaction successfully executed from the strategy")
+        );
+        console.log(res);
       }
-    };
-  
-    static compareTransactionHistory(transactionHistory,strategy){
-      return new Promise(async (resolve, reject) => {
-        const lastActive  = await this.toStartDay(strategy.last_active);
-        for (const transaction of transactionHistory) {
-          if(transaction.date>=lastActive){
-            console.log("date", transaction.date , "last ran ", lastActive);
-            await this.addTransaction(transaction, strategy);
-          }
-        }
-        let today = new Date();
-        await this.updateLastActive(today.toISOString(), strategy.user_id);
-        await this.updateAccountValue(strategy.user_id);
-    
-        resolve(); // resolve the promise when everything is done
-      });
+    } catch (err) {
+      console.log(err);
     }
+  }
+
+  static compareTransactionHistory(transactionHistory, strategy) {
+    return new Promise(async (resolve, reject) => {
+      const lastActive = await this.toStartDay(strategy.last_active);
+      for (const transaction of transactionHistory) {
+        if (transaction.date >= lastActive) {
+          console.log("date", transaction.date, "last ran ", lastActive);
+          await this.addTransaction(transaction, strategy);
+        }
+      }
+      let today = new Date();
+      await this.updateLastActive(today.toISOString(), strategy.user_id);
+      await this.updateAccountValue(strategy.user_id);
+
+      resolve(); // resolve the promise when everything is done
+    });
+  }
 
   static async updateLastActive(date, userId) {
     //Updates the date of the current strategy
     try {
       const res = await axios.post(
-        "http://localhost:3001/strategy/active",
+        "https://stock-swap.onrender.com/strategy/active",
         {
           date: date,
           user_id: userId,
@@ -174,29 +192,28 @@ export default class Utilities {
     }
   }
 
-    static async toStartDay(isoString) {
-      let date = new Date(isoString);
-      date.setHours(0, 0, 0, 0); // Set hours, minutes, seconds and milliseconds to 0
-      return date.toISOString();
-    } 
-    static updateAccountValue(userId) {
-      return new Promise(async (resolve, reject) => {
-        try {
-          const res = await axios.get(`http://localhost:3001/strategy/update/${userId}`);
-          console.log("Total share value updated");
-          console.log(this.strategyTrades);
-          resolve();  // Move this inside the try block
-        } catch (error) {
-          console.log(error);
-          reject(error);  // Add this to reject the Promise when there's an error
-        }
-      });
-    }
-
+  static async toStartDay(isoString) {
+    let date = new Date(isoString);
+    date.setHours(0, 0, 0, 0); // Set hours, minutes, seconds and milliseconds to 0
+    return date.toISOString();
+  }
+  static updateAccountValue(userId) {
+    return new Promise(async (resolve, reject) => {
+      try {
+        const res = await axios.get(
+          `https://stock-swap.onrender.com/strategy/update/${userId}`
+        );
+        console.log("Total share value updated");
+        console.log(this.strategyTrades);
+        resolve(); // Move this inside the try block
+      } catch (error) {
+        console.log(error);
+        reject(error); // Add this to reject the Promise when there's an error
+      }
+    });
+  }
 
   static async getStrategyTrades() {
     return this.strategyTrades;
   }
-
-
 }

@@ -37,8 +37,7 @@ import UserPieChart from "../Graph/UsersPieChart";
 import { useEffect } from "react";
 import { Button, Center } from "@chakra-ui/react";
 
-
-import { Link as RouterLink } from "react-router-dom"; 
+import { Link as RouterLink } from "react-router-dom";
 
 // import MeanReversionStrat from "../../TradingCalculations/MeanReversionStrat.js"
 
@@ -173,14 +172,14 @@ function App() {
   const [googlAVGBuyPrice, setGooglAVGBuyPrice] = useState(0);
   const [crmAVGBuyPrice, setCrmAVGBuyPrice] = useState(0);
 
-  // http://localhost:3001
+  // https://stock-swap.onrender.com
 
-  // http://localhost:3001/
+  // https://stock-swap.onrender.com/
 
   const getTickerViaUser = async (ticker) => {
     try {
       const res = await axios.get(
-        `http://localhost:3001/trans/avgbuyprice/${ticker}/${localStorage.getItem(
+        `https://stock-swap.onrender.com/trans/avgbuyprice/${ticker}/${localStorage.getItem(
           "currentUserId"
         )}`
       );
@@ -223,7 +222,7 @@ function App() {
   const getProfile = async () => {
     try {
       const res = await axios.get(
-        `http://localhost:3001/auth/profile/${localStorage.getItem(
+        `https://stock-swap.onrender.com/auth/profile/${localStorage.getItem(
           "currentUserId"
         )}`
       );
@@ -239,7 +238,7 @@ function App() {
   const getAccount = async () => {
     try {
       const res = await axios.get(
-        `http://localhost:3001/trans/account/${localStorage.getItem(
+        `https://stock-swap.onrender.com/trans/account/${localStorage.getItem(
           "currentUserId"
         )}`
       );
@@ -254,7 +253,7 @@ function App() {
   const getPortfolio = async () => {
     try {
       const res = await axios.get(
-        `http://localhost:3001/trans/portfolio/${localStorage.getItem(
+        `https://stock-swap.onrender.com/trans/portfolio/${localStorage.getItem(
           "currentUserId"
         )}`
       );
@@ -267,7 +266,7 @@ function App() {
   const getPortfolioforTradePage = async () => {
     try {
       const res = await axios.get(
-        `http://localhost:3001/trans/portfolio/${localStorage.getItem(
+        `https://stock-swap.onrender.com/trans/portfolio/${localStorage.getItem(
           "currentUserId"
         )}`
       );
@@ -345,10 +344,32 @@ function App() {
     },
   ];
 
+<<<<<<< HEAD
+=======
+  // --------------------------------------------------------------------------------------------------------------
+  // this function gets the current price of the stocks
+  // const getPercentChange = async (ticker) => {
+  //   console.log("PERCENT CHANGE-------------")
+  //   try {
+  //     const response = await axios.get(
+  //       `https://stock-swap.onrender.com/trans/stock/${ticker}`
+  //     );
+
+  //     const percentChange = response.data.data.dp; // this is the current price of the stock
+  //     // const currPrice = price.c
+  //     console.log(percentChange)
+  //     return percentChange
+  //     // console.log(price);
+  //   } catch (error) {
+  //     console.error(error);
+  //   }
+  // };
+
+>>>>>>> 35767475fd50c37b6a1a2c5cdfdbacd910c41e0f
   const getStockPrice = async (ticker) => {
     try {
       const response = await axios.get(
-        `http://localhost:3001/trans/stock/${ticker}`
+        `https://stock-swap.onrender.com/trans/stock/${ticker}`
       );
 
       const price = response.data.data.c; // this is the current price of the stock
@@ -417,7 +438,7 @@ function App() {
   const getStrategy = async () => {
     try {
       const res = await axios.get(
-        `http://localhost:3001/strategy/${localStorage.getItem(
+        `https://stock-swap.onrender.com/strategy/${localStorage.getItem(
           "currentUserId"
         )}`
       );
@@ -431,7 +452,7 @@ function App() {
   const removeStrategy = async () => {
     try {
       const res = await axios.delete(
-        `http://localhost:3001/strategy/remove/${localStorage.getItem(
+        `https://stock-swap.onrender.com/strategy/remove/${localStorage.getItem(
           "currentUserId"
         )}`
       );
@@ -456,7 +477,7 @@ function App() {
   ) => {
     try {
       const res = await axios.post(
-        `http://localhost:3001/trans/add`,
+        `https://stock-swap.onrender.com/trans/add`,
         {
           ticker: ticker,
           quantity: quantity,
@@ -497,7 +518,7 @@ function App() {
 
     const getTransactions = async (userID) => {
       axios
-        .get(`http://localhost:3001/trans/history/${userID}`)
+        .get(`https://stock-swap.onrender.com/trans/history/${userID}`)
         .then((response) => {
           //console.log("HISTORY in APP: ", response);
           setTransactionHistory(response.data.userTransactionHistory);
