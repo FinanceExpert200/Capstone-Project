@@ -72,36 +72,6 @@ const Home = ({
   const { isOpen, onOpen, onClose } = useDisclosure();
   let formattedStrategyName = "";
 
-  // useEffect(() => {
-  //   tickers.forEach(async (ticker) => {
-  //     if (portfolio) {
-  //       // Find the dictionary with the given ticker in the portfolio list
-  //       const tickerIndex = portfolio.findIndex(
-  //         (item) => item.ticker === ticker
-  //       );
-  //       // console.log("tickerIndex", tickerIndex);
-
-  //       // If the ticker exists in the list, add the get_avg_buy_price value to the dictionary
-  //       if (tickerIndex !== -1) {
-  //         console.log("specific ticker", portfolio[tickerIndex]);
-  //         console.log("tryna add", portfolio[tickerIndex].avgBuyPrice);
-  //         if (ticker === "CRM")
-  //           portfolio[tickerIndex].avgBuyPrice = crmAVGBuyPrice;
-  //         else if (ticker === "AMZN")
-  //           portfolio[tickerIndex].avgBuyPrice = amznAVGBuyPrice;
-  //         else if (ticker === "GOOGL")
-  //           portfolio[tickerIndex].avgBuyPrice = googlAVGBuyPrice;
-  //         else if (ticker === "META")
-  //           portfolio[tickerIndex].avgBuyPrice = metaAVGBuyPrice;
-  //         else if (ticker === "NFLX")
-  //           portfolio[tickerIndex].avgBuyPrice = nflxAVGBuyPrice;
-  //       }
-  //     } else {
-  //       console.log("Portfolio is null or empty.");
-  //     }
-  //   });
-  // }, [portfolio, metaAVGBuyPrice]);
-
   const [test, setTest] = useState();
   useEffect(() => {
     const fetchDataAndRunStrategy = async () => {
@@ -129,15 +99,19 @@ const Home = ({
     const runCurrentStrategy = async () => {
       if (strategy) {
         setIsLoading(true);
-        await Utilities.runCurrentStrategy(strategy);
-        // Below calls will wait until runCurrentStrategy has finished
-        await getAccount();
-        await getPortfolio()
-        setIsLoading(false);
+        try {
+            await Utilities.runCurrentStrategy(strategy);
+            await getAccount();
+            await getPortfolio();
+        } catch (error) {
+            console.error("Error running strategy: ", error);
+        } finally {
+            setIsLoading(false);
+        }
       }
     };
     runCurrentStrategy();
-  }, [strategy]);
+}, [strategy]);
 
 
   //gathers the individual stocks together as sets
@@ -233,12 +207,13 @@ const Home = ({
                       flexDirection={"column"}
                       alignItems={"center"}
                       justifyContent={"center"}
-                      fontSize={"20"}
+                      fontSize={"17"}
                       borderRadius={15}
                       bgColor={"#ecf2f3"}
                       textColor={"#03314b"}
                       fontWeight={"light"}
                       p={1}
+                      
                     >
                       <Text textDecoration={"underline"}>Strategy: </Text>
 
@@ -299,7 +274,7 @@ const Home = ({
                 boxShadow={"20px 20px 50px grey"}
                 pt={1}
                 pl={3}
-                mt={"-80px"}
+                mt={"-60px"}
                 ml={10}
                 mr={10}
                 mb={10}
@@ -320,7 +295,6 @@ const Home = ({
                 <Flex
                   direction={"row"}
                   justify={"space-evenly"}
-
                 >
 
                   {portfolio.map((item, key) => (
@@ -371,17 +345,13 @@ const Home = ({
                   as={Link}
                   to='/trade'
 
-                  // onClick={(event) => {
-                  //   window.location.href = "/trade";
-                  // }}
-
                 >
                   Start Trading!
                 </Button>
               </Stack>
             )}
             {pieChart ? (
-              <Box w={'100%'} h={'80vh'}>
+              <Box w={'100%'} h={'90vh'}>
                 <Heading>Breakdown of Account Value</Heading>
                 <Box display={'flex'} direction={'row'} w={'full'} >
                   <UserPieChart stockData={pieChart} />

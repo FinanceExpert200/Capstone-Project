@@ -332,7 +332,7 @@ export default function StockCard({
                 </Text>
 
                 {account && (
-                  <Text color="#03314b" fontSize={"30px"}>
+                  <Text color="#03314b" fontSize={"25px"} mt={2}>
                     Buying Power: ${addCommasToNumber(account.buying_power)}
                   </Text>
                 )}

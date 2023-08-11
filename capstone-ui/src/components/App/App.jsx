@@ -319,50 +319,31 @@ function App() {
   };
   const stockPrice = [
     {
-      name: "Netflix",
+      name: "NFLX",
       ticker: "NFLX",
       stockPrice: nflxPrice,
     },
     {
-      name: "Meta",
+      name: "META",
       ticker: "META",
       stockPrice: metaPrice,
     },
     {
-      name: "Crm",
+      name: "CRM",
       ticker: "CRM",
       stockPrice: crmPrice,
     },
     {
-      name: "Amazon",
+      name: "AMZN",
       ticker: "AMZN",
       stockPrice: amznPrice,
     },
     {
-      name: "Google",
+      name: "GOOGL",
       ticker: "GOOGL",
       stockPrice: googlPrice,
     },
   ];
-
-  // --------------------------------------------------------------------------------------------------------------
-  // this function gets the current price of the stocks
-  // const getPercentChange = async (ticker) => {
-  //   console.log("PERCENT CHANGE-------------")
-  //   try {
-  //     const response = await axios.get(
-  //       `http://localhost:3001/trans/stock/${ticker}`
-  //     );
-
-  //     const percentChange = response.data.data.dp; // this is the current price of the stock
-  //     // const currPrice = price.c
-  //     console.log(percentChange)
-  //     return percentChange
-  //     // console.log(price);
-  //   } catch (error) {
-  //     console.error(error);
-  //   }
-  // };
 
   const getStockPrice = async (ticker) => {
     try {
@@ -497,13 +478,6 @@ function App() {
       const google = await pastStockPrice(tickers[3], rangeDate);
       const crm = await pastStockPrice(tickers[4], rangeDate);
       const nflx = await pastStockPrice(tickers[2], rangeDate);
-
-      // const mPercentage = await getPercentChange(tickers[0]);
-      // const aPercentage = await getPercentChange(tickers[1]);
-      // const gPercentage = await getPercentChange(tickers[3]);
-      // //netflix here
-      // const cPercentage = await getPercentChange(tickers[4]);
-
       const [
         historicalMeta,
         historicalAmzn,
@@ -516,10 +490,6 @@ function App() {
       setHistoricalGoogle(historicalGoogle);
       setHistoricalMeta(historicalMeta);
       setHistoricalNflx(historicalNflx);
-      // setMetaPercent(metaPercent);
-      // setAmznPercent(amznPercent);
-      // setGooglPercent(googlPercent);
-      // setCrmPercent(crmPercent);
       await getAccount();
 
       setHistoricalChecker(true);
@@ -529,7 +499,7 @@ function App() {
       axios
         .get(`http://localhost:3001/trans/history/${userID}`)
         .then((response) => {
-          // console.log("HISTORY in APP: ", response);
+          //console.log("HISTORY in APP: ", response);
           setTransactionHistory(response.data.userTransactionHistory);
         })
         .catch((error) => {
@@ -733,18 +703,6 @@ function App() {
                   removeStrategy={removeStrategy}
                   setFormattedStrategyName={setFormattedStrategyName}
                 />
-              }
-            />
-            <Route
-              path="/tester"
-              element={
-                stockData && (
-                  <UserPieChart
-                    stockData={stockPrice}
-                    updateStockPrice={updateStockPrice}
-                    tickers={tickers}
-                  />
-                )
               }
             />
             <Route path="/*" element={<NotFound />} />

@@ -31,27 +31,30 @@ export default function SingleStockGraph({ data, dataName, aspect, color }) {
                         tickLine={false}
                         tickFormatter={string => {
                             const date = parseISO(string);
-                            if (date.getDate() % 1 === 0) {
+                            if (date.getDate() % 3 === 0) {
                                 return format(date, "MMM,d")
                             }
                             return "";
                         }}>
-                        <Label fontSize="100%" fill="white" stroke={'white'} value="Date" offset={0} position="insideBottom" />
+                        <Label fontSize="100%" fill="black"  value="Date" offset={0} position="insideBottom" />
                     </XAxis>
 
                     <YAxis stroke={color}
                         domain={['auto', 'auto']}
                         tickCount={5}
-                        tickFormatter={number => `${number.toFixed(2)}`}>
+                        tickSize={-1}
+                        tickFormatter={number => `$${number.toFixed(2)}`}>
                         <Label
                             style={{
                                 textAnchor: "middle",
                                 fontSize: "100%",
-                                fill: "white",
+                                fill: "black",
                             }}
                             position={'left'}
+                            marginLeft={10}
                             angle={270}
-                            value={"Index"} />
+                            value={"Index"}
+                            offset={15}  />
                     </YAxis>
                     
                     <Tooltip content={<CustomizeLabel color={color} />} />
@@ -95,12 +98,12 @@ export default function SingleStockGraph({ data, dataName, aspect, color }) {
 function CustomizeLabel({ active, payload, label, color }) {
     if (active) {
         return (
-            <Box bgColor={'black'} justify={'center'} p={3}>
+            <Box bgColor={'blackAlpha.700'} justify={'center'} p={3}>
                 <Text color={'white'}>
                     {format(parseISO(label), "eeee,d MMM, yyyy")}
                 </Text>
 
-                <Text color={color}>Closing Price : ${payload[0].value.toFixed(2)}</Text>
+                <Text color={'white'}> Closing Price : ${payload[0].value.toFixed(2)}</Text>
 
             </Box>
         )

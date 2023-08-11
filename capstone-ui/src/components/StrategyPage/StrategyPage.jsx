@@ -422,7 +422,7 @@ const StrategyPage = ({
               variant="outline"
             ></Button>
           )}
-          <Box position="absolute" bottom={`-35vh`} align={"center"} width = "full" >
+          <Box  position="absolute" top={300} right={150} >
           <Button
             onClick={() => {
               setRanStrategy(false);

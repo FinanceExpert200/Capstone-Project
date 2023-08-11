@@ -6,7 +6,7 @@ import { PieChart, Pie, Sector, Cell, ResponsiveContainer } from 'recharts';
 
 
 
-const renderCustomizedLabel = ({ cx, cy, midAngle, innerRadius, outerRadius, startAngle, endAngle, fill, percent, index, name,stockPrice }) => {
+const renderCustomizedLabel = ({ cx, cy, midAngle, innerRadius, outerRadius, startAngle, endAngle, fill, index, name,stockPrice }) => {
     const RADIAN = Math.PI / 180;
     const radius = innerRadius + (outerRadius - innerRadius) * 0.5;
     const x = cx + radius * Math.cos(-midAngle * RADIAN);
@@ -54,10 +54,6 @@ const renderCustomizedLabel = ({ cx, cy, midAngle, innerRadius, outerRadius, sta
 
 
 export default function UserPieChart({ stockData, tickers, updateStockPrice, }) {
-    console.log('DATATTTTAAAA: ', stockData)
-    // useEffect(() => {
-    //     updateStockPrice(tickers);
-    //   }, []);
     const [state, setState] = useState({ activeIndex: 0 })
 
     const onPieEnter = (_, index) => {
@@ -70,7 +66,7 @@ export default function UserPieChart({ stockData, tickers, updateStockPrice, }) 
 
 
     return (
-            <ResponsiveContainer width="50%" aspect={2.5} margin={3} >
+            <ResponsiveContainer width="100%" aspect={2.5} >
                 <PieChart >
                     <Pie
                         activeIndex={state.activeIndex}

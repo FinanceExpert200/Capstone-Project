@@ -30,7 +30,7 @@ export default function StrategyGraph({ data, dataName, aspect, color }) {
                         tickLine={false}
                         tickFormatter={string => {
                             const date = parseISO(string);
-                            if (date.getDate() % 4 === 0) {
+                            if (date.getDate() % 0 === 0) {
                                 return format(date, "MMM,d")
                             }
                             return "";
@@ -54,7 +54,7 @@ export default function StrategyGraph({ data, dataName, aspect, color }) {
                             offset={13} />
                     </YAxis>
                     
-                    <Tooltip />
+                    <Tooltip content={<CustomizeLabel color={'black'} />}/>
                     <Legend verticalAlign="top" height={36} />
                     <CartesianGrid opacity={.3} vertical={false} />
 
@@ -93,3 +93,18 @@ export default function StrategyGraph({ data, dataName, aspect, color }) {
         </Box>
     )
 }
+
+function CustomizeLabel({ active, payload, label, color }) {
+    if (active) {
+      return (
+        <Box bgColor={'blackAlpha.700'}  justify={'center'} p={3}>
+          <Text color={'white'}>
+            {/* {format(parseISO(label), "eeee,d MMM, yyyy")} */}
+            {label}
+          </Text>
+          <Text color={'white'}>Average Price: {payload[0].value.toFixed(2)}%</Text>
+        </Box>
+      )
+    }
+  
+  }

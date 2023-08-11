@@ -12,13 +12,12 @@ export default function StockGraph({ priceList }) {
   console.log(priceList)
 
   return (
-    <Box width="100%" h={'80vh'}>
+    <Box width="100%" h={'80vh'} position={'relative'}>
       <ResponsiveContainer  >
         <AreaChart
           data={priceList}
           margin={{
             top: 5,
-          
             left: 20,
             bottom: 5,
           }}
@@ -52,26 +51,27 @@ export default function StockGraph({ priceList }) {
             tickLine={false}
             tickFormatter={string => {
               const date = parseISO(string);
-              if (date.getDate() % 4 === 0) {
+              if (date.getDate() % 3 === 0) {
                 return format(date, "MMM,d")
               }
               return "";
             }} >
-              <Label stroke={'#03314b'} value="Date" offset={0} position="insideBottom" />
+              <Label fill={'#03314b'} value="Date" offset={0} position="insideBottom" />
             </XAxis>
           <YAxis 
             fontSize={15}
             stroke={'#03314b'}
             domain={['auto', 'auto']}
             tickCount={5}
+            tickSize={0}
             tickFormatter={number => `$${number.toFixed(2)}`}>
               <Label style={{
                 textAnchor: "middle",
                 fontSize: "100%",
-                fill: "white",
+                fill: "black",
               }}
               position={'left'}
-              angle={270}stroke={'#03314b'} 
+              angle={270}
               marginRight={5}
               value="Opening Price" 
               offset={13} />
@@ -148,7 +148,7 @@ export default function StockGraph({ priceList }) {
 function CustomizeLabel({ active, payload, label, color }) {
   if (active) {
     return (
-      <Box bgColor={'black'} justify={'center'} p={3}>
+      <Box bgColor={'blackAlpha.700'}  justify={'center'} p={3}>
         <Text color={'white'}>
           {format(parseISO(label), "eeee,d MMM, yyyy")}
         </Text>
